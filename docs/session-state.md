@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-05** Mastery estimator as a pure TypeScript module, no dependency.
-  Attempts in, per-step estimate plus uncertainty interval out. BKT-style.
+Nothing.
 
 ---
 
@@ -93,6 +92,7 @@ history at `ec7ada9`.
 - **T-02** — tokens.css carries every DESIGN.md colour, space, radius, duration and easing; Tailwind @theme exposes them and the built CSS contains only the six sanctioned colours.
 - **T-03** — Literata self-hosted from two committed woff2 subsets carrying both wght and opsz; opsz is bound to each role's pixel size and flips with the scale at 900px. No runtime Google request.
 - **T-04** — Base.astro shell plus layout.css: page max, measure, gutters, the 1180px annotation column, skip link, focus and link states, and a visible .todo primitive.
+- **T-05** — src/lib/mastery.ts — BKT two-step update, pure TS, no deps. Per-step estimate, 95% normal-approximation band, next-attempt prediction, and a plain-sentence describe().
 
 ---
 
@@ -104,3 +104,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - **Pre-approved deps:** astro, @astrojs/*, tailwindcss, typescript, vitest,
   @playwright/test, three, 3d-force-graph. Anything else gets logged to the
   review queue and routed around.
+- T-05 band at n=1 spans almost the full range ([0.003, 1.000]). That is what one observation is worth, not a bug, but the widget should not be tuned to hide it.
+
