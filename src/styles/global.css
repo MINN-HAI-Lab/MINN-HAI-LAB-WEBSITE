@@ -1,2 +1,15 @@
-/* Tailwind v4. Design tokens arrive in src/styles/tokens.css (T-02). */
-@import "tailwindcss";
+/* Tailwind v4 plus the design tokens.
+
+   source(none) disables Tailwind's automatic content detection and the
+   @source below replaces it. Without this, Tailwind scans the whole repo —
+   including .agents/skills, which is 612K of third-party markdown full of
+   class names in code examples — and generates utilities for colours that are
+   not in DESIGN.md. It emitted dark:bg-white/10 (#ffffff1a) before this was
+   pinned down.
+
+   tokens.css comes after the Tailwind import so its @theme blocks extend
+   rather than get overwritten. */
+@import "tailwindcss" source(none);
+@source "../";
+
+@import "./tokens.css";

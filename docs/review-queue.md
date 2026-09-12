@@ -39,3 +39,39 @@ passes.
 
 > Any objection to astro 7 and typescript 6? The TS pin is forced by the
 > checker, so moving to 7 means giving up `astro check` until it catches up.
+
+---
+
+## Q-3 — No fallback face is specified for Literata
+
+**Raised:** T-02, 2026-09-13. **Routed around:** generic `serif`.
+
+DESIGN.md specifies "Literata, one family" and gives a full stack for
+monospace, but names no fallback for Literata itself. A fallback matters: it is
+what renders before the webfont arrives and if it fails.
+
+`--font-serif: Literata, serif` was used. Naming a specific face — Georgia,
+Charter, whatever — would be inventing a value, which DESIGN.md forbids.
+
+> Do you want a named fallback stack? Georgia is the usual choice and is
+> metrically closest to Literata of the faces likely to be installed.
+
+---
+
+## Q-4 — Tailwind was scanning `.agents/skills` and emitting foreign colours
+
+**Raised:** T-02, 2026-09-13. **Routed around:** pinned the source to `src/`.
+
+Tailwind v4 auto-detects content from the project root. `.agents/skills` is
+tracked rather than gitignored, so 612K of third-party skill markdown was
+being scanned and every Tailwind class in their code examples became a real
+utility — including `dark:bg-white/10`, which put `#ffffff1a` in the built CSS.
+A white that is not one of the six, and a dark-mode rule that D-009 excludes
+from v1.
+
+Fixed with `@import "tailwindcss" source(none)` plus an explicit
+`@source "../"` limiting scanning to `src/`.
+
+> Worth knowing this is a standing hazard: anything added to the repo outside
+> `src/` is invisible to Tailwind now, which is correct, but if a template ever
+> lives elsewhere it has to be added to `@source` explicitly.

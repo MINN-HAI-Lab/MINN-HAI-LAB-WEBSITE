@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-02** `src/styles/tokens.css` from `design/DESIGN.md` — every colour,
-  space, radius, duration, easing — exposed through Tailwind `@theme`. No
-  value that is not in DESIGN.md.
+Nothing.
 
 ---
 
@@ -97,6 +95,7 @@ history at `ec7ada9`.
 ## DONE
 
 - **T-01** — Astro 7 + TypeScript 6 + Tailwind v4 scaffold. Build and astro check both clean on an empty index.
+- **T-02** — tokens.css carries every DESIGN.md colour, space, radius, duration and easing; Tailwind @theme exposes them and the built CSS contains only the six sanctioned colours.
 
 ---
 

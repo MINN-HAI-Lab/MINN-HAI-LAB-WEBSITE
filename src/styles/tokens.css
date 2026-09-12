@@ -1,0 +1,185 @@
+/* ---------------------------------------------------------------------------
+   tokens.css — the implementation of design/DESIGN.md.
+
+   DESIGN.md is the authority. If this file and that one disagree, that one is
+   right and this is the bug. Every value below is quoted from it; nothing here
+   was invented. Sections are ordered as they appear there.
+
+   Two layers:
+   - @theme / @theme inline exposes tokens to Tailwind, generating utilities.
+   - :root carries the DESIGN.md spellings (--paper, --space-5, --dur-base)
+     for hand-written CSS, which is most of this site.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* -- Colour ------------------------------------------------------------ */
+  /* Six values. There is no seventh. */
+  --color-paper: #eff1f2;
+  --color-paper-sunk: #e3e7e9;
+  --color-ink: #1c2830;
+  --color-ink-muted: #4e5d65;
+  --color-rule: #c9d0d3;
+  --color-claim: #b4133f;
+
+  /* -- Type -------------------------------------------------------------- */
+  /* Literata, one family. No named fallback face is specified in DESIGN.md,
+     so this falls through to the generic serif rather than inventing one.
+     See Q-3 in docs/review-queue.md. */
+  --font-serif: Literata, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* -- Spacing ----------------------------------------------------------- */
+  /* Four-pixel base, but not a linear scale past --space-4. Tailwind's
+     default calc() spacing is cleared so an undefined step cannot be used. */
+  --spacing: initial;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-8: 48px;
+  --spacing-10: 64px;
+  --spacing-12: 96px;
+  --spacing-16: 128px;
+  --spacing-20: 192px;
+
+  /* -- Layout ------------------------------------------------------------ */
+  /* Breakpoints: 640, 900, 1180. Three, and no fourth — the defaults are
+     cleared so a media query cannot reach for one that is not here. */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 900px;
+  --breakpoint-lg: 1180px;
+
+  /* -- Borders, radii ---------------------------------------------------- */
+  /* Zero for things that are document, 2px for things you can operate. */
+  --radius-*: initial;
+  --radius-0: 0;
+  --radius-sm: 2px;
+
+  /* -- Motion ------------------------------------------------------------ */
+  --ease-*: initial;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-mid: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Type scale is responsive, so its utilities must resolve through a variable
+   that changes at 900px rather than a value frozen at build time. */
+@theme inline {
+  --text-display: var(--size-display);
+  --text-display--line-height: var(--lh-display);
+  --text-display--letter-spacing: -0.015em;
+
+  --text-title: var(--size-title);
+  --text-title--line-height: var(--lh-title);
+  --text-title--letter-spacing: -0.01em;
+
+  --text-section: var(--size-section);
+  --text-section--line-height: var(--lh-section);
+
+  --text-body: var(--size-body);
+  --text-body--line-height: var(--lh-body);
+
+  --text-small: var(--size-small);
+  --text-small--line-height: var(--lh-small);
+}
+
+:root {
+  /* -- Colour, in the DESIGN.md spelling --------------------------------- */
+  --paper: var(--color-paper);
+  --paper-sunk: var(--color-paper-sunk);
+  --ink: var(--color-ink);
+  --ink-muted: var(--color-ink-muted);
+  --rule: var(--color-rule);
+  --claim: var(--color-claim);
+
+  /* -- Type scale, mobile first ------------------------------------------ */
+  /* Below 900px. The 900px block overrides. */
+  --size-display: 34px;
+  --lh-display: 1.1;
+  --size-title: 27px;
+  --lh-title: 1.2;
+  --size-section: 21px;
+  --lh-section: 1.3;
+  --size-body: 17px;
+  --lh-body: 1.6;
+  --size-small: 14px;
+  --lh-small: 1.5;
+
+  /* Weights. Section is the only role that is not 400. */
+  --weight-display: 400;
+  --weight-title: 400;
+  --weight-section: 500;
+  --weight-body: 400;
+  --weight-small: 400;
+
+  /* -- Spacing ------------------------------------------------------------ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-8: 48px;
+  --space-10: 64px;
+  --space-12: 96px;
+  --space-16: 128px;
+  --space-20: 192px;
+
+  /* Vertical rhythm. --space-12 below 900px, --space-20 at and above. */
+  --rhythm-section: var(--space-12);
+  --rhythm-heading: var(--space-6);
+  --rhythm-paragraph: var(--space-5);
+
+  /* -- Layout ------------------------------------------------------------- */
+  --measure: 66ch;
+  --page-max: 1180px;
+  --margin-col: 220px;
+  --gutter: var(--space-6);
+
+  /* -- Borders, radii ----------------------------------------------------- */
+  --rule-width: 1px;
+  --radius-0: 0;
+  --radius-sm: 2px;
+
+  /* -- Motion ------------------------------------------------------------- */
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 600ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-mid: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* -- States ------------------------------------------------------------- */
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --underline-offset: 0.15em;
+
+  /* -- Trace widget ------------------------------------------------------- */
+  /* Aliases onto the six colours, plus the one sanctioned opacity variant. */
+  --trace-bg: var(--paper-sunk);
+  --trace-edge: var(--ink-muted);
+  --trace-mark: var(--ink);
+  --trace-curve: var(--claim);
+  --trace-band: color-mix(in srgb, var(--claim) 12%, transparent);
+  --trace-band-edge: var(--claim);
+  --mark-size: 20px;
+  --curve-width: 2px;
+}
+
+@media (min-width: 900px) {
+  :root {
+    --size-display: 56px;
+    --lh-display: 1.05;
+    --size-title: 36px;
+    --lh-title: 1.15;
+    --size-section: 24px;
+    --lh-section: 1.25;
+    --size-body: 18px;
+    --lh-body: 1.65;
+    --size-small: 15px;
+    --lh-small: 1.5;
+
+    --rhythm-section: var(--space-20);
+  }
+}
