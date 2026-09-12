@@ -17,15 +17,20 @@ which resolved B-8 and created verifiable work.
 
 ## IN PROGRESS
 
-Nothing.
+**T-2 — Re-audit the amended `design/DESIGN.md` against the amended
+`design/decisions.md`.**
+
+The previous audit produced B-8. The amendment touched six places (palette,
+contrast table, trace tokens, layout breakpoint, motion easing, the "not yet
+specified" section) and added D-011, D-012 and a superseded D-005. Check for
+conflicts introduced by the amendment itself, and for anything B-8 claimed to
+fix that is only half-fixed. Report; do not pick values.
 
 ---
 
 ## QUEUE
 
-1. Re-audit the amended `design/DESIGN.md` against the amended
-   `design/decisions.md`. The previous audit produced B-8; the amendment
-   touched six places and may have introduced new conflicts.
+Empty.
 
 ---
 
