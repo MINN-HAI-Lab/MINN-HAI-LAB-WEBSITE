@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-06** Vitest unit tests for T-05: all-correct, all-incorrect,
-  alternating, single attempt, empty sequence.
+Nothing.
 
 ---
 
@@ -92,6 +91,7 @@ history at `ec7ada9`.
 - **T-03** — Literata self-hosted from two committed woff2 subsets carrying both wght and opsz; opsz is bound to each role's pixel size and flips with the scale at 900px. No runtime Google request.
 - **T-04** — Base.astro shell plus layout.css: page max, measure, gutters, the 1180px annotation column, skip link, focus and link states, and a visible .todo primitive.
 - **T-05** — src/lib/mastery.ts — BKT two-step update, pure TS, no deps. Per-step estimate, 95% normal-approximation band, next-attempt prediction, and a plain-sentence describe().
+- **T-06** — 52 vitest cases over the five required sequences plus cross-sequence invariants, belief chaining, determinism and parameter validation. Verified non-vacuous by mutation.
 
 ---
 
