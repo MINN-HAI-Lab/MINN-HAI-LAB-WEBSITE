@@ -52,14 +52,19 @@ Measured, not estimated. Re-verify after any token change.
 | Pair | Ratio | Note |
 |---|---|---|
 | `--ink` on `--paper` | ~13.3:1 | |
-| `--ink-muted` on `--paper` | ~5.9:1 | |
-| `--ink-muted` on `--paper-sunk` | ~5.4:1 | |
+| `--ink-muted` on `--paper` | ~6.0:1 | |
+| `--ink-muted` on `--paper-sunk` | ~5.5:1 | |
 | `--claim` on `--paper` | ~6.0:1 | |
 | `--rule` on `--paper` | ~1.4:1 | decorative separator only |
 | `--paper-sunk` on `--paper` | ~1.1:1 | cannot carry a boundary on its own |
 
 `--ink-muted` passes comfortably on both surfaces but should still not go below
 15px.
+
+Note that `--ink-muted` (6.02:1) now sits a hair above `--claim` (5.97:1) on
+`--paper`. Metadata therefore has marginally more contrast than the model's own
+estimate. Not an accessibility problem, and not a call this session can make —
+see B-9 in `docs/session-state.md`.
 
 The last two rows are the constraints that bite. `--rule` is not strong enough
 to bound anything a person has to perceive as a control; use `--ink-muted` for

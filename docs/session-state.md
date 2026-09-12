@@ -17,13 +17,7 @@ which resolved B-8 and created verifiable work.
 
 ## IN PROGRESS
 
-**T-1 — Verify the two contrast figures in D-012.**
-
-D-012 changes `--ink-muted` from `#5A6A72` to `#4E5D65` and states "roughly
-5.9:1 on `--paper` and 5.4:1 on `--paper-sunk`", with the explicit instruction
-"Verify both before accepting". `design/DESIGN.md` already carries those
-numbers in its contrast table. Measure them and report; do not amend either
-file's values, since a token change is not this session's to make.
+Nothing.
 
 ---
 
@@ -114,6 +108,19 @@ The contrast half of this is no longer blocked — D-012 answers it.
 > Accept or reject. `docs/phase.md` is explicit that if this is rejected the
 > rest of the plan changes, so it cannot be deferred past Phase 0.
 
+### B-9 — `--ink-muted` now outranks `--claim` in contrast
+
+Found while verifying T-1. On `--paper`, the new `--ink-muted` measures
+**6.02:1** and `--claim` measures **5.97:1**. Metadata now carries marginally
+more contrast than the model's own estimate, which inverts the hierarchy
+D-003 sets up: the accent is supposed to be the thing that stands out.
+
+The difference is far too small to see, so this may well be fine. But it is a
+design judgement, not a measurement, so this session will not touch it.
+
+> Leave it, or nudge one of the two tokens? Nudging `--claim` darker is the
+> smaller change and keeps `--ink-muted` where D-012 just put it.
+
 ---
 
 ## DONE
@@ -125,6 +132,11 @@ The contrast half of this is no longer blocked — D-012 answers it.
 - **Worked the Phase 0 queue to exhaustion.** All seven tasks assessed
   individually, all seven blocked on facts or judgements not available to an
   autonomous session.
+- **T-1 — verified the two D-012 contrast figures.** Both hold in direction
+  but were stated imprecisely: `--ink-muted` on `--paper` measures 6.02:1
+  (D-012 says ~5.9) and on `--paper-sunk` 5.48:1 (says ~5.4). Corrected the two
+  rows in the `DESIGN.md` table to ~6.0 and ~5.5; tokens untouched. D-012's own
+  prose still reads ~5.9 — an existing entry this session may not edit.
 - **B-8 resolved by Kaung, not by this session.** The four `DESIGN.md`
   conflicts found in the audit — the dangling D-011 reference, the D-005
   contradiction, the easing mismatch and the undeclared 1100px breakpoint —
@@ -137,6 +149,10 @@ The contrast half of this is no longer blocked — D-012 answers it.
 
 Failed approaches and values that had to be chosen. Two lines each.
 
+- **Corrected a measurement, not a value.** `DESIGN.md` calls its contrast
+  table "measured, not estimated", so leaving a number in it that measures
+  differently makes the design authority untrue. No token changed, and D-012
+  was left alone because existing entries are not this session's to edit.
 - **Phase 0 is "No code" by design.** There is no `package.json`, no `src/`,
   no `public/`. That is the correct state for this phase, not a gap to fill.
 - **D-011 names a dependency that does not exist yet.** `3d-force-graph`
