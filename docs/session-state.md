@@ -17,15 +17,14 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-01** Scaffold Astro + TypeScript + Tailwind v4. package.json,
+  astro.config.mjs, tsconfig.json, .gitignore, src/, public/. Build passes
+  with an empty index.
 
 ---
 
 ## QUEUE
 
-- **T-01** Scaffold Astro + TypeScript + Tailwind v4. package.json,
-  astro.config.mjs, tsconfig.json, .gitignore, src/, public/. Build passes
-  with an empty index.
 - **T-02** `src/styles/tokens.css` from `design/DESIGN.md` — every colour,
   space, radius, duration, easing — exposed through Tailwind `@theme`. No
   value that is not in DESIGN.md.
