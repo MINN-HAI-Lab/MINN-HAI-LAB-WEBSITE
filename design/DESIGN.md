@@ -1,12 +1,14 @@
 # DESIGN.md
 
 **Status: provisional.** Values here come from `decisions.md` D-002, D-003,
-D-010, D-011 and D-012, all of which are still `proposed`. This file becomes
-authoritative at the Phase 2 exit gate. Until then, treat it as the working
-proposal, not a ratified spec.
+D-010, D-011, D-012 and D-013, all of which are still `proposed`. This file
+becomes authoritative at the Phase 2 exit gate. Until then, treat it as the
+working proposal, not a ratified spec.
 
-Amended 2026-09-13 to resolve the four conflicts recorded as B-8 and the two
-contrast findings from the same audit. See D-011 and D-012.
+Amended 2026-09-13 to resolve the four conflicts recorded as B-8, then again
+to resolve B-9 through B-12. The second pass revised D-011 to a two-layer
+static-plus-3D structure, which is what makes it compatible with the island
+rules in `CLAUDE.md`. See D-011, D-012 and D-013.
 
 This is the only source for colour, type, spacing and motion values. Nothing in
 the codebase may introduce a value that is not here. If you need one that is
@@ -29,9 +31,13 @@ and the CSS is the bug.
 | `--rule` | `#C9D0D3` | hairlines and table rules |
 | `--claim` | `#B4133F` | the model's own estimate or prediction |
 
-Six values. There is no seventh. No tints, no opacity variants, no
-lighten/darken helpers. Aliases that point at one of these six are fine
-(`--trace-edge` below); new colours are not.
+Six values. There is no seventh. No tints, no lighten/darken helpers, and no
+opacity variants apart from one: `--trace-band`, specified in the trace
+section, because uncertainty is the one thing on this site that should be
+rendered uncertainly.
+
+Aliases that point at one of these six are fine (`--trace-edge` and
+`--trace-band-edge` below); new colours are not.
 
 ### The rule that matters
 
@@ -62,9 +68,10 @@ Measured, not estimated. Re-verify after any token change.
 15px.
 
 Note that `--ink-muted` (6.02:1) now sits a hair above `--claim` (5.97:1) on
-`--paper`. Metadata therefore has marginally more contrast than the model's own
-estimate. Not an accessibility problem, and not a call this session can make —
-see B-9 in `docs/session-state.md`.
+`--paper`. That is deliberate and settled: prominence here comes from hue, not
+from a 0.05 difference in ratio, and darkening `--claim` to win the number
+would make it heavier and no more legible. See D-003, "On B-9". Do not
+re-flag it.
 
 The last two rows are the constraints that bite. `--rule` is not strong enough
 to bound anything a person has to perceive as a control; use `--ink-muted` for
@@ -167,8 +174,8 @@ Four-pixel base. Use only these:
 --space-20: 192px
 ```
 
-Vertical rhythm: `--space-20` between major page sections on desktop,
-`--space-12` on mobile. `--space-6` between a heading and its body.
+Vertical rhythm: `--space-20` between major page sections at 900px and up,
+`--space-12` below. `--space-6` between a heading and its body.
 `--space-5` between paragraphs.
 
 Spacing does the work that borders and cards would otherwise do. If a section
@@ -243,8 +250,8 @@ Everything else responds to input. Toggling an attempt animates the estimate at
 `--dur-base` with `--ease-out`, per D-010, because the movement is the
 information and it should decelerate into its new value.
 
-Exit animations run faster than entrances. Enter uses `--ease-out`; do not use
-an ease-in on an entrance.
+Exit animations run at `--dur-fast`, entrances at `--dur-base` or
+`--dur-slow`. Enter uses `--ease-out`; never an ease-in on an entrance.
 
 ### Reduced motion
 
@@ -284,7 +291,8 @@ out to need it, and record that as a decision if so.
 --trace-edge:    var(--ink-muted)    1px rule above and below the panel
 --trace-mark:    var(--ink)          attempt marks
 --trace-curve:   var(--claim)        mastery estimate
---trace-band:    var(--claim) at 12% uncertainty band
+--trace-band:    var(--claim) at 12% uncertainty band fill
+--trace-band-edge: var(--claim)   1px stroke on the band's upper and lower edges
 --mark-size:     20px
 --curve-width:   2px
 ```
@@ -299,10 +307,14 @@ carries the distinction; colour does not.
 The uncertainty band is the only place any token appears at reduced opacity,
 because the band is literally about uncertainty.
 
-At 12% over `--paper-sunk` the band resolves to `#DDCED5`, which is 1.22:1
-against the panel — below the 3:1 floor for non-text content that has to be
-perceived. If the band carries meaning rather than atmosphere, 12% is too
-light. Measured, not settled: see B-11 in `docs/session-state.md`.
+The band fill sits at 12%, about 1.22:1 against the panel, which is below the
+non-text floor. The 1px `--claim` edges carry the information instead: 5.43:1
+against the panel and 4.46:1 against the band fill, so the worst adjacent case
+clears the 3:1 floor by 1.46. Do not raise the fill to compensate (D-013).
+
+D-013 states this as "about 6:1", which is `--claim` on `--paper`. The band sits
+inside the panel, not on the page, so the figures above are the ones that apply.
+The conclusion is unchanged.
 
 Label the synthetic data visibly inside the widget.
 
@@ -310,11 +322,16 @@ Label the synthetic data visibly inside the widget.
 
 ## Not yet specified
 
-**3D graph tokens.** D-011 proposes a 3D force-directed Bayesian network with a
-Markov blanket highlight, anchoring the interpretability section on
-`/research`. It needs node, edge, highlight and background values, plus a
-decision on whether it sits on `--paper` or a dark field. Blocked until D-011
-is accepted. Do not improvise these.
+**Graph tokens, both layers.** D-011 ships the Bayesian network in two layers,
+and they need specifying at different times.
+
+The static SVG layer is the baseline: build-time, no JavaScript, in the HTML.
+It needs node, edge and highlight values against `--paper`, and those can be
+specified as soon as D-011 is accepted.
+
+The 3D layer loads on click and needs its own background decision — `--paper`
+or a dark field — which can wait until the SVG exists and has been looked at.
+Do not improvise either set.
 
 **The human-like element.** Raised, never specified. A figure, a face, a
 learner avatar and an abstract human form are four different briefs and none

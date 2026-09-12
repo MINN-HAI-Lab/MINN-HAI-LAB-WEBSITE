@@ -1,25 +1,24 @@
 # Session state
 
-**RUN HALTED — 2026-09-13, second run.**
+**RUN HALTED — 2026-09-13, after amendments 2.**
 
-Two tasks completed, then halted cleanly on the same three conditions as the
-first run:
+B-9 through B-12 are resolved and moved to DONE. What remains is B-1 to B-7,
+which is the same wall as before: facts and judgements only Kaung can supply.
 
-1. **The queue is empty and everything left is BLOCKED.** B-1 to B-12. None is
-   blocked on effort; every one needs a fact or a judgement from you.
-2. **The phase exit gate needs a human judgement.** Phase 0 exits when every
-   decision is `accepted` or `rejected`. Twelve entries exist; none is accepted.
-   An autonomous session may only append, never change an existing entry.
-3. **No dependency manifest.** Still no `package.json`, and D-011 now names
-   `3d-force-graph` as a dependency, which is doubly out of reach.
+Halt conditions, unchanged:
 
-**Read B-10 first.** D-011 as written contradicts `CLAUDE.md` on client-side
-JavaScript, and `CLAUDE.md` is the one file that overrides everything and that
-this session may not edit. Accepting D-011 means amending `CLAUDE.md` yourself,
-or changing D-011. It is not a detail that can be deferred to Phase 3, because
-the graph is the whole interpretability anchor.
+1. **Everything left is BLOCKED.** B-1 to B-7. None is blocked on effort.
+2. **The phase exit gate needs a human judgement.** Thirteen decisions now
+   exist; none is `accepted`.
+3. **No dependency manifest.** Still no `package.json`. `three` and
+   `3d-force-graph` are now pre-approved by `CLAUDE.md`, but conditional on
+   D-011 being accepted, and there is nothing to install them into.
 
-`IN PROGRESS` is empty and the tree is clean. Nothing was left half-done.
+`IN PROGRESS` is empty and the tree is clean.
+
+**B-4 is the one that matters.** Fourteen publications, no authors, no URLs.
+Nothing else can be built on top of an empty publications file, and no
+autonomous session can fill it.
 
 ---
 
@@ -112,9 +111,9 @@ Rec. Syst.", which look abbreviated or partially redacted.
 > The full, unabbreviated funder names as they should appear, and whether
 > grant numbers should be published alongside them.
 
-### B-6 — Accept or reject the twelve decisions
+### B-6 — Accept or reject the thirteen decisions
 
-All of D-001 to D-012 are `proposed`, except D-008 which is `open` and D-005
+All of D-001 to D-013 are `proposed`, except D-008 which is `open` and D-005
 which is now `superseded by D-011`. The Phase 0 exit gate needs every one of
 them `accepted` or `rejected`, and an autonomous session may only append new
 entries, never change an existing one.
@@ -129,82 +128,6 @@ The contrast half of this is no longer blocked — D-012 answers it.
 > Accept or reject. `docs/phase.md` is explicit that if this is rejected the
 > rest of the plan changes, so it cannot be deferred past Phase 0.
 
-### B-9 — `--ink-muted` now outranks `--claim` in contrast
-
-Found while verifying T-1. On `--paper`, the new `--ink-muted` measures
-**6.02:1** and `--claim` measures **5.97:1**. Metadata now carries marginally
-more contrast than the model's own estimate, which inverts the hierarchy
-D-003 sets up: the accent is supposed to be the thing that stands out.
-
-The difference is far too small to see, so this may well be fine. But it is a
-design judgement, not a measurement, so this session will not touch it.
-
-> Leave it, or nudge one of the two tokens? Nudging `--claim` darker is the
-> smaller change and keeps `--ink-muted` where D-012 just put it.
-
-### B-10 — D-011 contradicts CLAUDE.md, which this session cannot edit
-
-This is the important one, and it is not a rounding question.
-
-`CLAUDE.md:23` — "Client-side JavaScript is allowed in exactly one place: the
-interactive trace widget on the home page. Everything else ships as HTML and
-CSS."
-
-`CLAUDE.md:106` — "Pages should work with JavaScript disabled, apart from the
-trace widget, which degrades to a static rendering of one example."
-
-D-011 puts a 3D force-directed graph on `/research`. That is a second place
-with client-side JavaScript, and `/research` would not work with JavaScript
-off. The exemption in `CLAUDE.md` names the trace widget and nothing else.
-
-Two more, same entry:
-
-- `CLAUDE.md:121` — "Do not add dependencies without asking." D-011 names
-  `3d-force-graph`, which pulls Three.js and d3-force-3d.
-- `CLAUDE.md:78` bans "floating nodes, animated neural-network backgrounds …
-  any generic 'AI' motif". D-011 argues the graph is the lab's real research
-  object rather than a motif, and that it "reads the way people expect a neural
-  visual to read". That may well be the right call, but `CLAUDE.md` says to say
-  so rather than quietly pick, so it is said here rather than assumed.
-
-D-011 cannot be accepted as written without `CLAUDE.md` changing, and this
-session may not touch `CLAUDE.md`.
-
-> Amend the client-side JavaScript rule to admit a second island on
-> `/research`, with whatever no-JS fallback you want for it? Or move the graph
-> to a static rendering? Or drop D-011?
-
-### B-11 — `--trace-band` is below the non-text contrast floor
-
-`--claim` at 12% over `--paper-sunk` resolves to `#DDCED5`: **1.22:1** against
-the panel, against a 3:1 floor for non-text content a reader has to perceive.
-The mastery curve sitting on the band is fine at 4.46:1.
-
-The band represents the model's uncertainty, which is information rather than
-atmosphere, so the floor probably applies.
-
-> Raise the 12%, or accept that the band is atmosphere and label it as such?
-> Picking an opacity is picking a value, so this session did not.
-
-### B-12 — Four smaller gaps from the same audit
-
-1. **D-003 is not marked superseded.** D-012 replaces its `--ink-muted`
-   (`#5A6A72` → `#4E5D65`), but D-003 still shows the old value and carries no
-   marker. The preamble of `decisions.md` says to mark the old entry; D-005 was
-   marked, D-003 was not. Anyone reading D-003 at face value takes a token that
-   fails on the panel.
-2. **No exit-duration token.** `DESIGN.md` says "Exit animations run faster
-   than entrances", but the three durations are spoken for: `--dur-fast`
-   (colour, hover), `--dur-base` (estimate, state), `--dur-slow` (curve draw).
-   Which one is an exit?
-3. **The vertical rhythm switch names no breakpoint.** `--space-20` "on
-   desktop", `--space-12` "on mobile", while Layout declares exactly three
-   breakpoints and says "any media query in the codebase uses one of these
-   numbers". Which of 640, 900 or 1180 switches the rhythm?
-4. **The opacity carve-out omits `--trace-band`.** The Colour section still
-   reads "no tints, no opacity variants" and then carves out aliases only. The
-   band is the exception and is permitted four sections later.
-
 ---
 
 ## DONE
@@ -216,6 +139,21 @@ atmosphere, so the floor probably applies.
 - **Worked the Phase 0 queue to exhaustion.** All seven tasks assessed
   individually, all seven blocked on facts or judgements not available to an
   autonomous session.
+- **Applied amendments 2** from `amendments-phase-0-2.md`, which Kaung wrote
+  and which is now deleted. This resolved four blocked entries:
+  - **B-10** — `CLAUDE.md` now allows two islands instead of one, requires
+    every island to render a real static version server-side, and gates any
+    island over ~100KB gzipped behind an explicit click. D-011 was revised to
+    a two-layer design (build-time static SVG, click-to-load 3D) that meets
+    those rules. `three` and `3d-force-graph` are pre-approved, conditional on
+    D-011 being accepted.
+  - **B-9** — recorded in D-003 as deliberate and not to be "fixed":
+    prominence comes from hue, not from a 0.05 difference in ratio.
+  - **B-11** — D-013 adds `--trace-band-edge`, 1px `--claim` strokes on the
+    band's edges, rather than raising the 12% fill.
+  - **B-12** — all four: D-003 marked as amended by D-012, exits assigned
+    `--dur-fast`, the rhythm switch pinned to 900px, and the opacity exception
+    named in the colour section.
 - **T-2 — re-audited the amended `DESIGN.md` against the amended
   `decisions.md`.** The six B-8 fixes all hold: easing is `--ease-out` on both
   sides, the annotation column is on the declared 1180px breakpoint, D-011 and
@@ -239,6 +177,12 @@ atmosphere, so the floor probably applies.
 
 Failed approaches and values that had to be chosen. Two lines each.
 
+- **Two figures in the amendment measured differently from their claim.**
+  D-012's ~5.9/~5.4 were corrected to 6.02/5.48 in the first pass. D-013 says
+  the band edges are "about 6:1", which is `--claim` on `--paper`; the band
+  sits inside the panel, so it is 5.43:1 there and 4.46:1 against the fill.
+  Both still clear the 3:1 floor, so D-013's conclusion stands. `DESIGN.md`
+  carries the measured values; D-013's own prose was left as written.
 - **Corrected a measurement, not a value.** `DESIGN.md` calls its contrast
   table "measured, not estimated", so leaving a number in it that measures
   differently makes the design authority untrue. No token changed, and D-012

@@ -20,8 +20,19 @@ in and what its exit gate is.
 Astro, TypeScript, Tailwind v4. Static output. No component library, no CMS.
 Publications live in a typed data file, not in JSX.
 
-Client-side JavaScript is allowed in exactly one place: the interactive trace
-widget on the home page. Everything else ships as HTML and CSS.
+Client-side JavaScript is allowed in interactive islands only. There are two:
+the trace widget on the home page, and the Markov blanket graph on
+`/research`. Everything else ships as HTML and CSS.
+
+Every island obeys two rules, without exception.
+
+It renders a real static version server-side. Not a placeholder, not a "this
+requires JavaScript" notice — an actual readable rendering of the same data,
+which is what a reader gets with JS off and what they see before hydration.
+
+And any island whose payload exceeds roughly 100KB gzipped loads on explicit
+interaction, never on page load. Three.js alone is well past that, so the
+blanket graph is click-to-load by construction.
 
 ## Design authority
 
@@ -76,7 +87,10 @@ Non-negotiable, because each one is now a recognised marker of generated design:
   the same soft grey shadow under each.
 - Gradients used as decoration. Glassmorphism. Backdrop blur.
 - Particle fields, floating nodes, animated neural-network backgrounds,
-  orbiting dots, any generic "AI" motif.
+  orbiting dots, any generic "AI" motif. The test is whether the thing carries
+  data a reader can interrogate. An ambient field of nodes that means nothing
+  is banned. A graph whose nodes are named variables from a real model is
+  content. If you cannot tell which one you have built, it is the banned one.
 - Numbered `01 / 02 / 03` markers unless the content is genuinely a sequence.
 - Accenting one word inside a headline in a different colour or weight.
 - Fade-and-slide-up entrance on every section; hover lift on every card.
@@ -103,8 +117,9 @@ for body text. Headings in document order with no skipped levels. The trace
 widget is operable by keyboard and announces its state. Every image has real
 alt text describing the content, not the file.
 
-Pages should work with JavaScript disabled, apart from the trace widget, which
-degrades to a static rendering of one example.
+Every page works with JavaScript disabled. Islands fall back to their static
+rendering, which has to convey the same thing at a glance even though it
+cannot be manipulated.
 
 ## Process
 
@@ -118,8 +133,12 @@ Before building any new page or section:
 4. Append any new design decision to `design/decisions.md` with its rationale
    and status.
 
-Do not run `git commit` unless I ask. Do not add dependencies without asking.
-Do not create files outside the structure in `docs/plan.md`.
+Do not run `git commit` unless I ask. Do not create files outside the
+structure in `docs/plan.md`.
+
+Do not add dependencies without asking. `three` and `3d-force-graph` are
+approved for the blanket graph, conditional on D-011 being accepted. Nothing
+else.
 
 ## Skills
 

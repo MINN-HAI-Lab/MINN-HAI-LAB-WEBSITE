@@ -65,7 +65,7 @@ Inter or Geist.
 
 ## D-003 — Cool neutral base, one accent, and the accent means something
 
-**Status:** proposed · 2026-09-13
+**Status:** proposed · 2026-09-13 · amended by D-012 (`--ink-muted`)
 
 | Token | Value | Use |
 |---|---|---|
@@ -95,6 +95,14 @@ the widget survives colour blindness and greyscale printing.
 
 **Rejected:** cream and terracotta, near-black and acid green, any
 blue-to-violet pairing, green-for-correct and red-for-incorrect.
+
+**On B-9.** After D-012, `--ink-muted` measures 6.02:1 and `--claim` 5.97:1 on
+`--paper`, so metadata now carries fractionally more luminance contrast than
+the model's estimate. This is not a hierarchy problem and should not be
+"fixed". Prominence here comes from hue: a saturated crimson among grey-blue
+neutrals reads as the loudest thing on the page regardless of a 0.05
+difference in ratio. Darkening `--claim` to win a number would make it heavier
+and no more legible. Recorded so the next audit does not re-flag it.
 
 ---
 
@@ -250,38 +258,46 @@ when this was written.
 
 ## D-011 — 3D applies to the Bayesian network, not to anatomy
 
-**Status:** proposed · 2026-09-13
+**Status:** proposed · 2026-09-13 · revised 2026-09-13 after B-10
 
-A 3D force-directed rendering of a Bayesian network. Nodes are variables, edges
-are conditional dependencies. Selecting a target node highlights its Markov
-blanket — parents, children, and children's other parents — while the rest of
-the graph recedes.
+A Bayesian network shown as a graph. Nodes are variables, edges are conditional
+dependencies. Selecting a target node highlights its Markov blanket — parents,
+children, and children's other parents — while the rest recedes.
 
-`3d-force-graph` (MIT, Three.js with d3-force-3d underneath) does this
-directly. Feed it `{nodes, links}`.
+It ships in two layers.
+
+The baseline is a static SVG, rendered at build time, in the HTML. Real nodes,
+real edges, one blanket already highlighted. No JavaScript, no dependency, no
+payload. This is what most readers will see and it is sufficient on its own.
+
+The 3D version loads on an explicit click. `3d-force-graph` (MIT, Three.js with
+d3-force-3d underneath) takes `{nodes, links}` and gives a force-directed
+layout you can rotate, with the blanket highlight driven by selection. Three.js
+is roughly 150KB gzipped before the graph library, which is why it is never on
+the initial load.
 
 Reasoning. A force-directed graph settles into an organic cluster on its own,
-so it reads the way people expect a neural visual to read, without claiming to
+so it reads the way people expect a neural visual to read without claiming to
 be a brain. And it is the lab's actual research object rather than a motif
-borrowed from a neighbouring field.
+borrowed from a neighbouring field. The static layer is what makes it
+compatible with the island rules in `CLAUDE.md`; without it this decision would
+have to be rejected.
 
-Still rejected, and this is the part D-005 got right: img2threejs. It rebuilds
-a photographed object from primitives, gated on hard-surface detail — bevels,
+Still rejected, and D-005 got this part right: img2threejs. It rebuilds a
+photographed object from primitives, gated on hard-surface detail — bevels,
 rivets, engraved linework, wear. Organic anatomy is its worst case, unseen
-sides are inferred, and sourcing a reference image of a brain raises a
-licensing question on top.
+sides are inferred, and sourcing a reference image raises a licensing question
+on top.
 
 Also still rejected: a literal anatomical brain of any provenance. A site about
 knowledge tracing and Bayesian networks that opens with a brain claims
 neuroscience the lab does not do.
 
 Placement: the trace stays the home hero, the graph anchors the
-interpretability section on `/research`. The trace loads instantly and the
-graph does not.
+interpretability section on `/research`.
 
-**Open:** the "human-like" element from the same conversation is still
-unspecified. A figure, a face, a learner avatar and an abstract human form are
-four different briefs. Unresolved, so no tokens for it.
+**Open:** the "human-like" element is still unspecified. A figure, a face, a
+learner avatar and an abstract human form are four different briefs.
 
 ---
 
@@ -294,8 +310,9 @@ Two fixes from the audit.
 `--ink-muted` changes from `#5A6A72` to `#4E5D65`. The old value measured
 4.51:1 on `--paper-sunk`, clearing the 4.5:1 floor by a hundredth. That is not
 a pass, it is an accident waiting for the next tweak to either token. The new
-value gives roughly 5.9:1 on `--paper` and 5.4:1 on `--paper-sunk`. Verify both
-before accepting.
+value measures 6.02:1 on `--paper` and 5.48:1 on `--paper-sunk` — the ~5.9 and
+~5.4 in the original draft of this entry were estimates that came in low and
+were corrected against measurement.
 
 The trace panel measured 1.10:1 against the page. With shadows banned (D-003)
 and `--radius-0` on panels, it had nothing left to define it. Two greys this
@@ -305,3 +322,23 @@ rules define it, the fill only tints it.
 
 This is consistent with the rest of the system, where spacing and rules do the
 work that cards would otherwise do.
+
+---
+
+## D-013 — The uncertainty band is bounded by strokes, not by fill
+
+**Status:** proposed · 2026-09-13
+
+`--trace-band` at 12% over `--paper-sunk` resolves to about `#DDCED5`, which is
+1.22:1 against the panel. The band conveys the model's uncertainty, so it is
+information and the 3:1 non-text floor applies.
+
+Raising the fill to 3:1 is the wrong fix. It would make the band heavy enough
+to compete with the curve it surrounds, and the fill is a wash rather than the
+thing being read.
+
+Instead the band gets 1px `--claim` boundary strokes along its upper and lower
+edges. Those measure about 6:1 and carry the information; the fill stays at 12%
+and stays decorative. This is also better chart practice than a bare tint.
+
+New token: `--trace-band-edge: var(--claim)`, 1px.
