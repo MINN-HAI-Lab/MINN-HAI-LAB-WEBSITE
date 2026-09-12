@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-04** Base layout shell: measure, page max, gutters, the three
+  breakpoints, skip link, document outline.
 
 ---
 
 ## QUEUE
 
-- **T-04** Base layout shell: measure, page max, gutters, the three
-  breakpoints, skip link, document outline.
 - **T-05** Mastery estimator as a pure TypeScript module, no dependency.
   Attempts in, per-step estimate plus uncertainty interval out. BKT-style.
 - **T-06** Vitest unit tests for T-05: all-correct, all-incorrect,
