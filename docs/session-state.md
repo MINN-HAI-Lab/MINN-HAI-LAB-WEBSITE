@@ -1,5 +1,28 @@
 # Session state
 
+**RUN HALTED — 2026-09-13, second run.**
+
+Two tasks completed, then halted cleanly on the same three conditions as the
+first run:
+
+1. **The queue is empty and everything left is BLOCKED.** B-1 to B-12. None is
+   blocked on effort; every one needs a fact or a judgement from you.
+2. **The phase exit gate needs a human judgement.** Phase 0 exits when every
+   decision is `accepted` or `rejected`. Twelve entries exist; none is accepted.
+   An autonomous session may only append, never change an existing entry.
+3. **No dependency manifest.** Still no `package.json`, and D-011 now names
+   `3d-force-graph` as a dependency, which is doubly out of reach.
+
+**Read B-10 first.** D-011 as written contradicts `CLAUDE.md` on client-side
+JavaScript, and `CLAUDE.md` is the one file that overrides everything and that
+this session may not edit. Accepting D-011 means amending `CLAUDE.md` yourself,
+or changing D-011. It is not a detail that can be deferred to Phase 3, because
+the graph is the whole interpretability anchor.
+
+`IN PROGRESS` is empty and the tree is clean. Nothing was left half-done.
+
+---
+
 Continuity file for autonomous sessions. A session starts by reading this,
 then `CLAUDE.md`, `docs/phase.md`, `docs/plan.md`, `design/DESIGN.md` and
 `design/decisions.md`.
@@ -23,7 +46,7 @@ Nothing.
 
 ## QUEUE
 
-Empty.
+Empty. Refill from BLOCKED as answers arrive.
 
 ---
 
