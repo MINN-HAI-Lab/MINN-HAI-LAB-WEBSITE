@@ -218,6 +218,25 @@ export function trace(
 }
 
 /**
+ * Format an estimate as a whole percentage for display.
+ *
+ * Clamped to 1..99 unless the estimate is exactly 0 or 1. BKT approaches
+ * certainty asymptotically and never arrives: after a good run this model sits
+ * at 0.9964, and rounding that to "100 per cent" tells a reader the model is
+ * certain when it is not. An overclaim in the caption is the same class of
+ * error as an invented number, so it is rounded away from the endpoints
+ * rather than to them.
+ */
+export function formatPercent(estimate: number): number {
+  const p = unit(estimate);
+  if (p === 0 || p === 1) return p * 100;
+  const rounded = Math.round(p * 100);
+  if (rounded >= 100) return 99;
+  if (rounded <= 0) return 1;
+  return rounded;
+}
+
+/**
  * The current estimate as a plain sentence, for the live region and the
  * caption under the widget.
  *
@@ -225,7 +244,7 @@ export function trace(
  * reader user nothing about what moved or what it refers to.
  */
 export function describe(result: TraceResult, skill: string): string {
-  const percent = Math.round(result.final * 100);
+  const percent = formatPercent(result.final);
   const count = result.steps.length;
   if (count === 0) {
     return `No attempts yet. The model starts from an estimate of ${percent} per cent on ${skill}.`;

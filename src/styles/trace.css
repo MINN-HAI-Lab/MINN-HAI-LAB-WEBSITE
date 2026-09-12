@@ -1,0 +1,119 @@
+/* ---------------------------------------------------------------------------
+   trace.css — the knowledge trace widget.
+
+   Every value comes from design/DESIGN.md § Trace widget. The panel is bounded
+   by rules rather than by fill, because --paper-sunk against --paper is
+   1.1:1 and cannot carry a boundary (D-012).
+--------------------------------------------------------------------------- */
+
+.trace {
+  margin: 0;
+}
+
+/* Full-bleed horizontally, with a 1px rule above and below. Those rules are
+   what define the panel; the fill only tints. */
+.trace__panel {
+  background-color: var(--trace-bg);
+  border-block: var(--rule-width) solid var(--trace-edge);
+  border-radius: var(--radius-0);
+  padding-block: var(--space-6);
+  padding-inline: var(--space-4);
+}
+
+/* Scales down to fit, never up, so --mark-size and --curve-width are exact at
+   full width and shrink proportionally below it. */
+.trace__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 700px;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+/* -- Axis ------------------------------------------------------------------ */
+
+.trace__axis {
+  stroke: var(--rule);
+  stroke-width: var(--rule-width);
+}
+
+.trace__axis-label {
+  fill: var(--ink-muted);
+  font-family: var(--font-literata), serif;
+  font-size: var(--size-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+  font-feature-settings: "tnum" 1;
+  text-anchor: end;
+}
+
+/* -- Uncertainty band ------------------------------------------------------ */
+
+/* The one sanctioned opacity variant on the site. The fill is a wash; the
+   edges carry the information. */
+.trace__band {
+  fill: var(--trace-band);
+  stroke: none;
+}
+
+.trace__band-edge {
+  fill: none;
+  stroke: var(--trace-band-edge);
+  stroke-width: var(--rule-width);
+  stroke-linejoin: round;
+}
+
+/* -- The estimate ---------------------------------------------------------- */
+
+.trace__curve {
+  fill: none;
+  stroke: var(--trace-curve);
+  stroke-width: var(--curve-width);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* -- Attempt marks --------------------------------------------------------- */
+
+/* Correct is filled, incorrect is open with a stroke. Shape carries the
+   distinction; both are --ink. An attempt is something the learner did, which
+   is fact, so it is never --claim. */
+.trace__mark {
+  stroke: var(--trace-mark);
+  stroke-width: var(--curve-width);
+}
+
+.trace__mark.is-correct {
+  fill: var(--trace-mark);
+}
+
+.trace__mark.is-incorrect {
+  fill: var(--trace-bg);
+}
+
+/* -- Caption --------------------------------------------------------------- */
+
+.trace__caption {
+  margin-block-start: var(--space-5);
+}
+
+.trace__sentence {
+  margin: 0;
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
+  font-variation-settings: "opsz" var(--opsz-body), "wght" var(--weight-body);
+  color: var(--ink);
+  max-width: var(--measure);
+}
+
+/* The synthetic-data label. Required by docs/plan.md and it must be legible,
+   not a whisper, so it is --ink-muted at --size-small rather than faded. */
+.trace__synthetic {
+  margin-block-start: var(--space-3);
+  margin-block-end: 0;
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+  color: var(--ink-muted);
+  max-width: var(--measure);
+}

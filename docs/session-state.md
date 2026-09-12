@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-07** Static SVG rendering of the trace, built at build time, zero
-  client JS. The JS-off fallback, shipped in the HTML.
+Nothing.
 
 ---
 
@@ -91,6 +90,7 @@ history at `ec7ada9`.
 - **T-04** — Base.astro shell plus layout.css: page max, measure, gutters, the 1180px annotation column, skip link, focus and link states, and a visible .todo primitive.
 - **T-05** — src/lib/mastery.ts — BKT two-step update, pure TS, no deps. Per-step estimate, 95% normal-approximation band, next-attempt prediction, and a plain-sentence describe().
 - **T-06** — 52 vitest cases over the five required sequences plus cross-sequence invariants, belief chaining, determinism and parameter validation. Verified non-vacuous by mutation.
+- **T-07** — Trace.astro renders the full trace as build-time SVG with zero client JS: band, band edges, curve, ten marks, axis, alt text, caption and synthetic-data label.
 
 ---
 
@@ -103,4 +103,5 @@ Failed approaches and values that had to be chosen. Two lines each.
   @playwright/test, three, 3d-force-graph. Anything else gets logged to the
   review queue and routed around.
 - T-05 band at n=1 spans almost the full range ([0.003, 1.000]). That is what one observation is worth, not a bug, but the widget should not be tuned to hide it.
+- T-07 found describe() rounding 0.9964 to '100 per cent'. BKT never reaches certainty, so that is an overclaim on the page. Added formatPercent(), clamped to 1..99 unless truly 0 or 1.
 

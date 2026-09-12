@@ -3,6 +3,7 @@ import {
   DEFAULT_PARAMETERS,
   type BktParameters,
   describe,
+  formatPercent,
   predict,
   trace,
   validateParameters,
@@ -206,5 +207,28 @@ suite('custom parameters', () => {
       expect(p).toBeGreaterThanOrEqual(guess);
       expect(p).toBeLessThanOrEqual(1 - slip);
     }
+  });
+});
+
+suite('formatPercent', () => {
+  it('never rounds an uncertain estimate up to certainty', () => {
+    // BKT approaches 1 asymptotically. Printing "100 per cent" would claim a
+    // certainty the model does not have.
+    expect(formatPercent(0.9964424654256085)).toBe(99);
+    expect(formatPercent(0.999999)).toBe(99);
+  });
+
+  it('never rounds an uncertain estimate down to impossibility', () => {
+    expect(formatPercent(0.0001)).toBe(1);
+  });
+
+  it('passes through the true endpoints', () => {
+    expect(formatPercent(0)).toBe(0);
+    expect(formatPercent(1)).toBe(100);
+  });
+
+  it('rounds normally in between', () => {
+    expect(formatPercent(0.25)).toBe(25);
+    expect(formatPercent(0.615)).toBe(62);
   });
 });

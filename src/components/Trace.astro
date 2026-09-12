@@ -1,0 +1,110 @@
+---
+/**
+ * The knowledge trace.
+ *
+ * This file emits the *static* rendering: real SVG, built at build time, in
+ * the HTML, with no client JavaScript. It is what a reader gets with
+ * JavaScript off and what everyone sees before hydration, and CLAUDE.md
+ * requires it to be "an actual readable rendering of the same data", not a
+ * placeholder. The interactive layer is added later (T-10) on top of this
+ * exact markup.
+ *
+ * The data is synthetic and the widget says so on its face.
+ */
+import { describe, formatPercent, trace } from '../lib/mastery.ts';
+import { VIEW, layout, yFor } from '../lib/trace-geometry.ts';
+import { EXAMPLE_ATTEMPTS, EXAMPLE_SKILL } from '../data/trace-example.ts';
+
+interface Props {
+  /** Sequence to render. Defaults to the synthetic example. */
+  attempts?: readonly boolean[];
+  /** Skill the sequence is about. */
+  skill?: string;
+}
+
+const { attempts = EXAMPLE_ATTEMPTS, skill = EXAMPLE_SKILL } = Astro.props;
+
+const result = trace(attempts);
+const geometry = layout(result);
+const sentence = describe(result, skill);
+
+/** Radius in user units. --mark-size is a diameter. */
+const markRadius = 10;
+
+const correctCount = result.steps.filter((step) => step.correct).length;
+
+/**
+ * Text alternative. Describes what the drawing shows, not what it is — "a
+ * line chart" would tell a screen reader user nothing they can act on.
+ */
+const altText =
+  `Knowledge trace over ${result.steps.length} attempts at ${skill}, ` +
+  `${correctCount} correct. The model's estimate starts at ` +
+  `${formatPercent(result.initial)} per cent, before any attempt, and ` +
+  `ends at ${formatPercent(result.final)} per cent. A shaded band around ` +
+  `the line shows the model's uncertainty, which narrows as attempts ` +
+  `accumulate.`;
+---
+
+<figure class="trace">
+  <div class="trace__panel">
+    <svg
+      class="trace__svg"
+      viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
+      role="img"
+      aria-label={altText}
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <title>Knowledge trace for {skill}</title>
+
+      {/* Baseline. A hairline, decorative, so --rule is the right weight. */}
+      <line
+        class="trace__axis"
+        x1={VIEW.padX}
+        y1={yFor(0)}
+        x2={VIEW.width - VIEW.padX}
+        y2={yFor(0)}
+      />
+
+      {/* Axis endpoints. Without them the curve's height means nothing. */}
+      <text class="trace__axis-label" x={VIEW.padX - 10} y={yFor(1)} dy="0.32em">1</text>
+      <text class="trace__axis-label" x={VIEW.padX - 10} y={yFor(0)} dy="0.32em">0</text>
+
+      {/* Uncertainty band. The fill is a wash at 12% and cannot carry the
+          information on its own (1.22:1 against the panel), so the 1px --claim
+          edges do it. D-013. */}
+      {geometry.bandPath && (
+        <>
+          <path class="trace__band" d={geometry.bandPath} />
+          <path class="trace__band-edge" d={geometry.bandUpperPath} />
+          <path class="trace__band-edge" d={geometry.bandLowerPath} />
+        </>
+      )}
+
+      {/* The estimate itself. The only --claim line on the page. */}
+      <path class="trace__curve" d={geometry.curvePath} />
+
+      {/* Attempts. Shape carries correct/incorrect, not colour, so the trace
+          still reads in greyscale and for colour-blind readers. */}
+      <g class="trace__marks">
+        {geometry.marks.map((mark) => (
+          <circle
+            class:list={['trace__mark', mark.correct ? 'is-correct' : 'is-incorrect']}
+            cx={mark.x}
+            cy={mark.y}
+            r={markRadius}
+          />
+        ))}
+      </g>
+    </svg>
+  </div>
+
+  <figcaption class="trace__caption">
+    <p class="trace__sentence">{sentence}</p>
+    <p class="trace__synthetic">
+      Synthetic data. This sequence was invented to illustrate the method. It
+      is not a recording of a learner and not output from a model trained on
+      student data.
+    </p>
+  </figcaption>
+</figure>
