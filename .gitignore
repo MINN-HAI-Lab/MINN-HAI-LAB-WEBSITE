@@ -28,6 +28,11 @@ pnpm-debug.log*
 !.vscode/extensions.json
 !.vscode/settings.json
 
+# test and screenshot output
+test-results/
+playwright-report/
+screenshots/
+
 # throwaway layout studies, per docs/plan.md
 prototypes/
 

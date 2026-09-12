@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-01** Scaffold Astro + TypeScript + Tailwind v4. package.json,
-  astro.config.mjs, tsconfig.json, .gitignore, src/, public/. Build passes
-  with an empty index.
+Nothing.
 
 ---
 
@@ -99,7 +97,7 @@ history at `ec7ada9`.
 
 ## DONE
 
-Nothing yet this run.
+- **T-01** — Astro 7 + TypeScript 6 + Tailwind v4 scaffold. Build and astro check both clean on an empty index.
 
 ---
 
