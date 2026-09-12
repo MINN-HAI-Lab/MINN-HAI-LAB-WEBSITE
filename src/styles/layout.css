@@ -1,0 +1,186 @@
+/* ---------------------------------------------------------------------------
+   layout.css — the page shell.
+
+   Every value here comes from design/DESIGN.md § Layout, § Spacing and
+   § States. The three breakpoints are 640, 900 and 1180, and there is no
+   fourth: any media query in this codebase uses one of those numbers.
+--------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* The skip link and in-page anchors should not land flush against the
+     viewport edge. */
+  scroll-padding-block-start: var(--space-6);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* -- The page frame -------------------------------------------------------- */
+
+/* Outer bound plus gutters. Everything on a page sits inside one of these.
+   At 360px the gutters take 64px, leaving 296px of content, which is why the
+   measure is a cap rather than a fixed width. */
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The body text column. Content is left-aligned and single-column; DESIGN.md
+   caps the measure at 66 characters. */
+.measure {
+  max-width: var(--measure);
+}
+
+/* -- The annotation column ------------------------------------------------- */
+
+/* At 1180px and up, marginal notes run to the left of the measure. Below that
+   they fall inline beneath the paragraph they annotate, which is what the
+   unprefixed rules already do.
+
+   The column is content-derived, not decorative. If it ends up holding
+   decoration, remove it. */
+.annotated {
+  display: block;
+}
+
+.annotated > .annotation {
+  margin-block: var(--space-5);
+  padding-inline-start: var(--space-4);
+  border-inline-start: var(--rule-width) solid var(--rule);
+  color: var(--ink-muted);
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+}
+
+@media (width >= 1180px) {
+  .annotated {
+    display: grid;
+    grid-template-columns: var(--margin-col) minmax(0, var(--measure));
+    column-gap: var(--gutter);
+  }
+
+  /* Body content sits in the second column; notes pull into the first. */
+  .annotated > * {
+    grid-column: 2;
+  }
+
+  .annotated > .annotation {
+    grid-column: 1;
+    margin-block: 0;
+    padding-inline-start: 0;
+    border-inline-start: none;
+    text-align: end;
+  }
+}
+
+/* -- Vertical rhythm ------------------------------------------------------- */
+
+/* --space-20 between major sections at 900px and up, --space-12 below. Driven
+   from --rhythm-section so the breakpoint lives in tokens.css, once. */
+.section + .section {
+  margin-block-start: var(--rhythm-section);
+}
+
+.section > :is(h1, h2, h3) + * {
+  margin-block-start: var(--rhythm-heading);
+}
+
+.prose > p + p {
+  margin-block-start: var(--rhythm-paragraph);
+}
+
+/* -- Skip link ------------------------------------------------------------- */
+
+/* Off-screen until focused, then pinned to the top-left. Not display:none,
+   which would take it out of the tab order and defeat the point. */
+.skip-link {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 100;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--paper);
+  color: var(--ink);
+  border: var(--rule-width) solid var(--ink);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transform: translateY(-120%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* -- Focus ----------------------------------------------------------------- */
+
+/* Visible on every interactive element, keyboard and mouse alike, and never
+   the browser default. Focus uses --ink deliberately: --claim means "a model
+   said this" and a focus ring is not that. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-width) solid var(--ink);
+  outline-offset: var(--focus-offset);
+}
+
+/* -- Links ----------------------------------------------------------------- */
+
+/* --ink, underlined, offset. Hover thickens the underline. No colour change,
+   no arrow appended. */
+.prose a,
+a.link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule-width);
+  text-underline-offset: var(--underline-offset);
+  transition: text-decoration-thickness var(--dur-fast) var(--ease-mid);
+}
+
+.prose a:hover,
+a.link:hover {
+  text-decoration-thickness: calc(var(--rule-width) * 2);
+}
+
+/* -- Reduced motion -------------------------------------------------------- */
+
+/* Transitions are removed rather than zeroed on a transform, which would
+   produce a jump. The skip link keeps its transform so it still appears. */
+@media (prefers-reduced-motion: reduce) {
+  .prose a,
+  a.link {
+    transition: none;
+  }
+}
+
+/* -- TODO markers ---------------------------------------------------------- */
+
+/* CLAUDE.md: "Where content is missing, write a literal TODO: marker
+   describing what is needed and who can supply it. A visible gap is correct.
+   A plausible fabrication is a serious bug."
+
+   So these are meant to be seen, not hidden behind a comment. They use --ink
+   on --paper-sunk with a rule, never --claim: --claim means a model made a
+   claim about a person, and an editorial note is not that. */
+.todo {
+  display: block;
+  margin-block: var(--space-5);
+  padding: var(--space-4);
+  background-color: var(--paper-sunk);
+  border-inline-start: calc(var(--rule-width) * 3) solid var(--ink);
+  border-radius: var(--radius-0);
+  color: var(--ink);
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+}

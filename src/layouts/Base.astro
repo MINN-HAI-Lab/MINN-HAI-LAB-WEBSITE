@@ -1,0 +1,43 @@
+---
+/**
+ * The page shell. Every page uses this.
+ *
+ * Document outline: the skip link targets #main, which is the <main> landmark.
+ * Pages supply exactly one <h1> in the default slot and headings descend from
+ * there without skipping a level — CLAUDE.md requires that and T-25 checks it.
+ */
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+
+interface Props {
+  /** Goes in <title>. Sentence case, like everything else. */
+  title: string;
+  /** Meta description. Optional — omitted rather than filled with filler. */
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <Font cssVariable="--font-literata" preload />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <slot name="header" />
+
+    <main id="main" class="page">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>
