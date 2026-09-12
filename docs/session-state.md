@@ -1,26 +1,5 @@
 # Session state
 
-**RUN HALTED — 2026-09-13.**
-
-Halted cleanly, on three independent stop conditions:
-
-1. **Everything left is BLOCKED.** All seven Phase 0 tasks need a fact or a
-   judgement that only you can supply. None is blocked on effort.
-2. **The phase exit gate needs a human judgement.** Phase 0 exits when every
-   decision in `design/decisions.md` is `accepted` or `rejected`. All ten are
-   `proposed` or `open`, and an autonomous session may only append new entries,
-   never change an existing one. The gate is unreachable from here by design.
-3. **No dependency manifest exists.** There is no `package.json` anywhere in
-   the tree, so entering Phase 1 would require adding a dependency that is not
-   already in one.
-
-Nothing was left half-done. `IN PROGRESS` is empty and the tree is clean.
-
-Answer the questions under BLOCKED and the queue reopens. Most of them are one
-line each; the publication metadata is the long one.
-
----
-
 Continuity file for autonomous sessions. A session starts by reading this,
 then `CLAUDE.md`, `docs/phase.md`, `docs/plan.md`, `design/DESIGN.md` and
 `design/decisions.md`.
@@ -30,17 +9,29 @@ Working branch: `auto/phase-0`. Never `main`.
 Current phase: **0 — Decide** (per `docs/phase.md`, which this file may not
 edit).
 
+The previous run halted with everything blocked. The halt was lifted on
+2026-09-13 when Kaung amended `design/DESIGN.md` and appended D-011 and D-012,
+which resolved B-8 and created verifiable work.
+
 ---
 
 ## IN PROGRESS
 
-Nothing.
+**T-1 — Verify the two contrast figures in D-012.**
+
+D-012 changes `--ink-muted` from `#5A6A72` to `#4E5D65` and states "roughly
+5.9:1 on `--paper` and 5.4:1 on `--paper-sunk`", with the explicit instruction
+"Verify both before accepting". `design/DESIGN.md` already carries those
+numbers in its contrast table. Measure them and report; do not amend either
+file's values, since a token change is not this session's to make.
 
 ---
 
 ## QUEUE
 
-Empty. Every Phase 0 task moved to BLOCKED. See below.
+1. Re-audit the amended `design/DESIGN.md` against the amended
+   `design/decisions.md`. The previous audit produced B-8; the amendment
+   touched six places and may have introduced new conflicts.
 
 ---
 
@@ -106,46 +97,22 @@ Rec. Syst.", which look abbreviated or partially redacted.
 > The full, unabbreviated funder names as they should appear, and whether
 > grant numbers should be published alongside them.
 
-### B-6 — D-002 and D-003: typography and palette
+### B-6 — Accept or reject the twelve decisions
 
-Both are `proposed`. I verified the D-003 contrast figures and they hold:
-`--ink` 13.28:1, `--ink-muted` 4.96:1, `--claim` 5.97:1, `--rule` 1.38:1,
-all against `--paper`. Two measurements the file does not record:
+All of D-001 to D-012 are `proposed`, except D-008 which is `open` and D-005
+which is now `superseded by D-011`. The Phase 0 exit gate needs every one of
+them `accepted` or `rejected`, and an autonomous session may only append new
+entries, never change an existing one.
 
-- `--ink-muted` on `--paper-sunk` is **4.51:1** — clears the 4.5 floor by
-  0.01. Metadata inside the trace panel has no margin at all.
-- `--paper-sunk` against `--paper` is **1.10:1**. With no shadows and
-  `--radius-0`, that is the only thing marking the trace panel as a bounded
-  region.
+> Accept or reject each. D-001 (Astro) gates everything buildable, since there
+> is still no `package.json` and no framework chosen.
 
-> Accept, reject or amend D-002 and D-003. If accepting D-003, does the trace
-> panel get a `--rule` hairline so it does not depend on a 1.10:1 step?
+The contrast half of this is no longer blocked — D-012 answers it.
 
 ### B-7 — D-004: the trace widget as hero
 
 > Accept or reject. `docs/phase.md` is explicit that if this is rejected the
 > rest of the plan changes, so it cannot be deferred past Phase 0.
-
-### B-8 — Four unresolved conflicts inside `design/DESIGN.md`
-
-Noticed while auditing, not acted on. Each is a choice between two values that
-already exist in the repo, so picking one would be inventing a decision.
-
-1. **D-011 does not exist.** `design/DESIGN.md` line 279 blocks the 3D graph
-   tokens on it. `design/decisions.md` stops at D-010.
-2. **The 3D section contradicts D-005.** D-005 rejects Three.js outright —
-   "the hero is 2D because the data is 2D, plain SVG and canvas, no library".
-   `DESIGN.md` *Not yet specified* plans node, edge and highlight tokens for a
-   3D Markov blanket visualisation. Either D-005 gets superseded by a new
-   entry, or that section is stale and comes out.
-3. **Easing mismatch.** D-010 says the estimate toggle is "180ms, **ease-out**".
-   `DESIGN.md` says `--dur-base` with **`--ease-mid`**. `DESIGN.md` claims
-   precedence only over `tokens.css`, not over `decisions.md`.
-4. **Undeclared breakpoint.** `DESIGN.md` Layout declares "Breakpoints: 640,
-   900, 1180", then activates the annotation column at **1100px**, twice.
-
-> For each: which value is right? I can then append a single new `proposed`
-> entry recording the resolution.
 
 ---
 
@@ -157,8 +124,12 @@ already exist in the repo, so picking one would be inventing a decision.
 - **Added this file**, queue filled from Phase 0 in `docs/phase.md`.
 - **Worked the Phase 0 queue to exhaustion.** All seven tasks assessed
   individually, all seven blocked on facts or judgements not available to an
-  autonomous session. Audited `design/DESIGN.md` against `design/decisions.md`
-  in the process, which produced B-8.
+  autonomous session.
+- **B-8 resolved by Kaung, not by this session.** The four `DESIGN.md`
+  conflicts found in the audit — the dangling D-011 reference, the D-005
+  contradiction, the easing mismatch and the undeclared 1100px breakpoint —
+  are answered by D-011, D-012 and the `DESIGN.md` amendment, committed at
+  `d11e934`.
 
 ---
 
@@ -168,24 +139,23 @@ Failed approaches and values that had to be chosen. Two lines each.
 
 - **Phase 0 is "No code" by design.** There is no `package.json`, no `src/`,
   no `public/`. That is the correct state for this phase, not a gap to fill.
+- **D-011 names a dependency that does not exist yet.** `3d-force-graph`
+  (MIT, Three.js + d3-force-3d). Nothing can install it: there is no
+  `package.json`, and adding one is an explicit stop condition for this run.
 - **Did not go looking for the missing facts.** Author lists, funder names and
   an affiliation are all findable on the open web, and a confident wrong answer
   from a search is indistinguishable from a fabrication once it is in the repo.
-  These stay blocked until supplied directly.
-- **Did not write D-011.** It would have cleared the dangling reference in
-  `DESIGN.md`, but the only content it could hold contradicts D-005, so writing
-  it means inventing a direction nobody chose.
+- **Did not write D-011 myself when it was only a dangling reference.** The
+  only content it could have held contradicted D-005, so writing it would have
+  meant inventing a direction nobody chose. Kaung wrote it instead, and
+  superseded D-005 to match.
 - **`.agents/skills` is tracked, not ignored.** `skills-lock.json` records a
   source and hash per skill so it is restorable in principle, but a silently
   empty skills directory is a worse failure than 612K of repo weight.
   `.claude/skills/*` are symlinks into it; ignoring one without the other
   leaves 26 dangling links.
 - **`main` does not exist as a branch.** It was unborn when this run started,
-  so branching to `auto/phase-0` carried the unborn HEAD across and left no
-  `main` behind. All three commits are on `auto/phase-0`.
+  so branching to `auto/phase-0` carried the unborn HEAD across. All commits
+  are on `auto/phase-0`.
 - **A remote is configured and nothing was pushed to it.** `origin` points at
-  `git@github.com:MINN-HAI-Lab/MINN-HAI-LAB-WEBSITE.git`. `auto/phase-0` has
-  no upstream set and the run never contacted it.
-- **Contrast was verified, not assumed.** The four ratios in D-003 are
-  accurate as written. The two gaps recorded under B-6 are additions, not
-  corrections.
+  `git@github.com:MINN-HAI-Lab/MINN-HAI-LAB-WEBSITE.git`. No upstream is set.
