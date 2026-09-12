@@ -17,15 +17,14 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-02** `src/styles/tokens.css` from `design/DESIGN.md` — every colour,
+  space, radius, duration, easing — exposed through Tailwind `@theme`. No
+  value that is not in DESIGN.md.
 
 ---
 
 ## QUEUE
 
-- **T-02** `src/styles/tokens.css` from `design/DESIGN.md` — every colour,
-  space, radius, duration, easing — exposed through Tailwind `@theme`. No
-  value that is not in DESIGN.md.
 - **T-03** Self-host Literata variable, `opsz` axis tracking rendered pixel
   size, subset latin + latin-ext, no runtime Google Fonts request.
 - **T-04** Base layout shell: measure, page max, gutters, the three
