@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-06** Vitest unit tests for T-05: all-correct, all-incorrect,
+  alternating, single attempt, empty sequence.
 
 ---
 
 ## QUEUE
 
-- **T-06** Vitest unit tests for T-05: all-correct, all-incorrect,
-  alternating, single attempt, empty sequence.
 - **T-07** Static SVG rendering of the trace, built at build time, zero
   client JS. The JS-off fallback, shipped in the HTML.
 - **T-08** Attempt marks: filled circle correct, open stroked circle
