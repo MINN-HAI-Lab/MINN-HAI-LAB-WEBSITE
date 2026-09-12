@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-10** Toggle interaction: clicking an attempt flips it, estimate and
+  curve update at `--dur-base` with `--ease-out`.
 
 ---
 
 ## QUEUE
 
-- **T-10** Toggle interaction: clicking an attempt flips it, estimate and
-  curve update at `--dur-base` with `--ease-out`.
 - **T-11** Keyboard operability: roving tabindex across attempts, Enter and
   Space toggle, visible `--ink` focus.
 - **T-12** ARIA live region announcing the new estimate as a plain sentence
