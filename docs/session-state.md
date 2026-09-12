@@ -59,6 +59,11 @@ Three spellings appear across the brief: "MINN HAI Lab", "MINN HAI
 > writes the American form in its own name, that mismatch should be deliberate
 > rather than accidental.
 
+The git remote is `git@github.com:MINN-HAI-Lab/MINN-HAI-LAB-WEBSITE.git`, so
+the GitHub org is spelled `MINN-HAI-Lab`. Recording that as an observation
+only — an org slug is not how a lab writes its name in a header, and it does
+not settle the "Human-centered" question either way. It is not an answer.
+
 ### B-2 — Institutional affiliation
 
 Nothing in the repo names a host institution.
@@ -175,6 +180,12 @@ Failed approaches and values that had to be chosen. Two lines each.
   empty skills directory is a worse failure than 612K of repo weight.
   `.claude/skills/*` are symlinks into it; ignoring one without the other
   leaves 26 dangling links.
+- **`main` does not exist as a branch.** It was unborn when this run started,
+  so branching to `auto/phase-0` carried the unborn HEAD across and left no
+  `main` behind. All three commits are on `auto/phase-0`.
+- **A remote is configured and nothing was pushed to it.** `origin` points at
+  `git@github.com:MINN-HAI-Lab/MINN-HAI-LAB-WEBSITE.git`. `auto/phase-0` has
+  no upstream set and the run never contacted it.
 - **Contrast was verified, not assumed.** The four ratios in D-003 are
   accurate as written. The two gaps recorded under B-6 are additions, not
   corrections.
