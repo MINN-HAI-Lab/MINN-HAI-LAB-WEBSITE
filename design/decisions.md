@@ -236,3 +236,72 @@ These block Phase 0.
    British spellings; a proper noun should stay as the lab writes it, so this
    needs to be deliberate rather than accidental.
 10. Domain name.
+
+## D-005 — No Three.js, no img2threejs
+
+**Status:** superseded by D-011 · 2026-09-13
+
+The img2threejs half of this still holds and is restated in D-011. The blanket
+"no 3D" half was too broad: it ruled out a 3D treatment of the Markov blanket,
+which is a different proposition from a decorative brain and was not considered
+when this was written.
+
+---
+
+## D-011 — 3D applies to the Bayesian network, not to anatomy
+
+**Status:** proposed · 2026-09-13
+
+A 3D force-directed rendering of a Bayesian network. Nodes are variables, edges
+are conditional dependencies. Selecting a target node highlights its Markov
+blanket — parents, children, and children's other parents — while the rest of
+the graph recedes.
+
+`3d-force-graph` (MIT, Three.js with d3-force-3d underneath) does this
+directly. Feed it `{nodes, links}`.
+
+Reasoning. A force-directed graph settles into an organic cluster on its own,
+so it reads the way people expect a neural visual to read, without claiming to
+be a brain. And it is the lab's actual research object rather than a motif
+borrowed from a neighbouring field.
+
+Still rejected, and this is the part D-005 got right: img2threejs. It rebuilds
+a photographed object from primitives, gated on hard-surface detail — bevels,
+rivets, engraved linework, wear. Organic anatomy is its worst case, unseen
+sides are inferred, and sourcing a reference image of a brain raises a
+licensing question on top.
+
+Also still rejected: a literal anatomical brain of any provenance. A site about
+knowledge tracing and Bayesian networks that opens with a brain claims
+neuroscience the lab does not do.
+
+Placement: the trace stays the home hero, the graph anchors the
+interpretability section on `/research`. The trace loads instantly and the
+graph does not.
+
+**Open:** the "human-like" element from the same conversation is still
+unspecified. A figure, a face, a learner avatar and an abstract human form are
+four different briefs. Unresolved, so no tokens for it.
+
+---
+
+## D-012 — Darker muted ink, and the trace panel is defined by rules
+
+**Status:** proposed · 2026-09-13
+
+Two fixes from the audit.
+
+`--ink-muted` changes from `#5A6A72` to `#4E5D65`. The old value measured
+4.51:1 on `--paper-sunk`, clearing the 4.5:1 floor by a hundredth. That is not
+a pass, it is an accident waiting for the next tweak to either token. The new
+value gives roughly 5.9:1 on `--paper` and 5.4:1 on `--paper-sunk`. Verify both
+before accepting.
+
+The trace panel measured 1.10:1 against the page. With shadows banned (D-003)
+and `--radius-0` on panels, it had nothing left to define it. Two greys this
+close cannot carry a boundary, so the fill stops trying: the panel runs
+full-bleed horizontally with a 1px `--ink-muted` rule above and below. The
+rules define it, the fill only tints it.
+
+This is consistent with the rest of the system, where spacing and rules do the
+work that cards would otherwise do.

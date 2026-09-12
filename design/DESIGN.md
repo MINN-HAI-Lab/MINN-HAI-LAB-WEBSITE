@@ -1,9 +1,12 @@
 # DESIGN.md
 
-**Status: provisional.** Values here come from `decisions.md` D-002, D-003 and
-D-010, all of which are still `proposed`. This file becomes authoritative at
-the Phase 2 exit gate. Until then, treat it as the working proposal, not a
-ratified spec.
+**Status: provisional.** Values here come from `decisions.md` D-002, D-003,
+D-010, D-011 and D-012, all of which are still `proposed`. This file becomes
+authoritative at the Phase 2 exit gate. Until then, treat it as the working
+proposal, not a ratified spec.
+
+Amended 2026-09-13 to resolve the four conflicts recorded as B-8 and the two
+contrast findings from the same audit. See D-011 and D-012.
 
 This is the only source for colour, type, spacing and motion values. Nothing in
 the codebase may introduce a value that is not here. If you need one that is
@@ -20,14 +23,15 @@ and the CSS is the bug.
 | Token | Value | Use |
 |---|---|---|
 | `--paper` | `#EFF1F2` | page background |
-| `--paper-sunk` | `#E3E7E9` | the trace panel, and nothing else |
+| `--paper-sunk` | `#E3E7E9` | the trace panel tint, and nothing else |
 | `--ink` | `#1C2830` | body text, headings, marks, focus rings |
-| `--ink-muted` | `#5A6A72` | metadata: venue, year, authors, captions |
+| `--ink-muted` | `#4E5D65` | metadata: venue, year, authors, captions |
 | `--rule` | `#C9D0D3` | hairlines and table rules |
 | `--claim` | `#B4133F` | the model's own estimate or prediction |
 
 Six values. There is no seventh. No tints, no opacity variants, no
-lighten/darken helpers.
+lighten/darken helpers. Aliases that point at one of these six are fine
+(`--trace-edge` below); new colours are not.
 
 ### The rule that matters
 
@@ -43,15 +47,24 @@ The easiest way to break this is a focus ring. Focus uses `--ink`, deliberately.
 
 ### Contrast
 
-Approximate ratios against `--paper`, worth re-verifying after any change:
+Measured, not estimated. Re-verify after any token change.
 
-- `--ink` — about 13:1
-- `--ink-muted` — about 5:1, so it passes for body-size text but should not go
-  below 15px
-- `--claim` — about 6:1
+| Pair | Ratio | Note |
+|---|---|---|
+| `--ink` on `--paper` | ~13.3:1 | |
+| `--ink-muted` on `--paper` | ~5.9:1 | |
+| `--ink-muted` on `--paper-sunk` | ~5.4:1 | |
+| `--claim` on `--paper` | ~6.0:1 | |
+| `--rule` on `--paper` | ~1.4:1 | decorative separator only |
+| `--paper-sunk` on `--paper` | ~1.1:1 | cannot carry a boundary on its own |
 
-`--rule` sits near 1.4:1. It is a decorative separator only. Anything that must
-be perceivable as a control boundary uses `--ink-muted` or darker.
+`--ink-muted` passes comfortably on both surfaces but should still not go below
+15px.
+
+The last two rows are the constraints that bite. `--rule` is not strong enough
+to bound anything a person has to perceive as a control; use `--ink-muted` for
+that. And `--paper-sunk` cannot define the trace panel by itself, which is why
+the panel is bounded by rules rather than by fill. See the trace section.
 
 Never let colour be the only signal. Correct and incorrect attempts are
 distinguished by mark shape, so the trace still reads in greyscale and for
@@ -163,16 +176,18 @@ feels undifferentiated, add space before you consider adding a box.
 ```
 --measure:     66ch        body text column
 --page-max:    1180px      outer bound
---margin-col:  220px       annotation column, 1100px and up
+--margin-col:  220px       annotation column, 1180px and up
 --gutter:      var(--space-6)
 ```
 
-Breakpoints: 640, 900, 1180.
+Breakpoints: 640, 900, 1180. Three, and no fourth. Any media query in the
+codebase uses one of these numbers.
 
-Content is left-aligned and sits in a single measured column. On `/research`
+Content is left-aligned and sits in a single measured column. At 1180px and up
 the annotation column runs to the left of that measure and holds marginal notes
-— the limitation notes, the "what this needs in data terms" asides. Below
-1100px those notes fall inline beneath the paragraph they annotate.
+on `/research` — the limitation notes, the "what this needs in data terms"
+asides. Below 1180px those notes fall inline beneath the paragraph they
+annotate.
 
 The margin column is content-derived, not decorative: the lab's subject is
 explanation sitting beside the thing it explains. If it ends up holding
@@ -191,9 +206,14 @@ decoration, remove it.
 Two radii, and they mean different things: zero for things that are document,
 2px for things you can operate. Not one value applied to everything.
 
-**No shadows.** None, anywhere. Depth comes from `--paper-sunk` against
-`--paper`. A soft grey shadow under every panel is on the banned list in
-`CLAUDE.md` and there is no case for it here.
+**No shadows.** None, anywhere. A soft grey shadow under every panel is on the
+banned list in `CLAUDE.md` and there is no case for it here.
+
+That ban has a consequence worth stating plainly, because it was missed once
+already: with no shadow and no radius, a panel has only its fill and its edges
+to distinguish it, and two greys this close cannot do it with fill. Panels are
+defined by rules. If you find yourself reaching for a shadow, reach for a rule
+and more space instead.
 
 No gradients. No backdrop blur.
 
@@ -206,8 +226,8 @@ No gradients. No backdrop blur.
 --dur-base:  180ms     estimate updates, state changes
 --dur-slow:  600ms     the curve draw, once, on first load
 
---ease-out:  cubic-bezier(0.22, 1, 0.36, 1)      things entering
---ease-mid:  cubic-bezier(0.4, 0, 0.2, 1)        things changing in place
+--ease-out:  cubic-bezier(0.22, 1, 0.36, 1)      entrances, and the estimate
+--ease-mid:  cubic-bezier(0.4, 0, 0.2, 1)        other in-place state changes
 ```
 
 Budget: one orchestrated moment on load, which is the mastery curve drawing in.
@@ -215,7 +235,8 @@ Nothing else animates on its own. No scroll-triggered reveals anywhere. No
 section fade-and-slide. No hover lift.
 
 Everything else responds to input. Toggling an attempt animates the estimate at
-`--dur-base` with `--ease-mid`, because the movement is the information.
+`--dur-base` with `--ease-out`, per D-010, because the movement is the
+information and it should decelerate into its new value.
 
 Exit animations run faster than entrances. Enter uses `--ease-out`; do not use
 an ease-in on an entrance.
@@ -254,13 +275,18 @@ out to need it, and record that as a decision if so.
 ## Trace widget
 
 ```
---trace-bg:      var(--paper-sunk)
+--trace-bg:      var(--paper-sunk)   tint only, not a boundary
+--trace-edge:    var(--ink-muted)    1px rule above and below the panel
 --trace-mark:    var(--ink)          attempt marks
 --trace-curve:   var(--claim)        mastery estimate
 --trace-band:    var(--claim) at 12% uncertainty band
 --mark-size:     20px
 --curve-width:   2px
 ```
+
+The panel runs full-bleed horizontally with a 1px `--trace-edge` rule above and
+below. Those rules are what define it. The fill only tints, and at ~1.1:1
+against the page it cannot do more than that (D-012).
 
 Correct is a filled circle, incorrect is an open circle with a stroke. Shape
 carries the distinction; colour does not.
@@ -274,11 +300,15 @@ Label the synthetic data visibly inside the widget.
 
 ## Not yet specified
 
-**3D graph tokens.** The Markov blanket visualisation needs node, edge,
-highlight and background values, plus a decision on whether it sits on a
-`--paper` or a dark field. Blocked on D-011 and on the open question about what
-the human-like element should be. Do not improvise these — add them here once
-the decision lands.
+**3D graph tokens.** D-011 proposes a 3D force-directed Bayesian network with a
+Markov blanket highlight, anchoring the interpretability section on
+`/research`. It needs node, edge, highlight and background values, plus a
+decision on whether it sits on `--paper` or a dark field. Blocked until D-011
+is accepted. Do not improvise these.
+
+**The human-like element.** Raised, never specified. A figure, a face, a
+learner avatar and an abstract human form are four different briefs and none
+has been chosen, so there is nothing to tokenise. Listed in D-011 as open.
 
 **Imagery.** No photographs are planned. If any appear, they need a treatment
 spec before they go in.
