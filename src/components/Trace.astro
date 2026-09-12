@@ -97,6 +97,25 @@ const altText =
         ))}
       </g>
     </svg>
+
+    {/* Key. "Shape carries the distinction" only holds if a reader can decode
+        which shape is which, so the two marks are shown at the size they
+        appear, drawn by the same CSS. Nothing here relies on colour: printed
+        in greyscale, or seen by a colour-blind reader, it reads the same. */}
+    <ul class="trace__key">
+      <li class="trace__key-item">
+        <svg class="trace__key-swatch" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <circle class="trace__mark is-correct" cx="10" cy="10" r="8" />
+        </svg>
+        <span>A filled circle is an attempt answered correctly.</span>
+      </li>
+      <li class="trace__key-item">
+        <svg class="trace__key-swatch" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <circle class="trace__mark is-incorrect" cx="10" cy="10" r="8" />
+        </svg>
+        <span>An open circle is an attempt answered incorrectly.</span>
+      </li>
+    </ul>
   </div>
 
   <figcaption class="trace__caption">

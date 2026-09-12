@@ -91,6 +91,39 @@
   fill: var(--trace-bg);
 }
 
+/* -- Key ------------------------------------------------------------------- */
+
+/* Wraps to one item per line at narrow widths rather than overflowing. */
+.trace__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  margin-block: var(--space-5) 0;
+  margin-inline: auto;
+  padding: 0;
+  max-width: 700px;
+  list-style: none;
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+  color: var(--ink-muted);
+}
+
+.trace__key-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Sized from --mark-size so the key and the trace cannot disagree about what
+   a mark looks like. */
+.trace__key-swatch {
+  flex: none;
+  inline-size: var(--mark-size);
+  block-size: var(--mark-size);
+  overflow: visible;
+}
+
 /* -- Caption --------------------------------------------------------------- */
 
 .trace__caption {

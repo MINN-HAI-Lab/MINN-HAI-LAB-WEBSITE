@@ -23,8 +23,6 @@ Nothing.
 
 ## QUEUE
 
-- **T-08** Attempt marks: filled circle correct, open stroked circle
-  incorrect. Shape carries the distinction, colour does not.
 - **T-09** Mastery curve path plus uncertainty band. Fill at 12%, 1px
   `--claim` strokes on upper and lower edges per D-013.
 - **T-10** Toggle interaction: clicking an attempt flips it, estimate and
@@ -91,6 +89,7 @@ history at `ec7ada9`.
 - **T-05** — src/lib/mastery.ts — BKT two-step update, pure TS, no deps. Per-step estimate, 95% normal-approximation band, next-attempt prediction, and a plain-sentence describe().
 - **T-06** — 52 vitest cases over the five required sequences plus cross-sequence invariants, belief chaining, determinism and parameter validation. Verified non-vacuous by mutation.
 - **T-07** — Trace.astro renders the full trace as build-time SVG with zero client JS: band, band edges, curve, ten marks, axis, alt text, caption and synthetic-data label.
+- **T-08** — Marks verified: both states stroke --ink, correct fills, incorrect stays open. Added a key so the shapes are decodable, drawn from --mark-size by the same CSS.
 
 ---
 
@@ -104,4 +103,5 @@ Failed approaches and values that had to be chosen. Two lines each.
   review queue and routed around.
 - T-05 band at n=1 spans almost the full range ([0.003, 1.000]). That is what one observation is worth, not a bug, but the widget should not be tuned to hide it.
 - T-07 found describe() rounding 0.9964 to '100 per cent'. BKT never reaches certainty, so that is an overclaim on the page. Added formatPercent(), clamped to 1..99 unless truly 0 or 1.
+- T-08 nearly shipped 'Filled — answered correctly', which is the WORD — fragment spaced-em-dash label on the CLAUDE.md banned list. Key now uses full sentences. Worth watching for in any label-shaped copy.
 
