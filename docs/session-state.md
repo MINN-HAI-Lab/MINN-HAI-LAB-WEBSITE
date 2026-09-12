@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-05** Mastery estimator as a pure TypeScript module, no dependency.
+  Attempts in, per-step estimate plus uncertainty interval out. BKT-style.
 
 ---
 
 ## QUEUE
 
-- **T-05** Mastery estimator as a pure TypeScript module, no dependency.
-  Attempts in, per-step estimate plus uncertainty interval out. BKT-style.
 - **T-06** Vitest unit tests for T-05: all-correct, all-incorrect,
   alternating, single attempt, empty sequence.
 - **T-07** Static SVG rendering of the trace, built at build time, zero
