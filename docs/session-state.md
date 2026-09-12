@@ -17,14 +17,7 @@ which resolved B-8 and created verifiable work.
 
 ## IN PROGRESS
 
-**T-2 — Re-audit the amended `design/DESIGN.md` against the amended
-`design/decisions.md`.**
-
-The previous audit produced B-8. The amendment touched six places (palette,
-contrast table, trace tokens, layout breakpoint, motion easing, the "not yet
-specified" section) and added D-011, D-012 and a superseded D-005. Check for
-conflicts introduced by the amendment itself, and for anything B-8 claimed to
-fix that is only half-fixed. Report; do not pick values.
+Nothing.
 
 ---
 
@@ -126,6 +119,69 @@ design judgement, not a measurement, so this session will not touch it.
 > Leave it, or nudge one of the two tokens? Nudging `--claim` darker is the
 > smaller change and keeps `--ink-muted` where D-012 just put it.
 
+### B-10 — D-011 contradicts CLAUDE.md, which this session cannot edit
+
+This is the important one, and it is not a rounding question.
+
+`CLAUDE.md:23` — "Client-side JavaScript is allowed in exactly one place: the
+interactive trace widget on the home page. Everything else ships as HTML and
+CSS."
+
+`CLAUDE.md:106` — "Pages should work with JavaScript disabled, apart from the
+trace widget, which degrades to a static rendering of one example."
+
+D-011 puts a 3D force-directed graph on `/research`. That is a second place
+with client-side JavaScript, and `/research` would not work with JavaScript
+off. The exemption in `CLAUDE.md` names the trace widget and nothing else.
+
+Two more, same entry:
+
+- `CLAUDE.md:121` — "Do not add dependencies without asking." D-011 names
+  `3d-force-graph`, which pulls Three.js and d3-force-3d.
+- `CLAUDE.md:78` bans "floating nodes, animated neural-network backgrounds …
+  any generic 'AI' motif". D-011 argues the graph is the lab's real research
+  object rather than a motif, and that it "reads the way people expect a neural
+  visual to read". That may well be the right call, but `CLAUDE.md` says to say
+  so rather than quietly pick, so it is said here rather than assumed.
+
+D-011 cannot be accepted as written without `CLAUDE.md` changing, and this
+session may not touch `CLAUDE.md`.
+
+> Amend the client-side JavaScript rule to admit a second island on
+> `/research`, with whatever no-JS fallback you want for it? Or move the graph
+> to a static rendering? Or drop D-011?
+
+### B-11 — `--trace-band` is below the non-text contrast floor
+
+`--claim` at 12% over `--paper-sunk` resolves to `#DDCED5`: **1.22:1** against
+the panel, against a 3:1 floor for non-text content a reader has to perceive.
+The mastery curve sitting on the band is fine at 4.46:1.
+
+The band represents the model's uncertainty, which is information rather than
+atmosphere, so the floor probably applies.
+
+> Raise the 12%, or accept that the band is atmosphere and label it as such?
+> Picking an opacity is picking a value, so this session did not.
+
+### B-12 — Four smaller gaps from the same audit
+
+1. **D-003 is not marked superseded.** D-012 replaces its `--ink-muted`
+   (`#5A6A72` → `#4E5D65`), but D-003 still shows the old value and carries no
+   marker. The preamble of `decisions.md` says to mark the old entry; D-005 was
+   marked, D-003 was not. Anyone reading D-003 at face value takes a token that
+   fails on the panel.
+2. **No exit-duration token.** `DESIGN.md` says "Exit animations run faster
+   than entrances", but the three durations are spoken for: `--dur-fast`
+   (colour, hover), `--dur-base` (estimate, state), `--dur-slow` (curve draw).
+   Which one is an exit?
+3. **The vertical rhythm switch names no breakpoint.** `--space-20` "on
+   desktop", `--space-12` "on mobile", while Layout declares exactly three
+   breakpoints and says "any media query in the codebase uses one of these
+   numbers". Which of 640, 900 or 1180 switches the rhythm?
+4. **The opacity carve-out omits `--trace-band`.** The Colour section still
+   reads "no tints, no opacity variants" and then carves out aliases only. The
+   band is the exception and is permitted four sections later.
+
 ---
 
 ## DONE
@@ -137,6 +193,12 @@ design judgement, not a measurement, so this session will not touch it.
 - **Worked the Phase 0 queue to exhaustion.** All seven tasks assessed
   individually, all seven blocked on facts or judgements not available to an
   autonomous session.
+- **T-2 — re-audited the amended `DESIGN.md` against the amended
+  `decisions.md`.** The six B-8 fixes all hold: easing is `--ease-out` on both
+  sides, the annotation column is on the declared 1180px breakpoint, D-011 and
+  D-012 exist, D-005 is superseded. The audit turned up one blocking conflict
+  with `CLAUDE.md` (B-10), one measured accessibility failure (B-11) and four
+  smaller gaps (B-12). Added a measurement note to the trace section.
 - **T-1 — verified the two D-012 contrast figures.** Both hold in direction
   but were stated imprecisely: `--ink-muted` on `--paper` measures 6.02:1
   (D-012 says ~5.9) and on `--paper-sunk` 5.48:1 (says ~5.4). Corrected the two

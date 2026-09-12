@@ -299,6 +299,11 @@ carries the distinction; colour does not.
 The uncertainty band is the only place any token appears at reduced opacity,
 because the band is literally about uncertainty.
 
+At 12% over `--paper-sunk` the band resolves to `#DDCED5`, which is 1.22:1
+against the panel — below the 3:1 floor for non-text content that has to be
+perceived. If the band carries meaning rather than atmosphere, 12% is too
+light. Measured, not settled: see B-11 in `docs/session-state.md`.
+
 Label the synthetic data visibly inside the widget.
 
 ---
