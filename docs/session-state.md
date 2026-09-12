@@ -23,8 +23,6 @@ Nothing.
 
 ## QUEUE
 
-- **T-09** Mastery curve path plus uncertainty band. Fill at 12%, 1px
-  `--claim` strokes on upper and lower edges per D-013.
 - **T-10** Toggle interaction: clicking an attempt flips it, estimate and
   curve update at `--dur-base` with `--ease-out`.
 - **T-11** Keyboard operability: roving tabindex across attempts, Enter and
@@ -90,6 +88,7 @@ history at `ec7ada9`.
 - **T-06** — 52 vitest cases over the five required sequences plus cross-sequence invariants, belief chaining, determinism and parameter validation. Verified non-vacuous by mutation.
 - **T-07** — Trace.astro renders the full trace as build-time SVG with zero client JS: band, band edges, curve, ten marks, axis, alt text, caption and synthetic-data label.
 - **T-08** — Marks verified: both states stroke --ink, correct fills, incorrect stays open. Added a key so the shapes are decodable, drawn from --mark-size by the same CSS.
+- **T-09** — Curve and band verified against D-013: 12% fill, 1px --claim edge strokes, 2px --claim curve. 20 geometry tests added; fixed a color-mix fallback that would have painted the band solid.
 
 ---
 
@@ -104,4 +103,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-05 band at n=1 spans almost the full range ([0.003, 1.000]). That is what one observation is worth, not a bug, but the widget should not be tuned to hide it.
 - T-07 found describe() rounding 0.9964 to '100 per cent'. BKT never reaches certainty, so that is an overclaim on the page. Added formatPercent(), clamped to 1..99 unless truly 0 or 1.
 - T-08 nearly shipped 'Filled — answered correctly', which is the WORD — fragment spaced-em-dash label on the CLAUDE.md banned list. Key now uses full sentences. Worth watching for in any label-shaped copy.
+- T-09: the auto-generated color-mix fallback was full-opacity --claim, i.e. a solid block over the curve. Base value is now #b4133f1f (12.2%, nearest 8-bit alpha to 12%) with color-mix restoring the --claim link under @supports.
 

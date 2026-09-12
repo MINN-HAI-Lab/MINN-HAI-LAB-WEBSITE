@@ -171,10 +171,25 @@
   --trace-edge: var(--ink-muted);
   --trace-mark: var(--ink);
   --trace-curve: var(--claim);
-  --trace-band: color-mix(in srgb, var(--claim) 12%, transparent);
+  /* --claim at 12%, the one sanctioned opacity variant (D-013).
+
+     Declared twice on purpose. The hex is #B4133F at alpha 0.12 — the same
+     colour, not a seventh one — and it is the base value so that a browser
+     without color-mix still gets a 12% wash. Left to its own devices the
+     build emits `var(--claim)` as the fallback, which is full-opacity
+     crimson: a solid block painted straight over the curve it is supposed to
+     surround. The @supports branch then restores the link to --claim, so
+     changing that token still moves the band. */
+  --trace-band: #b4133f1f;
   --trace-band-edge: var(--claim);
   --mark-size: 20px;
   --curve-width: 2px;
+}
+
+@supports (color: color-mix(in srgb, red, red)) {
+  :root {
+    --trace-band: color-mix(in srgb, var(--claim) 12%, transparent);
+  }
 }
 
 @media (min-width: 900px) {
