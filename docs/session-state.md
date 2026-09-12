@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-07** Static SVG rendering of the trace, built at build time, zero
+  client JS. The JS-off fallback, shipped in the HTML.
 
 ---
 
 ## QUEUE
 
-- **T-07** Static SVG rendering of the trace, built at build time, zero
-  client JS. The JS-off fallback, shipped in the HTML.
 - **T-08** Attempt marks: filled circle correct, open stroked circle
   incorrect. Shape carries the distinction, colour does not.
 - **T-09** Mastery curve path plus uncertainty band. Fill at 12%, 1px
