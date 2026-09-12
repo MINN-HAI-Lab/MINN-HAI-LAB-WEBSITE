@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-03** Self-host Literata variable, `opsz` axis tracking rendered pixel
+  size, subset latin + latin-ext, no runtime Google Fonts request.
 
 ---
 
 ## QUEUE
 
-- **T-03** Self-host Literata variable, `opsz` axis tracking rendered pixel
-  size, subset latin + latin-ext, no runtime Google Fonts request.
 - **T-04** Base layout shell: measure, page max, gutters, the three
   breakpoints, skip link, document outline.
 - **T-05** Mastery estimator as a pure TypeScript module, no dependency.
