@@ -56,6 +56,16 @@ Charter, whatever — would be inventing a value, which DESIGN.md forbids.
 > Do you want a named fallback stack? Georgia is the usual choice and is
 > metrically closest to Literata of the faces likely to be installed.
 
+**Update, T-03.** Partly answered by the tooling rather than by a decision.
+Astro's `optimizedFallbacks` generated a metric-matched fallback of its own:
+`local("Times New Roman")` with `size-adjust: 118.4%` and ascent/descent
+overrides, so the reflow when Literata lands is small. The stack is now
+`Literata, "Literata fallback: Times New Roman", serif`.
+
+That is better than a bare `serif`, but Times New Roman is a face nobody chose
+and it does not resemble Literata. Georgia would be closer. Say the word and
+it becomes a one-line `fallbacks: ['Georgia', 'serif']`.
+
 ---
 
 ## Q-4 — Tailwind was scanning `.agents/skills` and emitting foreign colours
@@ -75,3 +85,32 @@ Fixed with `@import "tailwindcss" source(none)` plus an explicit
 > Worth knowing this is a standing hazard: anything added to the repo outside
 > `src/` is invisible to Tailwind now, which is correct, but if a template ever
 > lives elsewhere it has to be added to `@source` explicitly.
+
+---
+
+## Q-5 — The Literata files are checked in, not fetched at build time
+
+**Raised:** T-03, 2026-09-13. **Routed around:** committed two woff2 files.
+
+DESIGN.md picks Literata for its optical size axis and says ignoring that axis
+"wastes the choice". Getting the axis turned out to need the font files in the
+repo.
+
+Astro's font pipeline would normally download and subset at build time, which
+is tidier. But `fontProviders.google()` in Astro 7 is declared as `function
+google()` with no parameters — it constructs the unifont provider and drops any
+config passed to it. unifont *does* support extra axes, through
+`experimental.variableAxis`, and there is no way to reach it through Astro.
+
+With wght only, Google serves 32K + 38K. With `opsz,wght@7..72,400..500` it
+serves 84K + 69K. Same family, different files, and the extra 83K is the axis.
+Building through Astro's google provider silently produced the wght-only
+files, which look fine and quietly discard the reason the face was chosen.
+
+So `src/assets/fonts/literata-{latin,latin-ext}.woff2` are committed and loaded
+through `fontProviders.local()`. Astro still fingerprints, preloads and
+generates the metric-matched fallback.
+
+> Two consequences. Updating Literata is now a manual re-download rather than a
+> lockfile bump. And the repo carries 153K of binary. Both seem cheaper than
+> losing the axis, but it is your call.

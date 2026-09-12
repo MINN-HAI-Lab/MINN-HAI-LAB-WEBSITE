@@ -1,10 +1,86 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 // Static output. No adapter, no SSR. See docs/plan.md.
 export default defineConfig({
   output: 'static',
+
+  // Literata, self-hosted. The two woff2 files in src/assets/fonts are the
+  // latin and latin-ext subsets of the *two-axis* build, carrying both wght
+  // and opsz.
+  //
+  // They are checked in rather than fetched at build time because Astro's
+  // google() provider wrapper takes no arguments — it drops any config passed
+  // to it — so there is no way to ask it for the opsz axis. Its wght-only
+  // files are 32K/38K; these are 84K/69K, which is the axis showing up in the
+  // byte count. DESIGN.md picks Literata *for* opsz, so the larger file is the
+  // point, not an accident. See Q-5 in docs/review-queue.md.
+  //
+  // Nothing here talks to fonts.googleapis.com or fonts.gstatic.com at runtime.
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: 'Literata',
+      cssVariable: '--font-literata',
+      fallbacks: ['serif'],
+      options: {
+        variants: [
+        {
+          weight: '400 500',
+          style: 'normal',
+          src: ['./src/assets/fonts/literata-latin.woff2'],
+          unicodeRange: [
+          'U+0000-00FF',
+          'U+0131',
+          'U+0152-0153',
+          'U+02BB-02BC',
+          'U+02C6',
+          'U+02DA',
+          'U+02DC',
+          'U+0304',
+          'U+0308',
+          'U+0329',
+          'U+2000-206F',
+          'U+20AC',
+          'U+2122',
+          'U+2191',
+          'U+2193',
+          'U+2212',
+          'U+2215',
+          'U+FEFF',
+          'U+FFFD',
+          ],
+        },
+        {
+          weight: '400 500',
+          style: 'normal',
+          src: ['./src/assets/fonts/literata-latin-ext.woff2'],
+          unicodeRange: [
+          'U+0100-02BA',
+          'U+02BD-02C5',
+          'U+02C7-02CC',
+          'U+02CE-02D7',
+          'U+02DD-02FF',
+          'U+0304',
+          'U+0308',
+          'U+0329',
+          'U+1D00-1DBF',
+          'U+1E00-1E9F',
+          'U+1EF2-1EFF',
+          'U+2020',
+          'U+20A0-20AB',
+          'U+20AD-20C0',
+          'U+2113',
+          'U+2C60-2C7F',
+          'U+A720-A7FF',
+          ],
+          },
+        ],
+      },
+    },
+  ],
+
   vite: {
     plugins: [tailwindcss()],
   },

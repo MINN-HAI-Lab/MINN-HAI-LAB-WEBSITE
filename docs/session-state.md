@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-03** Self-host Literata variable, `opsz` axis tracking rendered pixel
-  size, subset latin + latin-ext, no runtime Google Fonts request.
+Nothing.
 
 ---
 
@@ -95,6 +94,7 @@ history at `ec7ada9`.
 
 - **T-01** — Astro 7 + TypeScript 6 + Tailwind v4 scaffold. Build and astro check both clean on an empty index.
 - **T-02** — tokens.css carries every DESIGN.md colour, space, radius, duration and easing; Tailwind @theme exposes them and the built CSS contains only the six sanctioned colours.
+- **T-03** — Literata self-hosted from two committed woff2 subsets carrying both wght and opsz; opsz is bound to each role's pixel size and flips with the scale at 900px. No runtime Google request.
 
 ---
 

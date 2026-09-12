@@ -107,6 +107,16 @@
   --size-small: 14px;
   --lh-small: 1.5;
 
+  /* Optical size, as a unitless numeral of the px size above. DESIGN.md:
+     "Set opsz to the rendered pixel size rather than leaving it at default.
+     That axis is the reason for choosing Literata." These mirror --size-*
+     exactly and flip at 900px with them. */
+  --opsz-display: 34;
+  --opsz-title: 27;
+  --opsz-section: 21;
+  --opsz-body: 17;
+  --opsz-small: 14;
+
   /* Weights. Section is the only role that is not 400. */
   --weight-display: 400;
   --weight-title: 400;
@@ -180,6 +190,32 @@
     --size-small: 15px;
     --lh-small: 1.5;
 
+    --opsz-display: 56;
+    --opsz-title: 36;
+    --opsz-section: 24;
+    --opsz-body: 18;
+    --opsz-small: 15;
+
     --rhythm-section: var(--space-20);
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Base type. Literata everywhere, with opsz driven from the role's own pixel
+   size rather than left at the font's default. Roles set their own opsz; this
+   is the body default.
+--------------------------------------------------------------------------- */
+
+body {
+  font-family: var(--font-literata), serif;
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
+  font-variation-settings: "opsz" var(--opsz-body), "wght" var(--weight-body);
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+/* Years, estimates and counts sit in columns and need to line up. */
+.tnum {
+  font-feature-settings: "tnum" 1;
 }
