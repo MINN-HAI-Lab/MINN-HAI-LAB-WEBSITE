@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+
+# dependencies
+node_modules/
+
+# build output — Astro, per D-001
+dist/
+.astro/
+
+# environment
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# typescript
+*.tsbuildinfo
+
+# editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# throwaway layout studies, per docs/plan.md
+prototypes/
+
+# per-machine agent settings, not shared
+.claude/settings.local.json
