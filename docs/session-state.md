@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-12** ARIA live region announcing the new estimate as a plain sentence
+  after each toggle. Polite, not assertive.
 
 ---
 
 ## QUEUE
 
-- **T-12** ARIA live region announcing the new estimate as a plain sentence
-  after each toggle. Polite, not assertive.
 - **T-13** Attribution view marking which past attempts carry the current
   estimate. Toggleable, keyboard reachable.
 - **T-14** Reduced-motion path: finished curve instead of the draw, instant
