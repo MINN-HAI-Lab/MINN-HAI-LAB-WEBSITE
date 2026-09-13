@@ -17,7 +17,10 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-34** Heading structure audit across both pages. axe checks order within
+  a page; this checks there is exactly one h1 per page and no skipped level.
+
+When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
 
 ---
 
@@ -32,11 +35,6 @@ on it is parsed from tokens.css at build time.
 These come from Phase 4 in `docs/phase.md` and the "Before deploy" checklist
 in `docs/handbook.md`. Phase 3 is deliberately not queued: it is publications
 and people content, and it needs Kaung.
-
-- **T-34** Heading structure audit across both pages. axe checks order within
-  a page; this checks there is exactly one h1 per page and no skipped level.
-
-When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
 
 ## BLOCKED
 
