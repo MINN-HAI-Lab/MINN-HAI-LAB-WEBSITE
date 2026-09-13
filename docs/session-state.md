@@ -17,12 +17,6 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
-
----
-
-## QUEUE
-
 - **T-25** Run axe-core over every built page. Fix violations, log design
   judgements rather than guessing.
 
@@ -30,6 +24,10 @@ When this empties, refill from `docs/phase.md` — Phase 2 first, then Phase 4
 polish. Never queue Phase 3; that is publications content and needs Kaung.
 
 ---
+
+---
+
+## QUEUE
 
 ## BLOCKED
 
