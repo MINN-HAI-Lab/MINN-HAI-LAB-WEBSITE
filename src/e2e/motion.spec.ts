@@ -31,34 +31,65 @@ test.describe('with motion allowed', () => {
   test.use({ reducedMotion: 'no-preference' });
 
   test('the curve draws in on load, once', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
+    /* Recorded as it happens, not caught mid-flight.
+     *
+     * The first version polled for a dash array with waitForFunction, which is
+     * a race against the animation it is trying to observe: the draw takes
+     * --dur-slow, and if the first poll lands after it finishes, the dash
+     * array has already been cleaned up and was never seen. It passed almost
+     * always and failed in WebKit about one run in five — which is the worst
+     * possible behaviour for a test, because it teaches whoever sees it to run
+     * the suite again rather than to look.
+     *
+     * A MutationObserver installed before any page script runs sees every
+     * value the style attribute ever held, so the assertion does not depend on
+     * when it is made.
+     */
+    await page.addInitScript(() => {
+      const seen: string[] = [];
+      (window as unknown as { __dashOffsets: string[] }).__dashOffsets = seen;
 
-    // Catch it mid-draw. --dur-slow is 600ms, so shortly after load the dash
-    // offset should be partway through, not zero and not absent.
-    await page.waitForFunction(
-      () => {
+      const watch = (curve: SVGPathElement): void => {
+        new MutationObserver(() => {
+          const value = curve.style.strokeDashoffset;
+          if (seen[seen.length - 1] !== value) seen.push(value);
+        }).observe(curve, { attributes: true, attributeFilter: ['style'] });
+      };
+
+      // The curve is server-rendered, but this script runs before the document
+      // exists, so wait for it.
+      document.addEventListener('DOMContentLoaded', () => {
         const curve = document.querySelector<SVGPathElement>('.trace__curve');
-        return !!curve?.style.strokeDasharray;
-      },
-      undefined,
-      { timeout: 3000 },
+        if (curve) watch(curve);
+      });
+    });
+
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    // Comfortably past --dur-slow, so the draw has finished either way.
+    await page.waitForTimeout(1500);
+
+    const offsets = await page.evaluate(
+      () => (window as unknown as { __dashOffsets: string[] }).__dashOffsets ?? [],
     );
 
-    const during = await curveState(page);
-    expect(during.dashArray, 'the draw should set a dash array').not.toBe('');
-    expect(Number.parseFloat(during.dashOffset)).toBeGreaterThan(0);
+    const numeric = offsets.map((v) => Number.parseFloat(v)).filter((n) => Number.isFinite(n));
+    expect(
+      numeric.length,
+      `the curve never set a dash offset, so it did not draw in: ${offsets.join(', ')}`,
+    ).toBeGreaterThan(2);
+    // It runs down towards zero rather than jumping.
+    expect(Math.max(...numeric), 'the draw should start at the full path length').toBeGreaterThan(0);
+    expect(
+      numeric[numeric.length - 1] ?? 1,
+      'the draw should finish at zero rather than partway',
+    ).toBeLessThan(Math.max(...numeric));
 
     // And it must clean up after itself, or a later toggle redraws against a
     // stale dash pattern.
-    await page.waitForFunction(
-      () => document.querySelector<SVGPathElement>('.trace__curve')?.style.strokeDasharray === '',
-      undefined,
-      { timeout: 3000 },
-    );
     const after = await curveState(page);
-    expect(after.dashArray).toBe('');
-    expect(after.dashOffset).toBe('');
+    expect(after.dashArray, 'the dash array was left on the curve').toBe('');
+    expect(after.dashOffset, 'the dash offset was left on the curve').toBe('');
   });
 
   test('toggling animates the estimate rather than jumping to it', async ({ page }) => {
