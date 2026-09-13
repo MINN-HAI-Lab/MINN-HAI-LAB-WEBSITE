@@ -13,6 +13,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { NAVIGATION } from '../data/navigation.ts';
+import { withBase } from '../lib/paths.ts';
 
 const built = NAVIGATION.filter((item) => item.built);
 const pending = NAVIGATION.filter((item) => !item.built).map((item) => item.label);
@@ -40,7 +41,7 @@ const pending = NAVIGATION.filter((item) => !item.built).map((item) => item.labe
         {
           built.map((item) => (
             <li>
-              <a class="link" href={item.href}>
+              <a class="link" href={withBase(item.href)}>
                 {item.label}
               </a>
             </li>

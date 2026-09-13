@@ -17,11 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-40** Base-path robustness. Every internal URL is absolute from the root
-  (`/favicon.svg`, `/share.svg`, `/`). D-008 names GitHub Pages as the
-  likeliest host, and a project page there serves from `/<repo>/`, which
-  breaks every one of them. Establish whether that is a real risk and either
-  handle it or log it clearly against D-008.
+Nothing.
 
 ---
 
@@ -113,6 +109,7 @@ history at `ec7ada9`.
 - **T-37** — npm run verify runs the type check, unit tests, token lint, contrast check, a production build and the browser suite, and propagates a failure's exit code past the preview-server cleanup. Handbook checklist rewritten around it.
 - **T-38** — TODO audit: every visible marker must name what is missing, who supplies it and a tracker. Prints the inventory on every run. Found the footer's contact TODO had no tracker; recorded as B-9.
 - **T-39** — Reviewed the 768, attribution, focus and no-JS captures. Found and fixed a stray '---' rendering on every page since T-27, and added a document-integrity test that catches it.
+- **T-40** — Internal URLs now go through withBase(), so a subpath deploy works. Verified by building with a base: all six pick up the prefix, including the three Astro would have left alone.
 
 ---
 

@@ -11,6 +11,7 @@
  * one that admits its scope.
  */
 import { LAB_NAME, NAVIGATION } from '../data/navigation.ts';
+import { withBase } from '../lib/paths.ts';
 
 const built = NAVIGATION.filter((item) => item.built);
 const current = Astro.url.pathname;
@@ -18,7 +19,7 @@ const current = Astro.url.pathname;
 
 <header class="site-header">
   <div class="page site-header__inner">
-    <a class="site-header__name" href="/">{LAB_NAME}</a>
+    <a class="site-header__name" href={withBase("/")}>{LAB_NAME}</a>
 
     {
       built.length > 1 && (
@@ -28,7 +29,7 @@ const current = Astro.url.pathname;
               <li>
                 <a
                   class="link"
-                  href={item.href}
+                  href={withBase(item.href)}
                   aria-current={current === item.href ? 'page' : undefined}
                 >
                   {item.label}

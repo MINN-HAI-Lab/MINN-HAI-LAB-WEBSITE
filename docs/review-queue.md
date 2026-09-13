@@ -325,3 +325,29 @@ the same time as the rasterisation, not before.
 
 > Three small jobs, all unblocked by one answer: the domain. Give me that and
 > og:image, og:url, the PNG and the embedded font all land together.
+
+---
+
+## Q-15 — A GitHub project page would have broken every internal link
+
+**Raised:** T-40, 2026-09-13. **Routed around:** made the paths base-aware.
+
+D-008 names GitHub Pages as the likeliest host. A GitHub *project* page is
+served from `github.io/<repo>/`, not from the root — and every internal URL on
+this site was written as a literal absolute path: the header link, the 404
+links, the favicon.
+
+Astro rewrites the URLs it generates itself when `base` is set — the bundled
+CSS, the script, the font files. It does not touch a string typed into an
+`href`. So the site would have built cleanly, passed every test at the root,
+deployed, and then 404'd on its own favicon and its own header link.
+
+Everything internal now goes through `withBase()` in `src/lib/paths.ts`. With
+no base configured it is a no-op, so nothing changes today. Verified by
+building with `base: '/minn-hai-lab'`: all six internal URLs pick up the
+prefix, including the three Astro would have left alone.
+
+> No decision needed unless the hosting answer is a GitHub project page, in
+> which case set `base` in `astro.config.mjs` and it works. A user or org page,
+> or any host serving from the root, needs nothing. Worth deciding alongside
+> D-008 and the domain rather than after a deploy.
