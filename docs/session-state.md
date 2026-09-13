@@ -23,7 +23,11 @@ Nothing.
 
 ## QUEUE
 
-Refilled 2026-09-13, eighth time. T-51 and T-52 are done.
+- **T-54** Is the build reproducible? Asset filenames are content hashes, so a
+  build that is not deterministic quietly breaks caching and makes every
+  deploy a full re-download. Never checked.
+
+---
 
 ## BLOCKED
 
