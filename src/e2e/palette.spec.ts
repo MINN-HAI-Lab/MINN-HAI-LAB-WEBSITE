@@ -54,9 +54,8 @@ const TRANSPARENT = new Set(['#0000', '#00000000']);
  * White, but only ever translucent.
  *
  * The glass is white at a few per cent over the field: --surface at 0.045,
- * --surface-edge at 0.10, --grid at 0.06, --surface-sunk at 0.03. The minifier
- * writes those as #ffffff0c and friends, so they arrive here as white with an
- * alpha channel.
+ * --surface-edge at 0.10, --grid at 0.06. The minifier writes those as
+ * #ffffff0c and friends, so they arrive here as white with an alpha channel.
  *
  * Opaque #ffffff still fails. A solid white anywhere on this field would be a
  * hole in it, and that is worth failing over — so the alpha is checked rather

@@ -27,7 +27,14 @@
   font-size: var(--size-body);
   line-height: 1.4;
   color: var(--text);
-  background-color: var(--surface-sunk);
+  /* Opaque, not another translucent white.
+
+     The override says glass is never nested, and a translucent fill inside a
+     glass panel is close enough to that to be worth avoiding — it also stacks
+     a third layer under the text the reader is typing, which is a contrast
+     case nobody was measuring. --field-2 is the recessed ground everywhere
+     else on the site and it reads as a well on a glass panel. */
+  background-color: var(--field-2);
   border: var(--rule-width) solid var(--surface-edge);
   border-radius: var(--radius-glass);
   padding: var(--space-3) var(--space-4);

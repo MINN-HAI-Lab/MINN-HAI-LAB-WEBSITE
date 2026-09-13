@@ -117,9 +117,6 @@
      surface carries both. Never stack one over another: two layers double the
      blur cost and wash the text underneath toward the surface colour. */
   --surface: rgb(255 255 255 / 0.045);
-  /* One step below the glass, for a field a reader types into. It has to read
-     as recessed against the panel it sits on, and the panel is --surface. */
-  --surface-sunk: rgb(255 255 255 / 0.03);
   --surface-edge: rgb(255 255 255 / 0.1);
   --glass-blur: blur(16px) saturate(120%);
 
