@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-17** Verify the JS-off path by building and loading with scripting
-  disabled. Record what was checked in NOTES.
+Nothing.
 
 ---
 
@@ -82,6 +81,7 @@ history at `ec7ada9`.
 - **T-14** — Load-time curve draw over --dur-slow, skipped entirely under reduced motion so the finished curve stands. Estimate updates become instant plus a static stroke-width highlight; all three CSS transitions get transition:none.
 - **T-15** — Synthetic-data label now sits inside the SVG at --ink-muted, so a screenshot or export carries it, with the fuller statement kept in the caption.
 - **T-16** — Verified at 360, 390, 768, 900, 1180 and 1440: no horizontal scroll anywhere. Fixed tap targets that scaled to 12px on a phone; they are now >=24px at every width.
+- **T-17** — JS-off path verified in chromium with scripting disabled: 24 checks, all passing. Interactive path smoke-tested too.
 
 ---
 
@@ -104,4 +104,7 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-24 must lint SOURCE css, not built output: Tailwind's base layer legitimately mentions box-shadow (reset plus utility plumbing), so a built-CSS grep for 'shadow' always trips.
 - T-14: the load draw sets stroke-dashoffset from JS only, so JS-off gets the finished curve. There may be a brief flash of the complete curve before the module runs; T-19 should look for it.
 - T-16 measured, did not assume: circular hit areas scaled to 12px at 360px because the SVG scales. Hit targets are now full-slot rects, 24px at 360 and 27px at 390. @playwright/test plus chromium installed here; T-19 owns the committed harness.
+- T-17 JS-off verification, 24 checks in headless chromium with javaScriptEnabled:false. Rendered and visible: curve path, uncertainty band, all ten marks, the in-SVG 'Synthetic data' stamp, the caption's full synthetic paragraph, and the estimate sentence. No 'requires JavaScript' placeholder anywhere. Inert as intended: svg keeps role=img with alt text, zero tabindex attributes, zero role=button, attribution control and keyboard instructions both still hidden, cursor on a mark is auto rather than pointer. The same 24 checks re-run with JS on confirm the upgrade: svg becomes role=group, ten marks focusable, controls revealed, cursor pointer.
+- T-17 also smoke-tested the interactive path that T-10/T-11/T-13 could only unit-test. Click flips a mark, curve d changes, live region announces. Keyboard: Tab reaches the marks in one stop (skip-link, mark 0, button), arrows move focus with the roving tabindex following (0-1-1... to -10-1...), Home and End jump, Enter and Space both toggle, focus ring computes to solid 2px rgb(28,40,48) = --ink. Space does not scroll, verified against a control where Space on the body scrolls 428px. Attribution ring lands on marks 7,8,9.
+- Two false alarms while testing keyboard, both test-sequencing errors rather than bugs: pressing arrows after focus had already tabbed past the widget onto the button, and reading scrollY after focus() had itself scrolled the mark into view. Re-check the harness before believing a keyboard failure.
 
