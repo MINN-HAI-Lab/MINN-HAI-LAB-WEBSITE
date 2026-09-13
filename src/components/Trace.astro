@@ -129,9 +129,22 @@ const altText =
         <span>An open circle is an attempt answered incorrectly.</span>
       </li>
     </ul>
+
+    {/* Hidden until the script runs. With JavaScript off none of this is
+        true, and telling a reader to press keys that do nothing is worse than
+        saying nothing. */}
+    <p class="trace__instructions" data-instructions hidden>
+      Select an attempt to change its answer and watch the estimate move. Use
+      the arrow keys to move between attempts, then Enter or Space to change
+      one.
+    </p>
   </div>
 
   <figcaption class="trace__caption">
+    {/* Holds the graphic's description once the SVG stops being an image and
+        becomes a group of controls. Empty and off-screen until then, because
+        while role="img" is on the SVG the same text is already the alt. */}
+    <p class="visually-hidden" data-summary></p>
     <p class="trace__sentence" data-sentence>{sentence}</p>
     <p class="trace__synthetic">
       Synthetic data. This sequence was invented to illustrate the method. It
@@ -249,15 +262,93 @@ const altText =
       animateTo(next);
     }
 
+    /**
+     * Roving tabindex.
+     *
+     * Ten attempts should cost one Tab stop, not ten. Exactly one mark is in
+     * the tab order at a time and the arrow keys move between them, which is
+     * the expected behaviour for a composite control and keeps the trace from
+     * swamping the page's tab sequence.
+     */
+    let active = 0;
+
+    function focusMark(next: number, moveFocus = true): void {
+      active = Math.max(0, Math.min(next, groups.length - 1));
+      groups.forEach((group, i) => {
+        group.setAttribute('tabindex', i === active ? '0' : '-1');
+      });
+      if (moveFocus) groups[active]?.focus();
+    }
+
+    function onKeydown(event: KeyboardEvent, index: number): void {
+      switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          event.preventDefault();
+          focusMark(index + 1);
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          event.preventDefault();
+          focusMark(index - 1);
+          break;
+        case 'Home':
+          event.preventDefault();
+          focusMark(0);
+          break;
+        case 'End':
+          event.preventDefault();
+          focusMark(groups.length - 1);
+          break;
+        case 'Enter':
+        case ' ':
+        case 'Spacebar':
+          // Space would otherwise scroll the page out from under the widget.
+          event.preventDefault();
+          toggle(index);
+          break;
+        default:
+          break;
+      }
+    }
+
     /* Upgrade the inert marks into controls. Done here rather than in the
        template so the static rendering never offers a control that does
        nothing. */
     svgRoot?.classList.add('is-interactive');
-    for (const group of groups) {
-      group.setAttribute('role', 'button');
-      group.setAttribute('tabindex', '0');
-      group.addEventListener('click', () => toggle(Number(group.dataset.index)));
+    svgRoot?.setAttribute('role', 'group');
+    svgRoot?.setAttribute('aria-label', 'Attempts');
+
+    /* The <svg> ships as role="img", which is right while it is a picture:
+       assistive tech reads the alt text and ignores the children. Once the
+       marks become controls that is exactly wrong, because it would bury ten
+       buttons inside a single image node. Re-label it as a group and move the
+       description onto the figure, so the alt text survives and the controls
+       are reachable. */
+    const svg = root.querySelector<SVGSVGElement>('.trace__svg');
+    const description = svg?.getAttribute('aria-label') ?? '';
+    if (svg) {
+      svg.setAttribute('role', 'group');
+      svg.removeAttribute('aria-label');
     }
+    const summary = root.querySelector<HTMLElement>('[data-summary]');
+    if (summary) summary.textContent = description;
+
+    groups.forEach((group, i) => {
+      const index = Number(group.dataset.index);
+      group.setAttribute('role', 'button');
+      group.setAttribute('tabindex', i === 0 ? '0' : '-1');
+      group.addEventListener('click', () => {
+        focusMark(i, false);
+        toggle(index);
+      });
+      group.addEventListener('keydown', (event) => onKeydown(event, index));
+      group.addEventListener('focus', () => focusMark(i, false));
+    });
+
+    const instructions = root.querySelector<HTMLElement>('[data-instructions]');
+    if (instructions) instructions.hidden = false;
+
     paintMarks();
   }
 </script>

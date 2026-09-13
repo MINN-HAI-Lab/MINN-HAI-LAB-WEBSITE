@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-11** Keyboard operability: roving tabindex across attempts, Enter and
-  Space toggle, visible `--ink` focus.
+Nothing.
 
 ---
 
@@ -87,6 +86,7 @@ history at `ec7ada9`.
 - **T-08** — Marks verified: both states stroke --ink, correct fills, incorrect stays open. Added a key so the shapes are decodable, drawn from --mark-size by the same CSS.
 - **T-09** — Curve and band verified against D-013: 12% fill, 1px --claim edge strokes, 2px --claim curve. 20 geometry tests added; fixed a color-mix fallback that would have painted the band solid.
 - **T-10** — Click a mark to flip it; estimate, curve and band animate at --dur-base with --ease-out via rAF interpolation. 2.2KB gzipped, progressive enhancement over the static SVG.
+- **T-11** — Roving tabindex across the ten marks, arrows plus Home and End to move, Enter and Space to toggle, visible --ink focus ring. Ten attempts cost one Tab stop.
 
 ---
 
@@ -104,4 +104,6 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-09: the auto-generated color-mix fallback was full-opacity --claim, i.e. a solid block over the curve. Base value is now #b4133f1f (12.2%, nearest 8-bit alpha to 12%) with color-mix restoring the --claim link under @supports.
 - T-10 animates by interpolating path coordinates in rAF rather than transitioning the CSS d property: d is not reliably animatable in Firefox, and DESIGN.md says the movement IS the information. It also makes T-14's reduced-motion path exact rather than a zeroed duration.
 - T-10 verified at the logic level only (89 unit tests). The click path itself needs a real browser; that check belongs to T-19.
+- T-11 found that svg role='img' hides its own children from assistive tech, which would have buried ten controls inside one image node. The script now swaps the SVG to role='group' and moves the description to a visually-hidden paragraph.
+- npm run check occasionally hangs past 120s. Re-running it alone completes in seconds. Not diagnosed; if it recurs, run it with a longer timeout rather than assuming a failure.
 
