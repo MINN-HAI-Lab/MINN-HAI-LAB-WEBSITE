@@ -17,14 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-42** The annotation column in `layout.css` is specified in DESIGN.md,
-  built, and used by nothing — `/research` is Phase 3. Give it a fixture and
-  a test at the 1180px breakpoint so it is not discovered to be broken on the
-  day someone needs it.
-
-When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
-
----
+Nothing.
 
 ---
 
@@ -107,6 +100,7 @@ history at `ec7ada9`.
 - **T-39** — Reviewed the 768, attribution, focus and no-JS captures. Found and fixed a stray '---' rendering on every page since T-27, and added a document-integrity test that catches it.
 - **T-40** — Internal URLs now go through withBase(), so a subpath deploy works. Verified by building with a base: all six pick up the prefix, including the three Astro would have left alone.
 - **T-41** — Layout shift measured on all three pages: zero, verified against a probe that catches a forced 0.22 reflow. The font swap and the curve draw both move nothing.
+- **T-42** — Annotation column rendered on the specimen and covered at both breakpoints. Rendering it exposed two defects: no paragraph rhythm inside it, and no measure cap below 1180 where the grid stops enforcing one.
 
 ---
 

@@ -61,6 +61,13 @@ main {
   display: block;
 }
 
+/* Below 1180px the grid is off, so nothing is capping the column. The grid's
+   minmax(0, var(--measure)) does it above; this does it below, or annotated
+   prose runs the full page width and breaks the measure. */
+.annotated > * {
+  max-width: var(--measure);
+}
+
 .annotated > .annotation {
   margin-block: var(--space-5);
   padding-inline-start: var(--space-4);
@@ -69,6 +76,15 @@ main {
   font-size: var(--size-small);
   line-height: var(--lh-small);
   font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+}
+
+/* Paragraph rhythm inside an annotated block. .prose does this elsewhere, but
+   .annotated is a grid at 1180px and up and its children are grid items, so it
+   cannot be nested inside .prose without breaking the column. Scoped to body
+   paragraphs: the annotation is a sibling, and spacing it would push the text
+   out of line with the note it belongs to. */
+.annotated > .type-body + .type-body {
+  margin-block-start: var(--rhythm-paragraph);
 }
 
 @media (width >= 1180px) {
