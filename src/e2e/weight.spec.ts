@@ -9,23 +9,50 @@ import { expect, test } from '@playwright/test';
  * should rather than drifting. A failure here is a prompt to look, not
  * necessarily a bug.
  *
- * As measured, a cold visit to the home page is 94.4KB, of which 83.8KB is
+ * As measured, a cold visit to the home page is 98.1KB, of which 83.8KB is
  * Literata. Everything the site itself produces — HTML, CSS and the trace
- * island — is 10.6KB.
+ * island — is 14.3KB.
  *
- * That split is the useful part. One webfont costs eight times the entire
- * rest of the site, which is worth knowing before anyone optimises the 3.2KB
- * of JavaScript.
+ * That split is the useful part. One webfont costs six times the entire rest
+ * of the site, which is worth knowing before anyone optimises the 3.3KB of
+ * JavaScript.
+ *
+ * THE BUDGET IS PER PAGE, and it was not always.
+ *
+ * A single number was right when the site was one page with one island. It
+ * stopped being right the moment /research started carrying four artefacts:
+ * that page legitimately ships three times the script the home page does, so
+ * one budget either failed on /research or was slack enough on /people to
+ * catch nothing. It failed on /research, which is the better of the two
+ * failures but still the wrong test.
+ *
+ * Each page now carries its own measurement plus about fifteen per cent. The
+ * point is unchanged: catch a fourth stylesheet, a stray dependency, or an
+ * island that has wandered onto a page with no artefact on it.
  */
 
-/** Measured 94.4KB, with headroom. */
-const TOTAL_BUDGET_KB = 120;
+interface Budget {
+  path: string;
+  /** Everything, including the webfont. */
+  total: number;
+  /** HTML, CSS and script only — the part this repository controls. */
+  site: number;
+}
 
-/** Measured 10.6KB. Deliberately tight: this is the part we control, and it
- *  is where a fourth stylesheet or a stray dependency would show up. */
-const SITE_BUDGET_KB = 25;
-
-const PAGES = ['/', '/research/', '/people/', '/learning/', '/about/', '/404.html'] as const;
+/** Measured 2026-09-13 on the built site, gzipped, plus headroom. */
+const BUDGETS: readonly Budget[] = [
+  // One island: the trace.
+  { path: '/', total: 112, site: 17 },
+  // Four artefacts, and the photograph once it is scrolled to. The 3D chunk is
+  // not in this number and islands.spec.ts fails if it ever is.
+  { path: '/research/', total: 135, site: 29 },
+  // No island. These should be almost entirely font and stylesheet; if one of
+  // them grows a script, that is the finding.
+  { path: '/people/', total: 106, site: 11 },
+  { path: '/learning/', total: 106, site: 11 },
+  { path: '/about/', total: 106, site: 11 },
+  { path: '/404.html', total: 106, site: 11 },
+];
 
 interface Weights {
   total: number;
@@ -61,7 +88,8 @@ async function weigh(
   return { total, site: total - (byType.font ?? 0), byType };
 }
 
-for (const path of PAGES) {
+for (const budget of BUDGETS) {
+  const path = budget.path;
   test.describe(`weight: ${path}`, () => {
     test('a first visit stays within budget', async ({ page }) => {
       const { total, site, byType } = await weigh(page, path);
@@ -74,14 +102,14 @@ for (const path of PAGES) {
 
       expect(
         total / 1024,
-        `${path} is ${(total / 1024).toFixed(1)}KB against a ${TOTAL_BUDGET_KB}KB budget: ${breakdown}`,
-      ).toBeLessThan(TOTAL_BUDGET_KB);
+        `${path} is ${(total / 1024).toFixed(1)}KB against a ${budget.total}KB budget: ${breakdown}`,
+      ).toBeLessThan(budget.total);
 
       expect(
         site / 1024,
         `${path} ships ${(site / 1024).toFixed(1)}KB of its own HTML, CSS and script ` +
-          `against a ${SITE_BUDGET_KB}KB budget: ${breakdown}`,
-      ).toBeLessThan(SITE_BUDGET_KB);
+          `against a ${budget.site}KB budget: ${breakdown}`,
+      ).toBeLessThan(budget.site);
     });
   });
 }

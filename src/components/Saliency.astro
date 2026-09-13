@@ -207,6 +207,7 @@ const alt =
 
     stage.addEventListener('pointermove', (event) => {
       if (everyEdge) return;
+      stopSweep();
       moveTo(event.clientX, event.clientY);
     });
 
@@ -231,6 +232,7 @@ const alt =
       const move = moves[event.key];
       if (!move) return;
       event.preventDefault();
+      stopSweep();
       fixation = {
         x: Math.max(0, Math.min(W, fixation.x + move[0]!)),
         y: Math.max(0, Math.min(H, fixation.y + move[1]!)),
@@ -240,6 +242,7 @@ const alt =
     });
 
     modeButton.addEventListener('click', () => {
+      stopSweep();
       everyEdge = !everyEdge;
       modeButton.setAttribute('aria-pressed', String(everyEdge));
       modeButton.textContent = everyEdge ? 'Follow the pointer again' : 'Show every edge';
@@ -259,6 +262,72 @@ const alt =
       schedule();
     });
 
+    /* -- The entrance --------------------------------------------------------
+
+       This artefact answers the pointer, and until something moves it, it sits
+       there. On a phone nothing ever will: there is no hover, and a reader has
+       no reason to guess that dragging a finger over a photograph does
+       anything.
+
+       So the first time it comes into view the fixation point sweeps once,
+       left to right along the eye line, and stops. Both eyes and the bridge of
+       the nose light up in turn and the smooth background does not, which is
+       the whole argument of the artefact made without the reader doing
+       anything. It happens once, it stops the instant anyone takes over, and
+       under reduced motion it does not happen at all. */
+    const SWEEP_FROM = { x: W * 0.07, y: H * 0.75 };
+    const SWEEP_TO = { x: W * 0.67, y: H * 0.75 };
+    const SWEEP_MS = 2400;
+
+    let sweep = 0;
+
+    function stopSweep(): void {
+      if (!sweep) return;
+      cancelAnimationFrame(sweep);
+      sweep = 0;
+    }
+
+    /**
+     * Smoothstep, not the site's easing.
+     *
+     * `--ease-out` is cubic-bezier(0.22, 1, 0.36, 1), which is heavily
+     * front-loaded: it covers eighty per cent of the distance in the first
+     * third of the time. That is right for something arriving at a resting
+     * place and wrong for a traversal — measured, the sweep crossed both eyes
+     * inside seven hundred milliseconds and then crawled, so the part worth
+     * watching was over before it read as motion at all.
+     *
+     * Smoothstep eases in and out symmetrically and spends its time in the
+     * middle, which is where the eyes are.
+     */
+    function sweepEase(t: number): number {
+      return t * t * (3 - 2 * t);
+    }
+
+    function runSweep(): void {
+      /* Under reduced motion the artefact rests where the sweep would have
+         ended rather than where it would have started — on the eye, not on the
+         blurred corner. Skipping the motion should not also cost the reader
+         the thing the motion was there to show. */
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        fixation = { ...SWEEP_TO };
+        draw();
+        return;
+      }
+      const started = performance.now();
+      const step = (now: number): void => {
+        const t = Math.min(1, (now - started) / SWEEP_MS);
+        const e = sweepEase(t);
+        fixation = {
+          x: SWEEP_FROM.x + (SWEEP_TO.x - SWEEP_FROM.x) * e,
+          y: SWEEP_FROM.y + (SWEEP_TO.y - SWEEP_FROM.y) * e,
+        };
+        draw();
+        sweep = t < 1 ? requestAnimationFrame(step) : 0;
+      };
+      sweep = requestAnimationFrame(step);
+    }
+
     function start(): void {
       measurePhoto();
       if (!energy) return;
@@ -267,7 +336,26 @@ const alt =
       key.hidden = false;
       controls.hidden = false;
       el.classList.add('is-live');
+      fixation = { ...SWEEP_FROM };
       draw();
+
+      // Once, when it is actually on screen — not while it is eight hundred
+      // pixels below the fold with nobody watching.
+      if ('IntersectionObserver' in window) {
+        const watcher = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              watcher.disconnect();
+              runSweep();
+            }
+          },
+          { threshold: 0.35 },
+        );
+        watcher.observe(stage);
+      } else {
+        runSweep();
+      }
     }
 
     /* The image is lazy, so it may not have arrived — or even been requested —
