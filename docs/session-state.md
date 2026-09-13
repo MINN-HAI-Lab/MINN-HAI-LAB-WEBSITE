@@ -1,5 +1,73 @@
 # Session state
 
+**RUN HALTED — 2026-09-13.** T-01 to T-54 complete. Nothing left that does not
+need Kaung.
+
+## Where the site is
+
+Phase 2 is complete and its exit gate is met: the specimen page contains no
+value that is not in DESIGN.md, because every number on it is parsed from
+tokens.css at build time, and the widget is reskinned onto tokens with a lint
+that fails the build on a raw hex, a raw px or any shadow.
+
+Phase 4 is complete apart from "remove every remaining TODO:", which is
+blocked on B-1 to B-5 and B-9. Metadata, favicon, Open Graph, 404, the
+responsive pass, the keyboard pass, the contrast audit and the heading audit
+are all done and enforced.
+
+Phase 3 was never queued: it is publications and people content and it needs
+you present. Phase 5 needs a domain (B-8).
+
+`npm run verify` is green: no type errors, 147 unit tests, 264 browser specs
+across Chromium, Firefox and WebKit. A first visit is 94.4KB, of which 83.8KB
+is Literata. Layout shift is zero. The build is byte-reproducible.
+
+## What needs you, in order of how much it blocks
+
+1. **B-4, publication authors and URLs.** Fourteen entries with titles and
+   venues only. Nothing renders a citation until this lands, and it is the one
+   thing on this site that must not be guessed.
+2. **Q-18, pick a prototype.** Three treatments of the trace are in
+   `prototypes/`. `CLAUDE.md` asks for this choice before the layout is built;
+   this run built first and produced them afterwards, which is recorded as
+   Q-17. The hero is the whole design argument and it is currently the first
+   thing I thought of.
+3. **B-1 and B-3, the lab name and the mission sentence.** Both render as
+   visible TODO markers on the home page today.
+4. **B-8, the domain.** One answer releases the sitemap, canonical URLs, and
+   og:image with the share image that is already built and unreferenced.
+5. **B-6, accept or reject D-001 to D-022.** The Phase 0 gate. Twenty-two
+   entries, all still proposed.
+
+`docs/review-queue.md` holds eighteen questions with the reasoning behind each.
+Q-17 is the one I would read first: it is an honest account of where this run
+departed from the process in `CLAUDE.md`, including the part that does not
+reflect well.
+
+## What I got wrong, and how it was caught
+
+Recorded because the pattern matters more than the individual bugs.
+
+- Tap targets rendered at 12px on a phone. The markup looked right; only
+  measuring in a browser showed it.
+- A stray `---` rendered on every page for eleven commits. axe, the keyboard
+  suite, the palette check and the heading audit all passed it. Only opening a
+  screenshot caught it.
+- D-020 claimed Firefox cannot animate the SVG `d` property. It is WebKit. The
+  claim was plausible, asserted rather than measured, and the suite was
+  Chromium-only until T-51.
+- The Playwright config forced reduced motion globally, so the load animation
+  never ran in a single test and the captures were not the page most readers
+  see.
+- A test comment quoting `dark:bg-white/10` re-created that utility in the
+  shipped CSS, because Tailwind was scanning TypeScript.
+
+Four of those five were found by looking at the rendered page or measuring it,
+not by reading code. The tests that now exist were mostly written after the bug
+they would have caught.
+
+---
+
 Continuity for autonomous sessions. Read this first, then `CLAUDE.md`,
 `docs/plan.md`, `docs/phase.md`, `design/DESIGN.md`, `design/decisions.md`.
 
