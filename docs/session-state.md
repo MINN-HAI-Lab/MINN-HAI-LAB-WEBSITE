@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-18** Script recomputing every contrast pair in the DESIGN.md table,
+  failing if a measured ratio differs from the stated one by more than 0.05.
 
 ---
 
 ## QUEUE
 
-- **T-18** Script recomputing every contrast pair in the DESIGN.md table,
-  failing if a measured ratio differs from the stated one by more than 0.05.
 - **T-19** Playwright screenshot harness, three widths, output to a
   gitignored directory.
 - **T-20** Self-critique pass: walk the built page against the banned list in
