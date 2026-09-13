@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-41** Layout stability. The metric-matched font fallback and the curve
-  draw both run on load; neither has been measured for the shift they cause.
+Nothing.
 
 ---
 
@@ -109,6 +108,7 @@ history at `ec7ada9`.
 - **T-38** — TODO audit: every visible marker must name what is missing, who supplies it and a tracker. Prints the inventory on every run. Found the footer's contact TODO had no tracker; recorded as B-9.
 - **T-39** — Reviewed the 768, attribution, focus and no-JS captures. Found and fixed a stray '---' rendering on every page since T-27, and added a document-integrity test that catches it.
 - **T-40** — Internal URLs now go through withBase(), so a subpath deploy works. Verified by building with a base: all six pick up the prefix, including the three Astro would have left alone.
+- **T-41** — Layout shift measured on all three pages: zero, verified against a probe that catches a forced 0.22 reflow. The font swap and the curve draw both move nothing.
 
 ---
 
