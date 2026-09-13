@@ -17,7 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-38** TODO audit. Every visible `TODO:` in the built output should name
+  what is missing and who supplies it, and `verify` should list them rather
+  than let one ship unnoticed.
+
+When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
+
+---
 
 ---
 
@@ -29,14 +35,6 @@ B-5, and the handbook's publications check, which is Phase 3.
 
 So these are the constraints that CLAUDE.md and DESIGN.md state but nothing
 currently enforces. Each was verified by hand once and could regress silently.
-
-- **T-38** TODO audit. Every visible `TODO:` in the built output should name
-  what is missing and who supplies it, and `verify` should list them rather
-  than let one ship unnoticed.
-
-When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
-
----
 
 ## BLOCKED
 
