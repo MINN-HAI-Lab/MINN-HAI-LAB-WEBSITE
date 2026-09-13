@@ -1,5 +1,73 @@
 # Session state
 
+**RUN HALTED — 2026-09-13.** T-01 to T-54 complete. Nothing left that does not
+need Kaung.
+
+## Where the site is
+
+Phase 2 is complete and its exit gate is met: the specimen page contains no
+value that is not in DESIGN.md, because every number on it is parsed from
+tokens.css at build time, and the widget is reskinned onto tokens with a lint
+that fails the build on a raw hex, a raw px or any shadow.
+
+Phase 4 is complete apart from "remove every remaining TODO:", which is
+blocked on B-1 to B-5 and B-9. Metadata, favicon, Open Graph, 404, the
+responsive pass, the keyboard pass, the contrast audit and the heading audit
+are all done and enforced.
+
+Phase 3 was never queued: it is publications and people content and it needs
+you present. Phase 5 needs a domain (B-8).
+
+`npm run verify` is green: no type errors, 147 unit tests, 264 browser specs
+across Chromium, Firefox and WebKit. A first visit is 94.4KB, of which 83.8KB
+is Literata. Layout shift is zero. The build is byte-reproducible.
+
+## What needs you, in order of how much it blocks
+
+1. **B-4, publication authors and URLs.** Fourteen entries with titles and
+   venues only. Nothing renders a citation until this lands, and it is the one
+   thing on this site that must not be guessed.
+2. **Q-18, pick a prototype.** Three treatments of the trace are in
+   `prototypes/`. `CLAUDE.md` asks for this choice before the layout is built;
+   this run built first and produced them afterwards, which is recorded as
+   Q-17. The hero is the whole design argument and it is currently the first
+   thing I thought of.
+3. **B-1 and B-3, the lab name and the mission sentence.** Both render as
+   visible TODO markers on the home page today.
+4. **B-8, the domain.** One answer releases the sitemap, canonical URLs, and
+   og:image with the share image that is already built and unreferenced.
+5. **B-6, accept or reject D-001 to D-022.** The Phase 0 gate. Twenty-two
+   entries, all still proposed.
+
+`docs/review-queue.md` holds eighteen questions with the reasoning behind each.
+Q-17 is the one I would read first: it is an honest account of where this run
+departed from the process in `CLAUDE.md`, including the part that does not
+reflect well.
+
+## What I got wrong, and how it was caught
+
+Recorded because the pattern matters more than the individual bugs.
+
+- Tap targets rendered at 12px on a phone. The markup looked right; only
+  measuring in a browser showed it.
+- A stray `---` rendered on every page for eleven commits. axe, the keyboard
+  suite, the palette check and the heading audit all passed it. Only opening a
+  screenshot caught it.
+- D-020 claimed Firefox cannot animate the SVG `d` property. It is WebKit. The
+  claim was plausible, asserted rather than measured, and the suite was
+  Chromium-only until T-51.
+- The Playwright config forced reduced motion globally, so the load animation
+  never ran in a single test and the captures were not the page most readers
+  see.
+- A test comment quoting `dark:bg-white/10` re-created that utility in the
+  shipped CSS, because Tailwind was scanning TypeScript.
+
+Four of those five were found by looking at the rendered page or measuring it,
+not by reading code. The tests that now exist were mostly written after the bug
+they would have caught.
+
+---
+
 Continuity for autonomous sessions. Read this first, then `CLAUDE.md`,
 `docs/plan.md`, `docs/phase.md`, `design/DESIGN.md`, `design/decisions.md`.
 
@@ -17,23 +85,17 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-53** Do the prototypes step, late. `CLAUDE.md` says "Produce three
-  visually distinct approaches in `prototypes/` ... Never one-shot a layout",
-  and Q-17 records that this run skipped it entirely. Build three genuinely
-  different treatments of the trace so there is something to choose between,
-  rather than one thing that happens to exist. One of them should be what is
-  currently built, so the comparison is fair.
-
-`prototypes/` is gitignored per `docs/plan.md`, so these live on disk and not
-in the repo. That is the plan's choice, not a way of hiding them.
-
----
+Nothing.
 
 ---
 
 ## QUEUE
 
-Refilled 2026-09-13, eighth time. T-51 and T-52 are done.
+Empty, and not because the work is done — because everything left needs Kaung.
+Refill from `docs/phase.md` as B-1 to B-9 land. Never queue Phase 3 without
+him.
+
+---
 
 ## BLOCKED
 
@@ -49,7 +111,9 @@ history at `ec7ada9`.
 - **B-4** Authors and real paper/code URLs for all fourteen publications.
   The big one. Nothing renders a citation until this lands.
 - **B-5** Full funder names, and whether grant numbers appear.
-- **B-6** Accept or reject D-001 to D-013. The Phase 0 exit gate.
+- **B-6** Accept or reject every entry in `design/decisions.md`. Twenty-three
+  now, D-001 to D-022 plus the superseded D-005. None is accepted. This is the
+  Phase 0 exit gate and it has not moved since the first run.
 - **B-7** Accept or reject D-004, the trace widget as hero.
 - **B-9** The contact email address. `docs/plan.md` lists it as supplied but
   it is not in the repo, and the footer is the one place the site promises it.
@@ -116,6 +180,8 @@ history at `ec7ada9`.
 - **T-50** — Clean rebuild from a wiped dist, .astro and screenshots: verify exits 0, three pages build, 147 unit tests and 80 browser specs pass, five TODO markers all well-formed, and the pages read correctly at 1440 and 390.
 - **T-51** — Suite now runs in Chromium, Firefox and WebKit: 243 specs pass. Found D-020's premise was backwards and corrected it as D-022; fixed three keyboard tests that encoded Chromium-only assumptions.
 - **T-52** — Font-failure path covered in all three engines: with every woff2 aborted, text still renders at the token sizes, nothing overflows, and the trace still draws and still toggles.
+- **T-53** — Three prototypes of the trace built from the real model and tokens — separated rows as built, marks on the curve, and stepped belief — with an honest comparison in Q-18 for Kaung to pick from.
+- **T-54** — Two clean builds produce byte-identical output. Recorded in the handbook with the command to re-check; not automated, since it means building twice every run.
 
 ---
 
@@ -155,4 +221,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-43: preloading a unicode-range-split font defeats the split. Astro inlines @font-face into the head, so there is no stylesheet round trip for preload to save, and it forced both subsets down. Removing it halved the font payload with no change to layout shift.
 - Reading an exit code after a pipe reports the LAST command in the pipeline, not the first. 'npm run verify | tail' always looks like it exited 0. Redirect to a file and check the status, or use PIPESTATUS.
 - T-51: D-020 claimed Firefox cannot transition the SVG d property. Measured, it is the opposite — Chromium and Firefox both can, WebKit cannot. The decision survives because Safari is the one that matters, but the premise was asserted, not tested, and a Chromium-only suite could never have caught it.
+- T-53: prototypes/ is gitignored per docs/plan.md, so the three prototypes, their README and their generator live on disk only. If the working copy is lost they go with it; 'node --experimental-strip-types prototypes/generate.mjs' rebuilds them from the real model and tokens.
 
