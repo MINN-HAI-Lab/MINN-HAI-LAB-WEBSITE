@@ -105,10 +105,12 @@ what will replace it, and it is still the first thing on `/people` and it is
 empty.
 
 **4. The 3D chunk is 361KB gzipped.** Opt-in, absent from the first paint,
-verified by a test that fails if it is ever requested on load. But someone who
-presses the button on a poor connection waits, and the button does not say how
-much it is about to fetch. It says "Loading the 3D view…" once pressed, which
-is late.
+verified by a test that fails if it is ever requested on load. Fixed during
+this pass: the button now carries "Loads about 360KB" beside it, before the
+click rather than after, which matters most to exactly the people for whom it
+matters most. What remains is that 361KB is a lot for a second view of a graph
+that is already fully interactive in 2D. It earns its place by making depth
+readable; it would not earn it twice.
 
 **5. The illustrative network is illustrative.** Ten plausible
 learning-analytics variables with plausible dependencies, and the artefact says

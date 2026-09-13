@@ -14,12 +14,18 @@ Nothing.
 
 ## QUEUE
 
-- **S-19** Final pass: screenshots at three widths, self-critique.
+Nothing. Everything in the brief is built.
+
+What is left is content, not code: eight facts nobody on this side of the
+repository has. Every one of them is a visible TODO on the page it belongs to,
+with the B number, and `docs/review-queue.md` has the reasoning behind each
+judgement call.
 
 ---
 
 ## DONE
 
+- **S-19** — Final pass: five pages at three widths, read against the banned list and the brief's floor. `docs/self-critique.md`. Found four things no test did, including the same TODO printed thirty-seven times on /research.
 - **S-13** — `/people`: full-bleed group frame, five 4:5 slots at one crop, two-up on a phone and five across on a desktop, no names in any of them and each saying what it is waiting for.
 - **S-14** — `/about`: mission, affiliation, funding and contact, all four as visible gaps with the exact question and the B number attached.
 - **S-15** — `/learning`: StatLab, built as a list of one so a second resource is an entry rather than a redesign.

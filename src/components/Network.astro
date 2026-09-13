@@ -165,6 +165,13 @@ const altText =
 
   <div class="artefact__controls" data-controls hidden>
     <button class="button" type="button" data-load-3d>Open in 3D</button>
+    {/* The cost, before the click rather than after it.
+
+        The 3D view is about 360KB gzipped. Saying so on the button is the
+        difference between a reader choosing to spend that and a reader
+        discovering they have spent it — which matters most to exactly the
+        people for whom it matters most. */}
+    <p class="label network__cost" data-cost hidden>Loads about 360KB</p>
     <button class="button" type="button" data-close-3d hidden>Close the 3D view</button>
     <p class="artefact__note" data-instructions hidden>
       Select a variable to see its blanket. Arrow keys move between them.
@@ -319,6 +326,7 @@ const altText =
     const open3d = el.querySelector<HTMLButtonElement>('[data-load-3d]');
     const close3d = el.querySelector<HTMLButtonElement>('[data-close-3d]');
     const stage3d = el.querySelector<HTMLElement>('[data-stage-3d]');
+    const cost = el.querySelector<HTMLElement>('[data-cost]');
     const canvas3d = el.querySelector<HTMLElement>('[data-canvas-3d]');
     const labels3d = el.querySelector<HTMLElement>('[data-labels-3d]');
     const panel = el.querySelector<HTMLElement>('.artefact__panel');
@@ -353,8 +361,11 @@ const altText =
         open3d.textContent = 'Open in 3D';
         open3d.focus();
       }
+      if (cost) cost.hidden = false;
       if (live) live.textContent = 'The 3D view is closed. The diagram is back.';
     }
+
+    if (cost) cost.hidden = false;
 
     open3d?.addEventListener('click', async () => {
       if (loading || scene) return;
@@ -382,6 +393,7 @@ const altText =
         });
 
         open3d.hidden = true;
+        if (cost) cost.hidden = true;
         if (close3d) {
           close3d.hidden = false;
           close3d.focus();

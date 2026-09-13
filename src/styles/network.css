@@ -193,6 +193,16 @@
    decides how large it can be drawn. In a 1100 by 420 box that meant a small
    graph with several hundred pixels of nothing either side of it. A box closer
    to square uses the height it has. */
+/* Sits beside the button that will spend it. */
+.network__cost {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.network__cost[hidden] {
+  display: none;
+}
+
 .network3d {
   position: relative;
   max-inline-size: var(--network3d-max);
