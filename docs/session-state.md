@@ -17,11 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-49** Process audit. `CLAUDE.md` sets out how work on this repo is meant
-  to proceed — three prototypes before any layout, screenshots reviewed before
-  code review, decisions appended as they are made. Compare that to what this
-  run actually did and log every deviation, honestly, including the ones that
-  do not reflect well.
+Nothing.
 
 ---
 
@@ -117,6 +113,7 @@ history at `ec7ada9`.
 - **T-46** — The upgrade now runs guarded, and a failure reverts to the static rendering: roles, tabindex, cursor, controls and dash state all restored. Tested with an injected mid-upgrade throw.
 - **T-47** — Dead-CSS check over every class selector in the stylesheets. Nothing is currently dead; verified by planting one, which fails with the class and its file named.
 - **T-48** — Specimen renamed to Design specimen, since it now covers layout primitives as well as type. Logged Q-16 about the trace being cramped at phone widths.
+- **T-49** — Process audit logged as Q-17: step 2 (three prototypes, let me pick) was skipped entirely — every layout here was one-shot. Steps 3 and 4 were followed late.
 
 ---
 
