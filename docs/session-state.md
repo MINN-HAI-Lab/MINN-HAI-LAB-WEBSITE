@@ -17,7 +17,11 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-40** Base-path robustness. Every internal URL is absolute from the root
+  (`/favicon.svg`, `/share.svg`, `/`). D-008 names GitHub Pages as the
+  likeliest host, and a project page there serves from `/<repo>/`, which
+  breaks every one of them. Establish whether that is a real risk and either
+  handle it or log it clearly against D-008.
 
 ---
 
@@ -30,11 +34,6 @@ B-9, and the handbook's publications check is Phase 3.
 These are gaps I can see in what has been built rather than new features:
 things made but never looked at, and assumptions never tested.
 
-- **T-40** Base-path robustness. Every internal URL is absolute from the root
-  (`/favicon.svg`, `/share.svg`, `/`). D-008 names GitHub Pages as the
-  likeliest host, and a project page there serves from `/<repo>/`, which
-  breaks every one of them. Establish whether that is a real risk and either
-  handle it or log it clearly against D-008.
 - **T-41** Layout stability. The metric-matched font fallback and the curve
   draw both run on load; neither has been measured for the shift they cause.
 - **T-42** The annotation column in `layout.css` is specified in DESIGN.md,
