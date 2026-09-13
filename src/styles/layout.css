@@ -194,7 +194,8 @@ a.link:hover {
    produce a jump. The skip link keeps its transform so it still appears. */
 @media (prefers-reduced-motion: reduce) {
   .prose a,
-  a.link {
+  a.link,
+  .button {
     transition: none;
   }
 }

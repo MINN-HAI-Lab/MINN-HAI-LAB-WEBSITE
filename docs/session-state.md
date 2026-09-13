@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-14** Reduced-motion path: finished curve instead of the draw, instant
-  estimate update with a brief static highlight. Do not zero out a transform.
+Nothing.
 
 ---
 
@@ -84,6 +83,7 @@ history at `ec7ada9`.
 - **T-11** — Roving tabindex across the ten marks, arrows plus Home and End to move, Enter and Space to toggle, visible --ink focus ring. Ten attempts cost one Tab stop.
 - **T-12** — Polite role=status live region, empty at load, populated after each toggle with the attempt that changed plus the new estimate. Debounced by the animation duration.
 - **T-13** — Attribution view: single-flip counterfactual influence per attempt, top three ringed in --claim with a dimming second cue, toggled by a real button with aria-pressed, announced in the live region.
+- **T-14** — Load-time curve draw over --dur-slow, skipped entirely under reduced motion so the finished curve stands. Estimate updates become instant plus a static stroke-width highlight; all three CSS transitions get transition:none.
 
 ---
 
@@ -104,4 +104,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-11 found that svg role='img' hides its own children from assistive tech, which would have buried ten controls inside one image node. The script now swaps the SVG to role='group' and moves the description to a visually-hidden paragraph.
 - npm run check occasionally hangs past 120s. Re-running it alone completes in seconds. Not diagnosed; if it recurs, run it with a longer timeout rather than assuming a failure.
 - T-24 must lint SOURCE css, not built output: Tailwind's base layer legitimately mentions box-shadow (reset plus utility plumbing), so a built-CSS grep for 'shadow' always trips.
+- T-14: the load draw sets stroke-dashoffset from JS only, so JS-off gets the finished curve. There may be a brief flash of the complete curve before the module runs; T-19 should look for it.
 

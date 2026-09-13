@@ -173,6 +173,18 @@
   overflow: visible;
 }
 
+/* -- Reduced-motion highlight ---------------------------------------------- */
+
+/* The substitute for the estimate animation when motion is reduced. It is
+   deliberately static: no transition, no transform, nothing eased. The curve
+   thickens for a moment so the change is visible, then returns.
+
+   DESIGN.md warns against the alternative — zeroing a duration on a transform,
+   which does not remove the motion so much as compress it into a jump. */
+.trace__curve.is-changed {
+  stroke-width: calc(var(--curve-width) * 2);
+}
+
 /* -- Attribution view ------------------------------------------------------ */
 
 /* Drawn on every mark, invisible until the view is on and the mark is one the

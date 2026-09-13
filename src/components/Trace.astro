@@ -218,6 +218,7 @@ const altText =
        DESIGN.md stays the single source. */
     const styles = getComputedStyle(document.documentElement);
     const duration = durationToMs(styles.getPropertyValue('--dur-base'));
+    const drawDuration = durationToMs(styles.getPropertyValue('--dur-slow'));
     const ease = cubicBezier(EASE_OUT);
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -271,12 +272,34 @@ const altText =
      * value is set outright rather than transitioned at zero duration, which
      * would produce a jump.
      */
+    let highlightTimer = 0;
+
+    /**
+     * The reduced-motion substitute for the estimate animation.
+     *
+     * DESIGN.md is specific: "an instant update plus a brief static
+     * highlight, so the change is still visible", and warns against setting
+     * duration to zero on a transform, which produces a jump rather than
+     * removing motion. So the value is set outright and the curve is marked
+     * for a moment. The highlight has no transition on it and nothing moves:
+     * it appears, holds, and goes.
+     */
+    function flashHighlight(): void {
+      if (!curve) return;
+      window.clearTimeout(highlightTimer);
+      curve.classList.add('is-changed');
+      highlightTimer = window.setTimeout(() => {
+        curve.classList.remove('is-changed');
+      }, drawDuration > 0 ? drawDuration : 600);
+    }
+
     function animateTo(next: ReturnType<typeof trace>): void {
       cancelAnimationFrame(frame);
 
       if (reduceMotion.matches || duration <= 0) {
         result = next;
         paint(result);
+        flashHighlight();
         return;
       }
 
@@ -448,5 +471,48 @@ const altText =
     attributionButton?.addEventListener('click', () => setAttribution(!attributing));
 
     paintMarks();
+
+    /**
+     * The one orchestrated moment on load: the mastery curve draws in, once,
+     * over --dur-slow.
+     *
+     * Under reduced motion this does not run at all, so the reader gets the
+     * finished curve — which is already what the HTML contains, since the
+     * dash offset is only ever applied here. Nothing is hidden that could fail
+     * to be revealed.
+     */
+    function drawCurveOnce(): void {
+      if (!curve || reduceMotion.matches || drawDuration <= 0) return;
+
+      let length = 0;
+      try {
+        length = curve.getTotalLength();
+      } catch {
+        // getTotalLength can throw on a detached or zero-length path. The
+        // finished curve is already on screen, so there is nothing to repair.
+        return;
+      }
+      if (!Number.isFinite(length) || length <= 0) return;
+
+      curve.style.strokeDasharray = `${length}`;
+      curve.style.strokeDashoffset = `${length}`;
+
+      const started = performance.now();
+      const step = (now: number): void => {
+        const progress = Math.min((now - started) / drawDuration, 1);
+        curve.style.strokeDashoffset = `${length * (1 - ease(progress))}`;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          // Leave no inline state behind, or a later toggle would redraw
+          // against a stale dash pattern.
+          curve.style.strokeDasharray = '';
+          curve.style.strokeDashoffset = '';
+        }
+      };
+      requestAnimationFrame(step);
+    }
+
+    drawCurveOnce();
   }
 </script>
