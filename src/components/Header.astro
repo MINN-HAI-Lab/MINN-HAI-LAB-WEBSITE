@@ -2,43 +2,36 @@
 /**
  * Site header.
  *
- * Set type, not a wordmark: DESIGN.md says there is none yet and the header is
- * type until there is. Sentence case throughout, including the nav, per
- * CLAUDE.md.
- *
- * Only built pages are linked. Three of the four in the information
- * architecture are Phase 3 and do not exist, and a nav that 404s is worse than
- * one that admits its scope.
+ * Set type, not a wordmark: there is no wordmark yet. Sans for the navigation
+ * because it is instrument furniture; serif for the lab name because it is
+ * the one piece of prose up here.
  */
 import { LAB_NAME, NAVIGATION } from '../data/navigation.ts';
 import { withBase } from '../lib/paths.ts';
 
-const built = NAVIGATION.filter((item) => item.built);
-const current = Astro.url.pathname;
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <header class="site-header">
   <div class="page site-header__inner">
-    <a class="site-header__name" href={withBase("/")}>{LAB_NAME}</a>
+    <a class="site-header__name" href={withBase('/')}>{LAB_NAME}</a>
 
-    {
-      built.length > 1 && (
-        <nav aria-label="Main">
-          <ul class="site-header__nav">
-            {built.map((item) => (
-              <li>
-                <a
-                  class="link"
-                  href={withBase(item.href)}
-                  aria-current={current === item.href ? 'page' : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )
-    }
+    <nav aria-label="Main">
+      <ul class="site-header__nav">
+        {
+          NAVIGATION.map((item) => (
+            <li>
+              <a
+                class="site-header__link"
+                href={withBase(item.href)}
+                aria-current={current === item.href.replace(/\/$/, '') || (item.href === '/' && current === '/') ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
   </div>
 </header>

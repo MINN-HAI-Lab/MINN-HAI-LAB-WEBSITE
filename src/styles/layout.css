@@ -1,9 +1,8 @@
 /* ---------------------------------------------------------------------------
-   layout.css — the page shell.
+   layout.css — the page shell on a dark instrument field.
 
-   Every value here comes from design/DESIGN.md § Layout, § Spacing and
-   § States. The three breakpoints are 640, 900 and 1180, and there is no
-   fourth: any media query in this codebase uses one of those numbers.
+   Breakpoints are 640, 900 and 1180. Three, and no fourth: any media query in
+   this codebase uses one of those numbers.
 --------------------------------------------------------------------------- */
 
 *,
@@ -13,9 +12,10 @@
 }
 
 html {
-  /* The skip link and in-page anchors should not land flush against the
-     viewport edge. */
   scroll-padding-block-start: var(--space-6);
+  /* Tell the browser the page is dark so form controls, scrollbars and the
+     address bar follow, rather than flashing white. */
+  color-scheme: dark;
 }
 
 body {
@@ -25,17 +25,12 @@ body {
   flex-direction: column;
 }
 
-/* Takes the slack so the footer sits at the bottom of a short page rather than
-   halfway up it. */
 main {
   flex: 1 0 auto;
 }
 
 /* -- The page frame -------------------------------------------------------- */
 
-/* Outer bound plus gutters. Everything on a page sits inside one of these.
-   At 360px the gutters take 64px, leaving 296px of content, which is why the
-   measure is a cap rather than a fixed width. */
 .page {
   width: 100%;
   max-width: var(--page-max);
@@ -43,77 +38,58 @@ main {
   padding-inline: var(--gutter);
 }
 
-/* The body text column. Content is left-aligned and single-column; DESIGN.md
-   caps the measure at 66 characters. */
+.bleed {
+  width: 100%;
+}
+
 .measure {
   max-width: var(--measure);
 }
 
-/* -- The annotation column ------------------------------------------------- */
+/* -- Glass ----------------------------------------------------------------- */
 
-/* At 1180px and up, marginal notes run to the left of the measure. Below that
-   they fall inline beneath the paragraph they annotate, which is what the
-   unprefixed rules already do.
+/* One glass primitive. Fill, 1px edge, 4px radius, blur.
 
-   The column is content-derived, not decorative. If it ends up holding
-   decoration, remove it. */
-.annotated {
-  display: block;
+   Never nest one inside another. Two layers double the blur cost — which is
+   what threatens the performance floor on mobile — and wash whatever is behind
+   toward the surface colour, so text on the inner layer loses the contrast the
+   outer layer was measured for.
+
+   Glass is for panels that hold live output. Body text sits directly on the
+   field, where it has 16.7:1 rather than 15.4:1 and costs nothing to
+   composite. */
+.glass {
+  position: relative;
+  background-color: var(--surface);
+  border: var(--rule-width) solid var(--surface-edge);
+  border-radius: var(--radius-glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
-/* Below 1180px the grid is off, so nothing is capping the column. The grid's
-   minmax(0, var(--measure)) does it above; this does it below, or annotated
-   prose runs the full page width and breaks the measure. */
-.annotated > * {
-  max-width: var(--measure);
-}
+/* Where backdrop-filter is unsupported the fill alone is nearly invisible
+   against the field and the panel loses its boundary. Deepen it so the edge
+   still reads.
 
-.annotated > .annotation {
-  margin-block: var(--space-5);
-  padding-inline-start: var(--space-4);
-  border-inline-start: var(--rule-width) solid var(--rule);
-  color: var(--ink-muted);
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-}
-
-/* Paragraph rhythm inside an annotated block. .prose does this elsewhere, but
-   .annotated is a grid at 1180px and up and its children are grid items, so it
-   cannot be nested inside .prose without breaking the column. Scoped to body
-   paragraphs: the annotation is a sibling, and spacing it would push the text
-   out of line with the note it belongs to. */
-.annotated > .type-body + .type-body {
-  margin-block-start: var(--rhythm-paragraph);
-}
-
-@media (width >= 1180px) {
-  .annotated {
-    display: grid;
-    grid-template-columns: var(--margin-col) minmax(0, var(--measure));
-    column-gap: var(--gutter);
-  }
-
-  /* Body content sits in the second column; notes pull into the first. */
-  .annotated > * {
-    grid-column: 2;
-  }
-
-  .annotated > .annotation {
-    grid-column: 1;
-    margin-block: 0;
-    padding-inline-start: 0;
-    border-inline-start: none;
-    text-align: end;
+   lint-allow-px: the 1px inside a feature query is a probe, not a design
+   value. @supports needs some length to ask the question with and any would
+   do; it never reaches the page. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background-color: var(--field-2);
   }
 }
 
-/* -- Vertical rhythm ------------------------------------------------------- */
+/* -- Sections -------------------------------------------------------------- */
 
-/* --space-20 between major sections at 900px and up, --space-12 below. Driven
-   from --rhythm-section so the breakpoint lives in tokens.css, once. */
-.section + .section {
-  margin-block-start: var(--rhythm-section);
+.section {
+  padding-block: var(--rhythm-section);
+}
+
+.section--raised {
+  background-color: var(--field-2);
+  border-block-start: var(--rule-width) solid var(--grid);
+  border-block-end: var(--rule-width) solid var(--grid);
 }
 
 .section > :is(h1, h2, h3) + * {
@@ -124,20 +100,99 @@ main {
   margin-block-start: var(--rhythm-paragraph);
 }
 
+/* -- Scroll reveal --------------------------------------------------------- */
+
+/* One entrance per section, once, never repeating. The script adds
+   .is-revealed and then stops observing, so nothing re-animates on the way
+   back up.
+
+   The hidden state is applied by script rather than in CSS, so with JavaScript
+   off every section is simply visible. Nothing is hidden that could fail to be
+   revealed. */
+[data-reveal].is-pending {
+  opacity: 0;
+  transform: translateY(var(--space-4));
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+/* -- Focus ----------------------------------------------------------------- */
+
+/* Visible on every interactive element, never the browser default. --text
+   rather than --signal: --signal means the model asserted something, and a
+   focus ring is not that. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-width) solid var(--text);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-glass);
+}
+
+/* -- Links ----------------------------------------------------------------- */
+
+.prose a,
+a.link {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--text-muted);
+  text-decoration-thickness: var(--rule-width);
+  text-underline-offset: var(--underline-offset);
+  transition: text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.prose a:hover,
+a.link:hover {
+  text-decoration-color: var(--text);
+}
+
+/* -- Buttons --------------------------------------------------------------- */
+
+/* One button style: glass edge, sans label. Not --signal — a control is not a
+   model output. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--surface);
+  border: var(--rule-width) solid var(--surface-edge);
+  border-radius: var(--radius-glass);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-tracking);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.button:hover,
+.button[aria-pressed='true'] {
+  background-color: var(--surface-edge);
+  border-color: var(--text-muted);
+}
+
 /* -- Skip link ------------------------------------------------------------- */
 
-/* Off-screen until focused, then pinned to the top-left. Not display:none,
-   which would take it out of the tab order and defeat the point. */
 .skip-link {
   position: absolute;
   inset-block-start: 0;
   inset-inline-start: 0;
   z-index: 100;
   padding: var(--space-3) var(--space-4);
-  background-color: var(--paper);
-  color: var(--ink);
-  border: var(--rule-width) solid var(--ink);
-  border-radius: var(--radius-sm);
+  background-color: var(--field-2);
+  color: var(--text);
+  border: var(--rule-width) solid var(--text);
+  border-radius: var(--radius-glass);
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
   text-decoration: none;
   transform: translateY(-120%);
 }
@@ -146,95 +201,24 @@ main {
   transform: translateY(0);
 }
 
-/* -- Focus ----------------------------------------------------------------- */
-
-/* main takes tabindex=-1 so the skip link can move focus to it, but it is a
+/* main takes tabindex="-1" so the skip link can move focus to it, but it is a
    landmark rather than a control and ringing the whole page would be noise. */
 main:focus,
 main:focus-visible {
   outline: none;
 }
 
-/* Visible on every interactive element, keyboard and mouse alike, and never
-   the browser default. Focus uses --ink deliberately: --claim means "a model
-   said this" and a focus ring is not that. */
-:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: var(--focus-width) solid var(--ink);
-  outline-offset: var(--focus-offset);
-}
+/* -- Hairlines ------------------------------------------------------------- */
 
-/* -- Links ----------------------------------------------------------------- */
-
-/* --ink, underlined, offset. Hover thickens the underline. No colour change,
-   no arrow appended. */
-.prose a,
-a.link {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-thickness: var(--rule-width);
-  text-underline-offset: var(--underline-offset);
-  transition: text-decoration-thickness var(--dur-fast) var(--ease-mid);
-}
-
-.prose a:hover,
-a.link:hover {
-  text-decoration-thickness: calc(var(--rule-width) * 2);
-}
-
-/* -- Buttons --------------------------------------------------------------- */
-
-/* DESIGN.md § States: there is one button style. --radius-sm because it is
-   something you operate, a 1px --ink border, transparent fill, --ink text. No
-   filled variant until something demonstrably needs one, and that would be a
-   new decision. */
-.button {
-  display: inline-block;
-  padding: var(--space-3) var(--space-4);
-  background-color: transparent;
-  border: var(--rule-width) solid var(--ink);
-  border-radius: var(--radius-sm);
-  color: var(--ink);
-  font-family: var(--font-literata), serif;
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-  text-align: start;
-  cursor: pointer;
-  transition: background-color var(--dur-fast) var(--ease-mid);
-}
-
-/* Hover changes colour only: no lift, no shadow, no growth. */
-.button:hover {
-  background-color: var(--paper-sunk);
-}
-
-/* Pressed state. The fill alone would be colour doing the work on its own, so
-   the label carries it too: buttons that toggle a view say "Show ..." and
-   "Hide ...", and aria-pressed says it to assistive tech. No shadow, inset or
-   otherwise — DESIGN.md bans them outright and an inset one is still a
-   shadow. */
-.button[aria-pressed='true'] {
-  background-color: var(--paper-sunk);
-}
-
-/* -- Reduced motion -------------------------------------------------------- */
-
-/* Transitions are removed rather than zeroed on a transform, which would
-   produce a jump. The skip link keeps its transform so it still appears. */
-@media (prefers-reduced-motion: reduce) {
-  .prose a,
-  a.link,
-  .button {
-    transition: none;
-  }
+.rule {
+  border: 0;
+  border-block-start: var(--rule-width) solid var(--grid);
+  margin: 0;
 }
 
 /* -- Visually hidden ------------------------------------------------------- */
 
-/* Off-screen but still announced. Not display:none and not visibility:hidden,
-   either of which would remove it from the accessibility tree entirely.
-
-   lint-allow-px: the clip rectangle is an accessibility idiom, not a design
+/* lint-allow-px: the clip rectangle is an accessibility idiom, not a design
    value. It has to be a real one-pixel box for screen readers to treat the
    content as rendered; a spacing token here would be meaningless. */
 .visually-hidden {
@@ -251,32 +235,46 @@ a.link:hover {
 
 /* -- TODO markers ---------------------------------------------------------- */
 
-/* CLAUDE.md: "Where content is missing, write a literal TODO: marker
-   describing what is needed and who can supply it. A visible gap is correct.
-   A plausible fabrication is a serious bug."
-
-   So these are meant to be seen, not hidden behind a comment. They use --ink
-   on --paper-sunk with a rule, never --claim: --claim means a model made a
-   claim about a person, and an editorial note is not that. */
+/* CLAUDE.md: a visible gap is correct, a plausible fabrication is a serious
+   bug. These are meant to be seen. --text on a raised field with a heavy
+   leading rule; never --signal, which means a model asserted something. */
 .todo {
   display: block;
   margin-block: var(--space-5);
   padding: var(--space-4);
-  background-color: var(--paper-sunk);
-  border-inline-start: calc(var(--rule-width) * 3) solid var(--ink);
-  border-radius: var(--radius-0);
-  color: var(--ink);
+  background-color: var(--field-2);
+  border-inline-start: calc(var(--rule-width) * 3) solid var(--text-muted);
+  border-radius: var(--radius-glass);
+  color: var(--text);
+  font-family: var(--font-sans);
   font-size: var(--size-small);
   line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+}
+
+/* -- Reduced motion -------------------------------------------------------- */
+
+/* Transitions are removed rather than zeroed on a transform, which produces a
+   jump instead of removing the motion. The reveal resolves to its finished
+   state: the script never adds .is-pending when motion is reduced, so nothing
+   starts hidden in the first place. */
+@media (prefers-reduced-motion: reduce) {
+  .prose a,
+  a.link,
+  .button {
+    transition: none;
+  }
+
+  [data-reveal].is-revealed {
+    transition: none;
+  }
 }
 
 /* -- Site header ----------------------------------------------------------- */
 
-/* Bounded by a rule beneath it, not a fill or a shadow. Same reasoning as the
-   trace panel: DESIGN.md bans shadows, so edges and space do the work. */
+/* Bounded by a hairline, not a fill. The header sits on the field like
+   everything else; glass is reserved for panels holding live output. */
 .site-header {
-  border-block-end: var(--rule-width) solid var(--rule);
+  border-block-end: var(--rule-width) solid var(--grid);
 }
 
 .site-header__inner {
@@ -284,18 +282,17 @@ a.link:hover {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-4) var(--space-6);
+  gap: var(--space-3) var(--space-6);
   padding-block: var(--space-5);
 }
 
-/* Set type, not a wordmark — DESIGN.md says there is no wordmark yet. The
-   name is a link to the home page and carries no underline until hovered,
-   since it reads as an identity rather than as running prose. */
+/* Serif, because the lab's name is the one piece of prose in the header. */
 .site-header__name {
+  font-family: var(--font-serif);
   font-size: var(--size-section);
   line-height: var(--lh-section);
   font-variation-settings: "opsz" var(--opsz-section), "wght" var(--weight-section);
-  color: var(--ink);
+  color: var(--text);
   text-decoration: none;
 }
 
@@ -305,6 +302,7 @@ a.link:hover {
   text-underline-offset: var(--underline-offset);
 }
 
+/* Sans, because navigation is furniture. */
 .site-header__nav {
   display: flex;
   flex-wrap: wrap;
@@ -312,40 +310,51 @@ a.link:hover {
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
 }
 
-/* The current page is marked by a thicker underline as well as by
-   aria-current, so the state is not carried by weight alone. */
-.site-header__nav a[aria-current='page'] {
-  text-decoration-thickness: calc(var(--rule-width) * 2);
+.site-header__link {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-tracking);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.site-header__link:hover {
+  color: var(--text);
+}
+
+/* The current page is marked by colour and an underline, not colour alone. */
+.site-header__link[aria-current='page'] {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule-width);
+  text-underline-offset: var(--underline-offset);
 }
 
 /* -- Site footer ----------------------------------------------------------- */
 
 .site-footer {
   margin-block-start: var(--rhythm-section);
-  border-block-start: var(--rule-width) solid var(--rule);
+  border-block-start: var(--rule-width) solid var(--grid);
 }
 
 .site-footer__inner {
   padding-block: var(--space-8);
 }
 
-.site-footer__note {
-  margin-block: var(--space-5) 0;
-  max-width: var(--measure);
+.site-footer__name {
+  font-family: var(--font-serif);
+  font-size: var(--size-section);
+  line-height: var(--lh-section);
+  color: var(--text);
+  margin: 0;
 }
 
-/* -- Not found ------------------------------------------------------------- */
-
-.not-found__list {
-  margin-block: var(--space-5) 0;
-  padding-inline-start: var(--space-5);
-}
-
-.not-found__list li + li {
-  margin-block-start: var(--space-3);
+@media (prefers-reduced-motion: reduce) {
+  .site-header__link {
+    transition: none;
+  }
 }

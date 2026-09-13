@@ -4,28 +4,21 @@
  *
  * docs/plan.md: "Contact is a line in the footer, not a page."
  *
- * The contact address and the pages still to be built are both shown as they
- * actually stand. A footer that lists four sections when one exists, or prints
- * a plausible-looking email address, would be a small lie in the most
- * load-bearing place on an academic site.
+ * The contact address is a TODO rather than a plausible-looking string. An
+ * invented email in a footer is a small lie in the most load-bearing place on
+ * an academic site.
  */
-import { NAVIGATION } from '../data/navigation.ts';
-
-const pending = NAVIGATION.filter((item) => !item.built).map((item) => item.label);
+import { LAB_NAME } from '../data/navigation.ts';
 ---
 
 <footer class="site-footer">
   <div class="page site-footer__inner">
-    <p class="todo measure">
-      TODO: the contact address for the footer. The plan lists a contact
-      email as supplied, but it is not in the repo. Kaung to supply. An
-      invented address would be worse than this gap. Tracked as B-9.
-    </p>
+    <p class="site-footer__name">{LAB_NAME}</p>
 
-    <p class="site-footer__note type-small type-meta">
-      Still to be built: {pending.join(', ')}. These are Phase 3 in
-      docs/phase.md and need publication and people content that has not been
-      supplied yet.
+    <p class="todo measure">
+      TODO: the contact address for the footer. The plan lists a contact email
+      as supplied, but it is not in the repo. Kaung to supply. An invented
+      address would be worse than this gap. Tracked as B-9.
     </p>
   </div>
 </footer>

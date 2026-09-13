@@ -78,12 +78,18 @@ export interface TraceResult {
  * Illustrative parameters. Not fitted, not measured, not a citation.
  *
  * guess is set as though a five-way choice, slip low but not negligible, and
- * learn brisk enough that a short sequence shows movement. A real deployment
- * would fit these per skill from real response data.
+ * learn brisk enough that a short sequence shows movement without running away
+ * from the reader. A real deployment would fit these per skill from real
+ * response data.
+ *
+ * The learn rate came down from 0.15 to 0.12 to slow the climb. The widget's
+ * earlier failure was not that the model was wrong but that it saturated: it
+ * sat at 99 per cent and clicking an attempt did not visibly move the
+ * headline, so the one thing the artefact exists to demonstrate was invisible.
  */
 export const DEFAULT_PARAMETERS: BktParameters = {
   prior: 0.25,
-  learn: 0.15,
+  learn: 0.12,
   guess: 0.2,
   slip: 0.1,
 };

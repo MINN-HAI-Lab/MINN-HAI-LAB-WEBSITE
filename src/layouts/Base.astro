@@ -1,10 +1,10 @@
 ---
 /**
- * The page shell. Every page uses this.
+ * The page shell.
  *
- * Document outline: the skip link targets #main, which is the <main> landmark.
- * Pages supply exactly one <h1> in the default slot and headings descend from
- * there without skipping a level — CLAUDE.md requires that and T-25 checks it.
+ * Document outline: the skip link targets #main, which is the <main>
+ * landmark. Pages supply exactly one <h1> and headings descend without
+ * skipping a level.
  */
 import { Font } from 'astro:assets';
 import Footer from '../components/Footer.astro';
@@ -16,32 +16,26 @@ import '../styles/global.css';
 interface Props {
   /** Goes in <title>. Sentence case, like everything else. */
   title: string;
-  /** Meta description. Optional — omitted rather than filled with filler. */
+  /** Meta description. Omitted rather than filled with filler. */
   description?: string;
-  /**
-   * Keep this page out of search results. For working documents like the type
-   * specimen, which exist for whoever is building the site rather than for
-   * anyone reading it.
-   */
+  /** Keep this page out of search results. */
   noindex?: boolean;
 }
 
 const { title, description, noindex = false } = Astro.props;
 
 /**
- * No canonical URL, and no absolute URLs anywhere.
+ * No canonical URL, and no absolute URL of any kind.
  *
- * They need an origin, the domain is undecided (open question 10 in
- * design/decisions.md, and D-008 ties hosting to it), and a placeholder domain
+ * They need an origin and the domain is undecided (B-8). A placeholder domain
  * baked into production metadata is exactly the kind of plausible-looking
- * fabrication CLAUDE.md is about. Relative metadata is correct at any origin;
- * canonical, Open Graph URLs and the sitemap all wait for the real one.
+ * fabrication that survives review because it looks right.
  */
 ---
 
 <!doctype html>
-<!-- en-GB because decisions.md records that the site uses British spellings.
-     The lab's own name may keep an American spelling; that is B-1. -->
+<!-- en-GB: decisions.md records that the site uses British spellings. The
+     lab's own name may keep an American one; that is B-1. -->
 <html lang="en-GB">
   <head>
     <meta charset="utf-8" />
@@ -50,17 +44,19 @@ const { title, description, noindex = false } = Astro.props;
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
 
-    {/* SVG only. It scales to every size a browser asks for, and an .ico would
-        mean checking in a rasterised copy that could drift from the tokens. */}
-    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <!-- The page is dark before a single byte of CSS arrives, so there is no
+         white flash on a slow connection. -->
+    <meta name="theme-color" content="#070b10" />
 
-    {/* Open Graph, minus anything needing an origin.
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
 
-        og:url and og:image both have to be absolute, and there is no domain
-        yet (Q-13). A share image is generated at /share.svg and is not
-        referenced here, because a relative og:image is silently ignored by
-        every crawler and a made-up domain is worse than none. Both become one
-        line each when the domain lands — Q-14. */}
+    <!-- No preload. Astro inlines the @font-face rules into this head, so the
+         font is discovered while parsing it and there is no stylesheet round
+         trip for a preload to save. What preload does do is defeat
+         unicode-range and pull down a latin-ext subset no page here uses:
+         measured at 152.8KB with it against 83.8KB without. -->
+    <Font cssVariable="--font-literata" />
+
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={LAB_NAME} />
     <meta property="og:locale" content="en_GB" />
@@ -69,19 +65,7 @@ const { title, description, noindex = false } = Astro.props;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
-    {/* No preload, deliberately.
 
-        Astro inlines the @font-face rules into this head, so the browser
-        discovers the font while parsing the head — there is no stylesheet
-        round trip for a preload to save. What preload does do is defeat
-        unicode-range: it forces both subsets down regardless of what the page
-        needs.
-
-        Measured: preloading fetches 2 files and 152.8KB. Without it the
-        browser fetches 1 file and 83.8KB, because no glyph on this site falls
-        in latin-ext. The 69.1KB subset stays available for when author names
-        need it, and is fetched then rather than now. */}
-    <Font cssVariable="--font-literata" />
     <slot name="head" />
   </head>
   <body>
@@ -89,17 +73,48 @@ const { title, description, noindex = false } = Astro.props;
 
     <Header />
 
-    {/* tabindex="-1" so the skip link genuinely moves focus here.
-
-        Without it, activating a fragment link scrolls the page and updates the
-        sequential focus starting point, but leaves document.activeElement on
-        the body in several browsers — so the next Tab goes back to the top and
-        the skip link skips nothing. It is -1, not 0, so it never becomes a tab
-        stop of its own. */}
-    <main id="main" class="page" tabindex="-1">
+    <!-- tabindex="-1" so the skip link genuinely moves focus here. Without it
+         the browser scrolls and updates the sequential focus starting point
+         but leaves activeElement on the body, so the next Tab returns to the
+         header and the link skips nothing. -->
+    <main id="main" tabindex="-1">
       <slot />
     </main>
 
     <Footer />
+
+    <script>
+      /**
+       * One entrance reveal per section, once, never repeating.
+       *
+       * The hidden state is added here rather than in CSS, so with JavaScript
+       * off nothing is hidden and there is nothing that could fail to be
+       * revealed. Under reduced motion it is never added at all — the section
+       * resolves to its finished state rather than to a zero-duration
+       * transform, which would be a jump rather than the absence of one.
+       */
+      const targets = [...document.querySelectorAll<HTMLElement>('[data-reveal]')];
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (targets.length > 0 && !still && 'IntersectionObserver' in window) {
+        for (const el of targets) el.classList.add('is-pending');
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.remove('is-pending');
+              entry.target.classList.add('is-revealed');
+              // Stop watching immediately: the reveal happens once and must
+              // not replay on the way back up.
+              observer.unobserve(entry.target);
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.05 },
+        );
+
+        for (const el of targets) observer.observe(el);
+      }
+    </script>
   </body>
 </html>

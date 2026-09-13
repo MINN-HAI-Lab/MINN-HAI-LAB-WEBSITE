@@ -1,62 +1,21 @@
 /* ---------------------------------------------------------------------------
-   trace.css — the knowledge trace widget.
+   trace.css — artefact 1, knowledge tracing.
 
-   Every value comes from design/DESIGN.md § Trace widget. The panel is bounded
-   by rules rather than by fill, because --paper-sunk against --paper is
-   1.1:1 and cannot carry a boundary (D-012).
+   The estimate and its uncertainty band are --signal, because they are the
+   model's own claim about a person. Everything the learner actually did —
+   every attempt mark — is --text, because that is fact. A reader picks the
+   grammar up without being told.
 --------------------------------------------------------------------------- */
 
-.trace {
-  margin: 0;
-}
-
-/* Full-bleed horizontally, with a 1px rule above and below. Those rules are
-   what define the panel; the fill only tints. */
-.trace__panel {
-  background-color: var(--trace-bg);
-  border-block: var(--rule-width) solid var(--trace-edge);
-  border-radius: var(--radius-0);
-  padding-block: var(--space-6);
-  padding-inline: var(--space-4);
-}
-
-/* The plotted area, plus the text that must not scale with it.
-
-   --trace-plot-width is set on the figure by Trace.astro, from the viewBox
-   width in trace-geometry.ts, so the drawing's nominal size lives in one place
-   rather than being repeated here as a magic number. It is set on the figure
-   rather than here because the key, the instructions and the controls are
-   siblings of this element and have to line up with it. */
 .trace__plot {
-  position: relative;
   max-width: var(--trace-plot-width);
   margin-inline: auto;
-  /* Room for the axis labels, which now sit outside the drawing. */
+  /* Room for the axis ticks, which sit outside the drawing so they keep
+     their size when it scales. */
   padding-inline-start: var(--space-5);
-  /* Room for the synthetic stamp beneath it. */
-  padding-block-end: var(--space-5);
+  padding-block-end: var(--space-2);
 }
 
-/* Below 640px every horizontal pixel is a tap target.
-   Ten marks share the drawing's width, so the hit area per mark is
-   (viewBox usable / 10) x (rendered width / 700). At 360px the chrome above —
-   64px of page gutter, the panel's inline padding, and the plot's label
-   gutter — left 240px of drawing and 22px targets, under the 24px minimum.
-   Trimming the two paddings we control gives 264px back and 24px with it.
-   Measured, not estimated: this exact regression appeared once already when
-   the label gutter was added. */
-@media (width < 640px) {
-  .trace__panel {
-    padding-inline: var(--space-2);
-  }
-
-  .trace__plot {
-    padding-inline-start: var(--space-4);
-  }
-}
-
-/* Scales down to fit, never up, so --mark-size and --curve-width are exact at
-   full width and shrink proportionally below it. */
 .trace__svg {
   display: block;
   width: 100%;
@@ -64,56 +23,29 @@
   overflow: visible;
 }
 
-/* -- Axis ------------------------------------------------------------------ */
-
-.trace__axis {
-  stroke: var(--rule);
-  stroke-width: var(--rule-width);
-}
-
-/* HTML, not SVG text, so it keeps its size when the drawing scales. Pinned to
-   the chart rows by percentage, which holds at any scale because the SVG has a
-   fixed aspect ratio. */
-.trace__axis-label {
-  position: absolute;
-  inset-inline-start: 0;
-  transform: translateY(-50%);
-  font-size: var(--size-small);
-  line-height: 1;
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-  font-feature-settings: "tnum" 1;
-  color: var(--ink-muted);
-}
-
-/* -- Synthetic-data stamp -------------------------------------------------- */
-
-/* Over the drawing, inside the panel, so a screenshot of the widget carries it.
-   --ink-muted at 5.48:1 on the panel: quiet enough not to compete with the
-   trace, loud enough that it cannot be missed or taken for decoration. Never
-   faded below the token, since the point is that it stays legible — and now
-   HTML rather than SVG text, so it holds 15px at every width. */
-.trace__stamp {
-  position: absolute;
-  inset-inline-end: 0;
-  inset-block-end: 0;
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-  color: var(--ink-muted);
+/* Below 640px every horizontal pixel is a tap target. Ten marks share the
+   drawing's width, so trimming the padding we control is what keeps each one
+   at the 24px minimum rather than 22. */
+@media (width < 640px) {
+  .trace__plot {
+    padding-inline-start: var(--space-4);
+  }
 }
 
 /* -- Uncertainty band ------------------------------------------------------ */
 
-/* The one sanctioned opacity variant on the site. The fill is a wash; the
-   edges carry the information. */
+/* A wash. It cannot carry the information on its own at this opacity, which is
+   why the edges below exist. */
 .trace__band {
-  fill: var(--trace-band);
+  fill: var(--signal);
+  fill-opacity: 0.12;
   stroke: none;
 }
 
 .trace__band-edge {
   fill: none;
-  stroke: var(--trace-band-edge);
+  stroke: var(--signal);
+  stroke-opacity: 0.55;
   stroke-width: var(--rule-width);
   stroke-linejoin: round;
 }
@@ -122,61 +54,64 @@
 
 .trace__curve {
   fill: none;
-  stroke: var(--trace-curve);
+  stroke: var(--signal);
   stroke-width: var(--curve-width);
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
+/* The reduced-motion substitute for the estimate animation. Deliberately
+   static: no transition, no transform. The curve thickens for a moment so the
+   change is visible, then returns. Zeroing a duration on a transform does not
+   remove motion so much as compress it into a jump. */
+.trace__curve.is-changed {
+  stroke-width: calc(var(--curve-width) * 2);
+}
+
 /* -- Attempt marks --------------------------------------------------------- */
 
-/* Correct is filled, incorrect is open with a stroke. Shape carries the
-   distinction; both are --ink. An attempt is something the learner did, which
-   is fact, so it is never --claim. */
+/* Correct is filled, incorrect is open. Shape carries the distinction; both
+   are --text. An attempt is something the learner did, so it is never
+   --signal. */
 .trace__mark {
-  stroke: var(--trace-mark);
+  stroke: var(--text);
   stroke-width: var(--curve-width);
 }
 
 .trace__mark.is-correct {
-  fill: var(--trace-mark);
+  fill: var(--text);
 }
 
 .trace__mark.is-incorrect {
-  fill: var(--trace-bg);
+  fill: none;
 }
 
-/* -- Interactive marks ----------------------------------------------------- */
-
 /* Transparent, not display:none — it has to stay hittable. A rect spanning the
-   whole slot, so the target survives the SVG scaling down: 24px at a 360px
-   viewport, where a circle gave 12. */
+   whole slot, so the target survives the SVG scaling down. */
 .trace__mark-hit {
   fill: transparent;
   stroke: none;
 }
 
 /* .is-interactive is added by the script, so none of this applies to the
-   static rendering. A cursor that promises a control where there is none is
-   worse than no cursor. */
+   static rendering. A cursor promising a control where there is none is worse
+   than no cursor. */
 .trace__marks.is-interactive .trace__mark-group {
   cursor: pointer;
 }
 
 .trace__marks.is-interactive .trace__mark {
-  transition: stroke var(--dur-fast) var(--ease-mid),
-    fill var(--dur-fast) var(--ease-mid);
+  transition:
+    stroke var(--dur-fast) var(--ease-out),
+    fill var(--dur-fast) var(--ease-out);
 }
 
-/* Hover changes colour and nothing else: no lift, no growth. --ink-muted on
-   the panel is 5.48:1, well clear of the 3:1 floor for a control boundary.
-   Never --claim, which means a model asserted something about a person. */
 .trace__marks.is-interactive .trace__mark-group:hover .trace__mark {
-  stroke: var(--ink-muted);
+  stroke: var(--text-muted);
 }
 
 .trace__marks.is-interactive .trace__mark-group:hover .trace__mark.is-correct {
-  fill: var(--ink-muted);
+  fill: var(--text-muted);
 }
 
 .trace__mark-group:focus {
@@ -184,33 +119,50 @@
 }
 
 .trace__mark-group:focus-visible {
-  outline: var(--focus-width) solid var(--ink);
+  outline: var(--focus-width) solid var(--text);
   outline-offset: var(--focus-offset);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-glass);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .trace__marks.is-interactive .trace__mark {
-    transition: none;
-  }
+/* -- Attribution view ------------------------------------------------------ */
+
+/* Drawn on every mark, invisible until the view is on and the mark is one the
+   model is leaning on. --signal is right here and nowhere else among the
+   marks: the highlight is the model asserting what it rests on. */
+.trace__mark-ring {
+  fill: none;
+  stroke: none;
+}
+
+.trace__marks.is-attributing .trace__mark-group.is-carrying .trace__mark-ring {
+  stroke: var(--signal);
+  stroke-width: var(--curve-width);
+}
+
+/* The ring's presence is the second cue, so the state never rests on colour
+   alone. Marks that are not carrying also dim, which survives greyscale. */
+.trace__marks.is-attributing .trace__mark-group:not(.is-carrying) .trace__mark {
+  stroke: var(--text-muted);
+}
+
+.trace__marks.is-attributing .trace__mark-group:not(.is-carrying) .trace__mark.is-correct {
+  fill: var(--text-muted);
 }
 
 /* -- Key ------------------------------------------------------------------- */
 
-/* Wraps to one item per line at narrow widths rather than overflowing. */
 .trace__key {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3) var(--space-5);
-  margin-block: var(--space-5) 0;
-  margin-inline: auto;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
   padding: 0;
-  max-width: var(--trace-plot-width);
   list-style: none;
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-  color: var(--ink-muted);
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-tracking);
+  color: var(--text-muted);
 }
 
 .trace__key-item {
@@ -219,8 +171,8 @@
   gap: var(--space-2);
 }
 
-/* Sized from --mark-size so the key and the trace cannot disagree about what
-   a mark looks like. */
+/* Sized from --mark-size so the key and the trace cannot disagree about what a
+   mark looks like. */
 .trace__key-swatch {
   flex: none;
   inline-size: var(--mark-size);
@@ -228,104 +180,20 @@
   overflow: visible;
 }
 
-/* -- Reduced-motion highlight ---------------------------------------------- */
-
-/* The substitute for the estimate animation when motion is reduced. It is
-   deliberately static: no transition, no transform, nothing eased. The curve
-   thickens for a moment so the change is visible, then returns.
-
-   DESIGN.md warns against the alternative — zeroing a duration on a transform,
-   which does not remove the motion so much as compress it into a jump. */
-.trace__curve.is-changed {
-  stroke-width: calc(var(--curve-width) * 2);
-}
-
-/* -- Attribution view ------------------------------------------------------ */
-
-/* Drawn on every mark, invisible until the view is on and the mark is one the
-   model is leaning on. */
-.trace__mark-ring {
-  fill: none;
-  stroke: none;
-}
-
-/* --claim is right here and nowhere else among the marks: the highlight is the
-   model asserting which attempts it is resting on, which is a claim about a
-   person. The attempts themselves stay --ink, because what the learner did is
-   fact. */
-.trace__marks.is-attributing .trace__mark-group.is-carrying .trace__mark-ring {
-  stroke: var(--trace-curve);
-  stroke-width: var(--curve-width);
-}
-
-/* The ring's presence is the second cue, so the state never rests on colour
-   alone. Marks that are not carrying also dim slightly, which gives the view a
-   figure-ground shift that survives greyscale. */
-.trace__marks.is-attributing .trace__mark-group:not(.is-carrying) .trace__mark {
-  stroke: var(--ink-muted);
-}
-
-.trace__marks.is-attributing
-  .trace__mark-group:not(.is-carrying)
-  .trace__mark.is-correct {
-  fill: var(--ink-muted);
-}
-
-.trace__controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-block-start: var(--space-5);
-  margin-inline: auto;
-  max-width: var(--trace-plot-width);
-}
-
-.trace__controls[hidden] {
-  display: none;
-}
-
-/* -- Instructions ---------------------------------------------------------- */
-
-/* Revealed by the script. [hidden] must win over the display below, or the
-   JS-off state leaks instructions for keys that do nothing. */
-.trace__instructions {
-  display: block;
-  margin-block: var(--space-4) 0;
-  margin-inline: auto;
-  max-width: var(--trace-plot-width);
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-  color: var(--ink-muted);
-}
-
-.trace__instructions[hidden] {
-  display: none;
-}
-
 /* -- Caption --------------------------------------------------------------- */
 
-.trace__caption {
-  margin-block-start: var(--space-5);
+.artefact__caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-.trace__sentence {
-  margin: 0;
-  font-size: var(--size-body);
-  line-height: var(--lh-body);
-  font-variation-settings: "opsz" var(--opsz-body), "wght" var(--weight-body);
-  color: var(--ink);
-  max-width: var(--measure);
+.artefact__note[hidden] {
+  display: none;
 }
 
-/* The synthetic-data label. Required by docs/plan.md and it must be legible,
-   not a whisper, so it is --ink-muted at --size-small rather than faded. */
-.trace__synthetic {
-  margin-block-start: var(--space-3);
-  margin-block-end: 0;
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
-  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-  color: var(--ink-muted);
-  max-width: var(--measure);
+@media (prefers-reduced-motion: reduce) {
+  .trace__marks.is-interactive .trace__mark {
+    transition: none;
+  }
 }

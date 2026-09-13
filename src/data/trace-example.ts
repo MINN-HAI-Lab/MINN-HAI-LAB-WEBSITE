@@ -10,25 +10,36 @@
  * statement at the source, so nobody downstream mistakes the array for a
  * recording of something.
  *
- * The shape was chosen to be legible rather than realistic: two early failures
- * so the estimate starts low, a middle stretch where it wobbles, then a run of
- * successes so the curve visibly climbs and the uncertainty band visibly
- * narrows. Ten attempts, within the eight-to-twelve that docs/phase.md asks
- * for.
+ * The shape was not chosen by eye. It was searched for.
+ *
+ * With the parameters in mastery.ts, all 210 ten-attempt sequences containing
+ * four incorrect answers were enumerated and scored on two things: where the
+ * final estimate lands, and how far the headline percentage moves when any
+ * single attempt is flipped. This sequence has the lowest peak of any that
+ * keeps the final estimate inside 0.40 to 0.80 while still moving the headline
+ * on every possible click.
+ *
+ * It peaks at 97 per cent rather than 100, which is the point: a saturated
+ * model is one where clicking does nothing, and an artefact that does not
+ * respond is not an artefact. Every one of the ten attempts moves the headline
+ * by at least 20 percentage points.
+ *
+ * The trajectory still swings wider than the 0.40 to 0.80 band the brief asks
+ * for. That band is not reachable with these parameters — see Q-20.
  */
 
 /** `true` means the attempt was answered correctly. */
 export const EXAMPLE_ATTEMPTS: readonly boolean[] = [
-  false,
-  false,
-  true,
-  false,
   true,
   true,
   false,
   true,
+  false,
   true,
   true,
+  false,
+  true,
+  false,
 ];
 
 /**

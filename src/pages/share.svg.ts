@@ -29,11 +29,11 @@ const WIDTH = 1200;
 const HEIGHT = 630;
 
 export const GET: APIRoute = () => {
-  const paper = token(tokens, 'color-paper');
-  const paperSunk = token(tokens, 'color-paper-sunk');
-  const ink = token(tokens, 'color-ink');
-  const inkMuted = token(tokens, 'color-ink-muted');
-  const claim = token(tokens, 'color-claim');
+  const field = token(tokens, 'color-field');
+  const field2 = token(tokens, 'color-field-2');
+  const text = token(tokens, 'color-text');
+  const textMuted = token(tokens, 'color-text-muted');
+  const signal = token(tokens, 'color-signal');
   const curveWidth = Number.parseFloat(token(tokens, 'curve-width'));
   const markSize = Number.parseFloat(token(tokens, 'mark-size'));
 
@@ -53,7 +53,7 @@ export const GET: APIRoute = () => {
     .map(
       (mark) =>
         `<circle cx="${mark.x}" cy="${mark.y}" r="${markSize / 2}" ` +
-        `fill="${mark.correct ? ink : paperSunk}" stroke="${ink}" ` +
+        `fill="${mark.correct ? text : 'none'}" stroke="${text}" ` +
         `stroke-width="${curveWidth}"/>`,
     )
     .join('\n      ');
@@ -65,21 +65,21 @@ export const GET: APIRoute = () => {
   const serif = 'Literata, Georgia, serif';
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" width="${WIDTH}" height="${HEIGHT}">
-  <rect width="${WIDTH}" height="${HEIGHT}" fill="${paper}"/>
+  <rect width="${WIDTH}" height="${HEIGHT}" fill="${field}"/>
 
-  <text x="70" y="110" font-family="${serif}" font-size="52" fill="${ink}">${LAB_NAME}</text>
-  <text x="70" y="162" font-family="${serif}" font-size="26" fill="${inkMuted}">A learner's attempts, and the model's estimate of what they know.</text>
+  <text x="70" y="110" font-family="${serif}" font-size="52" fill="${text}">${LAB_NAME}</text>
+  <text x="70" y="162" font-family="${serif}" font-size="26" fill="${textMuted}">A learner's attempts, and the model's estimate of what they know.</text>
 
   <g transform="translate(${offsetX} ${offsetY}) scale(${scale})">
-    <rect x="0" y="0" width="${VIEW.width}" height="${VIEW.height}" fill="${paperSunk}"/>
-    <path d="${geometry.bandPath}" fill="${claim}" fill-opacity="0.12"/>
-    <path d="${geometry.bandUpperPath}" fill="none" stroke="${claim}" stroke-width="1"/>
-    <path d="${geometry.bandLowerPath}" fill="none" stroke="${claim}" stroke-width="1"/>
-    <path d="${geometry.curvePath}" fill="none" stroke="${claim}" stroke-width="${curveWidth}"
+    <rect x="0" y="0" width="${VIEW.width}" height="${VIEW.height}" fill="${field2}"/>
+    <path d="${geometry.bandPath}" fill="${signal}" fill-opacity="0.12"/>
+    <path d="${geometry.bandUpperPath}" fill="none" stroke="${signal}" stroke-width="1"/>
+    <path d="${geometry.bandLowerPath}" fill="none" stroke="${signal}" stroke-width="1"/>
+    <path d="${geometry.curvePath}" fill="none" stroke="${signal}" stroke-width="${curveWidth}"
           stroke-linecap="round" stroke-linejoin="round"/>
       ${marks}
     <text x="${VIEW.width - VIEW.padX}" y="${VIEW.height - 8}" text-anchor="end"
-          font-family="${serif}" font-size="15" fill="${inkMuted}">Synthetic data</text>
+          font-family="${serif}" font-size="15" fill="${textMuted}">Synthetic data</text>
   </g>
 </svg>
 `;

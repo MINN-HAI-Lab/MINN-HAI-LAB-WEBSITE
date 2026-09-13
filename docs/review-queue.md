@@ -492,3 +492,49 @@ and the absolute rule against inventing content.
 > islands. I have not edited either — `CLAUDE.md` is off-limits and DESIGN.md's
 > palette section is load-bearing for the old test suite until S-16 moves it.
 > They need reconciling with this brief when you are back.
+
+---
+
+## Q-20 — The 0.40–0.80 band is unreachable with the given BKT parameters
+
+**Raised:** S-04, 2026-09-13. **Routed around:** kept the parameters, chose the
+best sequence, documented the gap.
+
+The brief fixes the parameters at init 0.25, transit 0.12, guess 0.20, slip
+0.10, and asks for a ten-attempt sequence with four incorrect answers such that
+"the estimate stays between 0.40 and 0.80 and every click moves the headline by
+at least two points".
+
+Both cannot hold. I enumerated all 210 such sequences:
+
+- **0** keep the whole trajectory inside 0.40–0.80.
+- **33** keep the *final* estimate inside it while moving the headline at least
+  two points on every possible click.
+
+The reason is the parameters, not the search. With guess at 0.20 and slip at
+0.10 a correct answer is strong evidence, so three in a row take the estimate
+past 0.95 whatever order they come in. The trough across every candidate is
+about 0.65 and the peak reaches 0.97 or higher.
+
+What is built: `##o#o##o#o`, the lowest-peaking sequence that satisfies the
+click requirement. It peaks at 97 per cent rather than 100, ends at 79, and
+every one of the ten attempts moves the headline by at least **20** points —
+ten times the two asked for. The saturation problem the brief was aimed at is
+fixed.
+
+I also searched for parameters that would make the band reachable, so this is
+actionable rather than just a refusal:
+
+| guess | slip | sequences in band |
+|---|---|---|
+| 0.20 | 0.10–0.30 | 0 |
+| 0.25 | 0.10–0.30 | 0 |
+| 0.30 | 0.10–0.30 | 0 |
+| 0.35 | 0.15 | 1 |
+| 0.35 | 0.20 | 1 |
+
+> The band needs the guess rate raised from 0.20 to 0.35 — nearly doubled —
+> and even then only one sequence in 210 works. My read is that the click
+> requirement was the real goal and the band was a proxy for it, so I optimised
+> the click requirement. If the band matters in itself, say so and I will take
+> guess to 0.35.

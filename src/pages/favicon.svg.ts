@@ -10,8 +10,8 @@ import tokens from '../styles/tokens.css?raw';
  * asked for and nobody could review.
  *
  * What it is instead is the site's own display idea at its smallest: a rising
- * mastery estimate. One --claim stroke on --paper, which is exactly what the
- * hero draws. --claim is the right colour and the only defensible one here,
+ * mastery estimate. One --signal stroke on --field, which is exactly what the
+ * hero draws. --signal is the right colour and the only defensible one here,
  * because the line *is* the model's estimate, which is what that token means.
  *
  * It deliberately does not use a letter. Which letter would depend on the lab
@@ -24,8 +24,8 @@ import tokens from '../styles/tokens.css?raw';
 export const prerender = true;
 
 export const GET: APIRoute = () => {
-  const paper = token(tokens, 'color-paper');
-  const claim = token(tokens, 'color-claim');
+  const field = token(tokens, 'color-field');
+  const signal = token(tokens, 'color-signal');
   // SVG geometry attributes take a number, not a CSS length.
   const curveWidth = Number.parseFloat(token(tokens, 'curve-width'));
 
@@ -40,8 +40,8 @@ export const GET: APIRoute = () => {
   const path = 'M2 12.5 L5.5 11 L9 6 L12.5 3.5 L14 3';
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-  <rect width="16" height="16" fill="${paper}"/>
-  <path d="${path}" fill="none" stroke="${claim}" stroke-width="${curveWidth}"
+  <rect width="16" height="16" fill="${field}"/>
+  <path d="${path}" fill="none" stroke="${signal}" stroke-width="${curveWidth}"
         stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 `;

@@ -1,24 +1,18 @@
 /* Tailwind v4 plus the design tokens.
 
    source(none) disables Tailwind's automatic content detection and the
-   @source below replaces it. Without it, Tailwind scans the whole repo —
-   including .agents/skills, which is 612K of third-party markdown full of
-   class names in code examples — and turns every one of them into a real
-   utility, colours and all.
+   @source below replaces it. Without it Tailwind scans the whole repo,
+   including .agents/skills — 612K of third-party markdown full of class names
+   in code examples — and turns every one into a real utility, colours and all.
 
-   The glob is narrowed to files that actually produce markup. Scanning all of
-   src/ was not enough: a TypeScript test that *described* this bug, quoting
-   the offending class name in a comment, was scanned and re-created it. Tests
-   and library code emit no HTML and have no business being read for class
-   names.
-
-   tokens.css comes after the Tailwind import so its @theme blocks extend
-   rather than get overwritten. */
+   The glob is narrowed to files that emit markup. Scanning all of src/ was not
+   enough: a TypeScript test that quoted an offending class name in a comment
+   was scanned and re-created it. */
 @import "tailwindcss" source(none);
 @source "../**/*.{astro,html,md,mdx}";
 
 @import "./tokens.css";
-@import "./layout.css";
 @import "./type.css";
+@import "./layout.css";
+@import "./artefact.css";
 @import "./trace.css";
-@import "./specimen.css";

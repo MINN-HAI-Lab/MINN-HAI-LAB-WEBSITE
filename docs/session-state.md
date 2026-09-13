@@ -10,16 +10,12 @@ conflict is logged as Q-19 rather than halted on.
 
 ## IN PROGRESS
 
-- **S-02** Type: Literata for prose, ui-sans-serif for labels and readouts.
+Nothing.
 
 ## QUEUE
 
 - **S-03** Layout shell on the dark field: glass primitive, motion tokens,
   one-per-section scroll reveal, reduced-motion path.
-- **S-04** Fix BKT saturation. init 0.25, transit 0.12, guess 0.20, slip 0.10,
-  ten attempts with four incorrect, estimate held in 0.40-0.80, every click
-  moving the headline by at least two points.
-- **S-05** Artefact 1: restyle the trace onto the dark palette.
 - **S-06** Artefact 2: Bayesian XAI static SVG baseline, Markov blanket
   highlighting, illustrative network over learning-analytics variables.
 - **S-07** Artefact 2: `3d-force-graph` on click only, absent from the initial
@@ -47,6 +43,9 @@ conflict is logged as Q-19 rather than halted on.
 - **S-01** — Dark instrument palette in tokens.css, contrast verified against the glass composite. Token lint drops the shadow rule; contrast suite rewritten for the new system.
 
 ---
+- **S-02** — Type split: Literata for prose, sans for labels, readouts and navigation. Layout shell, glass primitive, scroll reveal, header and footer on the dark field.
+- **S-04** — BKT learn rate 0.15 -> 0.12 and a searched demo sequence: peak 97% instead of 100%, final 79%, every click moving the headline at least 20 points.
+- **S-05** — Trace restyled onto the dark field: --signal for the estimate and band, --text for attempts, glass panel, HTML axis ticks. Favicon and share card repainted.
 
 ## NOTES
 
