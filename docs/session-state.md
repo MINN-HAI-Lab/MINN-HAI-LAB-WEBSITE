@@ -10,12 +10,6 @@ conflict is logged as Q-19 rather than halted on.
 
 ## IN PROGRESS
 
-Nothing.
-
----
-
-## QUEUE
-
 - **S-01** Token system: dark instrument field, glass surfaces, signal red.
   Replace the six-colour palette in tokens.css.
 - **S-02** Type: Literata for prose, ui-sans-serif for labels and readouts.
@@ -47,6 +41,10 @@ Nothing.
 - **S-19** Final pass: screenshots at three widths, self-critique.
 
 ---
+
+---
+
+## QUEUE
 
 ## DONE
 
