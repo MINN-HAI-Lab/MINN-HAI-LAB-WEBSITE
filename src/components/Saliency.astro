@@ -1,0 +1,218 @@
+---
+/**
+ * Artefact 3 — computer vision.
+ *
+ * A saliency map over an image. Move the cursor and the map follows: the model
+ * attends to structure, but only near where it is currently looking.
+ *
+ * The image is synthetic and generated deterministically. The saliency is a
+ * real Sobel gradient computed from the pixels — so the artefact shows
+ * something true about images over something invented, and says which is
+ * which.
+ *
+ * The static baseline is a plain description plus the scene itself; the map
+ * needs a canvas, so with JavaScript off the reader gets the image and an
+ * explanation rather than an empty box.
+ */
+---
+
+<figure class="artefact saliency" data-saliency>
+  <div class="artefact__bar">
+    <p class="artefact__name">Computer vision</p>
+    <p class="artefact__provenance">Synthetic image, computed saliency</p>
+  </div>
+
+  <div class="artefact__panel glass">
+    <div class="saliency__stage" data-stage>
+      <!-- Both canvases are painted by script. Sized by CSS, resolution set in
+           JS to match the device pixel ratio, so the map is not soft on a
+           retina screen. -->
+      <canvas class="saliency__scene" data-scene-canvas aria-hidden="true"></canvas>
+      <canvas class="saliency__map" data-map-canvas aria-hidden="true"></canvas>
+
+      <p class="saliency__fallback" data-fallback>
+        This artefact draws a saliency map over a generated image and follows
+        the pointer. It needs JavaScript to compute the map. What it shows:
+        a model's attention concentrates where an image has structure — edges
+        and texture — and falls away across smooth regions, even close to where
+        it is looking.
+      </p>
+    </div>
+  </div>
+
+  <ul class="saliency__key" data-key hidden>
+    <li class="saliency__key-item">
+      <span class="saliency__ramp" aria-hidden="true"></span>
+      <span class="label">Low to high attention</span>
+    </li>
+    <li class="saliency__key-item label">
+      <span class="readout readout--signal" data-peak>—</span>
+      <span>peak attention under the pointer</span>
+    </li>
+  </ul>
+
+  <div class="artefact__controls" data-controls hidden>
+    <button class="button" type="button" data-mode aria-pressed="false">Show the raw edge map</button>
+  </div>
+
+  <figcaption class="artefact__caption">
+    <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
+
+    <p class="artefact__readout" data-readout>
+      Attention concentrates where the image has structure. Move the pointer, or
+      use the arrow keys, to move the fixation point.
+    </p>
+
+    <p class="artefact__note">
+      Synthetic image, real computation. The picture is generated here from a
+      fixed seed and is not a photograph of anything. The map over it is the
+      gradient magnitude of the actual pixels — a Sobel edge response — gated by
+      distance from the fixation point. The colour ramp is viridis, which is
+      perceptually uniform and still reads in greyscale.
+    </p>
+  </figcaption>
+</figure>
+
+<script>
+  /**
+   * The saliency artefact.
+   *
+   * Everything is computed in the browser from the generated pixels. Nothing
+   * is precomputed and baked in, so what a reader sees genuinely follows from
+   * the image on screen.
+   */
+  import { attentionAt, edgeEnergy, generateScene, ramp } from '../lib/saliency.ts';
+
+  const root = document.querySelector<HTMLElement>('[data-saliency]');
+
+  if (root) {
+    const el = root;
+    const stage = el.querySelector<HTMLElement>('[data-stage]')!;
+    const sceneCanvas = el.querySelector<HTMLCanvasElement>('[data-scene-canvas]')!;
+    const mapCanvas = el.querySelector<HTMLCanvasElement>('[data-map-canvas]')!;
+    const fallback = el.querySelector<HTMLElement>('[data-fallback]')!;
+    const key = el.querySelector<HTMLElement>('[data-key]')!;
+    const controls = el.querySelector<HTMLElement>('[data-controls]')!;
+    const peakOut = el.querySelector<HTMLElement>('[data-peak]')!;
+    const live = el.querySelector<HTMLElement>('[data-live]')!;
+    const modeButton = el.querySelector<HTMLButtonElement>('[data-mode]')!;
+
+    /* Internal resolution. Fixed and modest: the Sobel pass is O(pixels) and
+       runs on every pointer move, so this is the number that decides whether
+       the artefact feels immediate or laggy. The canvas is scaled up by CSS. */
+    const W = 320;
+    const H = 200;
+
+    const scene = generateScene(W, H);
+    const energy = edgeEnergy(scene);
+
+    let fixation = { x: W * 0.5, y: H * 0.45 };
+    let rawMode = false;
+    let queued = 0;
+
+    const sceneCtx = sceneCanvas.getContext('2d');
+    const mapCtx = mapCanvas.getContext('2d');
+
+    if (!sceneCtx || !mapCtx) throw new Error('2D canvas is unavailable');
+
+    for (const canvas of [sceneCanvas, mapCanvas]) {
+      canvas.width = W;
+      canvas.height = H;
+    }
+
+    // The scene never changes, so it is painted once.
+    sceneCtx.putImageData(new ImageData(scene.pixels, W, H), 0, 0);
+
+    const mapImage = mapCtx.createImageData(W, H);
+
+    function draw(): void {
+      const field = rawMode ? energy : attentionAt(energy, scene, fixation.x, fixation.y, 58);
+
+      let peak = 0;
+      for (let i = 0; i < field.length; i += 1) {
+        const value = field[i]!;
+        if (value > peak) peak = value;
+        const [r, g, b] = ramp(value);
+        const p = i * 4;
+        mapImage.data[p] = r;
+        mapImage.data[p + 1] = g;
+        mapImage.data[p + 2] = b;
+        // Alpha tracks strength, so low-attention regions let the image show
+        // through rather than covering it in dark purple.
+        mapImage.data[p + 3] = Math.round(Math.min(1, value * 1.6) * 235);
+      }
+
+      mapCtx.putImageData(mapImage, 0, 0);
+      peakOut.textContent = peak.toFixed(2);
+    }
+
+    /** Coalesce pointer moves to one paint per frame. */
+    function schedule(): void {
+      if (queued) return;
+      queued = requestAnimationFrame(() => {
+        queued = 0;
+        draw();
+      });
+    }
+
+    function moveTo(clientX: number, clientY: number): void {
+      const rect = stage.getBoundingClientRect();
+      fixation = {
+        x: ((clientX - rect.left) / rect.width) * W,
+        y: ((clientY - rect.top) / rect.height) * H,
+      };
+      schedule();
+    }
+
+    stage.addEventListener('pointermove', (event) => moveTo(event.clientX, event.clientY));
+
+    /* Keyboard parity. A cursor-following artefact that only works with a
+       cursor is not operable, so the stage is focusable and the arrow keys
+       move the fixation point. */
+    stage.tabIndex = 0;
+    stage.setAttribute('role', 'application');
+    stage.setAttribute(
+      'aria-label',
+      'Saliency map over a generated image. Arrow keys move the fixation point.',
+    );
+
+    stage.addEventListener('keydown', (event) => {
+      const step = event.shiftKey ? 24 : 8;
+      const moves: Record<string, [number, number]> = {
+        ArrowLeft: [-step, 0],
+        ArrowRight: [step, 0],
+        ArrowUp: [0, -step],
+        ArrowDown: [0, step],
+      };
+      const move = moves[event.key];
+      if (!move) return;
+      event.preventDefault();
+      fixation = {
+        x: Math.max(0, Math.min(W, fixation.x + move[0])),
+        y: Math.max(0, Math.min(H, fixation.y + move[1])),
+      };
+      schedule();
+      live.textContent = `Fixation at ${Math.round((fixation.x / W) * 100)} per cent across, ${Math.round((fixation.y / H) * 100)} per cent down.`;
+    });
+
+    modeButton.addEventListener('click', () => {
+      rawMode = !rawMode;
+      modeButton.setAttribute('aria-pressed', String(rawMode));
+      modeButton.textContent = rawMode
+        ? 'Show attention at the pointer'
+        : 'Show the raw edge map';
+      live.textContent = rawMode
+        ? 'Showing the raw edge map: every edge in the image, with no fixation point.'
+        : 'Showing attention at the pointer.';
+      schedule();
+    });
+
+    // The fallback explains what is missing; once it is not missing, it goes.
+    fallback.hidden = true;
+    key.hidden = false;
+    controls.hidden = false;
+    el.classList.add('is-live');
+
+    draw();
+  }
+</script>

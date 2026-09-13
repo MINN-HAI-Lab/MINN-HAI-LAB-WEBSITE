@@ -1,0 +1,94 @@
+/* ---------------------------------------------------------------------------
+   saliency.css — artefact 3, computer vision.
+--------------------------------------------------------------------------- */
+
+.saliency__stage {
+  position: relative;
+  width: 100%;
+  /* The generated scene is 320x200. Holding that ratio means the canvas never
+     letterboxes and the fixation maths stays a straight proportion. */
+  aspect-ratio: 320 / 200;
+  border: var(--rule-width) solid var(--surface-edge);
+  border-radius: var(--radius-glass);
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.saliency__stage:focus-visible {
+  outline: var(--focus-width) solid var(--text);
+  outline-offset: var(--focus-offset);
+}
+
+/* Both canvases fill the stage and stack. image-rendering stays smooth: the
+   internal resolution is deliberately modest and pixelated would read as a
+   mistake rather than a choice. */
+.saliency__scene,
+.saliency__map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.saliency__map {
+  /* Screen keeps the bright end of the ramp legible over a mid-tone scene
+     without washing the dark end into grey. */
+  mix-blend-mode: screen;
+}
+
+.saliency__fallback {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: var(--space-5);
+  display: flex;
+  align-items: center;
+  background-color: var(--field-2);
+  font-family: var(--font-sans);
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  color: var(--text-muted);
+}
+
+.saliency__fallback[hidden] {
+  display: none;
+}
+
+/* -- Key ------------------------------------------------------------------- */
+
+.saliency__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.saliency__key[hidden] {
+  display: none;
+}
+
+.saliency__key-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* The ramp itself, so the map's colours mean something rather than being
+   decorative. Viridis, sampled at the same stops the map uses. */
+.saliency__ramp {
+  inline-size: var(--space-16);
+  block-size: var(--space-2);
+  border-radius: var(--radius-glass);
+  border: var(--rule-width) solid var(--surface-edge);
+  background-image: linear-gradient(
+    to right,
+    rgb(68 1 84),
+    rgb(62 74 137),
+    rgb(38 130 142),
+    rgb(53 183 121),
+    rgb(253 231 37)
+  );
+}
