@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-36** Enforce the palette in the built output: only the six DESIGN.md
-  colours reach the CSS, and no `prefers-color-scheme` rule survives, since
-  D-009 keeps dark mode out of v1. Tailwind smuggled one in once already.
+Nothing.
 
 ---
 
@@ -104,6 +102,7 @@ history at `ec7ada9`.
 - **T-33** — Keyboard pass over all three pages: skip link first and actually moving focus to main, a non-default focus ring at every stop, no focus trap, and the widget still costing one tab stop.
 - **T-34** — Heading structure checked on all three pages: exactly one h1 each, h1 first, no skipped level, no empty heading. Failures print the outline rather than a count.
 - **T-35** — Island rules enforced: only the home page ships script, the payload stays well under the 100KB click-to-load threshold, and the static trace is verified to be real geometry rather than a placeholder.
+- **T-36** — Palette enforced in the CSS the browser downloads: only the six DESIGN.md colours, and no prefers-color-scheme rule. Caught a live regression where a test comment re-created the dark-mode utility.
 
 ---
 
@@ -138,4 +137,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-25: auditing a JS-off page needs the site's scripts stripped at the network layer, not javaScriptEnabled:false (axe needs scripting) and not setContent (relative stylesheet URLs do not resolve, so nothing is styled and axe reports phantom target-size failures against unstyled links).
 - T-32 found the Playwright config was passing --force-prefers-reduced-motion globally for 'deterministic screenshots'. Every spec since T-19 ran in reduced motion, the load animation never executed once, and the captures were not the page most people see. Motion is now on by default and specs opt into reduce.
 - T-33: a skip link needs tabindex=-1 on its target. Without it the browser scrolls and updates the sequential focus starting point but leaves activeElement on the body, so the next Tab returns to the header and the link skips nothing. Verified by reverting: activeElement id came back empty.
+- T-36: Tailwind's @source glob must exclude .ts. Scanning all of src/ meant a test file that quoted dark:bg-white/10 in a comment about that very bug re-created it in the shipped CSS. Only files that emit markup should be scanned.
 
