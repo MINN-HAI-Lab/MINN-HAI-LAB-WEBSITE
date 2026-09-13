@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-12** ARIA live region announcing the new estimate as a plain sentence
-  after each toggle. Polite, not assertive.
+Nothing.
 
 ---
 
@@ -86,6 +85,7 @@ history at `ec7ada9`.
 - **T-09** — Curve and band verified against D-013: 12% fill, 1px --claim edge strokes, 2px --claim curve. 20 geometry tests added; fixed a color-mix fallback that would have painted the band solid.
 - **T-10** — Click a mark to flip it; estimate, curve and band animate at --dur-base with --ease-out via rAF interpolation. 2.2KB gzipped, progressive enhancement over the static SVG.
 - **T-11** — Roving tabindex across the ten marks, arrows plus Home and End to move, Enter and Space to toggle, visible --ink focus ring. Ten attempts cost one Tab stop.
+- **T-12** — Polite role=status live region, empty at load, populated after each toggle with the attempt that changed plus the new estimate. Debounced by the animation duration.
 
 ---
 

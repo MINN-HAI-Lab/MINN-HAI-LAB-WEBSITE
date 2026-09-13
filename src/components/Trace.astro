@@ -145,6 +145,19 @@ const altText =
         becomes a group of controls. Empty and off-screen until then, because
         while role="img" is on the SVG the same text is already the alt. */}
     <p class="visually-hidden" data-summary></p>
+
+    {/* Announces the estimate after a toggle.
+
+        Polite, never assertive: this is the result of something the reader
+        just did, not an error or an interruption, and assertive would cut off
+        whatever the screen reader was already saying.
+
+        Empty in the HTML and populated only by the script. A live region has
+        to be in the DOM before its content changes or the change goes
+        unannounced, and pre-filling it would make some screen readers read the
+        initial state out on page load for no reason. */}
+    <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
+
     <p class="trace__sentence" data-sentence>{sentence}</p>
     <p class="trace__synthetic">
       Synthetic data. This sequence was invented to illustrate the method. It
@@ -252,6 +265,30 @@ const altText =
       frame = requestAnimationFrame(step);
     }
 
+    const live = root.querySelector<HTMLElement>('[data-live]');
+    let announceTimer = 0;
+
+    /**
+     * Announce the new estimate, once the dust settles.
+     *
+     * Held back by the animation duration so that arrowing across several
+     * attempts and flipping them in quick succession produces one useful
+     * sentence rather than a queue of half-stale ones. The announcement names
+     * the attempt that changed, because "99 per cent" on its own does not tell
+     * a listener what moved.
+     */
+    function announce(at: ReturnType<typeof trace>, index: number): void {
+      if (!live) return;
+      window.clearTimeout(announceTimer);
+      const correct = attempts[index] === true;
+      const settle = reduceMotion.matches ? 0 : duration;
+      announceTimer = window.setTimeout(() => {
+        live.textContent =
+          `Attempt ${index + 1} is now ${correct ? 'correct' : 'incorrect'}. ` +
+          describe(at, skill);
+      }, settle);
+    }
+
     /** Flip one attempt and redraw everything that depends on it. */
     function toggle(index: number): void {
       if (!Number.isInteger(index) || index < 0 || index >= attempts.length) return;
@@ -259,6 +296,7 @@ const altText =
       const next = trace(attempts);
       paintMarks();
       if (sentence) sentence.textContent = describe(next, skill);
+      announce(next, index);
       animateTo(next);
     }
 
