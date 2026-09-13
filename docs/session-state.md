@@ -1,7 +1,13 @@
 # Session state
 
-**RUN HALTED — 2026-09-13.** T-01 to T-54 complete. Nothing left that does not
+**RUN HALTED — 2026-09-13.** T-01 to T-55 complete. Nothing left that does not
 need Kaung.
+
+T-55 was added after the halt, when a verify run before pushing came back red:
+a dev server was holding the suite's port and the whole browser suite had run
+against it. Not a regression, but the harness could have reported green while
+testing a build nobody ships, so it now uses its own port and refuses to start
+against a dev server.
 
 ## Where the site is
 
@@ -19,7 +25,8 @@ Phase 3 was never queued: it is publications and people content and it needs
 you present. Phase 5 needs a domain (B-8).
 
 `npm run verify` is green: no type errors, 147 unit tests, 264 browser specs
-across Chromium, Firefox and WebKit. A first visit is 94.4KB, of which 83.8KB
+across Chromium, Firefox and WebKit, served on port 4331 and guarded against
+accidentally testing a dev server. A first visit is 94.4KB, of which 83.8KB
 is Literata. Layout shift is zero. The build is byte-reproducible.
 
 ## What needs you, in order of how much it blocks
@@ -90,6 +97,12 @@ Nothing.
 ---
 
 ## QUEUE
+
+Empty, and not because the work is done — because everything left needs Kaung.
+Refill from `docs/phase.md` as B-1 to B-9 land. Never queue Phase 3 without
+him.
+
+---
 
 ## BLOCKED
 
