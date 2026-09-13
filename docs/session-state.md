@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-30** Sitemap, via `@astrojs/sitemap`, excluding anything marked
-  `noindex`.
+Nothing.
 
 ---
 
@@ -63,6 +62,11 @@ history at `ec7ada9`.
 - **B-5** Full funder names, and whether grant numbers appear.
 - **B-6** Accept or reject D-001 to D-013. The Phase 0 exit gate.
 - **B-7** Accept or reject D-004, the trace widget as hero.
+- **B-8** The domain. Open question 10 in `design/decisions.md`, with D-008
+  tying hosting to it. It now blocks three finished-but-inert things: the
+  sitemap (configured and verified, emits nothing without `site`), canonical
+  URLs, and `og:image` plus the PNG rasterisation of `/share.svg`. One answer
+  releases all of them. See Q-13 and Q-14.
 
 ---
 
@@ -97,6 +101,7 @@ history at `ec7ada9`.
 - **T-27** — Per-page title and description, noindex on the specimen. No canonical or absolute URL anywhere, because the domain is undecided and a placeholder would be a fabrication.
 - **T-28** — Favicon generated from the tokens as a rising --claim curve on --paper: the site's display idea at its smallest, no invented mark, no letter that would depend on the unconfirmed lab name.
 - **T-29** — Open Graph and Twitter tags that work without an origin, plus /share.svg generated from the real trace geometry. og:image and og:url stay out until there is a domain.
+- **T-30** — Sitemap integration configured and verified with a temporary domain: emits correctly and excludes the noindex specimen. Inert until  is set; the domain is now B-8.
 
 ---
 

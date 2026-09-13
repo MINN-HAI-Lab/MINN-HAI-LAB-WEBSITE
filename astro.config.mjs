@@ -1,10 +1,34 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // Static output. No adapter, no SSR. See docs/plan.md.
 export default defineConfig({
   output: 'static',
+
+  // TODO: set `site` to the lab's domain. Everything below waits on it.
+  //
+  // A sitemap needs absolute URLs, so @astrojs/sitemap emits nothing at all
+  // without this and says so during the build. The same value unblocks
+  // canonical URLs and og:image (Q-13, Q-14).
+  //
+  // It is left unset rather than pointed at a plausible placeholder, because a
+  // wrong domain in a sitemap is worse than no sitemap: it is the kind of
+  // thing that looks finished, ships, and is only noticed when the search
+  // results are wrong. The domain is open question 10 in design/decisions.md
+  // and D-008 ties hosting to it. Kaung to supply.
+  //
+  // site: 'https://example.org',
+
+  integrations: [
+    sitemap({
+      // The type specimen is a working document and carries noindex, so it has
+      // no business in a sitemap either. Keep this in step with the `noindex`
+      // props in src/pages.
+      filter: (page) => !page.includes('/specimen'),
+    }),
+  ],
 
   // Literata, self-hosted. The two woff2 files in src/assets/fonts are the
   // latin and latin-ext subsets of the *two-axis* build, carrying both wght
