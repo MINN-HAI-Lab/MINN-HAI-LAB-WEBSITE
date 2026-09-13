@@ -17,7 +17,9 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-32** Reduced-motion pass in a real browser. The handbook asks that
+  nothing jumps; T-14 built the path but only the CSS has been read, not the
+  rendered behaviour.
 
 ---
 
@@ -33,9 +35,6 @@ These come from Phase 4 in `docs/phase.md` and the "Before deploy" checklist
 in `docs/handbook.md`. Phase 3 is deliberately not queued: it is publications
 and people content, and it needs Kaung.
 
-- **T-32** Reduced-motion pass in a real browser. The handbook asks that
-  nothing jumps; T-14 built the path but only the CSS has been read, not the
-  rendered behaviour.
 - **T-33** Full-page keyboard pass. T-11 and T-17 covered the widget; this is
   the whole document on both pages, including the skip link actually moving
   focus to `#main`.
