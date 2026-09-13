@@ -17,7 +17,8 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-30** Sitemap, via `@astrojs/sitemap`, excluding anything marked
+  `noindex`.
 
 ---
 
@@ -33,8 +34,6 @@ These come from Phase 4 in `docs/phase.md` and the "Before deploy" checklist
 in `docs/handbook.md`. Phase 3 is deliberately not queued: it is publications
 and people content, and it needs Kaung.
 
-- **T-30** Sitemap, via `@astrojs/sitemap`, excluding anything marked
-  `noindex`.
 - **T-31** A 404 page, using the same layout, that says what is missing
   without inventing links to pages that do not exist.
 - **T-32** Reduced-motion pass in a real browser. The handbook asks that
