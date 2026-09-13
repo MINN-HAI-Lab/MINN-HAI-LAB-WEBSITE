@@ -39,7 +39,55 @@ function show(headings: readonly Heading[]): string {
   return headings.map((h) => `${'  '.repeat(h.level - 1)}h${h.level}  ${h.text}`).join('\n');
 }
 
+/**
+ * Stray template text.
+ *
+ * An Astro component with two frontmatter fences emits everything after the
+ * first one as content, so it lands between the doctype and <html> and the
+ * browser hoists it into the body. It renders as junk in the top-left corner
+ * of every page.
+ *
+ * That shipped for eleven commits. axe passed it, the keyboard suite passed
+ * it, the palette check passed it and the heading audit passed it, because it
+ * is valid HTML that merely displays rubbish. Only looking at a screenshot
+ * caught it, so this is the cheap version of looking.
+ */
 for (const { name, path } of PAGES) {
+  test.describe(`document: ${name}`, () => {
+    test('has nothing between the doctype and <html>', async ({ page }) => {
+      const response = await page.request.get(path);
+      const html = await response.text();
+
+      const start = html.indexOf('<html');
+      expect(start, 'no <html> element').toBeGreaterThan(-1);
+
+      const prologue = html
+        .slice(0, start)
+        .replace(/<!DOCTYPE[^>]*>/i, '')
+        .replace(/<!--[\s\S]*?-->/g, '')
+        .trim();
+
+      expect(
+        prologue,
+        `stray text before <html>, which the browser will hoist into the body: ${JSON.stringify(prologue)}`,
+      ).toBe('');
+    });
+
+    test('has no loose text node directly inside body', async ({ page }) => {
+      await page.goto(path);
+      await page.waitForLoadState('networkidle');
+
+      const loose = await page.evaluate(() =>
+        [...document.body.childNodes]
+          .filter((n) => n.nodeType === Node.TEXT_NODE)
+          .map((n) => (n.textContent ?? '').trim())
+          .filter((t) => t !== ''),
+      );
+
+      expect(loose, 'loose text directly inside <body>').toEqual([]);
+    });
+  });
+
   test.describe(`headings: ${name}`, () => {
     test('has exactly one h1, and it comes first', async ({ page }) => {
       await page.goto(path);

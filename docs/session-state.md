@@ -17,10 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-39** Look at the screenshots that have never been reviewed. T-20
-  critiqued the 1440 and 390 full-page captures; the 768 tablet width, the
-  attribution view, the focus ring and the no-JS capture have all been
-  generated and never opened.
+Nothing.
 
 ---
 
@@ -116,6 +113,7 @@ history at `ec7ada9`.
 - **T-36** — Palette enforced in the CSS the browser downloads: only the six DESIGN.md colours, and no prefers-color-scheme rule. Caught a live regression where a test comment re-created the dark-mode utility.
 - **T-37** — npm run verify runs the type check, unit tests, token lint, contrast check, a production build and the browser suite, and propagates a failure's exit code past the preview-server cleanup. Handbook checklist rewritten around it.
 - **T-38** — TODO audit: every visible marker must name what is missing, who supplies it and a tracker. Prints the inventory on every run. Found the footer's contact TODO had no tracker; recorded as B-9.
+- **T-39** — Reviewed the 768, attribution, focus and no-JS captures. Found and fixed a stray '---' rendering on every page since T-27, and added a document-integrity test that catches it.
 
 ---
 
@@ -151,4 +149,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-32 found the Playwright config was passing --force-prefers-reduced-motion globally for 'deterministic screenshots'. Every spec since T-19 ran in reduced motion, the load animation never executed once, and the captures were not the page most people see. Motion is now on by default and specs opt into reduce.
 - T-33: a skip link needs tabindex=-1 on its target. Without it the browser scrolls and updates the sequential focus starting point but leaves activeElement on the body, so the next Tab returns to the header and the link skips nothing. Verified by reverting: activeElement id came back empty.
 - T-36: Tailwind's @source glob must exclude .ts. Scanning all of src/ meant a test file that quoted dark:bg-white/10 in a comment about that very bug re-created it in the shipped CSS. Only files that emit markup should be scanned.
+- T-39: a duplicated Astro frontmatter fence emits everything after the first one as content, landing between the doctype and <html>, which the browser hoists into the body. Shipped on every page for eleven commits. axe, keyboard, palette and heading tests all passed it because it is valid HTML that merely shows junk. Only a screenshot caught it.
 
