@@ -155,8 +155,17 @@ const altText =
     <li class="network__key-item"><span class="network__swatch network__swatch--other"></span>Independent of it, given the blanket</li>
   </ul>
 
+  {/* The 3D view mounts in here, on top of the panel above, and only after
+      someone asks for it. Empty and display:none until then. */}
+  <div class="network3d" data-stage-3d hidden>
+    <div class="network3d__canvas" data-canvas-3d></div>
+    <div class="network3d__labels" data-labels-3d aria-hidden="true"></div>
+    <p class="network3d__hint label">Drag to turn it. Scroll to zoom. Select a node to see its blanket. Escape closes.</p>
+  </div>
+
   <div class="artefact__controls" data-controls hidden>
     <button class="button" type="button" data-load-3d>Open in 3D</button>
+    <button class="button" type="button" data-close-3d hidden>Close the 3D view</button>
     <p class="artefact__note" data-instructions hidden>
       Select a variable to see its blanket. Arrow keys move between them.
     </p>
@@ -297,6 +306,110 @@ const altText =
 
     if (controls) controls.hidden = false;
     if (instructions) instructions.hidden = false;
+
+    /* ---------------------------------------------------------------------
+       The 3D layer.
+
+       Everything below is about one rule: the graph library is not in the
+       initial payload. The import() is inside the click handler, so Vite
+       emits it as its own chunk and the browser never asks for it unless
+       somebody presses the button. Three.js plus the force-graph library is
+       around half a megabyte; the page above weighs a few tens of kilobytes.
+       --------------------------------------------------------------------- */
+    const open3d = el.querySelector<HTMLButtonElement>('[data-load-3d]');
+    const close3d = el.querySelector<HTMLButtonElement>('[data-close-3d]');
+    const stage3d = el.querySelector<HTMLElement>('[data-stage-3d]');
+    const canvas3d = el.querySelector<HTMLElement>('[data-canvas-3d]');
+    const labels3d = el.querySelector<HTMLElement>('[data-labels-3d]');
+    const panel = el.querySelector<HTMLElement>('.artefact__panel');
+
+    let scene: { select(id: string): void; destroy(): void } | null = null;
+    let loading = false;
+
+    /** Read the palette off the page so the scene cannot drift from the CSS. */
+    function palette() {
+      const style = getComputedStyle(document.documentElement);
+      const read = (name: string, fallback: string) =>
+        style.getPropertyValue(name).trim() || fallback;
+      return {
+        text: read('--text', '#e6edf3'),
+        muted: read('--text-muted', '#8a9ba8'),
+        signal: read('--signal', '#ff3d5a'),
+        field: read('--field', '#070b10'),
+        // The grid token is an rgb() with alpha, which three cannot parse as a
+        // colour. Links carry their own opacity, so a flat value is correct.
+        grid: read('--text-muted', '#8a9ba8'),
+      };
+    }
+
+    function close(): void {
+      scene?.destroy();
+      scene = null;
+      if (stage3d) stage3d.hidden = true;
+      if (panel) panel.hidden = false;
+      if (close3d) close3d.hidden = true;
+      if (open3d) {
+        open3d.hidden = false;
+        open3d.textContent = 'Open in 3D';
+        open3d.focus();
+      }
+      if (live) live.textContent = 'The 3D view is closed. The diagram is back.';
+    }
+
+    open3d?.addEventListener('click', async () => {
+      if (loading || scene) return;
+      if (!canvas3d || !labels3d || !stage3d) return;
+
+      loading = true;
+      open3d.setAttribute('aria-busy', 'true');
+      open3d.textContent = 'Loading the 3D view…';
+
+      try {
+        // The one dynamic import. Everything the 3D view needs hangs off it.
+        const module = await import('../lib/network-3d.ts');
+
+        stage3d.hidden = false;
+        if (panel) panel.hidden = true;
+
+        scene = module.mount(canvas3d, labels3d, {
+          initial: selected,
+          onSelect: (id) => {
+            select(id);
+            scene?.select(id);
+          },
+          reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+          palette: palette(),
+        });
+
+        open3d.hidden = true;
+        if (close3d) {
+          close3d.hidden = false;
+          close3d.focus();
+        }
+        if (live) live.textContent = 'The 3D view is open. Drag to turn the graph, or press Escape to close it.';
+      } catch (error) {
+        /* WebGL can be unavailable, blocked, or out of contexts, and the
+           import itself can fail on a flaky connection. Either way the 2D
+           diagram is still there and still complete, so the failure costs the
+           reader nothing but a sentence. */
+        console.error('The 3D view could not be opened.', error);
+        stage3d.hidden = true;
+        if (panel) panel.hidden = false;
+        open3d.textContent = 'The 3D view could not be opened';
+        open3d.disabled = true;
+        if (live) live.textContent =
+          'The 3D view could not be opened in this browser. The diagram above is unchanged.';
+      } finally {
+        loading = false;
+        open3d.removeAttribute('aria-busy');
+      }
+    });
+
+    close3d?.addEventListener('click', close);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && scene) close();
+    });
 
     // Paint the initial selection without announcing it: nothing has happened
     // yet, and a live region that speaks on load is noise.

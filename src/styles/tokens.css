@@ -202,6 +202,12 @@
      step, which is why it is here and not in the spacing ramp. */
   --tap-min: 44px;
 
+  /* How tall the 3D view of the network stands. Tall enough that depth is
+     readable — a flat-looking 3D graph is worse than the diagram it replaced —
+     and short enough to sit inside a section on a phone. */
+  --network3d-height: 420px;
+  --network3d-max: 820px;
+
   /* The widest the photograph in artefact 3 is drawn. Past this the 300x200
      working field is upscaled far enough to look soft, and the artefact starts
      reading as a picture rather than as a reading. */
@@ -237,6 +243,7 @@
        and one paragraph, 192px top and bottom meant nearly four hundred pixels
        of nothing between two sentences. */
     --rhythm-section: var(--space-16);
+    --network3d-height: 520px;
   }
 }
 

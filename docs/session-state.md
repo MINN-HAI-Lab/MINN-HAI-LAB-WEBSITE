@@ -14,9 +14,6 @@ Nothing.
 
 ## QUEUE
 
-- **S-07** Artefact 2: `3d-force-graph` on click only, absent from the initial
-  payload.
-- **S-10** Header, footer and navigation for the five pages.
 - **S-13** `/people`: group photo, five 4:5 portraits, placeholder slots.
 - **S-14** `/about`: mission, funding, contact.
 - **S-15** `/learning`: StatLab.
@@ -31,6 +28,8 @@ Nothing.
 
 ## DONE
 
+- **S-07** — The 3D view: `3d-force-graph` behind a dynamic import from the click handler, 361KB gzipped in its own chunk, never requested until the button is pressed. Same NODES and EDGES as the diagram, blanket highlighting both ways, Escape closes, and the WebGL context is released on close.
+- **S-10** — Header and footer across the five pages: current-page marking, footer navigation, and the contact gap in the one place the plan asks for it.
 - **S-08** — Computer vision artefact, rebuilt on a real photograph: CC0, licence read from the Commons API, Sobel edge map computed in the browser from its pixels, veil plus viridis heat gated by a Gaussian at the cursor.
 - **S-09** — Language artefact: a real rule-based subword tokeniser, live on every keystroke, with illustrative softmax attention drawn as cubic arcs measured from the rendered tokens.
 - **S-12** — `/research`: four sections, one live artefact each, publications under the two areas that have them and a visible "none yet" under the two that do not.
@@ -55,6 +54,16 @@ Nothing.
   https://creativecommons.org/publicdomain/zero/1.0/. Licence read from the
   Commons API, not assumed. Attribution is not required by CC0; it is given
   anyway, under the artefact. Full record in Q-21.
+- The 3D view uses trackball controls, not orbit. OrbitControls threw
+  "Cannot read properties of undefined (reading 'x')" out of its own pointer
+  bookkeeping on every click on a node; trackball does not. The slow rotation
+  is eleven lines in the label loop instead of `autoRotate`, and it stops on
+  the first pointerdown or wheel, which is better behaviour anyway.
+- `margin-inline: auto` on a flex item in a column makes it shrink to content
+  rather than stretch. This has now caused two bugs: the trace plot drawing at
+  324px in a 1116px panel, and the 3D canvas sizing itself from
+  window.innerWidth and pushing a scrollbar onto the page at 360px. Both fixed
+  by adding an explicit `width: 100%` next to the cap.
 - Astro emits the saliency script inline rather than as its own chunk, so
   `grep` for a `<script src>` will not find it. It is there.
 - Contrast measured against the glass composite, not the field: --text 14.36-16.70:1, --text-muted 5.93-6.89:1, --signal 5.25-5.70:1. Tightest case is muted text on glass over --field-2 at 5.93:1 — first thing to fail if the surface alpha rises.
