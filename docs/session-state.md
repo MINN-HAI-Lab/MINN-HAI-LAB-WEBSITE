@@ -17,11 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-52** The font-failure path. Literata is a single 83.8KB request and
-  nothing tests what happens if it does not arrive. The metric-matched
-  fallback should make that a non-event; verify it rather than assume it.
-
----
+Nothing.
 
 ---
 
@@ -111,6 +107,7 @@ history at `ec7ada9`.
 - **T-49** — Process audit logged as Q-17: step 2 (three prototypes, let me pick) was skipped entirely — every layout here was one-shot. Steps 3 and 4 were followed late.
 - **T-50** — Clean rebuild from a wiped dist, .astro and screenshots: verify exits 0, three pages build, 147 unit tests and 80 browser specs pass, five TODO markers all well-formed, and the pages read correctly at 1440 and 390.
 - **T-51** — Suite now runs in Chromium, Firefox and WebKit: 243 specs pass. Found D-020's premise was backwards and corrected it as D-022; fixed three keyboard tests that encoded Chromium-only assumptions.
+- **T-52** — Font-failure path covered in all three engines: with every woff2 aborted, text still renders at the token sizes, nothing overflows, and the trace still draws and still toggles.
 
 ---
 
