@@ -17,7 +17,9 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-36** Enforce the palette in the built output: only the six DESIGN.md
+  colours reach the CSS, and no `prefers-color-scheme` rule survives, since
+  D-009 keeps dark mode out of v1. Tailwind smuggled one in once already.
 
 ---
 
@@ -30,9 +32,6 @@ B-5, and the handbook's publications check, which is Phase 3.
 So these are the constraints that CLAUDE.md and DESIGN.md state but nothing
 currently enforces. Each was verified by hand once and could regress silently.
 
-- **T-36** Enforce the palette in the built output: only the six DESIGN.md
-  colours reach the CSS, and no `prefers-color-scheme` rule survives, since
-  D-009 keeps dark mode out of v1. Tailwind smuggled one in once already.
 - **T-37** One `npm run verify` that runs the type check, unit tests, token
   lint, contrast check and the browser suite, so the pre-deploy gate in
   `docs/handbook.md` is a single command rather than five remembered ones.
