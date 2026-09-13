@@ -17,7 +17,11 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-51** Run the browser suite in Firefox and WebKit. Everything so far has
+  been Chromium only. D-020 asserts that `d` is not reliably animatable in
+  Firefox and the whole JavaScript-interpolation approach rests on that; it
+  was asserted, not measured. If it is wrong, the decision is built on a false
+  premise and should be revised.
 
 ---
 
@@ -27,11 +31,6 @@ Refilled 2026-09-13, seventh time. T-49 and T-50 are done.
 
 Two claims this run made and never tested.
 
-- **T-51** Run the browser suite in Firefox and WebKit. Everything so far has
-  been Chromium only. D-020 asserts that `d` is not reliably animatable in
-  Firefox and the whole JavaScript-interpolation approach rests on that; it
-  was asserted, not measured. If it is wrong, the decision is built on a false
-  premise and should be revised.
 - **T-52** The font-failure path. Literata is a single 83.8KB request and
   nothing tests what happens if it does not arrive. The metric-matched
   fallback should make that a non-event; verify it rather than assume it.
