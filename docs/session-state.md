@@ -17,10 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-35** Enforce the island rules from `CLAUDE.md` as a test: only the two
-  sanctioned islands ship JavaScript, each renders a real static version
-  server-side, and the bundle stays under the ~100KB gzipped threshold that
-  would force click-to-load.
+Nothing.
 
 ---
 
@@ -107,6 +104,7 @@ history at `ec7ada9`.
 - **T-32** — Motion verified in a real browser in both modes: the curve draws and cleans up its dash state, toggling interpolates, and under reduced motion nothing draws, the update is instant with a static highlight, and zero transitions remain active.
 - **T-33** — Keyboard pass over all three pages: skip link first and actually moving focus to main, a non-default focus ring at every stop, no focus trap, and the widget still costing one tab stop.
 - **T-34** — Heading structure checked on all three pages: exactly one h1 each, h1 first, no skipped level, no empty heading. Failures print the outline rather than a count.
+- **T-35** — Island rules enforced: only the home page ships script, the payload stays well under the 100KB click-to-load threshold, and the static trace is verified to be real geometry rather than a placeholder.
 
 ---
 
