@@ -17,7 +17,10 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-47** Find dead CSS. `.annotated` was written in T-04 and used by nothing
+  until T-42 rendered it. Check whether anything else is defined and never
+  used, and document the ones that are deliberately waiting for a Phase 3
+  page.
 
 ---
 
@@ -25,10 +28,6 @@ Nothing.
 
 Refilled 2026-09-13, fifth time. T-43 to T-45 are done.
 
-- **T-47** Find dead CSS. `.annotated` was written in T-04 and used by nothing
-  until T-42 rendered it. Check whether anything else is defined and never
-  used, and document the ones that are deliberately waiting for a Phase 3
-  page.
 - **T-48** The specimen page is called "Type specimen" and now demonstrates
   layout primitives as well. Make its name, description and heading match what
   it actually covers.
