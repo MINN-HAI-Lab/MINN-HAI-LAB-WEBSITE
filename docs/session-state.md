@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-13** Attribution view marking which past attempts carry the current
+  estimate. Toggleable, keyboard reachable.
 
 ---
 
 ## QUEUE
 
-- **T-13** Attribution view marking which past attempts carry the current
-  estimate. Toggleable, keyboard reachable.
 - **T-14** Reduced-motion path: finished curve instead of the draw, instant
   estimate update with a brief static highlight. Do not zero out a transform.
 - **T-15** Visible label stating the data is synthetic.
