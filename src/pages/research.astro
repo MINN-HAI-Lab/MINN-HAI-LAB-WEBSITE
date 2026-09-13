@@ -1,0 +1,132 @@
+---
+/**
+ * Research.
+ *
+ * Four sections, one live artefact in each. The artefacts are the argument —
+ * a description of knowledge tracing is worth less than a knowledge tracer you
+ * can click.
+ *
+ * Two of the four areas have publications and two do not. The two that do not
+ * say so in words, in place, rather than being padded out to match. A visible
+ * gap is the correct output here.
+ */
+import Base from '../layouts/Base.astro';
+import Language from '../components/Language.astro';
+import Network from '../components/Network.astro';
+import PublicationList from '../components/PublicationList.astro';
+import Saliency from '../components/Saliency.astro';
+import Trace from '../components/Trace.astro';
+import { RESEARCH_AREAS } from '../data/navigation.ts';
+import { PUBLICATIONS, byProgramme } from '../data/publications.ts';
+
+const [tracing, bayesian, vision, language] = RESEARCH_AREAS;
+
+const tracingPapers = byProgramme('personalised-learning');
+const bayesianPapers = byProgramme('interpretability');
+---
+
+<Base
+  title="Research — MINN HAI Lab"
+  description="Four research areas, each with a working artefact: knowledge tracing, Bayesian explanation, computer vision and language."
+>
+  <section class="section">
+    <div class="page">
+      <h1 class="type-display">Research</h1>
+      <p class="type-body measure">
+        Four areas. Each section below carries a working version of the idea
+        rather than a description of it — the estimate moves, the blanket
+        highlights, the map follows the cursor, the sentence comes apart as you
+        type.
+      </p>
+      <p class="type-body type-muted measure">
+        Every artefact states on its face whether what it shows is real,
+        synthetic or illustrative.
+      </p>
+    </div>
+  </section>
+
+  <!-- 1. Knowledge tracing ------------------------------------------------ -->
+  <section class="section section--raised" id={tracing.id} data-reveal>
+    <div class="page area">
+      <h2 class="type-title">{tracing.name}</h2>
+      <p class="type-body measure">{tracing.line}</p>
+
+      <Trace />
+
+      <div class="area__papers">
+        <h3 class="type-section">Published work</h3>
+        <p class="type-body type-muted measure">
+          {tracingPapers.length} entries, most recent first.
+        </p>
+        <PublicationList publications={tracingPapers} />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Bayesian explanation ---------------------------------------------- -->
+  <section class="section" id={bayesian.id} data-reveal>
+    <div class="page area">
+      <h2 class="type-title">{bayesian.name}</h2>
+      <p class="type-body measure">{bayesian.line}</p>
+
+      <Network />
+
+      <div class="area__papers">
+        <h3 class="type-section">Published work</h3>
+        <p class="type-body type-muted measure">
+          {bayesianPapers.length} entries, most recent first.
+        </p>
+        <PublicationList publications={bayesianPapers} />
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Computer vision ---------------------------------------------------- -->
+  <section class="section section--raised" id={vision.id} data-reveal>
+    <div class="page area">
+      <h2 class="type-title">{vision.name}</h2>
+      <p class="type-body measure">{vision.line}</p>
+
+      <Saliency />
+
+      <div class="area__papers">
+        <h3 class="type-section">Published work</h3>
+        <p class="area__none type-body measure">
+          None yet. This is a research direction rather than a programme with
+          output: there are no papers in this area in the list the lab supplied,
+          and none are claimed here.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Language ------------------------------------------------------------ -->
+  <section class="section" id={language.id} data-reveal>
+    <div class="page area">
+      <h2 class="type-title">{language.name}</h2>
+      <p class="type-body measure">{language.line}</p>
+
+      <Language />
+
+      <div class="area__papers">
+        <h3 class="type-section">Published work</h3>
+        <p class="area__none type-body measure">
+          None yet. As with computer vision, this is a direction the lab is
+          working in, not one it has published in.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Everything, in one list ------------------------------------------------ -->
+  <section class="section section--raised" id="all" data-reveal>
+    <div class="page">
+      <h2 class="type-title">All publications</h2>
+      <p class="type-body type-muted measure">
+        All {PUBLICATIONS.length} entries in the supplied list, most recent
+        first, across both programmes.
+      </p>
+      <PublicationList publications={PUBLICATIONS.slice().sort((a, b) => b.year - a.year)} />
+    </div>
+  </section>
+</Base>

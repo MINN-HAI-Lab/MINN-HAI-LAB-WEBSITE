@@ -1,0 +1,355 @@
+---
+/**
+ * Artefact 4 — language.
+ *
+ * Type a sentence. It tokenises as you type, and attention lines are drawn
+ * between the pieces.
+ *
+ * The tokenisation is real: a rule-based subword split that does exactly what
+ * it says. The attention is illustrative, built from distance and shared stems
+ * rather than from a trained model, and the artefact says so on its face
+ * rather than in a footnote.
+ *
+ * Server-rendered with the example sentence already tokenised, so with
+ * JavaScript off a reader gets a true tokenisation of a real sentence and an
+ * explanation of what the lines would show, rather than an empty box.
+ */
+import { EXAMPLE_SENTENCE, tokenise } from '../lib/tokens-nlp.ts';
+
+const initial = tokenise(EXAMPLE_SENTENCE);
+const words = EXAMPLE_SENTENCE.split(/\s+/).filter(Boolean).length;
+---
+
+<figure class="artefact language" data-language>
+  <div class="artefact__bar">
+    <p class="artefact__name">Language</p>
+    <p class="artefact__provenance">Real tokenisation, illustrative attention</p>
+  </div>
+
+  <div class="artefact__panel glass">
+    <!-- Hidden until the script runs: an input that tokenises nothing is worse
+         than no input at all. -->
+    <div class="language__field" data-field hidden>
+      <label class="label" for="language-input">Type a sentence</label>
+      <input
+        class="language__input"
+        id="language-input"
+        type="text"
+        value={EXAMPLE_SENTENCE}
+        maxlength="120"
+        autocomplete="off"
+        spellcheck="false"
+        data-input
+      />
+    </div>
+
+    <div class="language__stage" data-stage>
+      <!-- Sized in JavaScript to match the token row, in CSS pixels, so the
+           curves land on the tokens rather than near them. -->
+      <svg class="language__links" data-links aria-hidden="true" focusable="false"></svg>
+
+      <p class="language__tokens" data-tokens>
+        {
+          initial.map((token) => (
+            <span
+              class:list={[
+                'language__token',
+                token.continuation && 'is-continuation',
+                token.kind === 'punctuation' && 'is-punctuation',
+              ]}
+              data-token={token.index}
+            >{token.text}</span>
+          ))
+        }
+      </p>
+    </div>
+  </div>
+
+  <div class="artefact__controls" data-controls hidden>
+    <button class="button" type="button" data-restore>Restore the example sentence</button>
+    <p class="label language__count" data-count>{initial.length} tokens from {words} words</p>
+  </div>
+
+  <figcaption class="artefact__caption">
+    <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
+
+    <p class="artefact__readout" data-readout>
+      Select a token to see where its attention goes. Arrow keys move between
+      them.
+    </p>
+
+    <p class="artefact__note">
+      The tokenisation is real. It is a rule-based subword split — whitespace,
+      punctuation, then suffix stripping — and the boundaries drawn are the
+      boundaries it produced. The attention is illustrative: no trained model
+      runs here, and the weights come from how far apart two tokens are and
+      whether they share a stem, put through the same softmax a real attention
+      head uses. It has the shape of attention, not the values of any
+      particular model's.
+    </p>
+  </figcaption>
+</figure>
+
+<script>
+  /**
+   * Live tokenisation and the attention drawing.
+   *
+   * Two things matter here. Tokens that have not changed are reused rather than
+   * rebuilt, so typing at the end of a sentence does not make the whole row
+   * flicker — only the pieces that actually changed animate. And the curves are
+   * measured from the real positions of the rendered tokens, so they stay
+   * attached when the row wraps at 360px.
+   */
+  import { EXAMPLE_SENTENCE, attention, tokenise, type Token } from '../lib/tokens-nlp.ts';
+
+  const root = document.querySelector<HTMLElement>('[data-language]');
+
+  if (root) {
+    const el = root;
+    const input = el.querySelector<HTMLInputElement>('[data-input]')!;
+    const field = el.querySelector<HTMLElement>('[data-field]')!;
+    const stage = el.querySelector<HTMLElement>('[data-stage]')!;
+    const svg = el.querySelector<SVGSVGElement>('[data-links]')!;
+    const row = el.querySelector<HTMLElement>('[data-tokens]')!;
+    const controls = el.querySelector<HTMLElement>('[data-controls]')!;
+    const count = el.querySelector<HTMLElement>('[data-count]')!;
+    const readout = el.querySelector<HTMLElement>('[data-readout]')!;
+    const live = el.querySelector<HTMLElement>('[data-live]')!;
+    const restore = el.querySelector<HTMLButtonElement>('[data-restore]')!;
+
+    const NS = 'http://www.w3.org/2000/svg';
+
+    let tokens: Token[] = [];
+    let chips: HTMLButtonElement[] = [];
+    /** Index of the token whose attention is shown, or -1 for all of them. */
+    let selected = -1;
+    let active = 0;
+    let frame = 0;
+
+    /** Keyed by index and text, so an unchanged token keeps its element. */
+    let byKey = new Map<string, HTMLButtonElement>();
+
+    function key(token: Token): string {
+      return `${token.index}:${token.text}`;
+    }
+
+    function render(announce: boolean): void {
+      tokens = tokenise(input.value);
+
+      const next = new Map<string, HTMLButtonElement>();
+      chips = tokens.map((token) => {
+        const existing = byKey.get(key(token));
+        if (existing) {
+          next.set(key(token), existing);
+          return existing;
+        }
+
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'language__token is-entering';
+        if (token.continuation) chip.classList.add('is-continuation');
+        if (token.kind === 'punctuation') chip.classList.add('is-punctuation');
+        chip.dataset.token = String(token.index);
+        chip.textContent = token.text;
+        next.set(key(token), chip);
+
+        /* The entrance runs on the next frame so the browser has painted the
+           token at its starting state first. Without that the class is added
+           and removed inside one frame and nothing transitions. */
+        requestAnimationFrame(() => chip.classList.remove('is-entering'));
+        return chip;
+      });
+
+      byKey = next;
+      row.replaceChildren(...chips);
+
+      chips.forEach((chip, i) => {
+        chip.setAttribute('tabindex', i === active ? '0' : '-1');
+        chip.setAttribute('aria-pressed', String(i === selected));
+      });
+
+      if (selected >= tokens.length) selected = -1;
+      if (active >= chips.length) active = Math.max(0, chips.length - 1);
+
+      const wordCount = input.value.split(/\s+/).filter(Boolean).length;
+      count.textContent = `${tokens.length} ${tokens.length === 1 ? 'token' : 'tokens'} from ${wordCount} ${wordCount === 1 ? 'word' : 'words'}`;
+
+      drawLinks();
+      if (announce) describe();
+    }
+
+    /**
+     * Draw one curve per attention link.
+     *
+     * Positions come from getBoundingClientRect on the rendered tokens rather
+     * than from any estimate of text width, because the only thing that knows
+     * how wide a word is after wrapping is the browser.
+     */
+    function drawLinks(): void {
+      const stageBox = stage.getBoundingClientRect();
+      svg.setAttribute('viewBox', `0 0 ${stageBox.width} ${stageBox.height}`);
+      svg.setAttribute('width', String(stageBox.width));
+      svg.setAttribute('height', String(stageBox.height));
+
+      const anchors = chips.map((chip) => {
+        const box = chip.getBoundingClientRect();
+        return {
+          x: box.left - stageBox.left + box.width / 2,
+          top: box.top - stageBox.top,
+        };
+      });
+
+      const links = attention(tokens);
+      const paths: SVGPathElement[] = [];
+
+      links.forEach((link) => {
+        const from = anchors[link.from];
+        const to = anchors[link.to];
+        if (!from || !to) return;
+        if (selected >= 0 && link.from !== selected) return;
+
+        /* Cross-line links are drawn only for a token the reader has asked
+           about.
+
+           At 360px the sentence wraps to three lines, and drawing every link
+           meant curves swooping from the first line through the second to the
+           third — over the words, in the reader's way, and unreadable. The
+           ambient drawing is now per line, which is legible; select a token
+           and its own links are drawn wherever they go, which is few enough to
+           follow. */
+        const sameLine = Math.abs(to.top - from.top) < 4;
+        if (selected < 0 && !sameLine) return;
+
+        /* A cubic with both control points pulled straight up. On one line
+           that is a clean arc; across lines it becomes a swoop that still
+           joins the right two tokens. The cap matches the band reserved above
+           each line in CSS, so no arc reaches into the line above it. */
+        const lift = Math.max(16, Math.min(54, Math.abs(to.x - from.x) * 0.45));
+        const path = document.createElementNS(NS, 'path');
+        path.setAttribute(
+          'd',
+          `M ${from.x.toFixed(1)} ${from.top.toFixed(1)} C ${from.x.toFixed(1)} ${(from.top - lift).toFixed(1)}, ${to.x.toFixed(1)} ${(to.top - lift).toFixed(1)}, ${to.x.toFixed(1)} ${to.top.toFixed(1)}`,
+        );
+        path.setAttribute('class', 'language__link');
+        // Weight is carried twice — width and opacity — so the strength of a
+        // link survives being printed, or being looked at on a bad screen.
+        path.setAttribute('stroke-width', (0.75 + link.weight * 3.5).toFixed(2));
+        path.style.setProperty('--link-weight', String(Math.min(1, 0.25 + link.weight * 1.4)));
+        paths.push(path);
+      });
+
+      svg.replaceChildren(...paths);
+      // Same one-frame delay as the tokens: the curves fade up rather than
+      // snapping in, which at typing speed is the difference between a drawing
+      // that breathes and one that strobes.
+      requestAnimationFrame(() => {
+        for (const path of paths) path.classList.add('is-drawn');
+      });
+    }
+
+    function schedule(): void {
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        drawLinks();
+      });
+    }
+
+    /** The sentence under the artefact, stating what is currently shown. */
+    function describe(): void {
+      if (selected < 0) {
+        readout.textContent =
+          'Select a token to see where its attention goes. Arrow keys move between them.';
+        return;
+      }
+
+      const token = tokens[selected];
+      if (!token) return;
+      const outgoing = attention(tokens)
+        .filter((l) => l.from === selected)
+        .sort((a, b) => b.weight - a.weight);
+
+      if (outgoing.length === 0) {
+        readout.textContent = `“${token.text}” has no attention above the drawing threshold.`;
+      } else {
+        const strongest = outgoing[0]!;
+        const target = tokens[strongest.to];
+        const share = Math.round(strongest.weight * 100);
+        readout.textContent =
+          `“${token.text}” attends most strongly to “${target?.text ?? ''}”, at ${share} per cent of its attention, ` +
+          `across ${outgoing.length} drawn ${outgoing.length === 1 ? 'link' : 'links'}.`;
+      }
+      live.textContent = readout.textContent;
+    }
+
+    function select(index: number): void {
+      selected = selected === index ? -1 : index;
+      chips.forEach((chip, i) => {
+        chip.setAttribute('aria-pressed', String(i === selected));
+        chip.classList.toggle('is-selected', i === selected);
+      });
+      drawLinks();
+      describe();
+    }
+
+    function focusChip(next: number): void {
+      if (chips.length === 0) return;
+      active = (next + chips.length) % chips.length;
+      chips.forEach((chip, i) => chip.setAttribute('tabindex', i === active ? '0' : '-1'));
+      chips[active]?.focus();
+    }
+
+    /* Delegated, because the chips are replaced as the reader types and
+       listeners attached to each one would have to be re-attached with them. */
+    row.addEventListener('click', (event) => {
+      const chip = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-token]');
+      if (!chip) return;
+      active = chips.indexOf(chip);
+      chips.forEach((c, i) => c.setAttribute('tabindex', i === active ? '0' : '-1'));
+      select(Number(chip.dataset.token));
+    });
+
+    row.addEventListener('keydown', (event) => {
+      switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          event.preventDefault();
+          focusChip(active + 1);
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          event.preventDefault();
+          focusChip(active - 1);
+          break;
+        default:
+          break;
+      }
+    });
+
+    input.addEventListener('input', () => render(false));
+
+    restore.addEventListener('click', () => {
+      input.value = EXAMPLE_SENTENCE;
+      selected = -1;
+      render(false);
+      live.textContent = 'The example sentence is back.';
+      input.focus();
+    });
+
+    // Wrapping changes where every token is, so the curves are re-measured
+    // whenever the row's box changes rather than only on window resize.
+    if (typeof ResizeObserver === 'function') new ResizeObserver(schedule).observe(stage);
+    else window.addEventListener('resize', schedule);
+
+    field.hidden = false;
+    controls.hidden = false;
+    el.classList.add('is-live');
+
+    /* Fonts land after this script does, and a token's width changes when
+       Literata replaces the fallback — so the curves are re-measured once the
+       real face is in. */
+    document.fonts?.ready.then(schedule).catch(() => {});
+
+    render(false);
+  }
+</script>

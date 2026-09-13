@@ -2,44 +2,36 @@
 /**
  * Not found.
  *
- * Two jobs: say plainly what happened, and offer the pages that actually
- * exist. It deliberately does not list /research, /publications or /people —
- * those are in the information architecture but not built, and sending
- * someone from one 404 to another is worse than admitting the site is
- * unfinished.
+ * Two jobs: say plainly what happened, and offer the pages that exist. All
+ * five do now, so unlike the earlier version this lists them all rather than
+ * withholding the unbuilt ones.
  *
- * No apology, no joke, no illustration. Someone here is looking for
- * something.
+ * No apology, no joke, no illustration. Someone here is looking for something.
  */
 import Base from '../layouts/Base.astro';
 import { NAVIGATION } from '../data/navigation.ts';
 import { withBase } from '../lib/paths.ts';
-
-const built = NAVIGATION.filter((item) => item.built);
-const pending = NAVIGATION.filter((item) => !item.built).map((item) => item.label);
 ---
 
 <Base
-  title="Page not found, MINN HAI Lab"
+  title="Page not found — MINN HAI Lab"
   description="That page does not exist on this site."
   noindex
 >
   <section class="section">
-    <h1 class="measure">Page not found</h1>
+    <div class="page">
+      <h1 class="type-display">Page not found</h1>
 
-    <div class="prose measure">
-      <p>
+      <p class="type-body measure">
         There is nothing at this address. It may have been a typo, or a link
         from somewhere that pointed at a page this site does not have.
       </p>
 
-      <p>
-        What exists so far:
-      </p>
+      <p class="type-body type-muted measure">Everything that does exist:</p>
 
       <ul class="not-found__list">
         {
-          built.map((item) => (
+          NAVIGATION.map((item) => (
             <li>
               <a class="link" href={withBase(item.href)}>
                 {item.label}
@@ -48,12 +40,6 @@ const pending = NAVIGATION.filter((item) => !item.built).map((item) => item.labe
           ))
         }
       </ul>
-
-      <p class="type-small type-meta">
-        {pending.join(', ')} are planned and not built yet, so they are not
-        linked here. Linking them would send you from one missing page to
-        another.
-      </p>
     </div>
   </section>
 </Base>

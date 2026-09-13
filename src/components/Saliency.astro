@@ -2,73 +2,93 @@
 /**
  * Artefact 3 — computer vision.
  *
- * A saliency map over an image. Move the cursor and the map follows: the model
- * attends to structure, but only near where it is currently looking.
+ * A saliency map over a photograph. Move the cursor and the map follows: the
+ * model attends to structure, but only near where it is currently looking.
  *
- * The image is synthetic and generated deterministically. The saliency is a
- * real Sobel gradient computed from the pixels — so the artefact shows
- * something true about images over something invented, and says which is
- * which.
+ * Both halves are real. The photograph is openly licensed — CC0, verified
+ * against the Wikimedia Commons API rather than assumed — and the map over it
+ * is a Sobel gradient computed in the browser from that photograph's own
+ * pixels. The only invented thing is the fixation point, and that is the
+ * reader's cursor.
  *
- * The static baseline is a plain description plus the scene itself; the map
- * needs a canvas, so with JavaScript off the reader gets the image and an
- * explanation rather than an empty box.
+ * With JavaScript off the photograph is still there, with real alt text and
+ * the explanation beneath it. The image is the base layer, not something the
+ * script draws, which is why that degradation costs nothing.
  */
+import { Image } from 'astro:assets';
+import subject from '../assets/attention-subject.jpg';
+
+const alt =
+  'Close-up photograph of a tabby cat facing the camera. Its two pale blue ' +
+  'eyes, the striped fur on its forehead and its whiskers are sharply in ' +
+  'focus; the background behind it is thrown completely out of focus into ' +
+  'smooth bands of orange and brown.';
 ---
 
 <figure class="artefact saliency" data-saliency>
   <div class="artefact__bar">
     <p class="artefact__name">Computer vision</p>
-    <p class="artefact__provenance">Synthetic image, computed saliency</p>
+    <p class="artefact__provenance">Openly licensed photograph, computed saliency</p>
   </div>
 
   <div class="artefact__panel glass">
     <div class="saliency__stage" data-stage>
-      <!-- Both canvases are painted by script. Sized by CSS, resolution set in
-           JS to match the device pixel ratio, so the map is not soft on a
-           retina screen. -->
-      <canvas class="saliency__scene" data-scene-canvas aria-hidden="true"></canvas>
-      <canvas class="saliency__map" data-map-canvas aria-hidden="true"></canvas>
+      <Image
+        class="saliency__photo"
+        src={subject}
+        alt={alt}
+        widths={[400, 600, 900]}
+        sizes="(min-width: 900px) 600px, 92vw"
+        loading="lazy"
+        data-photo
+      />
 
-      <p class="saliency__fallback" data-fallback>
-        This artefact draws a saliency map over a generated image and follows
-        the pointer. It needs JavaScript to compute the map. What it shows:
-        a model's attention concentrates where an image has structure — edges
-        and texture — and falls away across smooth regions, even close to where
-        it is looking.
-      </p>
+      <!-- Painted by script from the photograph above it. Sized in JS to the
+           working resolution, scaled up by CSS. -->
+      <canvas class="saliency__map" data-map-canvas aria-hidden="true"></canvas>
     </div>
+
+    <p class="saliency__fallback label" data-fallback>
+      The saliency map over this photograph needs JavaScript to compute. What it
+      shows: attention concentrates where the image has structure — the eyes,
+      the whiskers, the edge of the fur — and falls away across the smooth
+      background, even right next to where the model is looking.
+    </p>
   </div>
 
   <ul class="saliency__key" data-key hidden>
-    <li class="saliency__key-item">
+    <li class="saliency__key-item label">
       <span class="saliency__ramp" aria-hidden="true"></span>
-      <span class="label">Low to high attention</span>
+      <span>Low to high attention</span>
     </li>
     <li class="saliency__key-item label">
-      <span class="readout readout--signal" data-peak>—</span>
-      <span>peak attention under the pointer</span>
+      <span class="readout readout--signal tnum" data-peak>—</span>
+      <span data-peak-label>peak attention under the pointer</span>
     </li>
   </ul>
 
   <div class="artefact__controls" data-controls hidden>
-    <button class="button" type="button" data-mode aria-pressed="false">Show the raw edge map</button>
+    <button class="button" type="button" data-mode aria-pressed="false">Show every edge</button>
   </div>
 
   <figcaption class="artefact__caption">
     <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
 
     <p class="artefact__readout" data-readout>
-      Attention concentrates where the image has structure. Move the pointer, or
-      use the arrow keys, to move the fixation point.
+      Attention concentrates where the image has structure. Move the pointer
+      over the photograph, or focus it and use the arrow keys, to move the
+      fixation point.
     </p>
 
     <p class="artefact__note">
-      Synthetic image, real computation. The picture is generated here from a
-      fixed seed and is not a photograph of anything. The map over it is the
-      gradient magnitude of the actual pixels — a Sobel edge response — gated by
-      distance from the fixation point. The colour ramp is viridis, which is
-      perceptually uniform and still reads in greyscale.
+      Real photograph, real computation. The map is the gradient magnitude of
+      this image's own pixels — a Sobel edge response, computed in your browser
+      — gated by distance from the fixation point. The colour ramp is viridis,
+      which is perceptually uniform and still reads in greyscale.
+      Photograph:{' '}
+      <a class="link" href="https://commons.wikimedia.org/wiki/File:Tabby_cat_with_blue_eyes-3336579.jpg" rel="noopener">Tabby cat with blue eyes</a>{' '}
+      by AdinaVoicu, via Wikimedia Commons, released under{' '}
+      <a class="link" href="https://creativecommons.org/publicdomain/zero/1.0/" rel="noopener">CC0 1.0</a>.
     </p>
   </figcaption>
 </figure>
@@ -77,72 +97,93 @@
   /**
    * The saliency artefact.
    *
-   * Everything is computed in the browser from the generated pixels. Nothing
-   * is precomputed and baked in, so what a reader sees genuinely follows from
-   * the image on screen.
+   * The photograph is read back out of the DOM and its pixels are the input,
+   * so what a reader sees genuinely follows from the image on screen rather
+   * than from anything baked in at build time.
    */
-  import { attentionAt, edgeEnergy, generateScene, ramp } from '../lib/saliency.ts';
+  import { attentionAt, edgeEnergy, gazeAt, ramp } from '../lib/saliency.ts';
 
   const root = document.querySelector<HTMLElement>('[data-saliency]');
 
   if (root) {
     const el = root;
     const stage = el.querySelector<HTMLElement>('[data-stage]')!;
-    const sceneCanvas = el.querySelector<HTMLCanvasElement>('[data-scene-canvas]')!;
+    const photo = el.querySelector<HTMLImageElement>('[data-photo]')!;
     const mapCanvas = el.querySelector<HTMLCanvasElement>('[data-map-canvas]')!;
     const fallback = el.querySelector<HTMLElement>('[data-fallback]')!;
     const key = el.querySelector<HTMLElement>('[data-key]')!;
     const controls = el.querySelector<HTMLElement>('[data-controls]')!;
     const peakOut = el.querySelector<HTMLElement>('[data-peak]')!;
+    const peakLabel = el.querySelector<HTMLElement>('[data-peak-label]')!;
+    const readout = el.querySelector<HTMLElement>('[data-readout]')!;
     const live = el.querySelector<HTMLElement>('[data-live]')!;
     const modeButton = el.querySelector<HTMLButtonElement>('[data-mode]')!;
 
-    /* Internal resolution. Fixed and modest: the Sobel pass is O(pixels) and
-       runs on every pointer move, so this is the number that decides whether
-       the artefact feels immediate or laggy. The canvas is scaled up by CSS. */
-    const W = 320;
+    /* Working resolution, 3:2 like the photograph. Fixed and modest: the whole
+       field is recomputed on every pointer move, so this is the number that
+       decides whether the artefact feels immediate or laggy. Upscaled by CSS,
+       which is fine — a saliency map is a smooth field, not fine detail. */
+    const W = 300;
     const H = 200;
+    /** Gaussian width of the fixation, in working pixels. */
+    const FALLOFF = 46;
 
-    const scene = generateScene(W, H);
-    const energy = edgeEnergy(scene);
+    const mapCtx = mapCanvas.getContext('2d');
+    if (!mapCtx) throw new Error('2D canvas is unavailable');
+    const paint = mapCtx;
 
-    let fixation = { x: W * 0.5, y: H * 0.45 };
-    let rawMode = false;
+    mapCanvas.width = W;
+    mapCanvas.height = H;
+
+    let energy: Float32Array | null = null;
+    let fixation = { x: W * 0.62, y: H * 0.52 };
+    let everyEdge = false;
     let queued = 0;
 
-    const sceneCtx = sceneCanvas.getContext('2d');
-    const mapCtx = mapCanvas.getContext('2d');
+    const mapImage = paint.createImageData(W, H);
 
-    if (!sceneCtx || !mapCtx) throw new Error('2D canvas is unavailable');
-
-    for (const canvas of [sceneCanvas, mapCanvas]) {
-      canvas.width = W;
-      canvas.height = H;
+    /** Read the photograph's pixels once, at the working resolution. */
+    function measurePhoto(): void {
+      const work = document.createElement('canvas');
+      work.width = W;
+      work.height = H;
+      const ctx = work.getContext('2d', { willReadFrequently: true });
+      if (!ctx) return;
+      ctx.drawImage(photo, 0, 0, W, H);
+      energy = edgeEnergy(ctx.getImageData(0, 0, W, H).data, W, H);
     }
 
-    // The scene never changes, so it is painted once.
-    sceneCtx.putImageData(new ImageData(scene.pixels, W, H), 0, 0);
-
-    const mapImage = mapCtx.createImageData(W, H);
-
     function draw(): void {
-      const field = rawMode ? energy : attentionAt(energy, scene, fixation.x, fixation.y, 58);
+      if (!energy) return;
+
+      const gaze = everyEdge ? null : gazeAt(W, H, fixation.x, fixation.y, FALLOFF);
+      const field = gaze ? attentionAt(energy, gaze) : energy;
 
       let peak = 0;
       for (let i = 0; i < field.length; i += 1) {
         const value = field[i]!;
         if (value > peak) peak = value;
-        const [r, g, b] = ramp(value);
+
+        /* Two overlays composited into one canvas: a black veil that dims the
+           periphery, and the heat itself. Doing it here rather than stacking
+           two canvases keeps the artefact to one extra layer over the photo,
+           which matters when the panel behind it is already a glass surface. */
+        const heat = Math.min(1, value * 2.2) * 0.95;
+        const veil = gaze ? 0.82 * (1 - gaze[i]!) : 0;
+        const total = heat + veil * (1 - heat);
+
+        const [r, g, b] = ramp(Math.min(1, value * 1.6));
         const p = i * 4;
-        mapImage.data[p] = r;
-        mapImage.data[p + 1] = g;
-        mapImage.data[p + 2] = b;
-        // Alpha tracks strength, so low-attention regions let the image show
-        // through rather than covering it in dark purple.
-        mapImage.data[p + 3] = Math.round(Math.min(1, value * 1.6) * 235);
+        // The heat sits over the veil, so the visible colour is the heat's own
+        // scaled by how much of the total opacity it accounts for.
+        const share = total > 0 ? heat / total : 0;
+        mapImage.data[p] = Math.round(r * share);
+        mapImage.data[p + 1] = Math.round(g * share);
+        mapImage.data[p + 2] = Math.round(b * share);
+        mapImage.data[p + 3] = Math.round(total * 255);
       }
 
-      mapCtx.putImageData(mapImage, 0, 0);
+      paint.putImageData(mapImage, 0, 0);
       peakOut.textContent = peak.toFixed(2);
     }
 
@@ -164,7 +205,10 @@
       schedule();
     }
 
-    stage.addEventListener('pointermove', (event) => moveTo(event.clientX, event.clientY));
+    stage.addEventListener('pointermove', (event) => {
+      if (everyEdge) return;
+      moveTo(event.clientX, event.clientY);
+    });
 
     /* Keyboard parity. A cursor-following artefact that only works with a
        cursor is not operable, so the stage is focusable and the arrow keys
@@ -173,11 +217,11 @@
     stage.setAttribute('role', 'application');
     stage.setAttribute(
       'aria-label',
-      'Saliency map over a generated image. Arrow keys move the fixation point.',
+      'Saliency map over a photograph. Arrow keys move the fixation point; hold shift to move further.',
     );
 
     stage.addEventListener('keydown', (event) => {
-      const step = event.shiftKey ? 24 : 8;
+      const step = event.shiftKey ? 30 : 10;
       const moves: Record<string, [number, number]> = {
         ArrowLeft: [-step, 0],
         ArrowRight: [step, 0],
@@ -188,31 +232,48 @@
       if (!move) return;
       event.preventDefault();
       fixation = {
-        x: Math.max(0, Math.min(W, fixation.x + move[0])),
-        y: Math.max(0, Math.min(H, fixation.y + move[1])),
+        x: Math.max(0, Math.min(W, fixation.x + move[0]!)),
+        y: Math.max(0, Math.min(H, fixation.y + move[1]!)),
       };
       schedule();
       live.textContent = `Fixation at ${Math.round((fixation.x / W) * 100)} per cent across, ${Math.round((fixation.y / H) * 100)} per cent down.`;
     });
 
     modeButton.addEventListener('click', () => {
-      rawMode = !rawMode;
-      modeButton.setAttribute('aria-pressed', String(rawMode));
-      modeButton.textContent = rawMode
-        ? 'Show attention at the pointer'
-        : 'Show the raw edge map';
-      live.textContent = rawMode
-        ? 'Showing the raw edge map: every edge in the image, with no fixation point.'
-        : 'Showing attention at the pointer.';
+      everyEdge = !everyEdge;
+      modeButton.setAttribute('aria-pressed', String(everyEdge));
+      modeButton.textContent = everyEdge ? 'Follow the pointer again' : 'Show every edge';
+
+      /* The number under the ramp means something different in each mode, so
+         it is relabelled rather than left saying "under the pointer" when
+         there is no pointer. */
+      peakLabel.textContent = everyEdge
+        ? 'strongest edge in the photograph'
+        : 'peak attention under the pointer';
+
+      readout.textContent = everyEdge
+        ? 'Every edge the operator finds, with no fixation point — the whole gradient field at once. The eyes, the whiskers and the rim of each ear come back strongly; the thrown-out background comes back at nearly nothing.'
+        : 'Attention concentrates where the image has structure. Move the pointer over the photograph, or focus it and use the arrow keys, to move the fixation point.';
+
+      live.textContent = readout.textContent;
       schedule();
     });
 
-    // The fallback explains what is missing; once it is not missing, it goes.
-    fallback.hidden = true;
-    key.hidden = false;
-    controls.hidden = false;
-    el.classList.add('is-live');
+    function start(): void {
+      measurePhoto();
+      if (!energy) return;
+      // The fallback explains what is missing; once it is not missing, it goes.
+      fallback.hidden = true;
+      key.hidden = false;
+      controls.hidden = false;
+      el.classList.add('is-live');
+      draw();
+    }
 
-    draw();
+    /* The image is lazy, so it may not have arrived — or even been requested —
+       when this runs. decode() resolves once the pixels are genuinely there,
+       which is the only point at which they can be read. */
+    if (photo.complete && photo.naturalWidth > 0) start();
+    else photo.addEventListener('load', start, { once: true });
   }
 </script>

@@ -3,129 +3,40 @@
  *
  * Two halves, and it matters which is which.
  *
- * The image is synthetic. It is generated here, deterministically, from a seed
- * — not a photograph, not sourced, not licensed from anyone. That is a
- * deliberate choice over using an openly licensed photo: stating a licence I
- * could not verify would be inventing a fact, and a wrong licence attribution
- * on an academic site is a real problem rather than a cosmetic one. See Q-21.
+ * THE IMAGE IS REAL AND OPENLY LICENSED. It is a photograph released under
+ * CC0 1.0, a public domain dedication — "Tabby cat with blue eyes" by
+ * AdinaVoicu, from Pixabay via Wikimedia Commons. The licence was read from
+ * the Commons API rather than assumed, and the source and terms are recorded
+ * in docs/review-queue.md as Q-21 and printed under the artefact itself.
  *
- * The saliency is real. It is the gradient magnitude of the image — a Sobel
- * edge response — which is genuinely what a low-level attention model keys on
- * and genuinely computed from the pixels, not painted on. Where the cursor is
- * modulates it, the way a fixation point would.
+ * THE SALIENCY IS REAL TOO. It is the gradient magnitude of that photograph's
+ * own pixels — a 3x3 Sobel response — computed in the browser from what is on
+ * screen. Nothing is precomputed, painted on, or approximated.
  *
- * So the artefact shows something true about images (structure attracts
- * attention) over something invented (this particular picture), and says so.
+ * The only invented part is the fixation point, which is wherever the reader's
+ * cursor is. That is the honest way round: the model's response to the picture
+ * is genuine, and the thing standing in for a model's gaze is under the
+ * reader's own control.
+ *
+ * The photograph earns its place rather than decorating: sharp eyes and
+ * whiskers against a thrown-out background is exactly the contrast the
+ * artefact exists to show — structure attracts attention, smooth regions do
+ * not, and no amount of proximity to the fixation point changes that.
  */
-
-export interface Scene {
-  width: number;
-  height: number;
-  /** RGBA, four bytes per pixel. */
-  pixels: Uint8ClampedArray;
-}
-
-/** Deterministic generator, so the scene is identical on every render. */
-function seeded(seed: number): () => number {
-  let state = seed >>> 0;
-  return () => {
-    state = (state + 0x6d2b79f5) | 0;
-    let t = Math.imul(state ^ (state >>> 15), 1 | state);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-/**
- * Build a synthetic scene with real structure.
- *
- * Not noise: noise has uniform gradient energy everywhere and the saliency map
- * over it is flat and says nothing. This has large smooth regions, a few hard
- * edges, and some fine texture, so the edge response actually varies and the
- * artefact has something to show.
- */
-export function generateScene(width: number, height: number, seed = 20260913): Scene {
-  const random = seeded(seed);
-  const pixels = new Uint8ClampedArray(width * height * 4);
-
-  /* A handful of soft blobs give broad tonal structure, and the hard-edged
-     shapes below sit on top of them. */
-  const blobs = Array.from({ length: 5 }, () => ({
-    x: random() * width,
-    y: random() * height,
-    radius: (0.2 + random() * 0.35) * Math.min(width, height),
-    level: 0.25 + random() * 0.5,
-  }));
-
-  const rects = Array.from({ length: 3 }, () => {
-    const w = (0.12 + random() * 0.2) * width;
-    const h = (0.12 + random() * 0.25) * height;
-    return {
-      x: random() * (width - w),
-      y: random() * (height - h),
-      w,
-      h,
-      level: random() > 0.5 ? 0.9 : 0.12,
-    };
-  });
-
-  const discs = Array.from({ length: 4 }, () => ({
-    x: random() * width,
-    y: random() * height,
-    radius: (0.04 + random() * 0.06) * Math.min(width, height),
-    level: random() > 0.5 ? 0.95 : 0.08,
-  }));
-
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      // Smooth base.
-      let value = 0.35;
-      for (const blob of blobs) {
-        const d = Math.hypot(x - blob.x, y - blob.y) / blob.radius;
-        if (d < 1) value += (blob.level - 0.35) * (1 - d * d);
-      }
-
-      // Hard edges. These are what the gradient will find.
-      for (const rect of rects) {
-        if (x >= rect.x && x < rect.x + rect.w && y >= rect.y && y < rect.y + rect.h) {
-          value = rect.level;
-        }
-      }
-      for (const disc of discs) {
-        if (Math.hypot(x - disc.x, y - disc.y) < disc.radius) value = disc.level;
-      }
-
-      // Fine texture in one band, so the map distinguishes "textured" from
-      // "smooth" as well as "edge" from "flat".
-      if (y > height * 0.62 && y < height * 0.78) {
-        value += Math.sin(x * 0.6) * 0.06 + Math.sin(y * 0.9) * 0.04;
-      }
-
-      const level = Math.max(0, Math.min(1, value));
-      // A cool blue-grey ramp, so the scene sits in the site's field rather
-      // than fighting it. The heat overlay is the only warm thing here.
-      const i = (y * width + x) * 4;
-      pixels[i] = Math.round(level * 150 + 12);
-      pixels[i + 1] = Math.round(level * 172 + 18);
-      pixels[i + 2] = Math.round(level * 190 + 26);
-      pixels[i + 3] = 255;
-    }
-  }
-
-  return { width, height, pixels };
-}
 
 /**
  * Gradient magnitude, by a 3x3 Sobel operator on luminance.
  *
  * This is the actual computation, not an approximation of one. It is what
- * "where is there structure in this image" means at the lowest level, and it
- * is the honest half of the artefact.
+ * "where is there structure in this image" means at the lowest level.
  *
  * Returns one value per pixel, normalised to 0..1.
  */
-export function edgeEnergy(scene: Scene): Float32Array {
-  const { width, height, pixels } = scene;
+export function edgeEnergy(
+  pixels: Uint8ClampedArray,
+  width: number,
+  height: number,
+): Float32Array {
   const luma = new Float32Array(width * height);
 
   for (let i = 0; i < width * height; i += 1) {
@@ -194,32 +105,43 @@ export function ramp(t: number): [number, number, number] {
 }
 
 /**
- * Combine edge energy with a fixation point.
+ * A Gaussian around the fixation point, one value per pixel, peaking at 1.
  *
- * The model attends to structure, but only near where it is currently looking
- * — which is the behaviour worth showing, because it is why a saliency map
- * moves rather than sitting still. `falloff` is in pixels.
+ * Kept separate from the attention field because the drawing needs both: the
+ * attention decides where the heat goes, and the gaze alone decides how far
+ * the periphery is dimmed. `falloff` is a standard deviation, in pixels of the
+ * working resolution.
  */
-export function attentionAt(
-  energy: Float32Array,
-  scene: Scene,
+export function gazeAt(
+  width: number,
+  height: number,
   fx: number,
   fy: number,
   falloff: number,
 ): Float32Array {
-  const { width, height } = scene;
-  const out = new Float32Array(energy.length);
+  const out = new Float32Array(width * height);
   const twoSigmaSquared = 2 * falloff * falloff;
 
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      const i = y * width + x;
       const d2 = (x - fx) ** 2 + (y - fy) ** 2;
-      const gaze = Math.exp(-d2 / twoSigmaSquared);
-      // Structure gates it: a smooth region near the cursor stays dark, which
-      // is the point. A pure distance falloff would just be a spotlight.
-      out[i] = energy[i]! * gaze;
+      out[y * width + x] = Math.exp(-d2 / twoSigmaSquared);
     }
   }
+  return out;
+}
+
+/**
+ * Combine edge energy with a fixation point.
+ *
+ * The model attends to structure, but only near where it is currently looking
+ * — which is the behaviour worth showing, because it is why a saliency map
+ * moves rather than sitting still. Structure gates it, so a smooth region next
+ * to the cursor stays dark: a pure distance falloff would just be a spotlight,
+ * and a spotlight explains nothing.
+ */
+export function attentionAt(energy: Float32Array, gaze: Float32Array): Float32Array {
+  const out = new Float32Array(energy.length);
+  for (let i = 0; i < energy.length; i += 1) out[i] = energy[i]! * gaze[i]!;
   return out;
 }

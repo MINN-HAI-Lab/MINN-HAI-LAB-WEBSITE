@@ -538,3 +538,85 @@ actionable rather than just a refusal:
 > requirement was the real goal and the band was a proxy for it, so I optimised
 > the click requirement. If the band matters in itself, say so and I will take
 > guess to 0.35.
+
+---
+
+## Q-21 — the computer vision artefact uses a real, openly licensed photograph
+
+The brief said: *"Use an openly licensed image and record its source and
+licence in NOTES."* This does exactly that, but it is worth recording how the
+licence was established, because "openly licensed" is a claim about a fact and
+this site does not make those without checking.
+
+**The image.** A close crop of *Tabby cat with blue eyes*, downloaded from
+Wikimedia Commons and reduced to 1200×800 for the site.
+
+| | |
+|---|---|
+| Source page | https://commons.wikimedia.org/wiki/File:Tabby_cat_with_blue_eyes-3336579.jpg |
+| File | `src/assets/attention-subject.jpg` |
+| Author | AdinaVoicu |
+| Origin | Pixabay, https://pixabay.com/en/cat-blue-eyes-about-pet-3336579/ |
+| Licence | CC0 1.0 Universal, public domain dedication |
+| Licence URL | https://creativecommons.org/publicdomain/zero/1.0/ |
+| Attribution required | No — recorded and credited on the page anyway |
+
+**How that was checked.** Read from the Commons API rather than from the file
+page's rendered text or from memory:
+
+```
+GET https://commons.wikimedia.org/w/api.php?action=query
+    &titles=File:Tabby_cat_with_blue_eyes-3336579.jpg
+    &prop=imageinfo&iiprop=url|extmetadata|size&format=json
+→ extmetadata.License            = "cc0"
+  extmetadata.LicenseShortName   = "CC0"
+  extmetadata.UsageTerms         = "Creative Commons Zero, Public Domain Dedication"
+  extmetadata.AttributionRequired = "false"
+```
+
+CC0 was chosen over the CC BY-SA images that came up first in the same search.
+Share-alike raises a question about whether a saliency overlay is a derivative
+work, and a site that is careful about not inventing facts should not be
+casual about someone else's licence terms. A public domain dedication has no
+such question in it.
+
+**An earlier version of this artefact generated its own image** — blobs and
+rectangles from a seed — specifically to avoid stating a licence that could not
+be verified. That turned out to be the wrong trade once the API made
+verification cheap: the synthetic scene had no structure worth attending to,
+and the artefact's whole argument is that structure attracts attention and
+smooth regions do not. The photograph makes that argument in one glance —
+whiskers and the rim of an eye light up, the thrown-out background does not —
+and the generator is deleted rather than left around.
+
+The credit appears under the artefact on `/research`, not only here.
+
+---
+
+## Q-22 — the attention in artefact 4 is illustrative, and labelled as such
+
+The brief asked for "attention lines drawn between tokens". No trained model
+runs in a static site, so there are two honest options: ship nothing, or ship
+something with the shape of attention and say plainly that is what it is.
+
+What is built:
+
+- **The tokenisation is real.** A rule-based subword tokeniser — whitespace,
+  punctuation, then suffix stripping with a four-character minimum stem. It is
+  not BPE and it is nobody's published vocabulary, but the boundaries it draws
+  are the boundaries it computed, and a test asserts it never drops or invents
+  a character.
+- **The attention is illustrative.** Per-token scores from distance and stem
+  overlap, plus a bonus from a suffix to the stem it was split from, through a
+  softmax at temperature 0.6. Each row is a genuine probability distribution.
+  The arithmetic is a real attention head's; the inputs are surface features
+  rather than learned ones.
+
+The artefact's provenance label reads "Real tokenisation, illustrative
+attention", and the note under it says which half is which in full. Calling a
+distance kernel "attention" without that line would be the kind of claim this
+site exists not to make.
+
+If the lab has a model whose weights could be exported, this artefact is the
+obvious place for them and the drawing would not have to change — only the
+label and the source of the numbers.

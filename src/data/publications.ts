@@ -95,3 +95,8 @@ export function mostRecent(count: number): Publication[] {
 export function incompleteCount(): number {
   return PUBLICATIONS.filter((p) => p.authors === null || p.paperUrl === null).length;
 }
+
+/** Every entry in one programme, most recent first. */
+export function byProgramme(programme: Programme): Publication[] {
+  return mostRecent(PUBLICATIONS.length).filter((p) => p.programme === programme);
+}

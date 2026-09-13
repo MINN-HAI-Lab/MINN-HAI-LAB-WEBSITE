@@ -1,17 +1,32 @@
 /* ---------------------------------------------------------------------------
    saliency.css — artefact 3, computer vision.
+
+   A photograph with a computed map over it. The map is the model's claim, so
+   it carries the viridis ramp; the photograph underneath is evidence and is
+   left alone.
+
+   The stage is capped rather than filling the panel. A 300x200 field upscaled
+   to eleven hundred pixels is a blurry poster, and the artefact is an
+   instrument reading, not a hero image.
 --------------------------------------------------------------------------- */
 
 .saliency__stage {
   position: relative;
+  display: block;
   width: 100%;
-  /* The generated scene is 320x200. Holding that ratio means the canvas never
-     letterboxes and the fixation maths stays a straight proportion. */
-  aspect-ratio: 320 / 200;
-  border: var(--rule-width) solid var(--surface-edge);
-  border-radius: var(--radius-glass);
+  max-width: var(--saliency-max);
+  margin-inline: auto;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
+  border-radius: var(--radius-glass);
+  /* The photograph is a rectangle of real content inside a glass panel, so it
+     gets the same hairline edge everything else on this site gets. */
+  border: var(--rule-width) solid var(--surface-edge);
   cursor: crosshair;
+}
+
+.saliency__stage:focus {
+  outline: none;
 }
 
 .saliency__stage:focus-visible {
@@ -19,36 +34,30 @@
   outline-offset: var(--focus-offset);
 }
 
-/* Both canvases fill the stage and stack. image-rendering stays smooth: the
-   internal resolution is deliberately modest and pixelated would read as a
-   mistake rather than a choice. */
-.saliency__scene,
+.saliency__photo,
 .saliency__map {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
+  object-fit: cover;
 }
 
 .saliency__map {
-  /* Screen keeps the bright end of the ramp legible over a mid-tone scene
-     without washing the dark end into grey. */
-  mix-blend-mode: screen;
+  pointer-events: none;
+  /* The map is a smooth field, so letting the browser interpolate the upscale
+     is correct here — the alternative is visible 300px blocks over a sharp
+     photograph. */
+  image-rendering: auto;
 }
 
+/* Shown only when the script has not run. */
 .saliency__fallback {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: var(--space-5);
-  display: flex;
-  align-items: center;
-  background-color: var(--field-2);
-  font-family: var(--font-sans);
-  font-size: var(--size-small);
-  line-height: var(--lh-small);
   color: var(--text-muted);
+  max-width: var(--measure);
+  margin-block-start: var(--space-4);
+  margin-inline: auto;
 }
 
 .saliency__fallback[hidden] {
@@ -60,10 +69,11 @@
 .saliency__key {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3) var(--space-5);
+  gap: var(--space-2) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
+  color: var(--text-muted);
 }
 
 .saliency__key[hidden] {
@@ -76,18 +86,23 @@
   gap: var(--space-2);
 }
 
-/* The ramp itself, so the map's colours mean something rather than being
-   decorative. Viridis, sampled at the same stops the map uses. */
+/* The viridis ramp itself, as a key. The eight stops are the same eight the
+   script interpolates, so the key is the scale rather than an impression of
+   it. */
 .saliency__ramp {
   inline-size: var(--space-16);
-  block-size: var(--space-2);
+  block-size: var(--space-3);
+  flex: none;
   border-radius: var(--radius-glass);
   border: var(--rule-width) solid var(--surface-edge);
   background-image: linear-gradient(
     to right,
     rgb(68 1 84),
+    rgb(72 40 120),
     rgb(62 74 137),
+    rgb(49 104 142),
     rgb(38 130 142),
+    rgb(31 158 137),
     rgb(53 183 121),
     rgb(253 231 37)
   );

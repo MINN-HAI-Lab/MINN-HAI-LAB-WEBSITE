@@ -358,3 +358,38 @@ main:focus-visible {
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Research areas
+
+   A section on /research is a heading, a line of prose, a live artefact and
+   its publications. The artefact gets air on both sides so it reads as the
+   subject of the section rather than as an illustration dropped into it.
+--------------------------------------------------------------------------- */
+
+.area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.area > .artefact {
+  margin-block: var(--space-4);
+}
+
+.area__papers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-start: var(--space-5);
+}
+
+/* The visible gap where an area has no publications. Ruled like the list it
+   stands in for, so it reads as a deliberate empty list rather than as a
+   paragraph that wandered in. */
+.area__none {
+  border-block-start: var(--rule-width) solid var(--grid);
+  border-block-end: var(--rule-width) solid var(--grid);
+  padding-block: var(--space-4);
+  color: var(--text-muted);
+}

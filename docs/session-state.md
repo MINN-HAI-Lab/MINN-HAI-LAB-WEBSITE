@@ -14,18 +14,9 @@ Nothing.
 
 ## QUEUE
 
-- **S-03** Layout shell on the dark field: glass primitive, motion tokens,
-  one-per-section scroll reveal, reduced-motion path.
-- **S-06** Artefact 2: Bayesian XAI static SVG baseline, Markov blanket
-  highlighting, illustrative network over learning-analytics variables.
 - **S-07** Artefact 2: `3d-force-graph` on click only, absent from the initial
   payload.
-- **S-08** Artefact 3: computer vision saliency map following the cursor.
-- **S-09** Artefact 4: NLP live tokeniser with attention lines between tokens.
 - **S-10** Header, footer and navigation for the five pages.
-- **S-11** `/` home: hero artefact on glass, four research areas, five recent
-  publications, StatLab callout.
-- **S-12** `/research`: four sections, one live artefact each.
 - **S-13** `/people`: group photo, five 4:5 portraits, placeholder slots.
 - **S-14** `/about`: mission, funding, contact.
 - **S-15** `/learning`: StatLab.
@@ -40,6 +31,9 @@ Nothing.
 
 ## DONE
 
+- **S-08** — Computer vision artefact, rebuilt on a real photograph: CC0, licence read from the Commons API, Sobel edge map computed in the browser from its pixels, veil plus viridis heat gated by a Gaussian at the cursor.
+- **S-09** — Language artefact: a real rule-based subword tokeniser, live on every keystroke, with illustrative softmax attention drawn as cubic arcs measured from the rendered tokens.
+- **S-12** — `/research`: four sections, one live artefact each, publications under the two areas that have them and a visible "none yet" under the two that do not.
 - **S-01** — Dark instrument palette in tokens.css, contrast verified against the glass composite. Token lint drops the shadow rule; contrast suite rewritten for the new system.
 
 ---
@@ -55,5 +49,13 @@ Nothing.
   Its infrastructure survives: the BKT model, the geometry module, the
   contrast maths, the token lint, the browser harness on port 4331 with its
   dev-server guard. The visual layer is being replaced.
+- The computer vision artefact's photograph is CC0: *Tabby cat with blue eyes*
+  by AdinaVoicu, Pixabay via Wikimedia Commons,
+  https://commons.wikimedia.org/wiki/File:Tabby_cat_with_blue_eyes-3336579.jpg,
+  https://creativecommons.org/publicdomain/zero/1.0/. Licence read from the
+  Commons API, not assumed. Attribution is not required by CC0; it is given
+  anyway, under the artefact. Full record in Q-21.
+- Astro emits the saliency script inline rather than as its own chunk, so
+  `grep` for a `<script src>` will not find it. It is there.
 - Contrast measured against the glass composite, not the field: --text 14.36-16.70:1, --text-muted 5.93-6.89:1, --signal 5.25-5.70:1. Tightest case is muted text on glass over --field-2 at 5.93:1 — first thing to fail if the surface alpha rises.
 
