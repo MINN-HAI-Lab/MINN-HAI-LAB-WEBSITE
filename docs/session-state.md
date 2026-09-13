@@ -17,11 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-54** Is the build reproducible? Asset filenames are content hashes, so a
-  build that is not deterministic quietly breaks caching and makes every
-  deploy a full re-download. Never checked.
-
----
+Nothing.
 
 ---
 
@@ -109,6 +105,7 @@ history at `ec7ada9`.
 - **T-51** — Suite now runs in Chromium, Firefox and WebKit: 243 specs pass. Found D-020's premise was backwards and corrected it as D-022; fixed three keyboard tests that encoded Chromium-only assumptions.
 - **T-52** — Font-failure path covered in all three engines: with every woff2 aborted, text still renders at the token sizes, nothing overflows, and the trace still draws and still toggles.
 - **T-53** — Three prototypes of the trace built from the real model and tokens — separated rows as built, marks on the curve, and stepped belief — with an honest comparison in Q-18 for Kaung to pick from.
+- **T-54** — Two clean builds produce byte-identical output. Recorded in the handbook with the command to re-check; not automated, since it means building twice every run.
 
 ---
 

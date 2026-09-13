@@ -171,3 +171,15 @@ subsetting it further to the glyphs actually used would take most of it.
 `npm run verify` fails if a page exceeds 120KB, or if the site's own HTML, CSS
 and script exceed 25KB. Those are the measurements above plus headroom, not
 design values — move them deliberately rather than to make a build pass.
+
+The build is reproducible: two clean builds produce byte-identical output,
+checked on 2026-09-13. That matters because asset filenames are content
+hashes, so a non-deterministic build would change every filename on every
+deploy and make returning visitors re-download the lot. It is not automated,
+because a determinism check means building twice on every run. To check it by
+hand:
+
+```
+rm -rf dist && npm run build && find dist -type f | sort | xargs shasum | shasum
+rm -rf dist .astro && npm run build && find dist -type f | sort | xargs shasum | shasum
+```
