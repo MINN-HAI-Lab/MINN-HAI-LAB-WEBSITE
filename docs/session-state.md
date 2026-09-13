@@ -17,7 +17,11 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-52** The font-failure path. Literata is a single 83.8KB request and
+  nothing tests what happens if it does not arrive. The metric-matched
+  fallback should make that a non-event; verify it rather than assume it.
+
+---
 
 ---
 
@@ -26,12 +30,6 @@ Nothing.
 Refilled 2026-09-13, seventh time. T-49 and T-50 are done.
 
 Two claims this run made and never tested.
-
-- **T-52** The font-failure path. Literata is a single 83.8KB request and
-  nothing tests what happens if it does not arrive. The metric-matched
-  fallback should make that a non-event; verify it rather than assume it.
-
----
 
 ## BLOCKED
 
