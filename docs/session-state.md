@@ -23,12 +23,22 @@ Nothing.
 
 ## QUEUE
 
-Refilled 2026-09-13, third time. T-35 to T-38 are done. Phase 4's remaining
-item is "remove every remaining TODO:", which is blocked on B-1 to B-5 and
-B-9, and the handbook's publications check is Phase 3.
+Refilled 2026-09-13, fourth time. T-39 to T-42 are done.
 
-These are gaps I can see in what has been built rather than new features:
-things made but never looked at, and assumptions never tested.
+- **T-43** Font payload. Both Literata subsets are preloaded on every page,
+  which is 153K before anything renders. The site's current text is entirely
+  ASCII, so latin-ext may be fetched and never used. Establish what is
+  actually needed and whether preloading both is right.
+- **T-44** Append this run's design decisions to `design/decisions.md` with
+  status `proposed`. Several real choices — the favicon, the TODO marker
+  treatment, the 24px target rule, the attribution measure — exist only in
+  commit messages, where they cannot be reviewed or rejected.
+- **T-45** Measure what a first visit downloads, and record it, so the next
+  person adding something can see what it costs.
+
+When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
+
+---
 
 ## BLOCKED
 
