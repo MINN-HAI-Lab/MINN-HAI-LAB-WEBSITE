@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-17** Verify the JS-off path by building and loading with scripting
+  disabled. Record what was checked in NOTES.
 
 ---
 
 ## QUEUE
 
-- **T-17** Verify the JS-off path by building and loading with scripting
-  disabled. Record what was checked in NOTES.
 - **T-18** Script recomputing every contrast pair in the DESIGN.md table,
   failing if a measured ratio differs from the stated one by more than 0.05.
 - **T-19** Playwright screenshot harness, three widths, output to a
