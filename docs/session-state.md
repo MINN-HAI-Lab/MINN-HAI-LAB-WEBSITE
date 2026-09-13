@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-14** Reduced-motion path: finished curve instead of the draw, instant
+  estimate update with a brief static highlight. Do not zero out a transform.
 
 ---
 
 ## QUEUE
 
-- **T-14** Reduced-motion path: finished curve instead of the draw, instant
-  estimate update with a brief static highlight. Do not zero out a transform.
 - **T-15** Visible label stating the data is synthetic.
 - **T-16** Responsive pass at 390, 768, 1440. No horizontal scroll, widget
   usable at every width.
