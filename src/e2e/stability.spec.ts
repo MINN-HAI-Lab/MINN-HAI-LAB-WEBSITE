@@ -109,3 +109,34 @@ test.describe('stability: the curve draw', () => {
     ).toEqual([]);
   });
 });
+
+test.describe('fonts', () => {
+  test('fetches only the subset the page actually uses', async ({ page }) => {
+    // unicode-range makes the second subset lazy. Preloading defeats that and
+    // costs 69KB on a first visit for glyphs no page here contains, so the
+    // Font component is deliberately used without `preload`.
+    const fonts: Array<{ name: string; size: number }> = [];
+    page.on('response', async (response) => {
+      if (response.request().resourceType() !== 'font') return;
+      let size = 0;
+      try {
+        size = (await response.body()).length;
+      } catch {
+        // The body can be gone by the time this runs; the count still holds.
+      }
+      fonts.push({ name: new URL(response.url()).pathname.split('/').pop() ?? '', size });
+    });
+
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(500);
+
+    const total = fonts.reduce((sum, f) => sum + f.size, 0);
+    expect(
+      fonts.length,
+      `expected one font file, got ${fonts.length}: ${fonts.map((f) => f.name).join(', ')}`,
+    ).toBe(1);
+    expect(total / 1024, 'the latin subset alone').toBeLessThan(100);
+  });
+});

@@ -17,10 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-43** Font payload. Both Literata subsets are preloaded on every page,
-  which is 153K before anything renders. The site's current text is entirely
-  ASCII, so latin-ext may be fetched and never used. Establish what is
-  actually needed and whether preloading both is right.
+Nothing.
 
 ---
 
@@ -110,6 +107,7 @@ history at `ec7ada9`.
 - **T-40** — Internal URLs now go through withBase(), so a subpath deploy works. Verified by building with a base: all six pick up the prefix, including the three Astro would have left alone.
 - **T-41** — Layout shift measured on all three pages: zero, verified against a probe that catches a forced 0.22 reflow. The font swap and the curve draw both move nothing.
 - **T-42** — Annotation column rendered on the specimen and covered at both breakpoints. Rendering it exposed two defects: no paragraph rhythm inside it, and no measure cap below 1180 where the grid stops enforcing one.
+- **T-43** — Dropped the font preload: it forced both subsets down for 152.8KB where the browser needs one at 83.8KB. Layout shift stays at zero. Covered by a test that fails if a second font is fetched.
 
 ---
 
@@ -146,4 +144,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-33: a skip link needs tabindex=-1 on its target. Without it the browser scrolls and updates the sequential focus starting point but leaves activeElement on the body, so the next Tab returns to the header and the link skips nothing. Verified by reverting: activeElement id came back empty.
 - T-36: Tailwind's @source glob must exclude .ts. Scanning all of src/ meant a test file that quoted dark:bg-white/10 in a comment about that very bug re-created it in the shipped CSS. Only files that emit markup should be scanned.
 - T-39: a duplicated Astro frontmatter fence emits everything after the first one as content, landing between the doctype and <html>, which the browser hoists into the body. Shipped on every page for eleven commits. axe, keyboard, palette and heading tests all passed it because it is valid HTML that merely shows junk. Only a screenshot caught it.
+- T-43: preloading a unicode-range-split font defeats the split. Astro inlines @font-face into the head, so there is no stylesheet round trip for preload to save, and it forced both subsets down. Removing it halved the font payload with no change to layout shift.
 

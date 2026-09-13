@@ -69,7 +69,19 @@ const { title, description, noindex = false } = Astro.props;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
-    <Font cssVariable="--font-literata" preload />
+    {/* No preload, deliberately.
+
+        Astro inlines the @font-face rules into this head, so the browser
+        discovers the font while parsing the head — there is no stylesheet
+        round trip for a preload to save. What preload does do is defeat
+        unicode-range: it forces both subsets down regardless of what the page
+        needs.
+
+        Measured: preloading fetches 2 files and 152.8KB. Without it the
+        browser fetches 1 file and 83.8KB, because no glyph on this site falls
+        in latin-ext. The 69.1KB subset stays available for when author names
+        need it, and is fetched then rather than now. */}
+    <Font cssVariable="--font-literata" />
     <slot name="head" />
   </head>
   <body>
