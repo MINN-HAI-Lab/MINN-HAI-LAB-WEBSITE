@@ -3,10 +3,13 @@
  *
  * Three rules, from CLAUDE.md and DESIGN.md:
  *
- *   1. No raw hex outside tokens.css. There are six colours and they live in
- *      one file.
+ *   1. No raw hex outside tokens.css. The palette lives in one file.
  *   2. No raw px outside tokens.css. Spacing, radii and sizes are tokens.
- *   3. No shadow property anywhere. "No shadows. None, anywhere."
+ *
+ * The third rule — no shadow property anywhere — is gone. DESIGN.md banned
+ * shadows outright and the current brief lifts that ban along with the ones on
+ * glass, blur and gradients (Q-19). The lint no longer has an opinion about
+ * them.
  *
  * It reads source, never the build output. Tailwind's preflight legitimately
  * resets box-shadow and its utility plumbing names it several times, so a grep
@@ -25,13 +28,13 @@
  *     file rather than added silently.
  */
 
-/** The only breakpoints any media query may use. DESIGN.md § Layout. */
+/** The only breakpoints any media query may use. */
 export const BREAKPOINTS = [640, 900, 1180] as const;
 
 export interface Violation {
   file: string;
   line: number;
-  rule: 'hex' | 'px' | 'shadow';
+  rule: 'hex' | 'px';
   text: string;
   message: string;
 }
@@ -108,19 +111,6 @@ export function lintTokens(targets: readonly LintTarget[]): Violation[] {
       const number = index + 1;
       const text = line.trim();
 
-      // Rule 3 first: shadows are banned everywhere, tokens.css included.
-      if (/\b(box-shadow|text-shadow)\b/.test(line) || /drop-shadow\s*\(/.test(line)) {
-        violations.push({
-          file,
-          line: number,
-          rule: 'shadow',
-          text,
-          message:
-            'DESIGN.md bans shadows outright: "No shadows. None, anywhere." ' +
-            'Reach for a rule and more space instead. An inset shadow is still a shadow.',
-        });
-      }
-
       if (isTokenFile) return;
 
       if (/#[0-9a-fA-F]{3,8}\b/.test(line)) {
@@ -130,8 +120,8 @@ export function lintTokens(targets: readonly LintTarget[]): Violation[] {
           rule: 'hex',
           text,
           message:
-            'Raw hex outside tokens.css. There are six colours in DESIGN.md and ' +
-            'they are declared in one place; use the token.',
+            'Raw hex outside tokens.css. The palette is declared in one place; ' +
+            'use the token.',
         });
       }
 
@@ -149,7 +139,7 @@ export function lintTokens(targets: readonly LintTarget[]): Violation[] {
               text,
               message:
                 `${value}px is not one of the three declared breakpoints ` +
-                `(${BREAKPOINTS.join(', ')}). DESIGN.md: "Three, and no fourth."`,
+                `(${BREAKPOINTS.join(', ')}). Three, and no fourth.`,
             });
           }
           continue;

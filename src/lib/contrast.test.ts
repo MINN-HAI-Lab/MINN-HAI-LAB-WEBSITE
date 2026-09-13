@@ -1,147 +1,106 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe as suite, expect, it } from 'vitest';
-import {
-  contrastRatio,
-  parseContrastTable,
-  parseHex,
-  resolveColourTokens,
-} from './contrast.ts';
-
-const read = (relative: string): string =>
-  readFileSync(fileURLToPath(new URL(relative, import.meta.url)), 'utf8');
-
-const DESIGN = read('../../design/DESIGN.md');
-const TOKENS = read('../styles/tokens.css');
+import { contrastRatio, glassOver, parseHex, parseRgb, resolveColourTokens } from './contrast.ts';
 
 /**
- * How far a stated ratio may sit from the measured one.
+ * Contrast on the dark instrument field.
  *
- * DESIGN.md quotes to one decimal place, so 0.05 is exactly the rounding
- * error of that notation and nothing more. Anything larger is a real
- * disagreement between the file and the tokens it claims to describe.
+ * The palette comes from the brief rather than from design/DESIGN.md, which
+ * still describes the light six-colour system and is out of date (Q-19). So
+ * this asserts the floor directly rather than checking a table against itself.
+ *
+ * The point worth keeping: text on a glass panel sits on the surface fill
+ * composited over the field, not on the field. Measuring against the field
+ * alone overstates every ratio, and that is the mistake this exists to catch.
  */
-const TOLERANCE = 0.05;
 
-suite('contrast maths', () => {
-  it('matches the WCAG reference values at the extremes', () => {
-    expect(contrastRatio('#000000', '#ffffff')).toBeCloseTo(21, 6);
-    expect(contrastRatio('#ffffff', '#ffffff')).toBeCloseTo(1, 6);
+const TOKENS = readFileSync(
+  fileURLToPath(new URL('../styles/tokens.css', import.meta.url)),
+  'utf8',
+);
+
+/** WCAG AA for body text. */
+const BODY_FLOOR = 4.5;
+/** WCAG AA for non-text that has to be perceived. */
+const NON_TEXT_FLOOR = 3;
+
+const tokens = resolveColourTokens(TOKENS);
+const raw = (name: string): string => {
+  const match = TOKENS.match(new RegExp(`--${name}\\s*:\\s*([^;]+);`));
+  if (!match) throw new Error(`--${name} is not defined in tokens.css`);
+  return match[1]!.trim();
+};
+const hex = (name: string): string => {
+  const value = tokens.get(name);
+  if (!value) throw new Error(`--${name} does not resolve to a hex in tokens.css`);
+  return value;
+};
+
+suite('compositing', () => {
+  it('reads the modern and legacy rgb() spellings', () => {
+    expect(parseRgb('rgb(255 255 255 / 0.045)')).toEqual({ rgb: [255, 255, 255], alpha: 0.045 });
+    expect(parseRgb('rgba(255, 255, 255, 0.1)')).toEqual({ rgb: [255, 255, 255], alpha: 0.1 });
+    expect(parseRgb('rgb(255 255 255 / 10%)')?.alpha).toBeCloseTo(0.1, 6);
   });
 
-  it('does not care which colour is named first', () => {
-    expect(contrastRatio('#1c2830', '#eff1f2')).toBeCloseTo(
-      contrastRatio('#eff1f2', '#1c2830'),
-      10,
-    );
+  it('lightens a dark field rather than darkening it', () => {
+    const composite = glassOver('rgb(255 255 255 / 0.045)', '#070b10');
+    expect(parseHex(composite)[0]).toBeGreaterThan(parseHex('#070b10')[0]);
   });
 
-  it('reads shorthand and alpha hex', () => {
-    expect(parseHex('#fff')).toEqual([255, 255, 255]);
-    expect(parseHex('#b4133f1f')).toEqual([180, 19, 63]);
-  });
-
-  it('rejects anything that is not a colour', () => {
-    expect(() => parseHex('rebeccapurple')).toThrow();
+  it('refuses a surface that is not an rgb() colour', () => {
+    expect(() => glassOver('#ffffff', '#070b10')).toThrow();
   });
 });
 
-suite('tokens.css resolves to the colours DESIGN.md specifies', () => {
-  const tokens = resolveColourTokens(TOKENS);
+suite('body text clears 4.5:1 on every surface it can land on', () => {
+  const field = hex('color-field');
+  const field2 = hex('color-field-2');
+  const surface = raw('surface');
 
-  // The six, straight out of the DESIGN.md colour table.
-  const declared = [
-    ...DESIGN.matchAll(/^\|\s*`--([a-z-]+)`\s*\|\s*`(#[0-9A-Fa-f]{6})`\s*\|/gim),
-  ].map((row) => ({ name: row[1]!, hex: row[2]!.toLowerCase() }));
+  const surfaces: Array<[string, string]> = [
+    ['--field', field],
+    ['--field-2', field2],
+    ['glass over --field', glassOver(surface, field)],
+    ['glass over --field-2', glassOver(surface, field2)],
+  ];
 
-  it('finds all six colours in the DESIGN.md table', () => {
-    expect(declared.map((entry) => entry.name)).toEqual([
-      'paper',
-      'paper-sunk',
-      'ink',
-      'ink-muted',
-      'rule',
-      'claim',
-    ]);
-  });
+  for (const [name, background] of surfaces) {
+    it(`--text on ${name}`, () => {
+      const ratio = contrastRatio(hex('color-text'), background);
+      expect(ratio, `${ratio.toFixed(2)}:1 on ${background}`).toBeGreaterThanOrEqual(BODY_FLOOR);
+    });
 
-  for (const { name, hex } of declared) {
-    it(`--${name} is ${hex}`, () => {
-      expect(tokens.get(name)).toBe(hex);
+    it(`--text-muted on ${name}`, () => {
+      // The tightest case in the system. If the surface alpha ever rises this
+      // is the first thing to fail.
+      const ratio = contrastRatio(hex('color-text-muted'), background);
+      expect(ratio, `${ratio.toFixed(2)}:1 on ${background}`).toBeGreaterThanOrEqual(BODY_FLOOR);
+    });
+
+    it(`--signal on ${name}`, () => {
+      // --signal carries model output, which is content, so it is held to the
+      // text floor rather than the non-text one.
+      const ratio = contrastRatio(hex('color-signal'), background);
+      expect(ratio, `${ratio.toFixed(2)}:1 on ${background}`).toBeGreaterThanOrEqual(BODY_FLOOR);
     });
   }
 });
 
-suite('every ratio in the DESIGN.md contrast table', () => {
-  const tokens = resolveColourTokens(TOKENS);
-  const claims = parseContrastTable(DESIGN);
+suite('the hairlines are decorative, and stay that way', () => {
+  const field = hex('color-field');
 
-  it('parses the whole table, so no row escapes checking', () => {
-    // Six rows today. If a row is added and this number is not updated the
-    // test fails, which is the point: a new pair must be measured, not
-    // assumed.
-    expect(claims).toHaveLength(6);
+  it('--surface-edge is below the non-text floor', () => {
+    // Asserted rather than assumed. The glass edge is a visual refinement; if
+    // a glass panel is itself a control, its edge cannot be the only thing
+    // marking it.
+    const edge = glassOver(raw('surface-edge'), field);
+    expect(contrastRatio(edge, field)).toBeLessThan(NON_TEXT_FLOOR);
   });
 
-  for (const { foreground, background, stated } of claims) {
-    it(`--${foreground} on --${background} measures ${stated}:1`, () => {
-      const fg = tokens.get(foreground);
-      const bg = tokens.get(background);
-      expect(fg, `--${foreground} is not defined in tokens.css`).toBeDefined();
-      expect(bg, `--${background} is not defined in tokens.css`).toBeDefined();
-
-      const measured = contrastRatio(fg!, bg!);
-      const drift = Math.abs(measured - stated);
-      expect(
-        drift,
-        `DESIGN.md says ${stated}:1, tokens.css gives ${measured.toFixed(2)}:1 ` +
-          `(off by ${drift.toFixed(3)}). Re-measure and correct DESIGN.md, or ` +
-          `change the token — but do not leave them disagreeing.`,
-      ).toBeLessThanOrEqual(TOLERANCE);
-    });
-  }
-});
-
-suite('the floors those ratios exist to protect', () => {
-  const tokens = resolveColourTokens(TOKENS);
-  const get = (name: string): string => {
-    const value = tokens.get(name);
-    if (!value) throw new Error(`--${name} missing from tokens.css`);
-    return value;
-  };
-
-  it('body text clears 4.5:1 on both surfaces', () => {
-    expect(contrastRatio(get('ink'), get('paper'))).toBeGreaterThanOrEqual(4.5);
-    expect(contrastRatio(get('ink'), get('paper-sunk'))).toBeGreaterThanOrEqual(4.5);
-  });
-
-  it('metadata clears 4.5:1 on both surfaces, including inside the trace panel', () => {
-    // This is the one D-012 exists to fix: the old --ink-muted cleared the
-    // floor on --paper-sunk by 0.01.
-    expect(contrastRatio(get('ink-muted'), get('paper'))).toBeGreaterThanOrEqual(4.5);
-    expect(contrastRatio(get('ink-muted'), get('paper-sunk'))).toBeGreaterThanOrEqual(4.5);
-  });
-
-  it('the estimate clears 4.5:1 wherever it is drawn', () => {
-    expect(contrastRatio(get('claim'), get('paper'))).toBeGreaterThanOrEqual(4.5);
-    expect(contrastRatio(get('claim'), get('paper-sunk'))).toBeGreaterThanOrEqual(4.5);
-  });
-
-  it('the panel boundary clears the 3:1 non-text floor', () => {
-    // The panel is bounded by a --trace-edge rule, which is --ink-muted,
-    // because the fill alone is 1.1:1 and cannot carry it (D-012).
-    expect(contrastRatio(get('ink-muted'), get('paper'))).toBeGreaterThanOrEqual(3);
-  });
-
-  it('the band edges clear the 3:1 non-text floor against the panel', () => {
-    // D-013: the 12% fill is 1.22:1 and decorative; the --claim edge strokes
-    // are what carry the information.
-    expect(contrastRatio(get('claim'), get('paper-sunk'))).toBeGreaterThanOrEqual(3);
-  });
-
-  it('--rule is too weak to bound a control, which is why it never does', () => {
-    // Asserted rather than assumed, so nobody promotes --rule to a boundary
-    // later. DESIGN.md: use --ink-muted for that.
-    expect(contrastRatio(get('rule'), get('paper'))).toBeLessThan(3);
+  it('--grid is below the non-text floor', () => {
+    const grid = glassOver(raw('grid'), field);
+    expect(contrastRatio(grid, field)).toBeLessThan(NON_TEXT_FLOOR);
   });
 });

@@ -118,3 +118,52 @@ export function resolveColourTokens(css: string): Map<string, string> {
   }
   return resolved;
 }
+
+/** An opaque colour, as channels. */
+export type Rgb = [number, number, number];
+
+/**
+ * Parse `rgb(255 255 255 / 0.045)` and its comma-separated form.
+ *
+ * Returns the channels and the alpha separately, because a translucent
+ * surface has no contrast ratio of its own — only its composite over
+ * whatever is behind it does.
+ */
+export function parseRgb(value: string): { rgb: Rgb; alpha: number } | null {
+  const match = value
+    .trim()
+    .match(/^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[/,]\s*([\d.]+%?))?\s*\)$/i);
+  if (!match) return null;
+
+  const rgb: Rgb = [Number(match[1]), Number(match[2]), Number(match[3])];
+  const rawAlpha = match[4];
+  const alpha =
+    rawAlpha === undefined
+      ? 1
+      : rawAlpha.endsWith('%')
+        ? Number.parseFloat(rawAlpha) / 100
+        : Number.parseFloat(rawAlpha);
+  return { rgb, alpha };
+}
+
+/** Composite a translucent colour over an opaque one. */
+export function over(foreground: Rgb, alpha: number, background: string): string {
+  const back = parseHex(background);
+  const mix = foreground.map((channel, i) =>
+    Math.round(channel * alpha + back[i]! * (1 - alpha)),
+  );
+  return `#${mix.map((c) => c.toString(16).padStart(2, '0')).join('')}`;
+}
+
+/**
+ * What a glass panel actually looks like, as a colour.
+ *
+ * Text on glass does not sit on the field; it sits on the surface fill
+ * composited over the field. Checking contrast against the field alone
+ * overstates it, which is the specific mistake this exists to prevent.
+ */
+export function glassOver(surface: string, background: string): string {
+  const parsed = parseRgb(surface);
+  if (!parsed) throw new Error(`Not an rgb() colour: ${surface}`);
+  return over(parsed.rgb, parsed.alpha, background);
+}

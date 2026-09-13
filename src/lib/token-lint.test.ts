@@ -29,26 +29,23 @@ suite('the rules themselves', () => {
     expect(lint('.a { padding: 13px; }')[0]?.rule).toBe('px');
   });
 
-  it('catches every spelling of a shadow, including inset and filter', () => {
-    expect(lint('.a { box-shadow: 0 1px 2px #000; }').some((v) => v.rule === 'shadow')).toBe(true);
-    expect(lint('.a { box-shadow: inset 0 0 0 1px red; }').some((v) => v.rule === 'shadow')).toBe(true);
-    expect(lint('.a { text-shadow: 0 1px 0 red; }').some((v) => v.rule === 'shadow')).toBe(true);
-    expect(lint('.a { filter: drop-shadow(0 1px 1px red); }').some((v) => v.rule === 'shadow')).toBe(true);
-  });
-
-  it('bans shadows in tokens.css too, where raw values are otherwise fine', () => {
-    const found = lint('.a { box-shadow: 0 1px 2px #000; }', true);
-    expect(found.map((v) => v.rule)).toEqual(['shadow']);
-  });
-
   it('allows raw values inside tokens.css', () => {
-    expect(lint(':root { --paper: #eff1f2; --space-4: 16px; }', true)).toEqual([]);
+    expect(lint(':root { --field: #070b10; --space-4: 16px; }', true)).toEqual([]);
+  });
+
+  it('no longer has an opinion about shadows', () => {
+    // DESIGN.md banned them; the current brief lifts the ban (Q-19). Written
+    // with tokens so the px rule, which still applies, does not fire instead
+    // and make this look like it passed for the wrong reason.
+    expect(
+      lint('.a { box-shadow: 0 0 0 var(--rule-width) var(--surface-edge); }'),
+    ).toEqual([]);
   });
 
   it('does not fail prose in comments that mentions a value', () => {
-    // The comments in this codebase explain 15px floors and #B4133F at 12%
+    // The comments in this codebase quote measured ratios and hex values
     // constantly. Linting them would make the rule unusable.
-    expect(lint('/* --ink-muted must not go below 15px, and #b4133f is 12% */\n.a { color: var(--ink); }')).toEqual([]);
+    expect(lint('/* --text-muted is 5.93:1 here, and #070b10 is the field */\n.a { color: var(--text); }')).toEqual([]);
   });
 
   it('allows the three declared breakpoints in a media query', () => {
