@@ -17,17 +17,15 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
-
----
-
-## QUEUE
-
 - **T-54** Is the build reproducible? Asset filenames are content hashes, so a
   build that is not deterministic quietly breaks caching and makes every
   deploy a full re-download. Never checked.
 
 ---
+
+---
+
+## QUEUE
 
 ## BLOCKED
 
