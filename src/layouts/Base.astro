@@ -45,6 +45,10 @@ const { title, description, noindex = false } = Astro.props;
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
+
+    {/* SVG only. It scales to every size a browser asks for, and an .ico would
+        mean checking in a rasterised copy that could drift from the tokens. */}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <Font cssVariable="--font-literata" preload />
     <slot name="head" />
   </head>
