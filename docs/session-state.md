@@ -85,12 +85,6 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
-
----
-
-## QUEUE
-
 - **T-55** `npm run verify` silently tests whatever is listening on port 4321.
   A dev server was running there and the whole browser suite ran against it —
   30 failures caused by Vite's client and the Astro dev toolbar, not by the
@@ -103,6 +97,10 @@ because everything left needs Kaung. Refill from `docs/phase.md` as B-1 to B-9
 land. Never queue Phase 3 without him.
 
 ---
+
+---
+
+## QUEUE
 
 ## BLOCKED
 
