@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-16** Responsive pass at 390, 768, 1440. No horizontal scroll, widget
-  usable at every width.
+Nothing.
 
 ---
 
@@ -83,6 +82,7 @@ history at `ec7ada9`.
 - **T-13** — Attribution view: single-flip counterfactual influence per attempt, top three ringed in --claim with a dimming second cue, toggled by a real button with aria-pressed, announced in the live region.
 - **T-14** — Load-time curve draw over --dur-slow, skipped entirely under reduced motion so the finished curve stands. Estimate updates become instant plus a static stroke-width highlight; all three CSS transitions get transition:none.
 - **T-15** — Synthetic-data label now sits inside the SVG at --ink-muted, so a screenshot or export carries it, with the fuller statement kept in the caption.
+- **T-16** — Verified at 360, 390, 768, 900, 1180 and 1440: no horizontal scroll anywhere. Fixed tap targets that scaled to 12px on a phone; they are now >=24px at every width.
 
 ---
 
@@ -104,4 +104,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - npm run check occasionally hangs past 120s. Re-running it alone completes in seconds. Not diagnosed; if it recurs, run it with a longer timeout rather than assuming a failure.
 - T-24 must lint SOURCE css, not built output: Tailwind's base layer legitimately mentions box-shadow (reset plus utility plumbing), so a built-CSS grep for 'shadow' always trips.
 - T-14: the load draw sets stroke-dashoffset from JS only, so JS-off gets the finished curve. There may be a brief flash of the complete curve before the module runs; T-19 should look for it.
+- T-16 measured, did not assume: circular hit areas scaled to 12px at 360px because the SVG scales. Hit targets are now full-slot rects, 24px at 360 and 27px at 390. @playwright/test plus chromium installed here; T-19 owns the committed harness.
 

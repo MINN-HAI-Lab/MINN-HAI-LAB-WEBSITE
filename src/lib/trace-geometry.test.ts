@@ -194,3 +194,34 @@ suite('blend', () => {
     }
   });
 });
+
+suite('hit targets', () => {
+  it('spans the full slot, so adjacent targets touch without overlapping', () => {
+    const geometry = layout(trace(SEQUENCE));
+    const usable = VIEW.width - VIEW.padX * 2;
+    expect(geometry.slotWidth).toBeCloseTo(usable / SEQUENCE.length, 10);
+
+    const gaps = geometry.marks
+      .slice(1)
+      .map((mark, i) => mark.x - geometry.marks[i]!.x);
+    for (const gap of gaps) expect(gap).toBeCloseTo(geometry.slotWidth, 10);
+  });
+
+  it('stays at or above 24 CSS pixels down to a 360px viewport', () => {
+    // The SVG scales to fit its container and never up. At 360px, after the
+    // page gutter and panel padding, it renders about 264px wide. A target has
+    // to survive that, which is what the first version did not: 32 units of
+    // circle became 12 physical pixels.
+    const geometry = layout(trace(SEQUENCE));
+    const scale = 264 / VIEW.width;
+    expect(geometry.slotWidth * scale).toBeGreaterThanOrEqual(24);
+    expect(VIEW.hitHeight * scale).toBeGreaterThanOrEqual(24);
+  });
+
+  it('keeps the hit target inside the viewBox and clear of the chart', () => {
+    const top = VIEW.marksY - VIEW.hitHeight / 2;
+    const bottom = VIEW.marksY + VIEW.hitHeight / 2;
+    expect(top).toBeGreaterThanOrEqual(0);
+    expect(bottom).toBeLessThan(VIEW.chartTop);
+  });
+});

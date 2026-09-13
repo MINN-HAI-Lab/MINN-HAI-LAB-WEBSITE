@@ -108,9 +108,17 @@ const altText =
       <g class="trace__marks" data-marks>
         {geometry.marks.map((mark) => (
           <g class="trace__mark-group" data-index={mark.index}>
-            {/* A larger transparent disc so the hit area clears the 24px
-                minimum without inflating the 20px mark itself. */}
-            <circle class="trace__mark-hit" cx={mark.x} cy={mark.y} r={16} />
+            {/* A transparent rectangle spanning the whole slot, so the hit
+                area clears the 24px WCAG minimum on a phone without
+                inflating the 20px mark itself. A circle scaled down to 12px
+                at 360px; this stays at 24. */}
+            <rect
+              class="trace__mark-hit"
+              x={mark.x - geometry.slotWidth / 2}
+              y={mark.y - VIEW.hitHeight / 2}
+              width={geometry.slotWidth}
+              height={VIEW.hitHeight}
+            />
             {/* Attribution ring. Drawn always, revealed only in the
                 attribution view. --claim is correct here and only here among
                 the marks: the highlight is the model asserting which attempts

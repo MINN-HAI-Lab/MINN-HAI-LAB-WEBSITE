@@ -23,8 +23,23 @@ export const VIEW = {
   height: 240,
   /** Horizontal inset so marks and end points do not clip. */
   padX: 30,
-  /** Centre line of the row of attempt marks. */
-  marksY: 26,
+  /**
+   * Centre line of the row of attempt marks.
+   *
+   * Sits low enough to give each mark a full-slot hit target above the chart
+   * without that target leaving the viewBox. See hitHeight.
+   */
+  marksY: 34,
+  /**
+   * Height of a mark's hit target, in user units.
+   *
+   * The SVG scales down on narrow screens and takes the hit areas with it. At
+   * 360px the drawing renders at roughly 0.38 of nominal, so a 24 CSS pixel
+   * target — the WCAG 2.5.8 minimum — needs about 64 units here. Measured
+   * rather than guessed: the first version used a 32-unit circle and produced
+   * 12px targets on a phone.
+   */
+  hitHeight: 64,
   /** Top of the plotted area, y for an estimate of 1. */
   chartTop: 76,
   /** Bottom of the plotted area, y for an estimate of 0. */
@@ -51,6 +66,8 @@ export interface CurvePoint {
 
 export interface TraceGeometry {
   marks: MarkPoint[];
+  /** Horizontal distance between adjacent slots, in user units. */
+  slotWidth: number;
   curve: CurvePoint[];
   /** `d` for the curve path. */
   curvePath: string;
@@ -168,6 +185,7 @@ export function layout(result: TraceResult): TraceGeometry {
 
   return {
     marks,
+    slotWidth: count > 0 ? (VIEW.width - VIEW.padX * 2) / count : VIEW.width - VIEW.padX * 2,
     curve,
     curvePath: polyline(curve),
     bandPath,
