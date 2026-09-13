@@ -85,18 +85,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-55** `npm run verify` silently tests whatever is listening on port 4321.
-  A dev server was running there and the whole browser suite ran against it —
-  30 failures caused by Vite's client and the Astro dev toolbar, not by the
-  site. Worse than the noise: if those tests had happened to pass, verify
-  would have reported green while testing a build nobody shipped. Give the
-  harness its own port and make it refuse to run against a dev server.
-
-Once T-55 is done the queue is empty again, and not because the work is done —
-because everything left needs Kaung. Refill from `docs/phase.md` as B-1 to B-9
-land. Never queue Phase 3 without him.
-
----
+Nothing.
 
 ---
 
@@ -187,6 +176,7 @@ history at `ec7ada9`.
 - **T-52** — Font-failure path covered in all three engines: with every woff2 aborted, text still renders at the token sizes, nothing overflows, and the trace still draws and still toggles.
 - **T-53** — Three prototypes of the trace built from the real model and tokens — separated rows as built, marks on the curve, and stepped belief — with an honest comparison in Q-18 for Kaung to pick from.
 - **T-54** — Two clean builds produce byte-identical output. Recorded in the handbook with the command to re-check; not automated, since it means building twice every run.
+- **T-55** — Browser suite moved to port 4331 and now refuses to run against a dev server, with a message naming what it found and what to do. Verified by pointing it at the live dev server.
 
 ---
 
@@ -227,4 +217,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - Reading an exit code after a pipe reports the LAST command in the pipeline, not the first. 'npm run verify | tail' always looks like it exited 0. Redirect to a file and check the status, or use PIPESTATUS.
 - T-51: D-020 claimed Firefox cannot transition the SVG d property. Measured, it is the opposite — Chromium and Firefox both can, WebKit cannot. The decision survives because Safari is the one that matters, but the premise was asserted, not tested, and a Chromium-only suite could never have caught it.
 - T-53: prototypes/ is gitignored per docs/plan.md, so the three prototypes, their README and their generator live on disk only. If the working copy is lost they go with it; 'node --experimental-strip-types prototypes/generate.mjs' rebuilds them from the real model and tokens.
+- T-55: the browser suite talks to whatever holds its port. A dev server on 4321 produced 30 failures that looked like regressions and were not. The harness now uses 4331 and aborts in globalSetup if the response contains Vite or dev-toolbar markers.
 

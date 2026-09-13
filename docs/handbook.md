@@ -130,6 +130,13 @@ Run `npm run verify`. It is the type check, the unit tests, the token lint,
 the contrast check, a production build and the whole browser suite, and it
 exits non-zero if any of them fails.
 
+It serves the build on port 4331 rather than Astro's default 4321, so an
+editor's dev server does not collide with it, and it refuses to run at all if
+what answers looks like a dev server. That guard exists because the suite once
+ran against a dev server for a full pass: thirty failures caused by Vite's
+client rather than by the site — and had the numbers happened to fit, it would
+have reported green while testing a build nobody was going to ship.
+
 That covers most of the list below mechanically:
 
 - ~~Keyboard through the whole page including the trace widget.~~

@@ -10,11 +10,11 @@
     "check": "astro check",
     "test": "vitest run",
     "check:contrast": "vitest run src/lib/contrast.test.ts",
-    "shots": "npm run build && astro preview --port 4321 && npm run e2e; s=$?; astro preview stop >/dev/null 2>&1; exit $s",
+    "shots": "npm run build && astro preview --port 4331 && npm run e2e; s=$?; astro preview stop >/dev/null 2>&1; exit $s",
     "lint:tokens": "vitest run src/lib/token-lint.test.ts",
     "prebuild": "vitest run src/lib/token-lint.test.ts src/lib/contrast.test.ts",
     "e2e": "playwright test",
-    "verify": "npm run check && npm test && npm run build && astro preview --port 4321 && npm run e2e; s=$?; astro preview stop >/dev/null 2>&1; exit $s"
+    "verify": "npm run check && npm test && npm run build && astro preview --port 4331 && npm run e2e; s=$?; astro preview stop >/dev/null 2>&1; exit $s"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

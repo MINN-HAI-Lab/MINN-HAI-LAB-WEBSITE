@@ -11,6 +11,10 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './src/e2e',
+
+  /* Refuses to run against a dev server. See the file for why that is worth a
+     hard failure rather than a warning. */
+  globalSetup: './src/e2e/global-setup.ts',
   outputDir: './test-results',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -18,7 +22,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'line' : [['list']],
 
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: 'http://localhost:4331',
     /* Motion is ON by default, and that matters.
      *
      * This previously passed --force-prefers-reduced-motion to Chromium for
