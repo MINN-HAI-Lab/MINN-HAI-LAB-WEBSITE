@@ -158,8 +158,12 @@ test.describe('with JavaScript disabled', () => {
     await expect(page.locator('[data-sentence]')).toContainText('per cent');
 
     // And it must not pretend to be interactive.
-    await expect(page.locator('[tabindex]')).toHaveCount(0);
-    await expect(page.locator('[role="button"]')).toHaveCount(0);
+    //
+    // Scoped to the widget on purpose. <main> carries tabindex="-1" so the
+    // skip link can move focus to it, which is a landmark concern and has
+    // nothing to do with whether the trace looks clickable.
+    await expect(page.locator('.trace [tabindex]')).toHaveCount(0);
+    await expect(page.locator('.trace [role="button"]')).toHaveCount(0);
     await expect(page.locator('[data-controls]')).toBeHidden();
     await expect(page.locator('[data-instructions]')).toBeHidden();
 

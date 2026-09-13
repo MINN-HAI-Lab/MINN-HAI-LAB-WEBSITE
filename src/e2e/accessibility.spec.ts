@@ -127,7 +127,9 @@ test.describe('axe: home without the site script', () => {
     await page.evaluate(() => document.fonts.ready);
 
     // Confirm the upgrade really did not run, or this audits the wrong page.
-    await expect(page.locator('[tabindex]')).toHaveCount(0);
+    // Scoped to the widget: <main> always carries tabindex="-1" as the skip
+    // link's target.
+    await expect(page.locator('.trace [tabindex]')).toHaveCount(0);
     await expect(page.locator('[data-controls]')).toBeHidden();
 
     const violations = await analyse(page);
