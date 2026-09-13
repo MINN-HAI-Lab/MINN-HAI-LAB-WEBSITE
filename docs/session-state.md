@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-29** Open Graph and Twitter card metadata, plus a share image. The
-  image should be the trace, since that is the thing the site is about, and it
-  can be rendered at build time from the same geometry module.
+Nothing.
 
 ---
 
@@ -99,6 +97,7 @@ history at `ec7ada9`.
 - **T-25** — axe-core over both built pages plus the attribution state and the script-free rendering: zero WCAG 2.2 A/AA violations. Detection verified by mutation.
 - **T-27** — Per-page title and description, noindex on the specimen. No canonical or absolute URL anywhere, because the domain is undecided and a placeholder would be a fabrication.
 - **T-28** — Favicon generated from the tokens as a rising --claim curve on --paper: the site's display idea at its smallest, no invented mark, no letter that would depend on the unconfirmed lab name.
+- **T-29** — Open Graph and Twitter tags that work without an origin, plus /share.svg generated from the real trace geometry. og:image and og:url stay out until there is a domain.
 
 ---
 

@@ -296,3 +296,32 @@ metadata is correct at whatever origin the site eventually gets.
 > This blocks the sitemap (T-30) and the absolute half of the Open Graph tags
 > (T-29) outright. The moment there is a domain, both are a one-line config
 > change.
+
+---
+
+## Q-14 — The share image exists but nothing points at it
+
+**Raised:** T-29, 2026-09-13. **Routed around:** built it, left it unreferenced.
+
+`/share.svg` is generated at build time from the same geometry module and the
+same synthetic sequence as the page, so a link preview shows the picture
+someone actually lands on rather than a separate illustration that could
+drift. 1200x630, the size crawlers expect.
+
+Nothing references it, for two reasons.
+
+`og:image` must be an absolute URL and there is no domain (Q-13). A relative
+`og:image` is silently ignored by every crawler, so adding one would look
+finished and do nothing.
+
+And it is SVG. Most crawlers want PNG or JPEG, which means rasterising during
+the build, which means a headless browser in the build pipeline. Playwright is
+already a dev dependency so this is doable, but it is not worth wiring up for
+an image that cannot be referenced yet.
+
+Literata is also not embedded in it, so it currently falls back to Georgia.
+Embedding the latin subset would add roughly 110KB of base64. Worth doing at
+the same time as the rasterisation, not before.
+
+> Three small jobs, all unblocked by one answer: the domain. Give me that and
+> og:image, og:url, the PNG and the embedded font all land together.
