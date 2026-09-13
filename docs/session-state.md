@@ -17,13 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-38** TODO audit. Every visible `TODO:` in the built output should name
-  what is missing and who supplies it, and `verify` should list them rather
-  than let one ship unnoticed.
-
-When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
-
----
+Nothing.
 
 ---
 
@@ -52,6 +46,9 @@ history at `ec7ada9`.
 - **B-5** Full funder names, and whether grant numbers appear.
 - **B-6** Accept or reject D-001 to D-013. The Phase 0 exit gate.
 - **B-7** Accept or reject D-004, the trace widget as hero.
+- **B-9** The contact email address. `docs/plan.md` lists it as supplied but
+  it is not in the repo, and the footer is the one place the site promises it.
+  Visible as a TODO on every page until it lands.
 - **B-8** The domain. Open question 10 in `design/decisions.md`, with D-008
   tying hosting to it. It now blocks three finished-but-inert things: the
   sitemap (configured and verified, emits nothing without `site`), canonical
@@ -99,6 +96,7 @@ history at `ec7ada9`.
 - **T-35** — Island rules enforced: only the home page ships script, the payload stays well under the 100KB click-to-load threshold, and the static trace is verified to be real geometry rather than a placeholder.
 - **T-36** — Palette enforced in the CSS the browser downloads: only the six DESIGN.md colours, and no prefers-color-scheme rule. Caught a live regression where a test comment re-created the dark-mode utility.
 - **T-37** — npm run verify runs the type check, unit tests, token lint, contrast check, a production build and the browser suite, and propagates a failure's exit code past the preview-server cleanup. Handbook checklist rewritten around it.
+- **T-38** — TODO audit: every visible marker must name what is missing, who supplies it and a tracker. Prints the inventory on every run. Found the footer's contact TODO had no tracker; recorded as B-9.
 
 ---
 

@@ -147,6 +147,8 @@ Still needs a person:
 
 - Publications rendered match the data file exactly. Nothing can check this
   but you; it is the failure mode the rest of this handbook is about.
-- No `TODO:` markers left visible in built output. Deciding they are all
-  resolved is a judgement, not a check.
+- No `TODO:` markers left visible in built output. `npm run verify` prints
+  the full inventory and fails if any marker does not name what is missing,
+  who supplies it, and its tracker — but deciding they are all resolved is a
+  judgement, not a check.
 - Look at the screenshots. `npm run shots` writes them to `screenshots/`.
