@@ -1,0 +1,105 @@
+---
+/**
+ * People.
+ *
+ * A full-bleed group photograph, then five portraits in a row that breaks to
+ * two-up on a phone. No circles, no cards, no hover lift. Names and roles are
+ * set in type under each portrait, never laid over the face.
+ *
+ * There are no names and no photographs yet, so every slot renders its gap:
+ * a neutral field at the right aspect ratio, and a visible TODO saying what is
+ * missing and who supplies it. That is the correct output, not a shortfall to
+ * be dressed up. The layout is built at full size around the real thing, so
+ * when the photographs arrive they drop in without a redesign.
+ */
+import Base from '../layouts/Base.astro';
+import { PEOPLE, unnamedCount } from '../data/people.ts';
+
+const missing = unnamedCount();
+---
+
+<Base
+  title="People — MINN HAI Lab"
+  description="The people of the MINN HAI Lab."
+>
+  <!-- The group photograph. Full-bleed, and currently an empty field of the
+       right shape, which is what an honest placeholder looks like. -->
+  <section class="bleed group">
+    <div class="group__frame" role="img" aria-label="A group photograph of the lab will appear here. It has not been supplied yet.">
+      <p class="group__todo todo">
+        TODO: a group photograph of the lab, landscape, at least 2400px wide.
+        It sits full-bleed at the top of this page, so faces should sit in the
+        middle third — the top and bottom are cropped at wide viewports.
+        Kaung to supply. Tracked as B-6.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="page">
+      <h1 class="type-display">People</h1>
+
+      <p class="type-body measure">
+        The lab has five members.
+        {
+          missing === PEOPLE.length
+            ? ' None of them are named here yet: the names, roles and photographs have not been supplied, and this site does not invent either.'
+            : ` ${missing} of the five are not named here yet.`
+        }
+      </p>
+
+      <p class="type-body type-muted measure">
+        Each slot below shows what it is waiting for. They fill in one at a
+        time, as people consent to appearing and supply a name, a role and a
+        link.
+      </p>
+
+      {/* Same section as the paragraph above it, not a new one. Two adjacent
+          sections on the same ground pay the section rhythm twice, and at
+          desktop width that put nearly four hundred pixels of nothing between
+          a sentence and the thing it introduces. */}
+      <ul class="people">
+        {
+          PEOPLE.map((person, index) => (
+            <li class="people__slot">
+              {/* 4:5, the same crop for all five, so the row reads as one
+                  photograph taken five times rather than five photographs. */}
+              <div
+                class="people__portrait"
+                role="img"
+                aria-label={
+                  person.name
+                    ? `Portrait of ${person.name}.`
+                    : `Portrait slot ${index + 1}. No photograph has been supplied.`
+                }
+              >
+                <span class="people__index label" aria-hidden="true">{index + 1}</span>
+              </div>
+
+              {/* Name and role in type, under the portrait. Never over it: a
+                  caption laid across a face is a magazine device, and this is
+                  a list of people to email. */}
+              <p class="people__name">
+                {person.name ?? <span class="people__unnamed">Not named yet</span>}
+              </p>
+              <p class="people__role label">{person.role ?? 'Role not supplied'}</p>
+              <p class="people__todo todo">TODO: {person.todo}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--raised" data-reveal>
+    <div class="page">
+      <h2 class="type-title">Why this page is empty</h2>
+      <p class="type-body measure">
+        A lab site with invented members is worse than one with none. Every
+        name here will be a real person who agreed to be listed, with a role
+        they recognise and a link they chose. Until then the slots stay open
+        and say so.
+      </p>
+    </div>
+  </section>
+</Base>

@@ -232,7 +232,11 @@
     --opsz-body: 18;
     --opsz-small: 15;
 
-    --rhythm-section: var(--space-20);
+    /* Was --space-20 (192px), set when the site was one page whose sections
+       were all dense. On the content pages, where a section can be a heading
+       and one paragraph, 192px top and bottom meant nearly four hundred pixels
+       of nothing between two sentences. */
+    --rhythm-section: var(--space-16);
   }
 }
 

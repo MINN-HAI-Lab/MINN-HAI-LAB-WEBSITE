@@ -1,0 +1,91 @@
+---
+/**
+ * Learning.
+ *
+ * StatLab today, and a page shaped to take more than StatLab tomorrow. The
+ * brief asks for it to be "built to take more resources later", so the list is
+ * a list from the start — one entry in a structure that holds many, rather
+ * than a single callout that would have to be dismantled to add a second.
+ *
+ * Nothing here is invented: StatLab's name, link and one-line description come
+ * from the brief. There is no course list, no syllabus and no teaching
+ * material, because none was supplied.
+ */
+import Base from '../layouts/Base.astro';
+import { LAB_NAME, STATLAB } from '../data/navigation.ts';
+
+/**
+ * The teaching resources, as a list of one.
+ *
+ * `docs/plan.md` files teaching material under "missing, does not block
+ * launch". When there is a second entry it goes here and the page needs no
+ * other change.
+ */
+const RESOURCES = [
+  {
+    name: STATLAB.name,
+    description: STATLAB.description,
+    href: STATLAB.href,
+    note:
+      'Runs in the browser. Nothing to install, nothing to sign in to, and it ' +
+      'works on a phone.',
+  },
+];
+---
+
+<Base
+  title={`Learning — ${LAB_NAME}`}
+  description="Teaching resources from the lab, starting with StatLab, an interactive introduction to probability and statistics."
+>
+  <section class="section">
+    <div class="page">
+      <h1 class="type-display">Learning</h1>
+
+      <p class="type-body measure">
+        Things the lab has built for people learning the material rather than
+        reading about the research. There is one so far.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--raised" data-reveal>
+    <div class="page">
+      <ul class="resources">
+        {
+          RESOURCES.map((resource) => (
+            <li class="resources__item">
+              <div class="resources__text">
+                <h2 class="type-title">{resource.name}</h2>
+                <p class="type-body measure">{resource.description}</p>
+                <p class="type-body type-muted measure">{resource.note}</p>
+              </div>
+              <p class="resources__action">
+                <a class="button" href={resource.href} rel="noopener">
+                  Open {resource.name}
+                </a>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="page">
+      <h2 class="type-title">More to come</h2>
+
+      <p class="type-body measure">
+        This page is built as a list so a second resource is an entry rather
+        than a redesign. Course notes, exercise sets and further interactive
+        pieces all fit here as they arrive.
+      </p>
+
+      <p class="todo measure">
+        TODO: teaching or course material beyond StatLab, if there is any that
+        should be public. `docs/plan.md` files this as missing but not blocking
+        launch. Kaung to supply. Tracked as B-10.
+      </p>
+    </div>
+  </section>
+</Base>

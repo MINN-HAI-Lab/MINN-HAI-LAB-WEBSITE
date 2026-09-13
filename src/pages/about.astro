@@ -1,0 +1,144 @@
+---
+/**
+ * About.
+ *
+ * Mission, funding, contact. All three are facts about the lab, and all three
+ * are missing from the repo, so all three are visible gaps with the exact
+ * question attached.
+ *
+ * `docs/plan.md` lists the mission paragraph, the funder list and the contact
+ * email under "already supplied, needs formatting only" — but none of them are
+ * in this repository, so there is nothing to format. It also says, of the
+ * funder names specifically, that they "need checking before publication".
+ * Publishing an unverified funder name would be worse than publishing none:
+ * a funder is a third party who did not agree to be credited wrongly.
+ */
+import Base from '../layouts/Base.astro';
+import { LAB_NAME, RESEARCH_AREAS } from '../data/navigation.ts';
+import { PUBLICATIONS } from '../data/publications.ts';
+import { withBase } from '../lib/paths.ts';
+
+const years = PUBLICATIONS.map((p) => p.year);
+const earliest = Math.min(...years);
+const latest = Math.max(...years);
+
+/**
+ * Small counts read as words in prose, not as digits.
+ *
+ * A sentence that says "works on 4 things" looks like a template that did not
+ * finish rendering. The list is four items long and will not grow past ten, so
+ * this covers what it needs to and nothing more.
+ */
+const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const inWords = (n: number): string => WORDS[n] ?? String(n);
+
+/* Joined with their capitals intact. Lowercasing them turned "Bayesian" into
+   "bayesian", which is a proper name with someone's surname in it. */
+const areaNames = RESEARCH_AREAS.map((area) => area.name).join(', ');
+---
+
+<Base
+  title={`About — ${LAB_NAME}`}
+  description="What the lab works on, how it is funded, and how to get in touch."
+>
+  <section class="section">
+    <div class="page">
+      <h1 class="type-display">About</h1>
+
+      <p class="type-body measure">
+        {LAB_NAME} works on {inWords(RESEARCH_AREAS.length)} things: {areaNames}.
+        Two of them have published work behind them, going back to {earliest}{' '}
+        and as recent as {latest}; two are directions rather than programmes.
+        The <a class="link" href={withBase('/research')}>research page</a> has a
+        working version of each.
+      </p>
+
+      <p class="todo measure">
+        TODO: the mission paragraph. `docs/plan.md` lists it as already
+        supplied, but the text is not in this repository, so there is nothing
+        to set. Two or three sentences, in the lab's own words, saying what the
+        work is for. Kaung to supply. Tracked as B-3.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--raised" data-reveal>
+    <div class="page">
+      <h2 class="type-title">Where the lab is</h2>
+      <p class="todo measure">
+        TODO: institutional affiliation. `docs/plan.md` lists this as blocking
+        launch — a lab site that does not say which institution it belongs to
+        is hard to take seriously, and guessing one would be a fabricated
+        affiliation on a public academic page. Kaung to supply. Tracked as B-7.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="page">
+      <h2 class="type-title">Funding</h2>
+
+      <p class="type-body measure">
+        This work is supported by grants that are not yet listed here. The
+        source list the site was built from gives them in an abbreviated form
+        that could not be verified, and a funder credited under the wrong name
+        is a third party misrepresented, not a typo.
+      </p>
+
+      <p class="todo measure">
+        TODO: verified funder names, in full, with grant numbers where they
+        should appear. The supplied list reads{' '}
+        <span class="quoted">Uni Kyoto-Inria associate team grant</span> and{' '}
+        <span class="quoted">Uni Library Rec. Syst.</span>, which look
+        abbreviated or partially redacted. `docs/plan.md` says these need
+        checking before publication. Kaung to supply. Tracked as B-9.
+      </p>
+
+      <p class="type-body type-muted measure">
+        No logo wall. Funders are acknowledged in plain text, which is what
+        most of them ask for.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--raised" data-reveal>
+    <div class="page">
+      <h2 class="type-title">Contact</h2>
+
+      <p class="todo measure">
+        TODO: the contact email address. `docs/plan.md` lists it as supplied
+        but it is not in this repository. It appears here and in the footer of
+        every page, so it only needs supplying once. Kaung to supply. Tracked
+        as B-2.
+      </p>
+
+      <p class="type-body measure">
+        Until then: the{' '}
+        <a class="link" href={withBase('/people')}>people page</a> says who is
+        here, and the{' '}
+        <a class="link" href={withBase('/research')}>research page</a> says what
+        they work on.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" data-reveal>
+    <div class="page">
+      <h2 class="type-title">About this site</h2>
+
+      <p class="type-body measure">
+        Every publication on this site comes from a list the lab supplied, and
+        nothing has been added to it. Where a field is missing — authors,
+        links, a name, a photograph — the page says so rather than filling it
+        with something plausible. The {inWords(RESEARCH_AREAS.length)} artefacts
+        on the research page each state whether what they show is real,
+        synthetic or illustrative.
+      </p>
+
+      <p class="type-body type-muted measure">
+        It is a static site: no tracking, no analytics, no cookies, no fonts or
+        scripts loaded from anywhere else.
+      </p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,131 @@
+/* ---------------------------------------------------------------------------
+   people.css — the people page.
+
+   Five portraits in a row, breaking to two-up on a phone. Deliberately not
+   cards: no panel, no radius, no shadow, no hover lift. A portrait is a
+   rectangle of photograph with a name under it, which is what a person in a
+   list of people looks like.
+
+   The row is built at full size around photographs that do not exist yet. The
+   empty slots are the same shape the real ones will be, so nothing moves when
+   they arrive.
+--------------------------------------------------------------------------- */
+
+.people {
+  list-style: none;
+  padding: 0;
+  /* Sits in the same section as the paragraph introducing it, so it needs a
+     heading-sized break rather than the paragraph-sized one the flow rule
+     would give it. */
+  margin: var(--space-10) 0 0;
+  display: grid;
+  /* Two-up on a phone, five across from the point five 4:5 portraits stop
+     being too narrow to show a face. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6) var(--space-4);
+}
+
+@media (width >= 640px) {
+  .people {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .people {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-4);
+  }
+}
+
+.people__slot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* The portrait itself. 4:5 for all five, same crop, same lighting when the
+   photographs land — a row of portraits taken under one set of conditions
+   reads as a group, and five different crops read as a collage. */
+.people__portrait {
+  aspect-ratio: 4 / 5;
+  background-color: var(--field-2);
+  border: var(--rule-width) solid var(--surface-edge);
+  border-radius: var(--radius-0);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: var(--space-3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* A hairline cross through the empty field: enough to read as "a frame with
+   nothing in it" rather than as a design element that is meant to be there. */
+.people__portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    to bottom right,
+    transparent calc(50% - var(--rule-width)),
+    var(--grid) 50%,
+    transparent calc(50% + var(--rule-width))
+  );
+  pointer-events: none;
+}
+
+.people__index {
+  color: var(--text-muted);
+  position: relative;
+  z-index: 1;
+}
+
+.people__name {
+  font-family: var(--font-serif);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
+  color: var(--text);
+  margin: 0;
+}
+
+.people__unnamed {
+  color: var(--text-muted);
+}
+
+.people__role {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.people__todo {
+  margin-block-start: var(--space-1);
+}
+
+/* -- The group photograph -------------------------------------------------- */
+
+/* Full-bleed, and short enough that it does not eat a phone screen before the
+   page has said what it is. */
+.group__frame {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  max-block-size: 60vh;
+  background-color: var(--field-2);
+  border-block-end: var(--rule-width) solid var(--surface-edge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+}
+
+@media (width >= 900px) {
+  .group__frame {
+    aspect-ratio: 3 / 1;
+  }
+}
+
+.group__todo {
+  max-width: var(--measure);
+  text-align: start;
+}

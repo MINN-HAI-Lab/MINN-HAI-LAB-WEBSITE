@@ -92,8 +92,26 @@ main {
   border-block-end: var(--rule-width) solid var(--grid);
 }
 
-.section > :is(h1, h2, h3) + * {
+/* Vertical rhythm inside a section.
+
+   Content sits in a `.page` column, so the rhythm has to reach one level
+   deeper than the section itself — the first version of this rule only matched
+   direct children of `.section` and every paragraph on the content pages ran
+   straight into the next one with no space at all. It looked like a stylesheet
+   that had failed to load. */
+.section > :is(h1, h2, h3) + *,
+.section > .page > :is(h1, h2, h3) + * {
   margin-block-start: var(--rhythm-heading);
+}
+
+.section > .page > * + * {
+  margin-block-start: var(--rhythm-paragraph);
+}
+
+/* Columns that set their own gap opt out: a flex gap and a margin add up, and
+   the result is a section with twice the air it was designed with. */
+.section > .page:is(.area, .statlab, .hero__inner) > * + * {
+  margin-block-start: 0;
 }
 
 .prose > p + p {
@@ -343,6 +361,25 @@ main:focus-visible {
 
 .site-footer__inner {
   padding-block: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+@media (width >= 640px) {
+  .site-footer__inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+}
+
+.site-footer__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
 }
 
 .site-footer__name {
@@ -353,8 +390,46 @@ main:focus-visible {
   margin: 0;
 }
 
+.site-footer__nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+}
+
+.site-footer__link {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-tracking);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.site-footer__link:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule-width);
+  text-underline-offset: var(--underline-offset);
+}
+
+.site-footer__link:focus-visible {
+  outline: var(--focus-width) solid var(--text);
+  outline-offset: var(--focus-offset);
+  color: var(--text);
+}
+
+.site-footer__note {
+  color: var(--text-muted);
+  margin: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .site-header__link {
+  .site-header__link,
+  .site-footer__link {
     transition: none;
   }
 }
@@ -392,4 +467,71 @@ main:focus-visible {
   border-block-end: var(--rule-width) solid var(--grid);
   padding-block: var(--space-4);
   color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Learning resources
+
+   A list of one today, and a list of many later — which is why it is a list
+   and not a callout. Each entry is a heading, a description and a way in.
+--------------------------------------------------------------------------- */
+
+.resources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.resources__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-block-end: var(--space-8);
+  border-block-end: var(--rule-width) solid var(--grid);
+}
+
+.resources__item:last-child {
+  padding-block-end: 0;
+  border-block-end: none;
+}
+
+.resources__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.resources__action {
+  margin: 0;
+}
+
+@media (width >= 900px) {
+  .resources__item {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+
+  .resources__action {
+    flex: none;
+  }
+}
+
+/* A string quoted from a source document, inside a TODO. Not a blockquote —
+   it is a fragment being pointed at, not a passage being cited. */
+.quoted {
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.quoted::before {
+  content: "\201C";
+}
+
+.quoted::after {
+  content: "\201D";
 }
