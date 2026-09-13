@@ -119,3 +119,56 @@ test.describe('islands: the trace renders statically', () => {
     expect(text).not.toMatch(/requires javascript|enable javascript|loading/i);
   });
 });
+
+test.describe('islands: the trace fails safe', () => {
+  test('a throwing upgrade leaves the static rendering, not a half-built one', async ({
+    page,
+  }) => {
+    // Break something the upgrade depends on before the module runs. Anything
+    // that throws mid-upgrade would otherwise leave some marks interactive and
+    // some not, with a pointer cursor promising behaviour that is gone.
+    await page.addInitScript(() => {
+      const realAdd = Element.prototype.addEventListener;
+      let calls = 0;
+      Element.prototype.addEventListener = function (...args: unknown[]) {
+        calls += 1;
+        // Let the first few through, then fail: a partial upgrade is the case
+        // worth testing, not a total one.
+        if (calls === 4) throw new Error('deliberate failure');
+        return realAdd.apply(this, args as never);
+      } as typeof Element.prototype.addEventListener;
+    });
+
+    const errors: string[] = [];
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+
+    // It said so rather than failing silently.
+    expect(
+      errors.some((e) => e.includes('could not be made interactive')),
+      'the failure should be reported to the console',
+    ).toBe(true);
+
+    // And what is left is the static rendering, intact.
+    await expect(page.locator('.trace [tabindex]')).toHaveCount(0);
+    await expect(page.locator('.trace [role="button"]')).toHaveCount(0);
+    await expect(page.locator('[data-controls]')).toBeHidden();
+    await expect(page.locator('[data-instructions]')).toBeHidden();
+    await expect(page.locator('.trace__svg')).toHaveAttribute('role', 'img');
+    await expect(page.locator('.trace__svg')).toHaveAttribute('aria-label', /Knowledge trace/);
+
+    const cursor = await page.evaluate(
+      () => getComputedStyle(document.querySelector('.trace__mark-group')!).cursor,
+    );
+    expect(cursor, 'marks must not promise a click that will not happen').not.toBe('pointer');
+
+    // The drawing itself is still real.
+    const d = await page.locator('.trace__curve').getAttribute('d');
+    expect(d?.length ?? 0).toBeGreaterThan(50);
+  });
+});

@@ -17,10 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-46** Make the trace island fail safe. The upgrade script runs
-  unguarded: if any part of it throws, the marks are left half-converted —
-  some interactive, some not, with a pointer cursor promising behaviour that
-  is gone. Failing back to the static rendering is strictly better.
+Nothing.
 
 ---
 
@@ -114,6 +111,7 @@ history at `ec7ada9`.
 - **T-43** — Dropped the font preload: it forced both subsets down for 152.8KB where the browser needs one at 83.8KB. Layout shift stays at zero. Covered by a test that fails if a second font is fetched.
 - **T-44** — Appended D-014 to D-021 as proposed: the favicon, TODO markers as content, target sizing in rendered pixels, the attribution measure, text outside the drawing, navigation showing only what exists, JS interpolation over CSS transitions, and no font preload.
 - **T-45** — First visit measured at 94.4KB, 83.8KB of it Literata and 10.6KB the site's own. Recorded in the handbook with a 120KB total and 25KB own-code budget enforced by verify.
+- **T-46** — The upgrade now runs guarded, and a failure reverts to the static rendering: roles, tabindex, cursor, controls and dash state all restored. Tested with an injected mid-upgrade throw.
 
 ---
 
