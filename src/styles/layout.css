@@ -256,9 +256,14 @@ main:focus-visible {
 /* CLAUDE.md: a visible gap is correct, a plausible fabrication is a serious
    bug. These are meant to be seen. --text on a raised field with a heavy
    leading rule; never --signal, which means a model asserted something. */
+/* No margin of its own. Every place a TODO appears is a column that already
+   sets its own spacing — a flex gap in the hero, the footer and a people slot,
+   the flow rhythm on the content pages — and a margin on top of a gap is the
+   two adding up. In the hero that made seventy pixels of nothing between two
+   short blocks. */
 .todo {
   display: block;
-  margin-block: var(--space-5);
+  margin-block: 0;
   padding: var(--space-4);
   background-color: var(--field-2);
   border-inline-start: calc(var(--rule-width) * 3) solid var(--text-muted);

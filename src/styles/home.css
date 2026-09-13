@@ -21,11 +21,39 @@
 
 @media (width >= 900px) {
   .hero {
-    padding-block: var(--space-12) var(--rhythm-section);
+    padding-block: var(--space-10) var(--rhythm-section);
   }
 
   .hero__inner {
     gap: var(--space-10);
+  }
+}
+
+/* Two columns, once there is room for both.
+
+   The brief puts one live artefact in the hero, and stacked it sat below the
+   fold behind two TODO blocks — so the first thing anyone saw was a list of
+   what is missing rather than the thing that works. Side by side, the trace is
+   on screen immediately and the gaps are beside it rather than in front of it.
+
+   Not attempted below 1180px: the trace needs about six hundred pixels before
+   ten attempts stop crowding, and a narrower column would cost more than the
+   arrangement gains. */
+@media (width >= 1180px) {
+  .hero__inner {
+    flex-direction: row;
+    align-items: start;
+    gap: var(--space-10);
+  }
+
+  .hero__text {
+    flex: 0 1 var(--hero-text);
+    min-width: 0;
+  }
+
+  .hero__inner > .artefact {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }
 

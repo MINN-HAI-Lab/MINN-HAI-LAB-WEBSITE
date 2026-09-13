@@ -177,6 +177,10 @@
   /* -- Layout ------------------------------------------------------------- */
   --measure: 66ch;
   --page-max: 1180px;
+  /* The text column beside the hero artefact. Wide enough for the title to
+     break where it should and for a TODO to hold four lines, narrow enough to
+     leave the trace the room it needs. */
+  --hero-text: 360px;
   --margin-col: 220px;
   --gutter: var(--space-6);
 
