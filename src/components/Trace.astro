@@ -62,6 +62,17 @@ const altText =
     >
       <title>Knowledge trace for {skill}</title>
 
+      {/* DESIGN.md: "Label the synthetic data visibly inside the widget."
+          Inside the SVG, not merely beside it, so that a screenshot or an
+          exported copy of the graphic carries the label with it. The caption
+          below states it in full; this is aria-hidden so a screen reader is
+          not told twice. */}
+      <text
+        class="trace__stamp"
+        x={VIEW.width - VIEW.padX}
+        y={VIEW.height - 8}
+        aria-hidden="true">Synthetic data</text>
+
       {/* Baseline. A hairline, decorative, so --rule is the right weight. */}
       <line
         class="trace__axis"

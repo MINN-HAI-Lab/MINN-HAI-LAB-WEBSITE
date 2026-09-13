@@ -17,7 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-15** Visible label stating the data is synthetic.
+Nothing.
 
 ---
 
@@ -83,6 +83,7 @@ history at `ec7ada9`.
 - **T-12** — Polite role=status live region, empty at load, populated after each toggle with the attempt that changed plus the new estimate. Debounced by the animation duration.
 - **T-13** — Attribution view: single-flip counterfactual influence per attempt, top three ringed in --claim with a dimming second cue, toggled by a real button with aria-pressed, announced in the live region.
 - **T-14** — Load-time curve draw over --dur-slow, skipped entirely under reduced motion so the finished curve stands. Estimate updates become instant plus a static stroke-width highlight; all three CSS transitions get transition:none.
+- **T-15** — Synthetic-data label now sits inside the SVG at --ink-muted, so a screenshot or export carries it, with the fuller statement kept in the caption.
 
 ---
 

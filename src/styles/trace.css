@@ -47,6 +47,20 @@
   text-anchor: end;
 }
 
+/* -- Synthetic-data stamp -------------------------------------------------- */
+
+/* Inside the drawing so it travels with a screenshot or an export. --ink-muted
+   at 5.48:1 on the panel: quiet enough not to compete with the trace, loud
+   enough that it cannot be missed or mistaken for decoration. Never faded
+   below the token, since the whole point is that it stays legible. */
+.trace__stamp {
+  fill: var(--ink-muted);
+  font-family: var(--font-literata), serif;
+  font-size: var(--size-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+  text-anchor: end;
+}
+
 /* -- Uncertainty band ------------------------------------------------------ */
 
 /* The one sanctioned opacity variant on the site. The fill is a wash; the
