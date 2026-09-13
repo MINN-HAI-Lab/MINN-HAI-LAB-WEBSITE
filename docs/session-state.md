@@ -17,7 +17,8 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-41** Layout stability. The metric-matched font fallback and the curve
+  draw both run on load; neither has been measured for the shift they cause.
 
 ---
 
@@ -30,8 +31,6 @@ B-9, and the handbook's publications check is Phase 3.
 These are gaps I can see in what has been built rather than new features:
 things made but never looked at, and assumptions never tested.
 
-- **T-41** Layout stability. The metric-matched font fallback and the curve
-  draw both run on load; neither has been measured for the shift they cause.
 - **T-42** The annotation column in `layout.css` is specified in DESIGN.md,
   built, and used by nothing — `/research` is Phase 3. Give it a fixture and
   a test at the 1180px breakpoint so it is not discovered to be broken on the
