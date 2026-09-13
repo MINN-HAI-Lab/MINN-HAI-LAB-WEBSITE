@@ -8,6 +8,10 @@
 --------------------------------------------------------------------------- */
 
 .trace__plot {
+  /* width:100% is load-bearing. The panel is a column flex container, and an
+     auto inline margin on a flex item makes it shrink to its content instead
+     of stretching — the drawing came out 324px wide inside a 1116px panel. */
+  width: 100%;
   max-width: var(--trace-plot-width);
   margin-inline: auto;
   /* Room for the axis ticks, which sit outside the drawing so they keep
@@ -35,17 +39,22 @@
 /* -- Uncertainty band ------------------------------------------------------ */
 
 /* A wash. It cannot carry the information on its own at this opacity, which is
-   why the edges below exist. */
+   why the edges below exist.
+
+   Lighter on dark than it would be on white. A saturated red at 12% over
+   near-black reads as a solid maroon mass rather than a wash, and the band
+   covers a large area — it swamped the curve it is supposed to surround. At
+   7% it recedes and the edges do the work. */
 .trace__band {
   fill: var(--signal);
-  fill-opacity: 0.12;
+  fill-opacity: 0.07;
   stroke: none;
 }
 
 .trace__band-edge {
   fill: none;
   stroke: var(--signal);
-  stroke-opacity: 0.55;
+  stroke-opacity: 0.45;
   stroke-width: var(--rule-width);
   stroke-linejoin: round;
 }

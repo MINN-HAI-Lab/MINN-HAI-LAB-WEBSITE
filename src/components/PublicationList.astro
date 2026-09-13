@@ -1,0 +1,41 @@
+---
+/**
+ * The publication list.
+ *
+ * Dense rows, not cards: forty entries in cards is unreadable and this list
+ * grows. Every field comes from src/data/publications.ts and nothing is
+ * rendered that is not in it.
+ *
+ * Authors and links are missing from the supplied list, so each row says so
+ * rather than showing a plausible-looking citation. That gap is the correct
+ * output until B-4 lands.
+ */
+import type { Publication } from '../data/publications.ts';
+
+interface Props {
+  publications: readonly Publication[];
+}
+
+const { publications } = Astro.props;
+---
+
+<ol class="publications">
+  {
+    publications.map((publication) => (
+      <li class="publications__row">
+        <span class="publications__year readout tnum">{publication.year}</span>
+        <span class="publications__body">
+          <span class="publications__name">{publication.shortName}</span>
+          <span class="publications__meta label">
+            {publication.venue}
+            {publication.hasCode && <span class="publications__flag">code</span>}
+          </span>
+          <span class="publications__gap">
+            TODO: authors and a paper link. The supplied list has titles and
+            venues only. Kaung to supply. Tracked as B-4.
+          </span>
+        </span>
+      </li>
+    ))
+  }
+</ol>

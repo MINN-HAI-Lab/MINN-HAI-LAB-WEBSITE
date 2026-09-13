@@ -1,30 +1,99 @@
 ---
+/**
+ * Home.
+ *
+ * The hero is one live artefact on glass, full-bleed. Everything below it is
+ * quiet so that can be loud: four research areas as four lines, the five most
+ * recent publications, and the StatLab callout.
+ */
 import Base from '../layouts/Base.astro';
 import Trace from '../components/Trace.astro';
+import PublicationList from '../components/PublicationList.astro';
+import { LAB_NAME, RESEARCH_AREAS, STATLAB } from '../data/navigation.ts';
+import { mostRecent } from '../data/publications.ts';
+import { withBase } from '../lib/paths.ts';
+
+const recent = mostRecent(5);
 ---
 
 <Base
-  title="MINN HAI Lab"
-  description="Research on knowledge tracing for personalised learning, and on interpreting tabular models with Bayesian networks and Markov blankets."
+  title={LAB_NAME}
+  description="Research on knowledge tracing, Bayesian explanation, computer vision and language, with the working artefacts rather than descriptions of them."
 >
-  <section class="section">
-    <h1 class="type-display measure">MINN HAI Lab</h1>
+  <!-- Hero. Full-bleed, with the live trace on glass. -->
+  <section class="hero bleed">
+    <div class="page hero__inner">
+      <div class="hero__text">
+        <h1 class="type-display">{LAB_NAME}</h1>
 
-    <p class="todo measure">
-      TODO: confirm the lab name as it should appear in the header. The brief
-      uses "MINN HAI Lab", "MINN HAI (Human-centered AI) Lab" and "HAI Lab"
-      interchangeably, and whether it is "Human-centered" or "Human-centred"
-      is undecided. Kaung to confirm. Tracked as B-1.
-    </p>
+        <p class="todo measure">
+          TODO: confirm the lab name as it should appear in the header. The
+          brief uses "MINN HAI Lab", "MINN HAI (Human-centered AI) Lab" and
+          "HAI Lab" interchangeably, and whether it is "Human-centered" or
+          "Human-centred" is undecided. Kaung to confirm. Tracked as B-1.
+        </p>
 
-    <p class="todo measure">
-      TODO: the mission sentence. The plan lists the mission paragraph as
-      already supplied, but the text is not in the repo, so there is nothing to
-      cut to one line. Kaung to supply. Tracked as B-3.
-    </p>
+        <p class="todo measure">
+          TODO: the mission sentence. The plan lists the mission paragraph as
+          already supplied, but the text is not in the repo, so there is
+          nothing to cut to one line. Kaung to supply. Tracked as B-3.
+        </p>
+      </div>
+
+      <Trace />
+    </div>
   </section>
 
-  <section class="section">
-    <Trace />
+  <!-- Four research areas, four lines. -->
+  <section class="section section--raised" data-reveal>
+    <div class="page">
+      <h2 class="type-title">Research</h2>
+
+      <ul class="areas">
+        {
+          RESEARCH_AREAS.map((area) => (
+            <li class="areas__row">
+              <a class="areas__link" href={withBase(`/research#${area.id}`)}>
+                <span class="areas__name type-section">{area.name}</span>
+                <span class="areas__line type-body type-muted">{area.line}</span>
+                {!area.hasPublications && (
+                  <span class="areas__flag label">Research direction, no published work yet</span>
+                )}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Five most recent publications. -->
+  <section class="section" data-reveal>
+    <div class="page">
+      <h2 class="type-title">Recent work</h2>
+      <p class="type-body type-muted measure">
+        The five most recent of fourteen. The full list is on the{' '}
+        <a class="link" href={withBase('/research')}>research page</a>.
+      </p>
+
+      <PublicationList publications={recent} />
+    </div>
+  </section>
+
+  <!-- StatLab. -->
+  <section class="section section--raised" data-reveal>
+    <div class="page statlab">
+      <div class="statlab__text">
+        <h2 class="type-title">{STATLAB.name}</h2>
+        <p class="type-body type-muted measure">{STATLAB.description}</p>
+        <p class="type-body measure">
+          Built to take more resources later, so a course or a set of exercises
+          can sit alongside it without a rebuild.
+        </p>
+      </div>
+      <p class="statlab__action">
+        <a class="button" href={STATLAB.href} rel="noopener">Open {STATLAB.name}</a>
+      </p>
+    </div>
   </section>
 </Base>

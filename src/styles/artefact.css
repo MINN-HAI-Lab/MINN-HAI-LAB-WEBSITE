@@ -135,3 +135,69 @@
 .artefact__plot {
   position: relative;
 }
+
+/* ---------------------------------------------------------------------------
+   Publications
+--------------------------------------------------------------------------- */
+
+.publications {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-block-start: var(--rule-width) solid var(--grid);
+}
+
+.publications__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-block-end: var(--rule-width) solid var(--grid);
+}
+
+.publications__year {
+  font-size: var(--label-size);
+  color: var(--text-muted);
+  padding-block-start: 0.2em;
+}
+
+.publications__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.publications__name {
+  font-family: var(--font-serif);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
+  color: var(--text);
+}
+
+.publications__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+/* A flag, not a link: the supplied list says code exists but gives no URL. */
+.publications__flag {
+  border: var(--rule-width) solid var(--surface-edge);
+  border-radius: var(--radius-glass);
+  padding-inline: var(--space-2);
+  color: var(--text-muted);
+}
+
+/* The visible gap where a citation would be. Deliberately not styled to look
+   like a citation. */
+.publications__gap {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  line-height: 1.5;
+  color: var(--text-muted);
+  border-inline-start: calc(var(--rule-width) * 2) solid var(--surface-edge);
+  padding-inline-start: var(--space-3);
+  max-width: var(--measure);
+}

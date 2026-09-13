@@ -46,6 +46,8 @@ Nothing.
 - **S-02** — Type split: Literata for prose, sans for labels, readouts and navigation. Layout shell, glass primitive, scroll reveal, header and footer on the dark field.
 - **S-04** — BKT learn rate 0.15 -> 0.12 and a searched demo sequence: peak 97% instead of 100%, final 79%, every click moving the headline at least 20 points.
 - **S-05** — Trace restyled onto the dark field: --signal for the estimate and band, --text for attempts, glass panel, HTML axis ticks. Favicon and share card repainted.
+- **S-06** — Bayesian network: deterministic force layout at build time, Markov blanket computed properly, static SVG interactive with a small script, HTML labels so they hold their size.
+- **S-11** — Home page: full-bleed hero with the live trace on glass, four research areas as rows, five most recent publications with honest gaps, StatLab callout.
 
 ## NOTES
 

@@ -1,0 +1,122 @@
+/* ---------------------------------------------------------------------------
+   home.css — the home page.
+--------------------------------------------------------------------------- */
+
+.hero {
+  padding-block: var(--space-10) var(--rhythm-section);
+  border-block-end: var(--rule-width) solid var(--grid);
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (width >= 900px) {
+  .hero {
+    padding-block: var(--space-12) var(--rhythm-section);
+  }
+
+  .hero__inner {
+    gap: var(--space-10);
+  }
+}
+
+/* -- Research areas -------------------------------------------------------- */
+
+/* Four lines, not four cards. A card grid of identical rounded boxes is the
+   thing this site is trying not to be, and rows read faster anyway. */
+.areas {
+  list-style: none;
+  margin-block: var(--rhythm-heading) 0;
+  padding: 0;
+  border-block-start: var(--rule-width) solid var(--grid);
+}
+
+.areas__row {
+  border-block-end: var(--rule-width) solid var(--grid);
+}
+
+.areas__link {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-5);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.areas__link:hover {
+  background-color: var(--surface);
+}
+
+.areas__name {
+  color: var(--text);
+}
+
+.areas__line {
+  max-width: var(--measure);
+}
+
+/* Computer vision and language have no publications in the supplied list, so
+   they are labelled as directions. Saying otherwise would imply papers that do
+   not exist. */
+.areas__flag {
+  justify-self: start;
+  border: var(--rule-width) solid var(--surface-edge);
+  border-radius: var(--radius-glass);
+  padding: var(--space-1) var(--space-2);
+}
+
+@media (width >= 900px) {
+  .areas__link {
+    grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--space-6);
+    padding-inline: var(--space-3);
+  }
+
+  .areas__flag {
+    grid-column: 2;
+  }
+}
+
+/* -- StatLab --------------------------------------------------------------- */
+
+.statlab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.statlab__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.statlab__action {
+  margin: 0;
+}
+
+@media (width >= 900px) {
+  .statlab {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-10);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .areas__link {
+    transition: none;
+  }
+}

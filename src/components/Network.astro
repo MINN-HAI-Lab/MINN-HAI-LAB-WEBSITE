@@ -1,0 +1,305 @@
+---
+/**
+ * Artefact 2 — Bayesian explanation.
+ *
+ * A Bayesian network over learning-analytics variables. Select a node and its
+ * Markov blanket lights up: parents, children, and the children's other
+ * parents. Conditioned on that set the node is independent of everything else,
+ * which is the thing the artefact exists to make visible.
+ *
+ * Two layers. This one is a static SVG, placed at build time by a
+ * deterministic force simulation, present in the HTML and fully interactive
+ * with nothing but the small script below. The 3D layer loads on an explicit
+ * click and never on page load — Three.js is roughly 150KB before the graph
+ * library, which has no business in a first paint.
+ *
+ * The structure is illustrative and the artefact says so.
+ */
+import { EDGES, NODES, VIEW, layoutNetwork, markovBlanket } from '../lib/network.ts';
+
+const placed = layoutNetwork(NODES, EDGES);
+const byId = new Map(placed.map((n) => [n.id, n]));
+
+/** Node radius in user units. Big enough to be a comfortable target. */
+const RADIUS = 9;
+
+/**
+ * Shorten an edge so it stops at the node's rim rather than its centre,
+ * leaving room for the arrowhead. Drawing to the centre buries the head under
+ * the node and the direction of the dependency disappears.
+ */
+const edges = EDGES.map((edge) => {
+  const from = byId.get(edge.from)!;
+  const to = byId.get(edge.to)!;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const distance = Math.max(Math.hypot(dx, dy), 1);
+  const gap = RADIUS + 5;
+  return {
+    ...edge,
+    x1: Math.round((from.x + (dx / distance) * RADIUS) * 10) / 10,
+    y1: Math.round((from.y + (dy / distance) * RADIUS) * 10) / 10,
+    x2: Math.round((to.x - (dx / distance) * gap) * 10) / 10,
+    y2: Math.round((to.y - (dy / distance) * gap) * 10) / 10,
+  };
+});
+
+/** The node the artefact opens on. Mastery has the richest blanket. */
+const initial = 'mastery';
+const initialBlanket = markovBlanket(initial);
+
+const altText =
+  `A Bayesian network of ${NODES.length} learning-analytics variables joined by ` +
+  `${EDGES.length} directed dependencies. Selecting a variable highlights its ` +
+  `Markov blanket: its parents, its children, and the other parents of those ` +
+  `children.`;
+---
+
+<figure class="artefact network" data-network>
+  <div class="artefact__bar">
+    <p class="artefact__name">Bayesian explanation</p>
+    <p class="artefact__provenance">Illustrative structure</p>
+  </div>
+
+  <div class="artefact__panel glass">
+    <div class="network__plot">
+    <svg
+      class="artefact__svg network__svg"
+      viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
+      role="img"
+      aria-label={altText}
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <title>Bayesian network over learning-analytics variables</title>
+
+      <defs>
+        <marker
+          id="network-arrow"
+          viewBox="0 0 8 8"
+          refX="7"
+          refY="4"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto-start-reverse"
+        >
+          <path d="M0 0 L8 4 L0 8 z" class="network__arrowhead" />
+        </marker>
+      </defs>
+
+      <g class="network__edges">
+        {
+          edges.map((edge) => (
+            <line
+              class="network__edge"
+              data-edge
+              data-from={edge.from}
+              data-to={edge.to}
+              x1={edge.x1}
+              y1={edge.y1}
+              x2={edge.x2}
+              y2={edge.y2}
+              marker-end="url(#network-arrow)"
+            />
+          ))
+        }
+      </g>
+
+      {/* Rendered inert. The script upgrades each node to a control, so with
+          JavaScript off these stay a readable diagram rather than controls
+          that do nothing. The initial blanket is applied here so the static
+          rendering already demonstrates the idea. */}
+      <g class="network__nodes" data-nodes>
+        {
+          placed.map((node) => (
+            <g
+              class:list={[
+                'network__node',
+                node.id === initial && 'is-selected',
+                initialBlanket.all.includes(node.id) && 'is-blanket',
+              ]}
+              data-node={node.id}
+            >
+              <circle class="network__hit" cx={node.x} cy={node.y} r={22} />
+              <circle class="network__ring" cx={node.x} cy={node.y} r={RADIUS + 5} />
+              <circle class="network__dot" cx={node.x} cy={node.y} r={RADIUS} />
+            </g>
+          ))
+        }
+      </g>
+    </svg>
+
+    {/* Labels are HTML positioned over the drawing, not SVG <text>.
+        Text inside a scaled viewBox scales with it: at 360px this drawing
+        renders at about 0.39 of nominal, which would take a 13 unit label down
+        to five physical pixels. Percentages keep them attached to their nodes
+        at any scale. */}
+    {
+      placed.map((node) => (
+        <span
+          class:list={[
+            'network__label',
+            node.id === initial && 'is-selected',
+            initialBlanket.all.includes(node.id) && 'is-blanket',
+          ]}
+          data-label={node.id}
+          style={`left: ${(node.x / VIEW.width) * 100}%; top: ${(node.y / VIEW.height) * 100}%`}
+          aria-hidden="true">{node.label}</span>
+      ))
+    }
+    </div>
+  </div>
+
+  <ul class="network__key">
+    <li class="network__key-item"><span class="network__swatch network__swatch--selected"></span>Selected variable</li>
+    <li class="network__key-item"><span class="network__swatch network__swatch--blanket"></span>Its Markov blanket</li>
+    <li class="network__key-item"><span class="network__swatch network__swatch--other"></span>Independent of it, given the blanket</li>
+  </ul>
+
+  <div class="artefact__controls" data-controls hidden>
+    <button class="button" type="button" data-load-3d>Open in 3D</button>
+    <p class="artefact__note" data-instructions hidden>
+      Select a variable to see its blanket. Arrow keys move between them.
+    </p>
+  </div>
+
+  <figcaption class="artefact__caption">
+    <p class="visually-hidden" data-summary></p>
+    <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
+
+    <p class="artefact__readout" data-readout>
+      The Markov blanket of Mastery is {initialBlanket.all.length} variables. Given
+      those, Mastery is independent of everything else here.
+    </p>
+
+    <p class="artefact__note">
+      Illustrative. These variables are the kind a learning-analytics model
+      ranges over and the dependencies among them are plausible, but this
+      network was not learned from data and is not the lab's model. The Markov
+      blanket itself is computed properly: parents, children, and the children's
+      other parents.
+    </p>
+  </figcaption>
+</figure>
+
+<script>
+  /**
+   * Selection and blanket highlighting.
+   *
+   * Small, and deliberately separate from the 3D layer: this is what makes the
+   * static diagram interactive, and it must work whether or not anyone ever
+   * clicks "Open in 3D".
+   */
+  import { EDGES, NODES, describeBlanket, markovBlanket } from '../lib/network.ts';
+
+  const root = document.querySelector<HTMLElement>('[data-network]');
+
+  if (root) {
+    const el = root;
+    const nodes = [...el.querySelectorAll<SVGGElement>('[data-node]')];
+    const labels = [...el.querySelectorAll<HTMLElement>('[data-label]')];
+    const edges = [...el.querySelectorAll<SVGLineElement>('[data-edge]')];
+    const readout = el.querySelector<HTMLElement>('[data-readout]');
+    const live = el.querySelector<HTMLElement>('[data-live]');
+    const controls = el.querySelector<HTMLElement>('[data-controls]');
+    const instructions = el.querySelector<HTMLElement>('[data-instructions]');
+
+    let selected = 'mastery';
+    let active = nodes.findIndex((n) => n.dataset.node === selected);
+    if (active < 0) active = 0;
+
+    function select(id: string, announce = true): void {
+      selected = id;
+      const blanket = markovBlanket(id, EDGES);
+      const inBlanket = new Set(blanket.all);
+
+      for (const node of nodes) {
+        const nodeId = node.dataset.node ?? '';
+        node.classList.toggle('is-selected', nodeId === id);
+        node.classList.toggle('is-blanket', inBlanket.has(nodeId));
+        node.setAttribute('aria-pressed', String(nodeId === id));
+
+        const label = NODES.find((n) => n.id === nodeId)?.label ?? nodeId;
+        const role = nodeId === id
+          ? 'selected'
+          : inBlanket.has(nodeId)
+            ? 'in the Markov blanket'
+            : 'outside the blanket';
+        node.setAttribute('aria-label', `${label}, ${role}. Activate to select it.`);
+      }
+
+      for (const labelEl of labels) {
+        const labelId = labelEl.dataset.label ?? '';
+        labelEl.classList.toggle('is-selected', labelId === id);
+        labelEl.classList.toggle('is-blanket', inBlanket.has(labelId));
+      }
+
+      // An edge is in the blanket if it touches the selected node, or joins a
+      // co-parent to the shared child. Anything else recedes.
+      for (const edge of edges) {
+        const from = edge.dataset.from ?? '';
+        const to = edge.dataset.to ?? '';
+        const touches = from === id || to === id;
+        const coParentEdge = blanket.coParents.includes(from) && blanket.children.includes(to);
+        edge.classList.toggle('is-blanket', touches || coParentEdge);
+      }
+
+      const sentence = describeBlanket(id, EDGES);
+      if (readout) readout.textContent = sentence;
+      if (live && announce) live.textContent = sentence;
+    }
+
+    function focusNode(next: number): void {
+      active = (next + nodes.length) % nodes.length;
+      nodes.forEach((node, i) => node.setAttribute('tabindex', i === active ? '0' : '-1'));
+      nodes[active]?.focus();
+    }
+
+    nodes.forEach((node, i) => {
+      const id = node.dataset.node ?? '';
+      node.setAttribute('role', 'button');
+      node.setAttribute('tabindex', i === active ? '0' : '-1');
+      node.addEventListener('click', () => {
+        active = i;
+        nodes.forEach((n, j) => n.setAttribute('tabindex', j === i ? '0' : '-1'));
+        select(id);
+      });
+      node.addEventListener('keydown', (event) => {
+        switch (event.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+            event.preventDefault();
+            focusNode(active + 1);
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+            event.preventDefault();
+            focusNode(active - 1);
+            break;
+          case 'Enter':
+          case ' ':
+          case 'Spacebar':
+            event.preventDefault();
+            select(id);
+            break;
+          default:
+            break;
+        }
+      });
+    });
+
+    el.querySelector<SVGSVGElement>('.network__svg')?.setAttribute('role', 'group');
+    const summary = el.querySelector<HTMLElement>('[data-summary]');
+    const description = el.querySelector<SVGSVGElement>('.network__svg')?.getAttribute('aria-label');
+    if (summary && description) {
+      summary.textContent = description;
+      el.querySelector<SVGSVGElement>('.network__svg')?.removeAttribute('aria-label');
+    }
+
+    if (controls) controls.hidden = false;
+    if (instructions) instructions.hidden = false;
+
+    // Paint the initial selection without announcing it: nothing has happened
+    // yet, and a live region that speaks on load is noise.
+    select(selected, false);
+  }
+</script>

@@ -1,0 +1,176 @@
+/* ---------------------------------------------------------------------------
+   network.css — artefact 2, Bayesian explanation.
+
+   The selected variable and its Markov blanket are the model's claim about
+   structure, so they carry --signal. Everything outside the blanket recedes to
+   --text-muted, which is the visual form of the statement the artefact is
+   making: given the blanket, the rest is irrelevant.
+--------------------------------------------------------------------------- */
+
+.network__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+/* -- Edges ----------------------------------------------------------------- */
+
+.network__edge {
+  stroke: var(--grid);
+  stroke-width: var(--rule-width);
+  transition:
+    stroke var(--dur-base) var(--ease-out),
+    stroke-opacity var(--dur-base) var(--ease-out);
+}
+
+.network__edge.is-blanket {
+  stroke: var(--signal);
+  stroke-opacity: 0.7;
+}
+
+.network__arrowhead {
+  fill: var(--text-muted);
+}
+
+/* -- Nodes ----------------------------------------------------------------- */
+
+/* Transparent and larger than the dot, so the target clears the 24px minimum
+   without inflating the mark. */
+.network__hit {
+  fill: transparent;
+  stroke: none;
+}
+
+.network__dot {
+  fill: var(--field-2);
+  stroke: var(--text-muted);
+  stroke-width: var(--curve-width);
+  transition:
+    fill var(--dur-base) var(--ease-out),
+    stroke var(--dur-base) var(--ease-out);
+}
+
+/* The ring is the second cue: blanket membership never rests on colour alone. */
+.network__ring {
+  fill: none;
+  stroke: none;
+  transition: stroke var(--dur-base) var(--ease-out);
+}
+
+/* The drawing plus the labels that must not scale with it. */
+.network__plot {
+  position: relative;
+}
+
+/* Positioned by percentage so they stay attached to their nodes at any scale,
+   and sized in CSS pixels so they stay legible when the drawing shrinks. */
+.network__label {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - var(--space-3)));
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-tracking);
+  line-height: 1;
+  color: var(--text-muted);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+/* In the blanket: the node is filled, and the label comes up to full text. */
+.network__node.is-blanket .network__dot {
+  fill: var(--signal);
+  stroke: var(--signal);
+}
+
+.network__label.is-blanket {
+  color: var(--text);
+}
+
+/* Selected: filled and ringed, so it is distinguishable from its own blanket
+   by shape as well as by weight. */
+.network__node.is-selected .network__dot {
+  fill: var(--text);
+  stroke: var(--text);
+}
+
+.network__node.is-selected .network__ring {
+  stroke: var(--signal);
+  stroke-width: var(--curve-width);
+}
+
+.network__label.is-selected {
+  color: var(--text);
+}
+
+.network__node {
+  cursor: pointer;
+}
+
+.network__node:focus {
+  outline: none;
+}
+
+.network__node:focus-visible {
+  outline: var(--focus-width) solid var(--text);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-glass);
+}
+
+.network__node:hover .network__dot {
+  stroke: var(--text);
+}
+
+/* -- Key ------------------------------------------------------------------- */
+
+.network__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-tracking);
+  color: var(--text-muted);
+}
+
+.network__key-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.network__swatch {
+  inline-size: var(--space-3);
+  block-size: var(--space-3);
+  border-radius: 50%;
+  flex: none;
+}
+
+.network__swatch--selected {
+  background-color: var(--text);
+  box-shadow: 0 0 0 var(--curve-width) var(--signal);
+}
+
+.network__swatch--blanket {
+  background-color: var(--signal);
+}
+
+.network__swatch--other {
+  background-color: var(--field-2);
+  border: var(--curve-width) solid var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network__edge,
+  .network__dot,
+  .network__ring,
+  .network__label {
+    transition: none;
+  }
+}
