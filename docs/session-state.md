@@ -17,7 +17,12 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-50** Final coherence pass. Rebuild from clean, look at every page at
+  1440 and 390, and confirm nothing regressed across forty-eight tasks.
+
+After T-50 the queue is genuinely exhausted of work that does not need Kaung.
+
+---
 
 ---
 
@@ -28,13 +33,6 @@ Refilled 2026-09-13, sixth time. T-46 to T-48 are done.
 Phase 2 is complete and Phase 4 is complete apart from "remove every remaining
 TODO:", which is blocked on B-1 to B-5 and B-9. Phase 3 is content and needs
 Kaung; Phase 5 is deploy and needs B-8. So these are closing tasks.
-
-- **T-50** Final coherence pass. Rebuild from clean, look at every page at
-  1440 and 390, and confirm nothing regressed across forty-eight tasks.
-
-After T-50 the queue is genuinely exhausted of work that does not need Kaung.
-
----
 
 ## BLOCKED
 
