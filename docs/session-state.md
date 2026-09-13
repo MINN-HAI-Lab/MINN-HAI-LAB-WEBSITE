@@ -17,20 +17,18 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
-
----
-
-## QUEUE
-
-Refilled 2026-09-13, fourth time. T-39 to T-42 are done.
-
 - **T-45** Measure what a first visit downloads, and record it, so the next
   person adding something can see what it costs.
 
 When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
 
 ---
+
+---
+
+## QUEUE
+
+Refilled 2026-09-13, fourth time. T-39 to T-42 are done.
 
 ## BLOCKED
 
