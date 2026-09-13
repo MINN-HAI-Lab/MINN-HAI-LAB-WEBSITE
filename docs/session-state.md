@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-37** One `npm run verify` that runs the type check, unit tests, token
-  lint, contrast check and the browser suite, so the pre-deploy gate in
-  `docs/handbook.md` is a single command rather than five remembered ones.
+Nothing.
 
 ---
 
@@ -102,6 +100,7 @@ history at `ec7ada9`.
 - **T-34** — Heading structure checked on all three pages: exactly one h1 each, h1 first, no skipped level, no empty heading. Failures print the outline rather than a count.
 - **T-35** — Island rules enforced: only the home page ships script, the payload stays well under the 100KB click-to-load threshold, and the static trace is verified to be real geometry rather than a placeholder.
 - **T-36** — Palette enforced in the CSS the browser downloads: only the six DESIGN.md colours, and no prefers-color-scheme rule. Caught a live regression where a test comment re-created the dark-mode utility.
+- **T-37** — npm run verify runs the type check, unit tests, token lint, contrast check, a production build and the browser suite, and propagates a failure's exit code past the preview-server cleanup. Handbook checklist rewritten around it.
 
 ---
 

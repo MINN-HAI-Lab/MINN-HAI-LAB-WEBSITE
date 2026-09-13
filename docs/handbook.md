@@ -126,10 +126,27 @@ An entry with no paper link is fine. An entry with a guessed link is not.
 
 ## Before deploy
 
-- Publications rendered match the data file exactly.
-- No `TODO:` markers left visible in built output.
-- Keyboard through the whole page including the trace widget.
-- 390px width, no horizontal scroll, trace widget still usable.
-- Reduced motion on, nothing jumps.
-- Lighthouse accessibility above 95, and read the failures rather than
-  chasing the number.
+Run `npm run verify`. It is the type check, the unit tests, the token lint,
+the contrast check, a production build and the whole browser suite, and it
+exits non-zero if any of them fails.
+
+That covers most of the list below mechanically:
+
+- ~~Keyboard through the whole page including the trace widget.~~
+  `src/e2e/keyboard.spec.ts`, on every page.
+- ~~390px width, no horizontal scroll, trace widget still usable.~~
+  `src/e2e/screenshots.spec.ts`, at 360, 390, 768 and 1440, including a 24px
+  tap-target floor.
+- ~~Reduced motion on, nothing jumps.~~ `src/e2e/motion.spec.ts`, which checks
+  both modes so that "reduced motion removes the animation" means something.
+- ~~Lighthouse accessibility above 95.~~ Replaced by axe-core over every page
+  in `src/e2e/accessibility.spec.ts`, run against WCAG 2.2 A and AA. Reading
+  the failures rather than chasing a number is easier when there is no number.
+
+Still needs a person:
+
+- Publications rendered match the data file exactly. Nothing can check this
+  but you; it is the failure mode the rest of this handbook is about.
+- No `TODO:` markers left visible in built output. Deciding they are all
+  resolved is a judgement, not a check.
+- Look at the screenshots. `npm run shots` writes them to `screenshots/`.
