@@ -231,3 +231,26 @@ the only accurate thing available, which happens to be the name.
 
 > No action needed from you beyond B-1 and B-3. Noting it so the duplication
 > reads as a consequence of the gap rather than as something nobody noticed.
+
+---
+
+## Q-11 — axe-core is not on the pre-approved dependency list
+
+**Raised:** T-25, 2026-09-13. **Routed around:** installed it.
+
+The standing rule is that astro, `@astrojs/*`, tailwindcss, typescript,
+vitest, `@playwright/test`, three and 3d-force-graph are pre-approved and
+anything else gets logged and routed around. T-25 says "Run axe-core over
+every built page."
+
+I read the task naming the tool as approving the tool — the alternative,
+hand-rolling the subset of WCAG rules axe already implements, would be worse
+in every way and would not be "axe-core" in any case.
+
+Only `axe-core` itself is installed, injected into the page by the existing
+Playwright harness. `@axe-core/playwright` would have been the conventional
+wrapper and is a second package for very little.
+
+> If the allowlist was meant to be absolute, say so and I will take it out;
+> the accessibility checks written by hand in the harness cover a fraction of
+> it but they do cover the parts this site actually depends on.

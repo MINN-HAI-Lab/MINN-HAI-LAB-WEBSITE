@@ -17,13 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-25** Run axe-core over every built page. Fix violations, log design
-  judgements rather than guessing.
-
-When this empties, refill from `docs/phase.md` — Phase 2 first, then Phase 4
-polish. Never queue Phase 3; that is publications content and needs Kaung.
-
----
+Nothing.
 
 ---
 
@@ -75,6 +69,7 @@ history at `ec7ada9`.
 - **T-22** — Header with set type and built-pages-only nav, footer carrying the contact TODO, plus link, button and focus states verified against DESIGN.md § States.
 - **T-23** — Widget geometry now derives from tokens: mark, ring and swatch radii parsed from --mark-size, --curve-width and --space-1; plot width from the viewBox constant; the script's last duration literal removed. Verified by mutation.
 - **T-24** — Token lint over source stylesheets: raw hex, raw px and any shadow property. Wired to prebuild so it fails the build; verified by mutation that all three rules trip and the exit code is 1.
+- **T-25** — axe-core over both built pages plus the attribution state and the script-free rendering: zero WCAG 2.2 A/AA violations. Detection verified by mutation.
 
 ---
 
@@ -106,4 +101,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-26: only h1-h6 need element rules. Tailwind preflight resets headings to font-size:inherit but leaves p and li alone, so both already inherit --size-body from body. An li rule would outrank .trace__key's inherited Small and silently enlarge the widget key.
 - T-22 caught a T-20 regression: the axis-label gutter narrowed the SVG and tap targets fell from 24px to 22px at 360, with nothing failing. Narrow-width padding trimmed, and the 24px floor is now asserted in the browser harness across four widths rather than only in unit arithmetic.
 - T-24: a docblock explaining that '*/' slipped through the reason check contained '*/' and closed the comment, so half the module parsed as code. oxc reported it as a missing semicolon 78 lines later. If a TS parse error points somewhere that looks fine, check for a comment terminator upstream.
+- T-25: auditing a JS-off page needs the site's scripts stripped at the network layer, not javaScriptEnabled:false (axe needs scripting) and not setContent (relative stylesheet URLs do not resolve, so nothing is styled and axe reports phantom target-size failures against unstyled links).
 
