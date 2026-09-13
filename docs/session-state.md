@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-16** Responsive pass at 390, 768, 1440. No horizontal scroll, widget
+  usable at every width.
 
 ---
 
 ## QUEUE
 
-- **T-16** Responsive pass at 390, 768, 1440. No horizontal scroll, widget
-  usable at every width.
 - **T-17** Verify the JS-off path by building and loading with scripting
   disabled. Record what was checked in NOTES.
 - **T-18** Script recomputing every contrast pair in the DESIGN.md table,
