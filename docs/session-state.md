@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-19** Playwright screenshot harness, three widths, output to a
+  gitignored directory.
 
 ---
 
 ## QUEUE
 
-- **T-19** Playwright screenshot harness, three widths, output to a
-  gitignored directory.
 - **T-20** Self-critique pass: walk the built page against the banned list in
   `CLAUDE.md`. Fix unambiguous violations, log judgement calls.
 - **T-21** Typographic specimen page showing every text style in context at
