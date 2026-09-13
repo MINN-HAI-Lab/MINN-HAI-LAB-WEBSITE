@@ -217,6 +217,97 @@ export function trace(
   };
 }
 
+/** How much one attempt is carrying the current estimate. */
+export interface Attribution {
+  index: number;
+  /**
+   * Absolute change in the final estimate if this attempt had gone the other
+   * way. 0 means the estimate would be identical without it.
+   */
+  influence: number;
+  /** True if this attempt is among those carrying the estimate. */
+  carrying: boolean;
+}
+
+/**
+ * Which past attempts are carrying the current estimate.
+ *
+ * Counterfactual, one attempt at a time: flip attempt i, re-run the whole
+ * sequence, and measure how far the final estimate moves. An attempt that
+ * changes the conclusion a lot was load-bearing; one that changes it barely at
+ * all was not.
+ *
+ * This is an honest answer to a narrow question, and it is worth being precise
+ * about which question. It is not a Shapley value and does not account for
+ * interactions between attempts — flipping two together can move the estimate
+ * differently from the sum of flipping each alone. For a ten-step trace whose
+ * job is to make attribution legible, the single-flip counterfactual is the
+ * version a reader can verify for themselves by clicking, which matters more
+ * here than decomposition that is exactly additive.
+ *
+ * BKT is recency-weighted by construction, so late attempts usually dominate.
+ * That is a property of the model, not an artefact of this measure.
+ */
+export function attribute(
+  attempts: readonly boolean[],
+  parameters: BktParameters = DEFAULT_PARAMETERS,
+  carryingCount = 3,
+): Attribution[] {
+  validateParameters(parameters);
+  const baseline = trace(attempts, parameters).final;
+
+  const influences: Attribution[] = attempts.map((_, index) => {
+    const flipped = attempts.map((value, i) => (i === index ? !value : value));
+    return {
+      index,
+      influence: Math.abs(trace(flipped, parameters).final - baseline),
+      carrying: false,
+    };
+  });
+
+  // Half a percentage point, which is not an arbitrary cutoff: the estimate is
+  // displayed as a whole percentage, so an attempt with less influence than
+  // this could be flipped without changing the number the reader sees. Marking
+  // it as load-bearing would overstate what the model is leaning on.
+  //
+  // A consequence worth knowing: after a long correct run the model saturates
+  // and *no* single attempt clears the threshold. That is a true statement
+  // about the sequence, not a failure to find an answer, and
+  // describeAttribution says so rather than naming a top three regardless.
+  const THRESHOLD = 0.005;
+
+  const ranked = [...influences]
+    .filter((entry) => entry.influence >= THRESHOLD)
+    .sort((a, b) => b.influence - a.influence || a.index - b.index)
+    .slice(0, Math.max(0, carryingCount));
+
+  for (const entry of ranked) {
+    influences[entry.index]!.carrying = true;
+  }
+
+  return influences;
+}
+
+/**
+ * The attribution result as a plain sentence, for the caption and the live
+ * region.
+ */
+export function describeAttribution(attributions: readonly Attribution[]): string {
+  const carrying = attributions.filter((entry) => entry.carrying);
+  if (carrying.length === 0) {
+    return 'No single attempt is carrying the estimate; it rests on the sequence as a whole.';
+  }
+  const positions = carrying.map((entry) => entry.index + 1);
+  const list =
+    positions.length === 1
+      ? `Attempt ${positions[0]}`
+      : `Attempts ${positions.slice(0, -1).join(', ')} and ${positions.at(-1)}`;
+  const verb = positions.length === 1 ? 'is' : 'are';
+  return `${list} ${verb} carrying the estimate: changing ${
+    positions.length === 1 ? 'it' : 'any of them'
+  } would move it most.`;
+}
+
 /**
  * Format an estimate as a whole percentage for display.
  *

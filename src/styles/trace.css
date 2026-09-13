@@ -173,6 +173,50 @@
   overflow: visible;
 }
 
+/* -- Attribution view ------------------------------------------------------ */
+
+/* Drawn on every mark, invisible until the view is on and the mark is one the
+   model is leaning on. */
+.trace__mark-ring {
+  fill: none;
+  stroke: none;
+}
+
+/* --claim is right here and nowhere else among the marks: the highlight is the
+   model asserting which attempts it is resting on, which is a claim about a
+   person. The attempts themselves stay --ink, because what the learner did is
+   fact. */
+.trace__marks.is-attributing .trace__mark-group.is-carrying .trace__mark-ring {
+  stroke: var(--trace-curve);
+  stroke-width: var(--curve-width);
+}
+
+/* The ring's presence is the second cue, so the state never rests on colour
+   alone. Marks that are not carrying also dim slightly, which gives the view a
+   figure-ground shift that survives greyscale. */
+.trace__marks.is-attributing .trace__mark-group:not(.is-carrying) .trace__mark {
+  stroke: var(--ink-muted);
+}
+
+.trace__marks.is-attributing
+  .trace__mark-group:not(.is-carrying)
+  .trace__mark.is-correct {
+  fill: var(--ink-muted);
+}
+
+.trace__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block-start: var(--space-5);
+  margin-inline: auto;
+  max-width: 700px;
+}
+
+.trace__controls[hidden] {
+  display: none;
+}
+
 /* -- Instructions ---------------------------------------------------------- */
 
 /* Revealed by the script. [hidden] must win over the display below, or the

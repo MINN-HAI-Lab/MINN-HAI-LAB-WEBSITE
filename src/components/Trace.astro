@@ -100,6 +100,13 @@ const altText =
             {/* A larger transparent disc so the hit area clears the 24px
                 minimum without inflating the 20px mark itself. */}
             <circle class="trace__mark-hit" cx={mark.x} cy={mark.y} r={16} />
+            {/* Attribution ring. Drawn always, revealed only in the
+                attribution view. --claim is correct here and only here among
+                the marks: the highlight is the model asserting which attempts
+                it is leaning on, which is a claim about a person. The ring
+                itself is the second cue, so the state does not rest on colour
+                alone. */}
+            <circle class="trace__mark-ring" cx={mark.x} cy={mark.y} r={14} />
             <circle
               class:list={['trace__mark', mark.correct ? 'is-correct' : 'is-incorrect']}
               cx={mark.x}
@@ -138,6 +145,15 @@ const altText =
       the arrow keys to move between attempts, then Enter or Space to change
       one.
     </p>
+
+    {/* Attribution view. A real <button>, so it is keyboard reachable and
+        announces its pressed state without any help. Hidden until the script
+        runs, for the same reason as the instructions. */}
+    <div class="trace__controls" data-controls hidden>
+      <button class="button" type="button" data-attribution aria-pressed="false">
+        Show which attempts carry the estimate
+      </button>
+    </div>
   </div>
 
   <figcaption class="trace__caption">
@@ -179,7 +195,7 @@ const altText =
    * Geometry comes from the same layout() the build used, so the interactive
    * trace and the static one cannot disagree about where anything goes.
    */
-  import { describe, trace } from '../lib/mastery.ts';
+  import { attribute, describe, describeAttribution, trace } from '../lib/mastery.ts';
   import { blend, layout } from '../lib/trace-geometry.ts';
   import { EASE_OUT, cubicBezier, durationToMs } from '../lib/easing.ts';
 
@@ -217,19 +233,32 @@ const altText =
       bandLower?.setAttribute('d', geometry.bandLowerPath);
     }
 
+    let attributing = false;
+
     /** Redraw the marks to match the current attempts. */
     function paintMarks(): void {
+      const attributions = attribute(attempts);
+
       for (const group of groups) {
         const index = Number(group.dataset.index);
         const correct = attempts[index] === true;
+        const carrying = attributions[index]?.carrying === true;
+
         const mark = group.querySelector('.trace__mark');
         mark?.classList.toggle('is-correct', correct);
         mark?.classList.toggle('is-incorrect', !correct);
+        group.classList.toggle('is-carrying', carrying);
+
         group.setAttribute('aria-pressed', String(correct));
+
+        // The attribution state belongs in the name, not just the ring, or a
+        // screen reader user gets no version of the view at all.
+        const carries =
+          attributing && carrying ? ' This attempt is carrying the estimate.' : '';
         group.setAttribute(
           'aria-label',
-          `Attempt ${index + 1}, answered ${correct ? 'correctly' : 'incorrectly'}. ` +
-            `Activate to mark it ${correct ? 'incorrect' : 'correct'}.`,
+          `Attempt ${index + 1}, answered ${correct ? 'correctly' : 'incorrectly'}.` +
+            `${carries} Activate to mark it ${correct ? 'incorrect' : 'correct'}.`,
         );
       }
     }
@@ -386,6 +415,37 @@ const altText =
 
     const instructions = root.querySelector<HTMLElement>('[data-instructions]');
     if (instructions) instructions.hidden = false;
+
+    /**
+     * The attribution view.
+     *
+     * Answers "which past attempts is this estimate resting on" by flipping
+     * each attempt in turn and measuring how far the conclusion moves. The
+     * reader can check the answer by clicking the same attempt themselves,
+     * which is the point: the explanation is falsifiable in the widget.
+     */
+    const controls = root.querySelector<HTMLElement>('[data-controls]');
+    const attributionButton = root.querySelector<HTMLButtonElement>('[data-attribution]');
+    if (controls) controls.hidden = false;
+
+    function setAttribution(next: boolean): void {
+      attributing = next;
+      svgRoot?.classList.toggle('is-attributing', attributing);
+      attributionButton?.setAttribute('aria-pressed', String(attributing));
+      if (attributionButton) {
+        attributionButton.textContent = attributing
+          ? 'Hide which attempts carry the estimate'
+          : 'Show which attempts carry the estimate';
+      }
+      paintMarks();
+      if (live) {
+        live.textContent = attributing
+          ? describeAttribution(attribute(attempts))
+          : 'Attribution view hidden.';
+      }
+    }
+
+    attributionButton?.addEventListener('click', () => setAttribution(!attributing));
 
     paintMarks();
   }

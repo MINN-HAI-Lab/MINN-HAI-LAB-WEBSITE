@@ -2,7 +2,9 @@ import { describe as suite, expect, it } from 'vitest';
 import {
   DEFAULT_PARAMETERS,
   type BktParameters,
+  attribute,
   describe,
+  describeAttribution,
   formatPercent,
   predict,
   trace,
@@ -230,5 +232,71 @@ suite('formatPercent', () => {
   it('rounds normally in between', () => {
     expect(formatPercent(0.25)).toBe(25);
     expect(formatPercent(0.615)).toBe(62);
+  });
+});
+
+suite('attribute', () => {
+  const SEQUENCE = [false, false, true, false, true, true, false, true, true, true];
+
+  it('returns one entry per attempt, in order', () => {
+    const result = attribute(SEQUENCE);
+    expect(result).toHaveLength(SEQUENCE.length);
+    expect(result.map((entry) => entry.index)).toEqual(SEQUENCE.map((_, i) => i));
+  });
+
+  it('measures influence as the distance the final estimate would move', () => {
+    const baseline = trace(SEQUENCE).final;
+    for (const entry of attribute(SEQUENCE)) {
+      const flipped = SEQUENCE.map((v, i) => (i === entry.index ? !v : v));
+      expect(entry.influence).toBeCloseTo(Math.abs(trace(flipped).final - baseline), 10);
+      expect(entry.influence).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it('marks recent attempts as carrying, because BKT is recency-weighted', () => {
+    const carrying = attribute(SEQUENCE).filter((entry) => entry.carrying);
+    expect(carrying.map((entry) => entry.index)).toEqual([7, 8, 9]);
+  });
+
+  it('never marks more than asked for', () => {
+    expect(attribute(SEQUENCE, DEFAULT_PARAMETERS, 1).filter((e) => e.carrying)).toHaveLength(1);
+    expect(attribute(SEQUENCE, DEFAULT_PARAMETERS, 0).filter((e) => e.carrying)).toHaveLength(0);
+  });
+
+  it('marks nothing when the model has saturated and no single flip matters', () => {
+    // Six correct in a row leaves the estimate at 0.9999; the largest single
+    // flip moves it 0.0042, less than the half point the display would show.
+    // Naming a top three anyway would invent an explanation.
+    const saturated = attribute([true, true, true, true, true, true]);
+    expect(saturated.every((entry) => entry.influence < 0.005)).toBe(true);
+    expect(saturated.some((entry) => entry.carrying)).toBe(false);
+  });
+
+  it('handles the empty and single cases', () => {
+    expect(attribute([])).toEqual([]);
+    expect(attribute([true]).filter((e) => e.carrying)).toHaveLength(1);
+  });
+});
+
+suite('describeAttribution', () => {
+  it('lists the carrying attempts in a plain sentence', () => {
+    const sentence = describeAttribution(
+      attribute([false, false, true, false, true, true, false, true, true, true]),
+    );
+    expect(sentence).toBe(
+      'Attempts 8, 9 and 10 are carrying the estimate: changing any of them would move it most.',
+    );
+  });
+
+  it('uses the singular for one attempt', () => {
+    expect(describeAttribution(attribute([true]))).toBe(
+      'Attempt 1 is carrying the estimate: changing it would move it most.',
+    );
+  });
+
+  it('says so plainly when nothing is carrying, rather than naming something anyway', () => {
+    expect(describeAttribution(attribute([true, true, true, true, true, true]))).toBe(
+      'No single attempt is carrying the estimate; it rests on the sequence as a whole.',
+    );
   });
 });

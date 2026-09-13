@@ -152,6 +152,42 @@ a.link:hover {
   text-decoration-thickness: calc(var(--rule-width) * 2);
 }
 
+/* -- Buttons --------------------------------------------------------------- */
+
+/* DESIGN.md § States: there is one button style. --radius-sm because it is
+   something you operate, a 1px --ink border, transparent fill, --ink text. No
+   filled variant until something demonstrably needs one, and that would be a
+   new decision. */
+.button {
+  display: inline-block;
+  padding: var(--space-3) var(--space-4);
+  background-color: transparent;
+  border: var(--rule-width) solid var(--ink);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-family: var(--font-literata), serif;
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-mid);
+}
+
+/* Hover changes colour only: no lift, no shadow, no growth. */
+.button:hover {
+  background-color: var(--paper-sunk);
+}
+
+/* Pressed state. The fill alone would be colour doing the work on its own, so
+   the label carries it too: buttons that toggle a view say "Show ..." and
+   "Hide ...", and aria-pressed says it to assistive tech. No shadow, inset or
+   otherwise — DESIGN.md bans them outright and an inset one is still a
+   shadow. */
+.button[aria-pressed='true'] {
+  background-color: var(--paper-sunk);
+}
+
 /* -- Reduced motion -------------------------------------------------------- */
 
 /* Transitions are removed rather than zeroed on a transform, which would

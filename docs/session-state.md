@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-13** Attribution view marking which past attempts carry the current
-  estimate. Toggleable, keyboard reachable.
+Nothing.
 
 ---
 
@@ -85,6 +84,7 @@ history at `ec7ada9`.
 - **T-10** — Click a mark to flip it; estimate, curve and band animate at --dur-base with --ease-out via rAF interpolation. 2.2KB gzipped, progressive enhancement over the static SVG.
 - **T-11** — Roving tabindex across the ten marks, arrows plus Home and End to move, Enter and Space to toggle, visible --ink focus ring. Ten attempts cost one Tab stop.
 - **T-12** — Polite role=status live region, empty at load, populated after each toggle with the attempt that changed plus the new estimate. Debounced by the animation duration.
+- **T-13** — Attribution view: single-flip counterfactual influence per attempt, top three ringed in --claim with a dimming second cue, toggled by a real button with aria-pressed, announced in the live region.
 
 ---
 
@@ -104,4 +104,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-10 verified at the logic level only (89 unit tests). The click path itself needs a real browser; that check belongs to T-19.
 - T-11 found that svg role='img' hides its own children from assistive tech, which would have buried ten controls inside one image node. The script now swaps the SVG to role='group' and moves the description to a visually-hidden paragraph.
 - npm run check occasionally hangs past 120s. Re-running it alone completes in seconds. Not diagnosed; if it recurs, run it with a longer timeout rather than assuming a failure.
+- T-24 must lint SOURCE css, not built output: Tailwind's base layer legitimately mentions box-shadow (reset plus utility plumbing), so a built-CSS grep for 'shadow' always trips.
 
