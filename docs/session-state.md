@@ -23,6 +23,38 @@ Nothing.
 
 ## QUEUE
 
+Refilled 2026-09-13 after T-01 to T-26 completed. Phase 2 is done: tokens
+(T-02), header, footer, link and focus styles (T-22), the specimen page
+(T-21), and the widget reskinned onto tokens (T-23). Its exit gate is met —
+the specimen carries no value that is not in DESIGN.md, because every number
+on it is parsed from tokens.css at build time.
+
+These come from Phase 4 in `docs/phase.md` and the "Before deploy" checklist
+in `docs/handbook.md`. Phase 3 is deliberately not queued: it is publications
+and people content, and it needs Kaung.
+
+- **T-27** Page metadata. Per-page title and description, canonical URL, and
+  `noindex` on the specimen, which is a working document rather than a page
+  for readers.
+- **T-28** Favicon. SVG, from the design tokens, no invented mark.
+- **T-29** Open Graph and Twitter card metadata, plus a share image. The
+  image should be the trace, since that is the thing the site is about, and it
+  can be rendered at build time from the same geometry module.
+- **T-30** Sitemap, via `@astrojs/sitemap`, excluding anything marked
+  `noindex`.
+- **T-31** A 404 page, using the same layout, that says what is missing
+  without inventing links to pages that do not exist.
+- **T-32** Reduced-motion pass in a real browser. The handbook asks that
+  nothing jumps; T-14 built the path but only the CSS has been read, not the
+  rendered behaviour.
+- **T-33** Full-page keyboard pass. T-11 and T-17 covered the widget; this is
+  the whole document on both pages, including the skip link actually moving
+  focus to `#main`.
+- **T-34** Heading structure audit across both pages. axe checks order within
+  a page; this checks there is exactly one h1 per page and no skipped level.
+
+When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
+
 ## BLOCKED
 
 Carried forward from the Phase 0 runs. None of these blocks the queue above.
