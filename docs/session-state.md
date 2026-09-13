@@ -17,7 +17,10 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-35** Enforce the island rules from `CLAUDE.md` as a test: only the two
+  sanctioned islands ship JavaScript, each renders a real static version
+  server-side, and the bundle stays under the ~100KB gzipped threshold that
+  would force click-to-load.
 
 ---
 
@@ -30,10 +33,6 @@ B-5, and the handbook's publications check, which is Phase 3.
 So these are the constraints that CLAUDE.md and DESIGN.md state but nothing
 currently enforces. Each was verified by hand once and could regress silently.
 
-- **T-35** Enforce the island rules from `CLAUDE.md` as a test: only the two
-  sanctioned islands ship JavaScript, each renders a real static version
-  server-side, and the bundle stays under the ~100KB gzipped threshold that
-  would force click-to-load.
 - **T-36** Enforce the palette in the built output: only the six DESIGN.md
   colours reach the CSS, and no `prefers-color-scheme` rule survives, since
   D-009 keeps dark mode out of v1. Tailwind smuggled one in once already.
