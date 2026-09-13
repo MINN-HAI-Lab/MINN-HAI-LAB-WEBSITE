@@ -172,3 +172,36 @@ real lab name and mission sentence, which is the whole point of the space.
 
 Flagging it only so it is a decision rather than an oversight. Worth looking
 at again once B-1 and B-3 are answered.
+
+---
+
+## Q-9 — DESIGN.md contradicts itself about the 15px floor
+
+**Raised:** T-26, 2026-09-13. **Routed around:** followed the scale.
+
+Two statements in `design/DESIGN.md` cannot both hold below 900px.
+
+§ Colour, on contrast: "`--ink-muted` passes comfortably on both surfaces but
+should still not go below 15px."
+
+§ Type, the below-900px scale: Small is **14px**.
+
+`--ink-muted` is specified for "metadata: venue, year, authors, captions",
+which is exactly the Small role. So on a phone, every piece of metadata on the
+site renders at 14px in `--ink-muted` — one pixel under the floor the same
+file sets.
+
+Measured on the built page: at 390px the trace key, the synthetic label, the
+instructions, the axis labels and the caption are all 14px in `--ink-muted`.
+At 1440px they are 15px and the floor holds.
+
+I followed the type scale rather than the contrast note, because the scale is
+a table of explicit values and the note reads as a caution. But that is a
+guess about which of the two you meant.
+
+> Three ways out, and this is your call. Raise the below-900px Small to 15px.
+> Or keep 14px and drop the floor to 14, since `--ink-muted` at 6.02:1 on
+> `--paper` is comfortably above the 4.5:1 requirement and the floor is a
+> legibility preference rather than a WCAG one. Or keep both and say that
+> `--ink-muted` is not used at Small below 900px, which would mean metadata
+> goes to `--ink` on phones.

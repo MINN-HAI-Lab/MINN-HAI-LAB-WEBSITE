@@ -67,3 +67,47 @@
   font-size: var(--size-small);
   line-height: var(--lh-small);
 }
+
+/* ---------------------------------------------------------------------------
+   Element defaults.
+
+   Tailwind's preflight resets h1-h6 to `font-size: inherit`, which is the
+   right default for a utility-first codebase and wrong for this one: it left
+   the home page h1 rendering at body size. These restore the scale so a
+   correct document outline is also a correct visual hierarchy, and a page has
+   to opt *out* rather than remember to opt in.
+
+   h1 defaults to Page title rather than Display. DESIGN.md allows Display
+   "one per page at most", so it stays an explicit choice — a hero, not a
+   default that every h1 inherits.
+--------------------------------------------------------------------------- */
+
+h1 {
+  font-size: var(--size-title);
+  line-height: var(--lh-title);
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" var(--opsz-title), "wght" var(--weight-title);
+  margin-block: 0;
+}
+
+/* h2 and h3 share the Section role, because DESIGN.md defines one role for
+   "headings within a page" and inventing a sixth size to separate them is
+   exactly what "never invent a token" forbids. They separate by the space
+   above them instead, which is what --rhythm-section and --rhythm-heading are
+   for. */
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--size-section);
+  line-height: var(--lh-section);
+  font-variation-settings: "opsz" var(--opsz-section), "wght" var(--weight-section);
+  margin-block: 0;
+}
+
+/* Body copy needs no element rule. Tailwind's preflight does not touch
+   font-size on p or li, so both inherit --size-body from the body element
+   already. Adding one here would be redundant and actively harmful: an `li`
+   selector outranks the inherited size from .trace__key, and the widget's key
+   would jump from Small to Body. */
