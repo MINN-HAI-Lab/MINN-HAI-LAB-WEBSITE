@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-23** Reskin the widget onto tokens only. Grep component code for literal
-  hex, px or duration values and remove them.
+Nothing.
 
 ---
 
@@ -78,6 +77,7 @@ history at `ec7ada9`.
 - **T-21** — src/pages/specimen.astro plus type.css defining the five roles. Every number is parsed from tokens.css at build time; both scales render server-side, so the page is complete with JS off.
 - **T-26** — Type scale applied at element level for h1-h6; home h1 opts up to Display. Verified computed sizes at both scales: 56/18/15 above 900px, 34/17/14 below, with component overrides intact.
 - **T-22** — Header with set type and built-pages-only nav, footer carrying the contact TODO, plus link, button and focus states verified against DESIGN.md § States.
+- **T-23** — Widget geometry now derives from tokens: mark, ring and swatch radii parsed from --mark-size, --curve-width and --space-1; plot width from the viewBox constant; the script's last duration literal removed. Verified by mutation.
 
 ---
 

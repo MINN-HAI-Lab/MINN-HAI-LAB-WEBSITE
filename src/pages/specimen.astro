@@ -30,7 +30,11 @@ function read(block: string, name: string): string {
 }
 
 /** A value at the wide scale, falling back to the base where it is not
- *  overridden — weights are declared once and do not change at 900px. */
+ *  overridden — weights are declared once and do not change at 900px.
+ *
+ *  This reads both blocks, which is why it does not use token() from
+ *  src/lib/tokens.ts: that helper deliberately reads only the base scale,
+ *  because everywhere else in the codebase wants one answer rather than two. */
 const wide = (name: string): string => read(wideBlock, name) || read(baseBlock, name);
 const narrow = (name: string): string => read(baseBlock, name);
 

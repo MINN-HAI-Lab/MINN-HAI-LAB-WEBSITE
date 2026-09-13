@@ -20,10 +20,16 @@
   padding-inline: var(--space-4);
 }
 
-/* The plotted area, plus the text that must not scale with it. */
+/* The plotted area, plus the text that must not scale with it.
+
+   --trace-plot-width is set on the figure by Trace.astro, from the viewBox
+   width in trace-geometry.ts, so the drawing's nominal size lives in one place
+   rather than being repeated here as a magic number. It is set on the figure
+   rather than here because the key, the instructions and the controls are
+   siblings of this element and have to line up with it. */
 .trace__plot {
   position: relative;
-  max-width: 700px;
+  max-width: var(--trace-plot-width);
   margin-inline: auto;
   /* Room for the axis labels, which now sit outside the drawing. */
   padding-inline-start: var(--space-5);
@@ -199,7 +205,7 @@
   margin-block: var(--space-5) 0;
   margin-inline: auto;
   padding: 0;
-  max-width: 700px;
+  max-width: var(--trace-plot-width);
   list-style: none;
   font-size: var(--size-small);
   line-height: var(--lh-small);
@@ -271,7 +277,7 @@
   gap: var(--space-3);
   margin-block-start: var(--space-5);
   margin-inline: auto;
-  max-width: 700px;
+  max-width: var(--trace-plot-width);
 }
 
 .trace__controls[hidden] {
@@ -286,7 +292,7 @@
   display: block;
   margin-block: var(--space-4) 0;
   margin-inline: auto;
-  max-width: 700px;
+  max-width: var(--trace-plot-width);
   font-size: var(--size-small);
   line-height: var(--lh-small);
   font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);

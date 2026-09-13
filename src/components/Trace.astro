@@ -13,7 +13,9 @@
  */
 import { describe, formatPercent, trace } from '../lib/mastery.ts';
 import { VIEW, layout, yFor } from '../lib/trace-geometry.ts';
+import { tokenNumber } from '../lib/tokens.ts';
 import { EXAMPLE_ATTEMPTS, EXAMPLE_SKILL } from '../data/trace-example.ts';
+import tokens from '../styles/tokens.css?raw';
 
 interface Props {
   /** Sequence to render. Defaults to the synthetic example. */
@@ -28,8 +30,23 @@ const result = trace(attempts);
 const geometry = layout(result);
 const sentence = describe(result, skill);
 
-/** Radius in user units. --mark-size is a diameter. */
-const markRadius = 10;
+/* Geometry read from the tokens rather than typed in, so a change to
+   --mark-size moves the marks, the attribution ring and the key together
+   instead of moving one and leaving the others behind. */
+
+/** --mark-size is a diameter; SVG wants a radius. */
+const markSize = tokenNumber(tokens, 'mark-size');
+const markRadius = markSize / 2;
+
+/** Stroke width for marks and the curve. */
+const strokeWidth = tokenNumber(tokens, 'curve-width');
+
+/** The attribution ring sits one spacing step outside the mark. */
+const ringRadius = markRadius + tokenNumber(tokens, 'space-1');
+
+/** Key swatches are drawn at --mark-size, inset by half a stroke so the
+ *  outline of an open circle is not clipped by the viewBox. */
+const swatchRadius = markRadius - strokeWidth / 2;
 
 const correctCount = result.steps.filter((step) => step.correct).length;
 
@@ -65,6 +82,7 @@ const altText =
   data-trace
   data-attempts={JSON.stringify(attempts)}
   data-skill={skill}
+  style={`--trace-plot-width: ${VIEW.width}px`}
 >
   <div class="trace__panel">
     {/* Positioned wrapper. The axis labels and the synthetic stamp sit here as
@@ -131,7 +149,7 @@ const altText =
                 it is leaning on, which is a claim about a person. The ring
                 itself is the second cue, so the state does not rest on colour
                 alone. */}
-            <circle class="trace__mark-ring" cx={mark.x} cy={mark.y} r={14} />
+            <circle class="trace__mark-ring" cx={mark.x} cy={mark.y} r={ringRadius} />
             <circle
               class:list={['trace__mark', mark.correct ? 'is-correct' : 'is-incorrect']}
               cx={mark.x}
@@ -156,14 +174,34 @@ const altText =
         in greyscale, or seen by a colour-blind reader, it reads the same. */}
     <ul class="trace__key">
       <li class="trace__key-item">
-        <svg class="trace__key-swatch" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <circle class="trace__mark is-correct" cx="10" cy="10" r="8" />
+        <svg
+          class="trace__key-swatch"
+          viewBox={`0 0 ${markSize} ${markSize}`}
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle
+            class="trace__mark is-correct"
+            cx={markRadius}
+            cy={markRadius}
+            r={swatchRadius}
+          />
         </svg>
         <span>A filled circle is an attempt answered correctly.</span>
       </li>
       <li class="trace__key-item">
-        <svg class="trace__key-swatch" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <circle class="trace__mark is-incorrect" cx="10" cy="10" r="8" />
+        <svg
+          class="trace__key-swatch"
+          viewBox={`0 0 ${markSize} ${markSize}`}
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle
+            class="trace__mark is-incorrect"
+            cx={markRadius}
+            cy={markRadius}
+            r={swatchRadius}
+          />
         </svg>
         <span>An open circle is an attempt answered incorrectly.</span>
       </li>
@@ -319,10 +357,16 @@ const altText =
     function flashHighlight(): void {
       if (!curve) return;
       window.clearTimeout(highlightTimer);
+      // How long the highlight holds. --dur-slow, falling back to --dur-base
+      // rather than to a number typed in here: if neither token reads, there
+      // is no motion budget to spend and the highlight is skipped.
+      const hold = drawDuration || duration;
+      if (hold <= 0) return;
+
       curve.classList.add('is-changed');
       highlightTimer = window.setTimeout(() => {
         curve.classList.remove('is-changed');
-      }, drawDuration > 0 ? drawDuration : 600);
+      }, hold);
     }
 
     function animateTo(next: ReturnType<typeof trace>): void {
