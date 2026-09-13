@@ -17,7 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-22** Header, footer, body link, button and focus styles per DESIGN.md.
+Nothing.
 
 ---
 
@@ -78,6 +78,7 @@ history at `ec7ada9`.
 - **T-20** — Banned-list walk over the rendered 1440 and 390 captures. Two violations fixed: SVG text falling to ~6px against the 15px floor, and monospace used for a file path in prose. Three judgement calls logged, one defect queued as T-26.
 - **T-21** — src/pages/specimen.astro plus type.css defining the five roles. Every number is parsed from tokens.css at build time; both scales render server-side, so the page is complete with JS off.
 - **T-26** — Type scale applied at element level for h1-h6; home h1 opts up to Display. Verified computed sizes at both scales: 56/18/15 above 900px, 34/17/14 below, with component overrides intact.
+- **T-22** — Header with set type and built-pages-only nav, footer carrying the contact TODO, plus link, button and focus states verified against DESIGN.md § States.
 
 ---
 
@@ -107,4 +108,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-20 looked at the rendered screenshots rather than reasoning from markup, which is the only reason the 6px SVG text was caught. Text inside a scaled viewBox does not obey a px floor; anything that must stay legible belongs in HTML positioned over the drawing.
 - T-21: reading a source file from Astro frontmatter needs Vite's ?raw import, not fs. By prerender the module is bundled, so import.meta.url resolves into dist/.prerender and a relative path throws ENOENT.
 - T-26: only h1-h6 need element rules. Tailwind preflight resets headings to font-size:inherit but leaves p and li alone, so both already inherit --size-body from body. An li rule would outrank .trace__key's inherited Small and silently enlarge the widget key.
+- T-22 caught a T-20 regression: the axis-label gutter narrowed the SVG and tap targets fell from 24px to 22px at 360, with nothing failing. Narrow-width padding trimmed, and the 24px floor is now asserted in the browser harness across four widths rather than only in unit arithmetic.
 

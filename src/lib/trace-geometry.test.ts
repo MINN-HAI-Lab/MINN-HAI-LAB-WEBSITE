@@ -208,10 +208,12 @@ suite('hit targets', () => {
   });
 
   it('stays at or above 24 CSS pixels down to a 360px viewport', () => {
-    // The SVG scales to fit its container and never up. At 360px, after the
-    // page gutter and panel padding, it renders about 264px wide. A target has
-    // to survive that, which is what the first version did not: 32 units of
-    // circle became 12 physical pixels.
+    // 264px is what the drawing renders at on a 360px viewport once the page
+    // gutter, panel padding and axis-label gutter are taken out. That figure
+    // is CSS, not geometry, so this test can only check the arithmetic on one
+    // side of it — the authoritative check is the target-size spec in
+    // src/e2e, which measures the real boxes. Trimming the CSS is what put
+    // this back to 24px after the label gutter dropped it to 22.
     const geometry = layout(trace(SEQUENCE));
     const scale = 264 / VIEW.width;
     expect(geometry.slotWidth * scale).toBeGreaterThanOrEqual(24);

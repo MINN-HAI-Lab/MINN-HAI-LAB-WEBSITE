@@ -205,3 +205,29 @@ guess about which of the two you meant.
 > legibility preference rather than a WCAG one. Or keep both and say that
 > `--ink-muted` is not used at Small below 900px, which would mean metadata
 > goes to `--ink` on phones.
+
+---
+
+## Q-10 — The header name and the home page h1 are the same words
+
+**Raised:** T-22, 2026-09-13. **Routed around:** left as built, resolves with B-3.
+
+The header reads "MINN HAI Lab" and the home page h1 immediately below it reads
+"MINN HAI Lab" again.
+
+This is a symptom of the missing hero copy rather than a layout decision. The
+home page sketch in `docs/plan.md` puts the lab name in the header and a
+different line in the hero:
+
+```
+│  MINN HAI Lab                          research  ... │
+│  Human-centered AI                                   │
+│  One sentence, plain, no adjectives.                 │
+```
+
+So the h1 is meant to be a positioning line, not the name. Since that line is
+unknown (B-3, and its spelling depends on B-1), the h1 currently falls back to
+the only accurate thing available, which happens to be the name.
+
+> No action needed from you beyond B-1 and B-3. Noting it so the duplication
+> reads as a consequence of the gap rather than as something nobody noticed.

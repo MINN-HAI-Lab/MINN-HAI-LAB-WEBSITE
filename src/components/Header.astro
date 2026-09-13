@@ -1,0 +1,43 @@
+---
+/**
+ * Site header.
+ *
+ * Set type, not a wordmark: DESIGN.md says there is none yet and the header is
+ * type until there is. Sentence case throughout, including the nav, per
+ * CLAUDE.md.
+ *
+ * Only built pages are linked. Three of the four in the information
+ * architecture are Phase 3 and do not exist, and a nav that 404s is worse than
+ * one that admits its scope.
+ */
+import { LAB_NAME, NAVIGATION } from '../data/navigation.ts';
+
+const built = NAVIGATION.filter((item) => item.built);
+const current = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="page site-header__inner">
+    <a class="site-header__name" href="/">{LAB_NAME}</a>
+
+    {
+      built.length > 1 && (
+        <nav aria-label="Main">
+          <ul class="site-header__nav">
+            {built.map((item) => (
+              <li>
+                <a
+                  class="link"
+                  href={item.href}
+                  aria-current={current === item.href ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+  </div>
+</header>

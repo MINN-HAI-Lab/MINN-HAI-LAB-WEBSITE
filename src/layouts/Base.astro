@@ -7,6 +7,8 @@
  * there without skipping a level — CLAUDE.md requires that and T-25 checks it.
  */
 import { Font } from 'astro:assets';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -32,12 +34,12 @@ const { title, description } = Astro.props;
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
 
-    <slot name="header" />
+    <Header />
 
     <main id="main" class="page">
       <slot />
     </main>
 
-    <slot name="footer" />
+    <Footer />
   </body>
 </html>

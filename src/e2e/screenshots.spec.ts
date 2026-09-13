@@ -80,15 +80,66 @@ for (const { name, width, height } of WIDTHS) {
 
       // Tab rather than .focus(), so the capture shows what a keyboard user
       // actually gets, including :focus-visible.
-      await page.keyboard.press('Tab'); // skip link
-      await page.keyboard.press('Tab'); // first attempt
+      //
+      // Seeks rather than counting presses. A fixed count encodes how many
+      // focusable things happen to sit above the widget, which is a property
+      // of the header, not of the trace — adding the header's name link broke
+      // exactly that assumption once.
+      let focused: string | null = null;
+      let stops = 0;
+      for (; stops < 10 && focused === null; stops += 1) {
+        await page.keyboard.press('Tab');
+        focused = await page.evaluate(
+          () => document.activeElement?.getAttribute('data-index') ?? null,
+        );
+      }
 
-      const focused = await page.evaluate(
-        () => document.activeElement?.getAttribute('data-index'),
+      expect(focused, 'Tab never reached an attempt').toBe('0');
+
+      // Ten attempts must still cost one stop between them, however many
+      // stops precede the widget.
+      const inTabOrder = await page.evaluate(
+        () =>
+          [...document.querySelectorAll('.trace__mark-group')].filter(
+            (g) => g.getAttribute('tabindex') === '0',
+          ).length,
       );
-      expect(focused, 'Tab should reach the first attempt in two stops').toBe('0');
+      expect(inTabOrder, 'roving tabindex should leave exactly one stop').toBe(1);
 
       await page.locator('.trace__panel').screenshot({ path: `${OUT}/${name}-focus.png` });
+    });
+  });
+}
+
+/**
+ * Target size, measured in the browser rather than derived from the geometry.
+ *
+ * The unit tests can only check the viewBox arithmetic against an assumed
+ * render width. Everything upstream of that — the page gutter, the panel
+ * padding, the axis-label gutter — is CSS, and a change to any of it resizes
+ * every target. That has already happened once: adding the label gutter took
+ * the 360px targets from 24px to 22px, and nothing failed.
+ */
+for (const width of [360, 390, 768, 1440]) {
+  test.describe(`target size at ${width}px`, () => {
+    test.use({ viewport: { width, height: 900 } });
+
+    test('every attempt clears the 24px minimum', async ({ page }) => {
+      await page.goto('/');
+      await settle(page);
+
+      const boxes = await page.evaluate(() =>
+        [...document.querySelectorAll('.trace__mark-hit')].map((el) => {
+          const r = el.getBoundingClientRect();
+          return { w: r.width, h: r.height };
+        }),
+      );
+
+      expect(boxes.length, 'no attempt targets found').toBeGreaterThan(0);
+      for (const [i, box] of boxes.entries()) {
+        expect(box.w, `attempt ${i + 1} is ${box.w.toFixed(1)}px wide`).toBeGreaterThanOrEqual(24);
+        expect(box.h, `attempt ${i + 1} is ${box.h.toFixed(1)}px tall`).toBeGreaterThanOrEqual(24);
+      }
     });
   });
 }

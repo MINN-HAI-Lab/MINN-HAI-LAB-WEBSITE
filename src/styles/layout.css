@@ -25,6 +25,12 @@ body {
   flex-direction: column;
 }
 
+/* Takes the slack so the footer sits at the bottom of a short page rather than
+   halfway up it. */
+main {
+  flex: 1 0 auto;
+}
+
 /* -- The page frame -------------------------------------------------------- */
 
 /* Outer bound plus gutters. Everything on a page sits inside one of these.
@@ -236,4 +242,72 @@ a.link:hover {
   font-size: var(--size-small);
   line-height: var(--lh-small);
   font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+}
+
+/* -- Site header ----------------------------------------------------------- */
+
+/* Bounded by a rule beneath it, not a fill or a shadow. Same reasoning as the
+   trace panel: DESIGN.md bans shadows, so edges and space do the work. */
+.site-header {
+  border-block-end: var(--rule-width) solid var(--rule);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  padding-block: var(--space-5);
+}
+
+/* Set type, not a wordmark — DESIGN.md says there is no wordmark yet. The
+   name is a link to the home page and carries no underline until hovered,
+   since it reads as an identity rather than as running prose. */
+.site-header__name {
+  font-size: var(--size-section);
+  line-height: var(--lh-section);
+  font-variation-settings: "opsz" var(--opsz-section), "wght" var(--weight-section);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-header__name:hover {
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule-width);
+  text-underline-offset: var(--underline-offset);
+}
+
+.site-header__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+}
+
+/* The current page is marked by a thicker underline as well as by
+   aria-current, so the state is not carried by weight alone. */
+.site-header__nav a[aria-current='page'] {
+  text-decoration-thickness: calc(var(--rule-width) * 2);
+}
+
+/* -- Site footer ----------------------------------------------------------- */
+
+.site-footer {
+  margin-block-start: var(--rhythm-section);
+  border-block-start: var(--rule-width) solid var(--rule);
+}
+
+.site-footer__inner {
+  padding-block: var(--space-8);
+}
+
+.site-footer__note {
+  margin-block: var(--space-5) 0;
+  max-width: var(--measure);
 }

@@ -31,6 +31,24 @@
   padding-block-end: var(--space-5);
 }
 
+/* Below 640px every horizontal pixel is a tap target.
+   Ten marks share the drawing's width, so the hit area per mark is
+   (viewBox usable / 10) x (rendered width / 700). At 360px the chrome above —
+   64px of page gutter, the panel's inline padding, and the plot's label
+   gutter — left 240px of drawing and 22px targets, under the 24px minimum.
+   Trimming the two paddings we control gives 264px back and 24px with it.
+   Measured, not estimated: this exact regression appeared once already when
+   the label gutter was added. */
+@media (width < 640px) {
+  .trace__panel {
+    padding-inline: var(--space-2);
+  }
+
+  .trace__plot {
+    padding-inline-start: var(--space-4);
+  }
+}
+
 /* Scales down to fit, never up, so --mark-size and --curve-width are exact at
    full width and shrink proportionally below it. */
 .trace__svg {
