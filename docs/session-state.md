@@ -17,10 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-47** Find dead CSS. `.annotated` was written in T-04 and used by nothing
-  until T-42 rendered it. Check whether anything else is defined and never
-  used, and document the ones that are deliberately waiting for a Phase 3
-  page.
+Nothing.
 
 ---
 
@@ -111,6 +108,7 @@ history at `ec7ada9`.
 - **T-44** — Appended D-014 to D-021 as proposed: the favicon, TODO markers as content, target sizing in rendered pixels, the attribution measure, text outside the drawing, navigation showing only what exists, JS interpolation over CSS transitions, and no font preload.
 - **T-45** — First visit measured at 94.4KB, 83.8KB of it Literata and 10.6KB the site's own. Recorded in the handbook with a 120KB total and 25KB own-code budget enforced by verify.
 - **T-46** — The upgrade now runs guarded, and a failure reverts to the static rendering: roles, tabindex, cursor, controls and dash state all restored. Tested with an injected mid-upgrade throw.
+- **T-47** — Dead-CSS check over every class selector in the stylesheets. Nothing is currently dead; verified by planting one, which fails with the class and its file named.
 
 ---
 
