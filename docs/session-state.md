@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-21** Typographic specimen page showing every text style in context at
+  both scales.
 
 ---
 
 ## QUEUE
 
-- **T-21** Typographic specimen page showing every text style in context at
-  both scales.
 - **T-26** Apply the DESIGN.md type scale to headings and body copy across the
   site. Tailwind's preflight resets h1-h6 to `font-size: inherit`, so the home
   page h1 currently renders at body size. Raised by T-20.
