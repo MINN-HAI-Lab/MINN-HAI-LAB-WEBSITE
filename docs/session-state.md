@@ -17,7 +17,10 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-43** Font payload. Both Literata subsets are preloaded on every page,
+  which is 153K before anything renders. The site's current text is entirely
+  ASCII, so latin-ext may be fetched and never used. Establish what is
+  actually needed and whether preloading both is right.
 
 ---
 
@@ -25,10 +28,6 @@ Nothing.
 
 Refilled 2026-09-13, fourth time. T-39 to T-42 are done.
 
-- **T-43** Font payload. Both Literata subsets are preloaded on every page,
-  which is 153K before anything renders. The site's current text is entirely
-  ASCII, so latin-ext may be fetched and never used. Establish what is
-  actually needed and whether preloading both is right.
 - **T-44** Append this run's design decisions to `design/decisions.md` with
   status `proposed`. Several real choices — the favicon, the TODO marker
   treatment, the 24px target rule, the attribution measure — exist only in
