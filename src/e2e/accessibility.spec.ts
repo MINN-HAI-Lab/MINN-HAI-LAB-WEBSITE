@@ -22,6 +22,7 @@ const AXE_SOURCE = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const PAGES = [
   { name: 'home', path: '/' },
   { name: 'specimen', path: '/specimen/' },
+  { name: '404', path: '/404.html' },
 ] as const;
 
 interface AxeNode {
