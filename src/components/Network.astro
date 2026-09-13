@@ -182,7 +182,7 @@ const altText =
     <p class="visually-hidden" data-summary></p>
     <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
 
-    <p class="artefact__readout" data-readout>
+    <p class="artefact__sentence" data-sentence>
       The Markov blanket of Mastery is {initialBlanket.all.length} variables. Given
       those, Mastery is independent of everything else here.
     </p>
@@ -214,7 +214,7 @@ const altText =
     const nodes = [...el.querySelectorAll<SVGGElement>('[data-node]')];
     const labels = [...el.querySelectorAll<HTMLElement>('[data-label]')];
     const edges = [...el.querySelectorAll<SVGLineElement>('[data-edge]')];
-    const readout = el.querySelector<HTMLElement>('[data-readout]');
+    const readout = el.querySelector<HTMLElement>('[data-sentence]');
     const live = el.querySelector<HTMLElement>('[data-live]');
     const controls = el.querySelector<HTMLElement>('[data-controls]');
     const instructions = el.querySelector<HTMLElement>('[data-instructions]');

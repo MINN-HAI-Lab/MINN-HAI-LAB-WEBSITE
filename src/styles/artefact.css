@@ -71,8 +71,14 @@
 /* -- Readout --------------------------------------------------------------- */
 
 /* The sentence under an artefact, stating in words what it currently shows.
-   Serif, because it is a sentence a person reads. */
-.artefact__readout {
+
+   Serif, and deliberately not called a readout. The brief puts readouts in the
+   sans — and it means the numeric kind, `.readout`: a peak value, an estimate,
+   a token count, the sort of thing that belongs on an instrument face. This is
+   a sentence in English that a person reads, so it is prose and it is set in
+   the prose face. Naming it `.artefact__readout` made that look like a
+   violation of the type rule rather than an application of it. */
+.artefact__sentence {
   font-family: var(--font-serif);
   font-size: var(--size-body);
   line-height: var(--lh-body);

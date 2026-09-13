@@ -74,7 +74,7 @@ const alt =
   <figcaption class="artefact__caption">
     <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
 
-    <p class="artefact__readout" data-readout>
+    <p class="artefact__sentence" data-sentence>
       Attention concentrates where the image has structure. Move the pointer
       over the photograph, or focus it and use the arrow keys, to move the
       fixation point.
@@ -115,7 +115,7 @@ const alt =
     const controls = el.querySelector<HTMLElement>('[data-controls]')!;
     const peakOut = el.querySelector<HTMLElement>('[data-peak]')!;
     const peakLabel = el.querySelector<HTMLElement>('[data-peak-label]')!;
-    const readout = el.querySelector<HTMLElement>('[data-readout]')!;
+    const readout = el.querySelector<HTMLElement>('[data-sentence]')!;
     const live = el.querySelector<HTMLElement>('[data-live]')!;
     const modeButton = el.querySelector<HTMLButtonElement>('[data-mode]')!;
 

@@ -73,7 +73,7 @@ const words = EXAMPLE_SENTENCE.split(/\s+/).filter(Boolean).length;
   <figcaption class="artefact__caption">
     <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
 
-    <p class="artefact__readout" data-readout>
+    <p class="artefact__sentence" data-sentence>
       Select a token to see where its attention goes. Arrow keys move between
       them.
     </p>
@@ -113,7 +113,7 @@ const words = EXAMPLE_SENTENCE.split(/\s+/).filter(Boolean).length;
     const row = el.querySelector<HTMLElement>('[data-tokens]')!;
     const controls = el.querySelector<HTMLElement>('[data-controls]')!;
     const count = el.querySelector<HTMLElement>('[data-count]')!;
-    const readout = el.querySelector<HTMLElement>('[data-readout]')!;
+    const readout = el.querySelector<HTMLElement>('[data-sentence]')!;
     const live = el.querySelector<HTMLElement>('[data-live]')!;
     const restore = el.querySelector<HTMLButtonElement>('[data-restore]')!;
 
