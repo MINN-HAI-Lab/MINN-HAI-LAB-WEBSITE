@@ -17,14 +17,6 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
-
----
-
-## QUEUE
-
-Refilled 2026-09-13, fifth time. T-43 to T-45 are done.
-
 - **T-48** The specimen page is called "Type specimen" and now demonstrates
   layout primitives as well. Make its name, description and heading match what
   it actually covers.
@@ -32,6 +24,12 @@ Refilled 2026-09-13, fifth time. T-43 to T-45 are done.
 When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
 
 ---
+
+---
+
+## QUEUE
+
+Refilled 2026-09-13, fifth time. T-43 to T-45 are done.
 
 ## BLOCKED
 
