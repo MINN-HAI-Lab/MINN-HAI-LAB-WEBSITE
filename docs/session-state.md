@@ -17,7 +17,10 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-39** Look at the screenshots that have never been reviewed. T-20
+  critiqued the 1440 and 390 full-page captures; the 768 tablet width, the
+  attribution view, the focus ring and the no-JS capture have all been
+  generated and never opened.
 
 ---
 
@@ -30,10 +33,6 @@ B-9, and the handbook's publications check is Phase 3.
 These are gaps I can see in what has been built rather than new features:
 things made but never looked at, and assumptions never tested.
 
-- **T-39** Look at the screenshots that have never been reviewed. T-20
-  critiqued the 1440 and 390 full-page captures; the 768 tablet width, the
-  attribution view, the focus ring and the no-JS capture have all been
-  generated and never opened.
 - **T-40** Base-path robustness. Every internal URL is absolute from the root
   (`/favicon.svg`, `/share.svg`, `/`). D-008 names GitHub Pages as the
   likeliest host, and a project page there serves from `/<repo>/`, which
