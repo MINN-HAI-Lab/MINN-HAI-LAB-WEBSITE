@@ -17,7 +17,10 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-46** Make the trace island fail safe. The upgrade script runs
+  unguarded: if any part of it throws, the marks are left half-converted —
+  some interactive, some not, with a pointer cursor promising behaviour that
+  is gone. Failing back to the static rendering is strictly better.
 
 ---
 
@@ -25,10 +28,6 @@ Nothing.
 
 Refilled 2026-09-13, fifth time. T-43 to T-45 are done.
 
-- **T-46** Make the trace island fail safe. The upgrade script runs
-  unguarded: if any part of it throws, the marks are left half-converted —
-  some interactive, some not, with a pointer cursor promising behaviour that
-  is gone. Failing back to the static rendering is strictly better.
 - **T-47** Find dead CSS. `.annotated` was written in T-04 and used by nothing
   until T-42 rendered it. Check whether anything else is defined and never
   used, and document the ones that are deliberately waiting for a Phase 3
