@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-20** Self-critique pass: walk the built page against the banned list in
-  `CLAUDE.md`. Fix unambiguous violations, log judgement calls.
+Nothing.
 
 ---
 
@@ -26,6 +25,9 @@ stop the run.
 
 - **T-21** Typographic specimen page showing every text style in context at
   both scales.
+- **T-26** Apply the DESIGN.md type scale to headings and body copy across the
+  site. Tailwind's preflight resets h1-h6 to `font-size: inherit`, so the home
+  page h1 currently renders at body size. Raised by T-20.
 - **T-22** Header, footer, body link, button and focus styles per DESIGN.md.
 - **T-23** Reskin the widget onto tokens only. Grep component code for literal
   hex, px or duration values and remove them.
@@ -79,6 +81,7 @@ history at `ec7ada9`.
 - **T-17** — JS-off path verified in chromium with scripting disabled: 24 checks, all passing. Interactive path smoke-tested too.
 - **T-18** — Contrast checker parses the DESIGN.md table and tokens.css, recomputes all six ratios and fails past 0.05 drift. Also asserts the 4.5 and 3.0 floors those ratios exist to protect. Verified by mutation.
 - **T-19** — Playwright harness at 390, 768 and 1440 capturing full page, trace, attribution view and focus ring, plus a JS-off capture. 13 specs, output to gitignored screenshots/.
+- **T-20** — Banned-list walk over the rendered 1440 and 390 captures. Two violations fixed: SVG text falling to ~6px against the 15px floor, and monospace used for a file path in prose. Three judgement calls logged, one defect queued as T-26.
 
 ---
 
@@ -105,4 +108,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-17 also smoke-tested the interactive path that T-10/T-11/T-13 could only unit-test. Click flips a mark, curve d changes, live region announces. Keyboard: Tab reaches the marks in one stop (skip-link, mark 0, button), arrows move focus with the roving tabindex following (0-1-1... to -10-1...), Home and End jump, Enter and Space both toggle, focus ring computes to solid 2px rgb(28,40,48) = --ink. Space does not scroll, verified against a control where Space on the body scrolls 428px. Attribution ring lands on marks 7,8,9.
 - Two false alarms while testing keyboard, both test-sequencing errors rather than bugs: pressing arrows after focus had already tabbed past the widget onto the button, and reading scrollY after focus() had itself scrolled the mark into view. Re-check the harness before believing a keyboard failure.
 - T-19: astro preview in Astro 7 always daemonises, so Playwright's webServer block reports 'Process from config.webServer exited early'. Server lifecycle lives in the shots npm script instead. Also added vitest.config.ts restricting vitest to src/**/*.test.ts, or it would try to run the .spec.ts Playwright files itself.
+- T-20 looked at the rendered screenshots rather than reasoning from markup, which is the only reason the 6px SVG text was caught. Text inside a scaled viewBox does not obey a px floor; anything that must stay legible belongs in HTML positioned over the drawing.
 

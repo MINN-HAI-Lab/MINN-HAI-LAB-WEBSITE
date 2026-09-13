@@ -20,14 +20,23 @@
   padding-inline: var(--space-4);
 }
 
+/* The plotted area, plus the text that must not scale with it. */
+.trace__plot {
+  position: relative;
+  max-width: 700px;
+  margin-inline: auto;
+  /* Room for the axis labels, which now sit outside the drawing. */
+  padding-inline-start: var(--space-5);
+  /* Room for the synthetic stamp beneath it. */
+  padding-block-end: var(--space-5);
+}
+
 /* Scales down to fit, never up, so --mark-size and --curve-width are exact at
    full width and shrink proportionally below it. */
 .trace__svg {
   display: block;
   width: 100%;
   height: auto;
-  max-width: 700px;
-  margin-inline: auto;
   overflow: visible;
 }
 
@@ -38,27 +47,35 @@
   stroke-width: var(--rule-width);
 }
 
+/* HTML, not SVG text, so it keeps its size when the drawing scales. Pinned to
+   the chart rows by percentage, which holds at any scale because the SVG has a
+   fixed aspect ratio. */
 .trace__axis-label {
-  fill: var(--ink-muted);
-  font-family: var(--font-literata), serif;
+  position: absolute;
+  inset-inline-start: 0;
+  transform: translateY(-50%);
   font-size: var(--size-small);
+  line-height: 1;
   font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
   font-feature-settings: "tnum" 1;
-  text-anchor: end;
+  color: var(--ink-muted);
 }
 
 /* -- Synthetic-data stamp -------------------------------------------------- */
 
-/* Inside the drawing so it travels with a screenshot or an export. --ink-muted
-   at 5.48:1 on the panel: quiet enough not to compete with the trace, loud
-   enough that it cannot be missed or mistaken for decoration. Never faded
-   below the token, since the whole point is that it stays legible. */
+/* Over the drawing, inside the panel, so a screenshot of the widget carries it.
+   --ink-muted at 5.48:1 on the panel: quiet enough not to compete with the
+   trace, loud enough that it cannot be missed or taken for decoration. Never
+   faded below the token, since the point is that it stays legible — and now
+   HTML rather than SVG text, so it holds 15px at every width. */
 .trace__stamp {
-  fill: var(--ink-muted);
-  font-family: var(--font-literata), serif;
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: 0;
   font-size: var(--size-small);
+  line-height: var(--lh-small);
   font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
-  text-anchor: end;
+  color: var(--ink-muted);
 }
 
 /* -- Uncertainty band ------------------------------------------------------ */
@@ -107,9 +124,9 @@
 
 /* -- Interactive marks ----------------------------------------------------- */
 
-/* Transparent, not display:none — it has to stay hittable. Radius 16 in user
-   units gives a 32px target at full width, clearing the 24px minimum without
-   inflating the 20px mark. */
+/* Transparent, not display:none — it has to stay hittable. A rect spanning the
+   whole slot, so the target survives the SVG scaling down: 24px at a 360px
+   viewport, where a circle gave 12. */
 .trace__mark-hit {
   fill: transparent;
   stroke: none;

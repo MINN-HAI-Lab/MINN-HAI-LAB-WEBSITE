@@ -136,3 +136,39 @@ The same reasoning will apply to the token lint in T-24.
 > If you would rather have a real `scripts/` directory, say so and I will move
 > them and add it to the layout in `docs/plan.md` — which I am not editing on
 > my own.
+
+---
+
+## Q-7 — The page has two left edges
+
+**Raised:** T-20, 2026-09-13. **Routed around:** left as built.
+
+Page content (the h1, the TODO blocks) starts at the page gutter. The trace
+panel is full-bleed per DESIGN.md, and its contents — the drawing, the key, the
+instructions, the button — are centred inside it, so they start about 200px
+further right at 1440. Two different left edges on one screen.
+
+Both halves follow DESIGN.md, which is why this is a judgement call rather
+than a fix. § Layout says "content is left-aligned and sits in a single
+measured column"; § Trace widget says the panel "runs full-bleed
+horizontally". Centring the drawing inside a full-bleed panel satisfies the
+second and quietly breaks the first.
+
+> Should the trace panel's contents align to the same left edge as the body
+> column, with the panel's fill and rules still running full width? That would
+> give one left edge and keep the full-bleed panel. I have not changed it
+> because the alternative reading is defensible and it is your page.
+
+---
+
+## Q-8 — 192px of nothing above the trace
+
+**Raised:** T-20, 2026-09-13. **Routed around:** left as built.
+
+`--space-20` between major sections at 900px and up is exactly what DESIGN.md
+specifies, and at 1440 it reads as a void because the section above it is
+currently two TODO blocks. It will likely look right once the hero carries the
+real lab name and mission sentence, which is the whole point of the space.
+
+Flagging it only so it is a decision rather than an oversight. Worth looking
+at again once B-1 and B-3 are answered.

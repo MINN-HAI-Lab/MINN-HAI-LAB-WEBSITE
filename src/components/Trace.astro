@@ -34,6 +34,20 @@ const markRadius = 10;
 const correctCount = result.steps.filter((step) => step.correct).length;
 
 /**
+ * Where the top and bottom of the plotted area sit, as a percentage of the
+ * SVG's height.
+ *
+ * The axis labels and the synthetic stamp are HTML, not SVG text, because SVG
+ * text scales with the viewBox: at 390px the drawing renders at 0.42 of
+ * nominal and 15px type became 6px, well under the floor DESIGN.md sets. HTML
+ * text keeps its size at every width. These percentages are what re-attach it
+ * to the right rows of the chart, and they are derived from the same geometry
+ * constants rather than eyeballed.
+ */
+const topPercent = (VIEW.chartTop / VIEW.height) * 100;
+const bottomPercent = (VIEW.chartBottom / VIEW.height) * 100;
+
+/**
  * Text alternative. Describes what the drawing shows, not what it is — "a
  * line chart" would tell a screen reader user nothing they can act on.
  */
@@ -53,7 +67,14 @@ const altText =
   data-skill={skill}
 >
   <div class="trace__panel">
-    <svg
+    {/* Positioned wrapper. The axis labels and the synthetic stamp sit here as
+        HTML rather than inside the SVG, so they keep their size when the
+        drawing scales down. */}
+    <div class="trace__plot">
+      <span class="trace__axis-label" style={`top: ${topPercent}%`} aria-hidden="true">1</span>
+      <span class="trace__axis-label" style={`top: ${bottomPercent}%`} aria-hidden="true">0</span>
+
+      <svg
       class="trace__svg"
       viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
       role="img"
@@ -61,17 +82,6 @@ const altText =
       preserveAspectRatio="xMidYMid meet"
     >
       <title>Knowledge trace for {skill}</title>
-
-      {/* DESIGN.md: "Label the synthetic data visibly inside the widget."
-          Inside the SVG, not merely beside it, so that a screenshot or an
-          exported copy of the graphic carries the label with it. The caption
-          below states it in full; this is aria-hidden so a screen reader is
-          not told twice. */}
-      <text
-        class="trace__stamp"
-        x={VIEW.width - VIEW.padX}
-        y={VIEW.height - 8}
-        aria-hidden="true">Synthetic data</text>
 
       {/* Baseline. A hairline, decorative, so --rule is the right weight. */}
       <line
@@ -81,10 +91,6 @@ const altText =
         x2={VIEW.width - VIEW.padX}
         y2={yFor(0)}
       />
-
-      {/* Axis endpoints. Without them the curve's height means nothing. */}
-      <text class="trace__axis-label" x={VIEW.padX - 10} y={yFor(1)} dy="0.32em">1</text>
-      <text class="trace__axis-label" x={VIEW.padX - 10} y={yFor(0)} dy="0.32em">0</text>
 
       {/* Uncertainty band. The fill is a wash at 12% and cannot carry the
           information on its own (1.22:1 against the panel), so the 1px --claim
@@ -135,7 +141,14 @@ const altText =
           </g>
         ))}
       </g>
-    </svg>
+      </svg>
+
+      {/* DESIGN.md: "Label the synthetic data visibly inside the widget."
+          Inside the panel, over the drawing, so a screenshot of the widget
+          carries it. The caption states it in full; this is aria-hidden so a
+          screen reader is not told twice. */}
+      <span class="trace__stamp" aria-hidden="true">Synthetic data</span>
+    </div>
 
     {/* Key. "Shape carries the distinction" only holds if a reader can decode
         which shape is which, so the two marks are shown at the size they
