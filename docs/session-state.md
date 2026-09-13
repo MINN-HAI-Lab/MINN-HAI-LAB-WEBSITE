@@ -10,7 +10,12 @@ conflict is logged as Q-19 rather than halted on.
 
 ## IN PROGRESS
 
-Nothing.
+Nothing. The build is finished.
+
+Final state: five pages, four live artefacts, 486 browser tests green across
+Chromium, Firefox and WebKit, 160 unit tests, Lighthouse 100 for performance,
+accessibility, best practices and SEO on every page with the glass in place.
+Never pushed; `auto/site` exists only on this machine.
 
 ## QUEUE
 
