@@ -17,17 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-53** Do the prototypes step, late. `CLAUDE.md` says "Produce three
-  visually distinct approaches in `prototypes/` ... Never one-shot a layout",
-  and Q-17 records that this run skipped it entirely. Build three genuinely
-  different treatments of the trace so there is something to choose between,
-  rather than one thing that happens to exist. One of them should be what is
-  currently built, so the comparison is fair.
-
-`prototypes/` is gitignored per `docs/plan.md`, so these live on disk and not
-in the repo. That is the plan's choice, not a way of hiding them.
-
----
+Nothing.
 
 ---
 
@@ -116,6 +106,7 @@ history at `ec7ada9`.
 - **T-50** — Clean rebuild from a wiped dist, .astro and screenshots: verify exits 0, three pages build, 147 unit tests and 80 browser specs pass, five TODO markers all well-formed, and the pages read correctly at 1440 and 390.
 - **T-51** — Suite now runs in Chromium, Firefox and WebKit: 243 specs pass. Found D-020's premise was backwards and corrected it as D-022; fixed three keyboard tests that encoded Chromium-only assumptions.
 - **T-52** — Font-failure path covered in all three engines: with every woff2 aborted, text still renders at the token sizes, nothing overflows, and the trace still draws and still toggles.
+- **T-53** — Three prototypes of the trace built from the real model and tokens — separated rows as built, marks on the curve, and stepped belief — with an honest comparison in Q-18 for Kaung to pick from.
 
 ---
 
@@ -155,4 +146,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-43: preloading a unicode-range-split font defeats the split. Astro inlines @font-face into the head, so there is no stylesheet round trip for preload to save, and it forced both subsets down. Removing it halved the font payload with no change to layout shift.
 - Reading an exit code after a pipe reports the LAST command in the pipeline, not the first. 'npm run verify | tail' always looks like it exited 0. Redirect to a file and check the status, or use PIPESTATUS.
 - T-51: D-020 claimed Firefox cannot transition the SVG d property. Measured, it is the opposite — Chromium and Firefox both can, WebKit cannot. The decision survives because Safari is the one that matters, but the premise was asserted, not tested, and a Chromium-only suite could never have caught it.
+- T-53: prototypes/ is gitignored per docs/plan.md, so the three prototypes, their README and their generator live on disk only. If the working copy is lost they go with it; 'node --experimental-strip-types prototypes/generate.mjs' rebuilds them from the real model and tokens.
 

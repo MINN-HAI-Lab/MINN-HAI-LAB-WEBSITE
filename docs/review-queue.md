@@ -422,3 +422,44 @@ They should have been written as they were taken.
 
 > Nothing here needs an answer. It needs you to know that the prototypes step
 > did not happen, before you read the site as something you chose.
+
+---
+
+## Q-18 — Three treatments of the trace, for picking between
+
+**Raised:** T-53, 2026-09-13. **Needs you.**
+
+The prototypes step Q-17 records as skipped, done late. Three self-contained
+files in `prototypes/`, each running the real model over the real synthetic
+sequence with the real tokens, so the differences are design differences and
+nothing else. `prototypes/README.md` explains them and how to regenerate.
+
+**A, separated rows.** Attempts in a row above, the estimate as a continuous
+curve below. What is currently built. The two things are legible separately,
+and the attempt row is easy to scan and easy to hit — which matters, because
+the attempts are the interactive part. The cost is that the reader has to
+connect cause to effect by eye.
+
+**B, marks on the curve.** Each attempt sits at the estimate it produced, so
+the sequence and the estimate are one object with half the elements. To my eye
+it is the strongest of the three as a picture. The costs are real though: the
+attempt row stops being scannable on its own, the marks land on the uncertainty
+band where the open ones lose contrast, and the tap targets would have to move
+with the curve rather than sitting in a predictable row.
+
+**C, stepped belief.** The estimate as a step function. This one is an argument
+rather than a style: BKT's belief is constant between observations and jumps
+when one arrives, so A and B both draw a sloping line implying readings that
+were never taken. C is the honest shape. It is also visibly busier — the
+stepped band reads as blocks rather than a wash — and it is harder to follow at
+a glance.
+
+> My recommendation, for what it is worth after building A: **B for the
+> picture, C for the honesty, A for the interaction.** If the widget has to
+> teach a non-specialist what knowledge tracing is in five seconds, which is
+> what `docs/plan.md` asks of it, I would look hardest at B. If it has to be
+> defensible to someone in the field, C has an argument the other two cannot
+> make.
+>
+> This is exactly the choice the process exists to give you, and it is one I
+> should not make on my own.
