@@ -91,6 +91,12 @@ Nothing.
 
 ## QUEUE
 
+Empty, and not because the work is done — because everything left needs Kaung.
+Refill from `docs/phase.md` as B-1 to B-9 land. Never queue Phase 3 without
+him.
+
+---
+
 ## BLOCKED
 
 Carried forward from the Phase 0 runs. None of these blocks the queue above.
@@ -105,7 +111,9 @@ history at `ec7ada9`.
 - **B-4** Authors and real paper/code URLs for all fourteen publications.
   The big one. Nothing renders a citation until this lands.
 - **B-5** Full funder names, and whether grant numbers appear.
-- **B-6** Accept or reject D-001 to D-013. The Phase 0 exit gate.
+- **B-6** Accept or reject every entry in `design/decisions.md`. Twenty-three
+  now, D-001 to D-022 plus the superseded D-005. None is accepted. This is the
+  Phase 0 exit gate and it has not moved since the first run.
 - **B-7** Accept or reject D-004, the trace widget as hero.
 - **B-9** The contact email address. `docs/plan.md` lists it as supplied but
   it is not in the repo, and the footer is the one place the site promises it.
