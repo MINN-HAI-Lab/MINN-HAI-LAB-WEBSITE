@@ -342,3 +342,171 @@ edges. Those measure about 6:1 and carry the information; the fill stays at 12%
 and stays decorative. This is also better chart practice than a bare tint.
 
 New token: `--trace-band-edge: var(--claim)`, 1px.
+
+---
+
+## D-014 — The favicon is the estimate, not a mark
+
+**Status:** proposed · 2026-09-13
+
+A rising `--claim` curve on `--paper`, generated from the tokens at build time.
+
+DESIGN.md says there is no wordmark yet and the header is set type until there
+is one. A favicon still has to be something, so it is the site's display idea
+at its smallest rather than a logo invented to fill the slot.
+
+`--claim` is not merely allowed here, it is required: the line is the model's
+estimate, which is what that token means.
+
+**Rejected:** a letter, because which letter depends on the lab name and that
+is unconfirmed — "MINN HAI Lab", "HAI Lab" and "MINN HAI (Human-centered AI)
+Lab" do not all start with the same one. Also rejected: a monogram, a mark, or
+anything that would be a branding decision nobody asked for.
+
+---
+
+## D-015 — TODO markers are content, not comments
+
+**Status:** proposed · 2026-09-13
+
+Missing content renders as a visible block on the page: `--ink` on
+`--paper-sunk` with a heavy rule, naming what is missing, who supplies it, and
+its tracker.
+
+CLAUDE.md asks for a visible gap rather than a plausible fabrication. Astro
+strips `{/* */}` comments from output entirely, so a marker written that way is
+invisible in the built page — the opposite of what was asked for.
+
+Deliberately never `--claim`. That colour means a model asserted something
+about a person, and an editorial note is not that.
+
+The site currently carries five. A test fails the build if any of them does not
+name what is missing, who supplies it, and a tracker.
+
+**Rejected:** HTML comments, a build-time warning, a separate list. All of them
+let an unfinished page look finished.
+
+---
+
+## D-016 — Interactive targets are sized in rendered pixels, not viewBox units
+
+**Status:** proposed · 2026-09-13
+
+Each attempt's hit area is a transparent rect spanning its whole slot, sized so
+it clears 24 CSS pixels at a 360px viewport.
+
+The trace scales down to fit. Anything sized in viewBox units scales with it,
+so the original 32-unit hit circles rendered at 12 physical pixels on a phone —
+half the WCAG 2.5.8 minimum, on exactly the devices where the pointer is a
+finger. It looked correct in the markup and only appeared on measurement.
+
+Adjacent targets touch rather than overlap, so there is no dead space between
+them either.
+
+The constraint is tight enough to bind on the layout: ten targets in 264px is
+24px each with nothing to spare, which is why the panel's padding narrows below
+640px. The floor is asserted in the browser at four widths, because the
+arithmetic depends on CSS the unit tests cannot see.
+
+---
+
+## D-017 — Attribution is a single-flip counterfactual
+
+**Status:** proposed · 2026-09-13
+
+"Which attempts carry the estimate" is answered by flipping each attempt in
+turn, re-running the sequence, and measuring how far the final estimate moves.
+The top three above a threshold are marked.
+
+This is not a Shapley value and does not account for interactions: flipping two
+attempts together can move the estimate differently from the sum of flipping
+each alone. For a ten-step trace whose job is to make attribution legible, the
+single-flip version is the one a reader can verify by clicking the same
+attempt, and being checkable matters more here than being exactly additive.
+
+The threshold is half a percentage point, tied to the display rather than
+chosen: the estimate is shown as a whole percentage, so anything below that
+could be flipped without changing the number on screen.
+
+A consequence worth stating: after a long correct run the model saturates and
+nothing clears the threshold, so the view says no single attempt is carrying
+the estimate rather than naming a top three regardless.
+
+---
+
+## D-018 — Text that must stay legible lives outside the drawing
+
+**Status:** proposed · 2026-09-13
+
+The axis labels and the synthetic-data stamp are HTML positioned over the SVG,
+not `<text>` inside it.
+
+SVG text scales with the viewBox. At 390px the trace renders at 0.42 of nominal
+and 15px type became 6px — DESIGN.md sets a 15px floor for `--ink-muted`, and
+six is not a near miss. HTML text keeps its size at every width; percentages
+derived from the geometry constants re-attach it to the right rows.
+
+The cost is that an exported SVG no longer carries its own labels. That is worth
+it: a label nobody can read is not a label.
+
+---
+
+## D-019 — Navigation shows only what exists
+
+**Status:** proposed · 2026-09-13
+
+The header links built pages and nothing else. `src/data/navigation.ts` carries
+a `built` flag per page; the footer names the unbuilt ones in prose so the gap
+is stated rather than hidden.
+
+Three of the four pages in the information architecture are Phase 3. A nav that
+links them would 404, and sending a reader from one missing page to another is
+worse than a site that admits its scope. The 404 page follows the same rule.
+
+**Rejected:** greyed-out nav items, which look like a bug; and linking them
+anyway, which is one.
+
+---
+
+## D-020 — Motion is interpolated in JavaScript, not transitioned in CSS
+
+**Status:** proposed · 2026-09-13
+
+The estimate animates by interpolating path coordinates frame by frame, with
+the D-010 bezier curves evaluated in JavaScript, rather than by handing a CSS
+transition the `d` property.
+
+Two reasons. `d` is animatable in Chromium and Safari but not reliably in
+Firefox, and DESIGN.md says the movement of the estimate *is* the information —
+losing it in one browser would lose the point of the widget there.
+
+And it makes the reduced-motion path exact. DESIGN.md warns against setting a
+duration to zero on a transform because it produces a jump; interpolating in
+JavaScript means the animation can be skipped outright instead.
+
+Cost: roughly 40 lines of bezier solver, and motion that cannot be tuned from
+the stylesheet. The durations and curves are still read from the tokens at
+runtime, so DESIGN.md stays the source.
+
+---
+
+## D-021 — The font is not preloaded
+
+**Status:** proposed · 2026-09-13
+
+Literata ships as two `unicode-range` subsets and neither is preloaded.
+
+Preload is not free. `unicode-range` exists so a browser fetches only the
+subsets it needs, and a preload link overrides that by asking unconditionally.
+Preloading both cost 152.8KB on a first visit; without it the browser fetches
+83.8KB, because no glyph on the site falls in latin-ext today.
+
+Preload earns its place when a font is discovered late, behind a stylesheet
+round trip. Astro inlines these `@font-face` rules into the head, so there is
+no round trip to save.
+
+Measured layout shift is 0.0000 either way — the metric-matched local fallback
+was doing that work, not the preload.
+
+The latin-ext subset stays available and will be fetched the moment an author
+name needs it, which is when it should be.

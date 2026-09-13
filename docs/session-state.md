@@ -17,10 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-44** Append this run's design decisions to `design/decisions.md` with
-  status `proposed`. Several real choices — the favicon, the TODO marker
-  treatment, the 24px target rule, the attribution measure — exist only in
-  commit messages, where they cannot be reviewed or rejected.
+Nothing.
 
 ---
 
@@ -107,6 +104,7 @@ history at `ec7ada9`.
 - **T-41** — Layout shift measured on all three pages: zero, verified against a probe that catches a forced 0.22 reflow. The font swap and the curve draw both move nothing.
 - **T-42** — Annotation column rendered on the specimen and covered at both breakpoints. Rendering it exposed two defects: no paragraph rhythm inside it, and no measure cap below 1180 where the grid stops enforcing one.
 - **T-43** — Dropped the font preload: it forced both subsets down for 152.8KB where the browser needs one at 83.8KB. Layout shift stays at zero. Covered by a test that fails if a second font is fetched.
+- **T-44** — Appended D-014 to D-021 as proposed: the favicon, TODO markers as content, target sizing in rendered pixels, the attribution measure, text outside the drawing, navigation showing only what exists, JS interpolation over CSS transitions, and no font preload.
 
 ---
 
