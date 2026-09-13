@@ -17,13 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-48** The specimen page is called "Type specimen" and now demonstrates
-  layout primitives as well. Make its name, description and heading match what
-  it actually covers.
-
-When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
-
----
+Nothing.
 
 ---
 
@@ -107,6 +101,7 @@ history at `ec7ada9`.
 - **T-45** — First visit measured at 94.4KB, 83.8KB of it Literata and 10.6KB the site's own. Recorded in the handbook with a 120KB total and 25KB own-code budget enforced by verify.
 - **T-46** — The upgrade now runs guarded, and a failure reverts to the static rendering: roles, tabindex, cursor, controls and dash state all restored. Tested with an injected mid-upgrade throw.
 - **T-47** — Dead-CSS check over every class selector in the stylesheets. Nothing is currently dead; verified by planting one, which fails with the class and its file named.
+- **T-48** — Specimen renamed to Design specimen, since it now covers layout primitives as well as type. Logged Q-16 about the trace being cramped at phone widths.
 
 ---
 

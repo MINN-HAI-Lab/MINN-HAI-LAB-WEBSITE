@@ -351,3 +351,26 @@ prefix, including the three Astro would have left alone.
 > which case set `base` in `astro.config.mjs` and it works. A user or org page,
 > or any host serving from the root, needs nothing. Worth deciding alongside
 > D-008 and the domain rather than after a deploy.
+
+---
+
+## Q-16 — The trace is short on a phone
+
+**Raised:** T-48, 2026-09-13. **Routed around:** left as built.
+
+The drawing has a fixed 700x240 viewBox and scales to fit, so at 390px it
+renders about 294x101. The plotted area inside that is roughly 56px tall, and
+the whole range from an estimate of 0 to an estimate of 1 has to fit in it.
+
+It is legible — the curve and the band both read, and the axis labels are
+proper 14px HTML now rather than scaled SVG text. But it is cramped, and the
+widget is the entire design argument of the site.
+
+Fixing it means a taller aspect ratio below 900px, which is a second viewBox
+and therefore a second set of geometry constants. That is a design decision
+with real consequences for the mark spacing and the tap targets, so it is not
+one to make unilaterally.
+
+> Worth looking at on an actual phone before deciding. If it reads fine there,
+> this needs nothing. If it does not, the fix is a narrow-screen viewBox and I
+> would want that written down as a decision first.
