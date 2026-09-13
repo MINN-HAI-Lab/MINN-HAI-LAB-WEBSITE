@@ -62,6 +62,35 @@ export interface TraceGeometry {
   bandLowerPath: string;
 }
 
+/**
+ * Blend two results, for animating between them.
+ *
+ * Only the values the drawing reads are interpolated — the estimate and its
+ * two bounds. Everything else is taken from the destination, because a
+ * half-flipped attempt is not a state the model has any opinion about and
+ * pretending otherwise would put a number on screen that BKT never produced.
+ *
+ * Both results must describe the same number of attempts; toggling changes an
+ * outcome, never the length.
+ */
+export function blend(from: TraceResult, to: TraceResult, t: number): TraceResult {
+  const mix = (a: number, b: number): number => a + (b - a) * t;
+  return {
+    ...to,
+    initial: mix(from.initial, to.initial),
+    final: mix(from.final, to.final),
+    steps: to.steps.map((step, i) => {
+      const previous = from.steps[i] ?? step;
+      return {
+        ...step,
+        estimate: mix(previous.estimate, step.estimate),
+        lower: mix(previous.lower, step.lower),
+        upper: mix(previous.upper, step.upper),
+      };
+    }),
+  };
+}
+
 /** Map an estimate in [0, 1] onto the plotted area. */
 export function yFor(estimate: number): number {
   const { chartTop, chartBottom } = VIEW;

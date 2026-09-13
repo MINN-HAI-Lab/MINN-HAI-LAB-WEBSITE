@@ -91,6 +91,55 @@
   fill: var(--trace-bg);
 }
 
+/* -- Interactive marks ----------------------------------------------------- */
+
+/* Transparent, not display:none — it has to stay hittable. Radius 16 in user
+   units gives a 32px target at full width, clearing the 24px minimum without
+   inflating the 20px mark. */
+.trace__mark-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+/* .is-interactive is added by the script, so none of this applies to the
+   static rendering. A cursor that promises a control where there is none is
+   worse than no cursor. */
+.trace__marks.is-interactive .trace__mark-group {
+  cursor: pointer;
+}
+
+.trace__marks.is-interactive .trace__mark {
+  transition: stroke var(--dur-fast) var(--ease-mid),
+    fill var(--dur-fast) var(--ease-mid);
+}
+
+/* Hover changes colour and nothing else: no lift, no growth. --ink-muted on
+   the panel is 5.48:1, well clear of the 3:1 floor for a control boundary.
+   Never --claim, which means a model asserted something about a person. */
+.trace__marks.is-interactive .trace__mark-group:hover .trace__mark {
+  stroke: var(--ink-muted);
+}
+
+.trace__marks.is-interactive .trace__mark-group:hover .trace__mark.is-correct {
+  fill: var(--ink-muted);
+}
+
+.trace__mark-group:focus {
+  outline: none;
+}
+
+.trace__mark-group:focus-visible {
+  outline: var(--focus-width) solid var(--ink);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trace__marks.is-interactive .trace__mark {
+    transition: none;
+  }
+}
+
 /* -- Key ------------------------------------------------------------------- */
 
 /* Wraps to one item per line at narrow widths rather than overflowing. */

@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-10** Toggle interaction: clicking an attempt flips it, estimate and
-  curve update at `--dur-base` with `--ease-out`.
+Nothing.
 
 ---
 
@@ -88,6 +87,7 @@ history at `ec7ada9`.
 - **T-07** — Trace.astro renders the full trace as build-time SVG with zero client JS: band, band edges, curve, ten marks, axis, alt text, caption and synthetic-data label.
 - **T-08** — Marks verified: both states stroke --ink, correct fills, incorrect stays open. Added a key so the shapes are decodable, drawn from --mark-size by the same CSS.
 - **T-09** — Curve and band verified against D-013: 12% fill, 1px --claim edge strokes, 2px --claim curve. 20 geometry tests added; fixed a color-mix fallback that would have painted the band solid.
+- **T-10** — Click a mark to flip it; estimate, curve and band animate at --dur-base with --ease-out via rAF interpolation. 2.2KB gzipped, progressive enhancement over the static SVG.
 
 ---
 
@@ -103,4 +103,6 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-07 found describe() rounding 0.9964 to '100 per cent'. BKT never reaches certainty, so that is an overclaim on the page. Added formatPercent(), clamped to 1..99 unless truly 0 or 1.
 - T-08 nearly shipped 'Filled — answered correctly', which is the WORD — fragment spaced-em-dash label on the CLAUDE.md banned list. Key now uses full sentences. Worth watching for in any label-shaped copy.
 - T-09: the auto-generated color-mix fallback was full-opacity --claim, i.e. a solid block over the curve. Base value is now #b4133f1f (12.2%, nearest 8-bit alpha to 12%) with color-mix restoring the --claim link under @supports.
+- T-10 animates by interpolating path coordinates in rAF rather than transitioning the CSS d property: d is not reliably animatable in Firefox, and DESIGN.md says the movement IS the information. It also makes T-14's reduced-motion path exact rather than a zeroed duration.
+- T-10 verified at the logic level only (89 unit tests). The click path itself needs a real browser; that check belongs to T-19.
 

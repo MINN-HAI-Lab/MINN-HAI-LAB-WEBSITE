@@ -1,6 +1,6 @@
 import { describe as suite, expect, it } from 'vitest';
 import { trace } from './mastery.ts';
-import { VIEW, layout, xFor, yFor } from './trace-geometry.ts';
+import { VIEW, blend, layout, xFor, yFor } from './trace-geometry.ts';
 
 const SEQUENCE = [false, false, true, false, true, true, false, true, true, true];
 
@@ -146,5 +146,51 @@ suite('single attempt', () => {
     // correct: one attempt gives no width to sweep.
     expect(points(geometry.bandPath)).toHaveLength(2);
     expect(geometry.bandPath.trim().endsWith('Z')).toBe(true);
+  });
+});
+
+suite('blend', () => {
+  const before = trace([true, true, true, true]);
+  const after = trace([true, false, true, true]);
+
+  it('returns the start at t=0 and the destination at t=1', () => {
+    expect(blend(before, after, 0).final).toBeCloseTo(before.final, 10);
+    expect(blend(before, after, 1).final).toBeCloseTo(after.final, 10);
+  });
+
+  it('moves the estimate part way at t=0.5', () => {
+    const mid = blend(before, after, 0.5);
+    const a = before.steps[1]!.estimate;
+    const b = after.steps[1]!.estimate;
+    expect(mid.steps[1]!.estimate).toBeCloseTo((a + b) / 2, 10);
+    expect(mid.steps[1]!.estimate).toBeGreaterThan(Math.min(a, b));
+    expect(mid.steps[1]!.estimate).toBeLessThan(Math.max(a, b));
+  });
+
+  it('takes the outcome from the destination, never a half-flipped attempt', () => {
+    // A mid-animation frame is a drawing, not a model state. Interpolating
+    // `correct` would put a number on screen that BKT never produced.
+    const mid = blend(before, after, 0.5);
+    expect(mid.steps.map((s) => s.correct)).toEqual(after.steps.map((s) => s.correct));
+  });
+
+  it('keeps the band bracketing the curve at every frame', () => {
+    for (let i = 0; i <= 10; i += 1) {
+      const frame = blend(before, after, i / 10);
+      for (const step of frame.steps) {
+        expect(step.lower).toBeLessThanOrEqual(step.estimate);
+        expect(step.upper).toBeGreaterThanOrEqual(step.estimate);
+      }
+    }
+  });
+
+  it('produces a drawable geometry at every frame', () => {
+    for (let i = 0; i <= 10; i += 1) {
+      const geometry = layout(blend(before, after, i / 10));
+      expect(geometry.curvePath).toMatch(/^M/);
+      expect(geometry.bandPath.trim().endsWith('Z')).toBe(true);
+      expect(geometry.curvePath).not.toMatch(/NaN/);
+      expect(geometry.bandPath).not.toMatch(/NaN/);
+    }
   });
 });

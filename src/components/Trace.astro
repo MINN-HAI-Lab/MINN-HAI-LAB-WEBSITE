@@ -46,7 +46,12 @@ const altText =
   `accumulate.`;
 ---
 
-<figure class="trace">
+<figure
+  class="trace"
+  data-trace
+  data-attempts={JSON.stringify(attempts)}
+  data-skill={skill}
+>
   <div class="trace__panel">
     <svg
       class="trace__svg"
@@ -75,25 +80,33 @@ const altText =
           edges do it. D-013. */}
       {geometry.bandPath && (
         <>
-          <path class="trace__band" d={geometry.bandPath} />
-          <path class="trace__band-edge" d={geometry.bandUpperPath} />
-          <path class="trace__band-edge" d={geometry.bandLowerPath} />
+          <path class="trace__band" d={geometry.bandPath} data-band />
+          <path class="trace__band-edge" d={geometry.bandUpperPath} data-band-upper />
+          <path class="trace__band-edge" d={geometry.bandLowerPath} data-band-lower />
         </>
       )}
 
       {/* The estimate itself. The only --claim line on the page. */}
-      <path class="trace__curve" d={geometry.curvePath} />
+      <path class="trace__curve" d={geometry.curvePath} data-curve />
 
       {/* Attempts. Shape carries correct/incorrect, not colour, so the trace
           still reads in greyscale and for colour-blind readers. */}
-      <g class="trace__marks">
+      {/* Rendered inert. The script upgrades each group to a button once it
+          runs, so with JavaScript off these stay honest marks rather than
+          controls that look live and do nothing. */}
+      <g class="trace__marks" data-marks>
         {geometry.marks.map((mark) => (
-          <circle
-            class:list={['trace__mark', mark.correct ? 'is-correct' : 'is-incorrect']}
-            cx={mark.x}
-            cy={mark.y}
-            r={markRadius}
-          />
+          <g class="trace__mark-group" data-index={mark.index}>
+            {/* A larger transparent disc so the hit area clears the 24px
+                minimum without inflating the 20px mark itself. */}
+            <circle class="trace__mark-hit" cx={mark.x} cy={mark.y} r={16} />
+            <circle
+              class:list={['trace__mark', mark.correct ? 'is-correct' : 'is-incorrect']}
+              cx={mark.x}
+              cy={mark.y}
+              r={markRadius}
+            />
+          </g>
         ))}
       </g>
     </svg>
@@ -119,7 +132,7 @@ const altText =
   </div>
 
   <figcaption class="trace__caption">
-    <p class="trace__sentence">{sentence}</p>
+    <p class="trace__sentence" data-sentence>{sentence}</p>
     <p class="trace__synthetic">
       Synthetic data. This sequence was invented to illustrate the method. It
       is not a recording of a learner and not output from a model trained on
@@ -127,3 +140,124 @@ const altText =
     </p>
   </figcaption>
 </figure>
+
+<script>
+  /**
+   * The interactive layer.
+   *
+   * Progressive enhancement over the static SVG: the markup is already correct
+   * and readable before this runs, and everything below only upgrades it. With
+   * JavaScript off the marks stay inert, which is why they are not rendered as
+   * buttons server-side.
+   *
+   * Geometry comes from the same layout() the build used, so the interactive
+   * trace and the static one cannot disagree about where anything goes.
+   */
+  import { describe, trace } from '../lib/mastery.ts';
+  import { blend, layout } from '../lib/trace-geometry.ts';
+  import { EASE_OUT, cubicBezier, durationToMs } from '../lib/easing.ts';
+
+  const root = document.querySelector<SVGElement & HTMLElement>('[data-trace]');
+
+  if (root) {
+    const svgRoot = root.querySelector('[data-marks]');
+    const band = root.querySelector<SVGPathElement>('[data-band]');
+    const bandUpper = root.querySelector<SVGPathElement>('[data-band-upper]');
+    const bandLower = root.querySelector<SVGPathElement>('[data-band-lower]');
+    const curve = root.querySelector<SVGPathElement>('[data-curve]');
+    const sentence = root.querySelector<HTMLElement>('[data-sentence]');
+    const groups = [...root.querySelectorAll<SVGGElement>('[data-index]')];
+
+    const skill = root.dataset.skill ?? '';
+    let attempts: boolean[] = JSON.parse(root.dataset.attempts ?? '[]');
+    let result = trace(attempts);
+
+    /* Motion values are read from the tokens rather than repeated here, so
+       DESIGN.md stays the single source. */
+    const styles = getComputedStyle(document.documentElement);
+    const duration = durationToMs(styles.getPropertyValue('--dur-base'));
+    const ease = cubicBezier(EASE_OUT);
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    let frame = 0;
+
+    /** Push one geometry onto the DOM. */
+    function paint(at: ReturnType<typeof trace>): void {
+      const geometry = layout(at);
+      curve?.setAttribute('d', geometry.curvePath);
+      band?.setAttribute('d', geometry.bandPath);
+      bandUpper?.setAttribute('d', geometry.bandUpperPath);
+      bandLower?.setAttribute('d', geometry.bandLowerPath);
+    }
+
+    /** Redraw the marks to match the current attempts. */
+    function paintMarks(): void {
+      for (const group of groups) {
+        const index = Number(group.dataset.index);
+        const correct = attempts[index] === true;
+        const mark = group.querySelector('.trace__mark');
+        mark?.classList.toggle('is-correct', correct);
+        mark?.classList.toggle('is-incorrect', !correct);
+        group.setAttribute('aria-pressed', String(correct));
+        group.setAttribute(
+          'aria-label',
+          `Attempt ${index + 1}, answered ${correct ? 'correctly' : 'incorrectly'}. ` +
+            `Activate to mark it ${correct ? 'incorrect' : 'correct'}.`,
+        );
+      }
+    }
+
+    /**
+     * Animate from the current estimate to the next one.
+     *
+     * DESIGN.md: the movement is the information, so it decelerates into the
+     * new value with --ease-out over --dur-base. Under reduced motion the
+     * value is set outright rather than transitioned at zero duration, which
+     * would produce a jump.
+     */
+    function animateTo(next: ReturnType<typeof trace>): void {
+      cancelAnimationFrame(frame);
+
+      if (reduceMotion.matches || duration <= 0) {
+        result = next;
+        paint(result);
+        return;
+      }
+
+      const from = result;
+      const started = performance.now();
+
+      const step = (now: number): void => {
+        const elapsed = now - started;
+        const progress = Math.min(elapsed / duration, 1);
+        paint(blend(from, next, ease(progress)));
+        if (progress < 1) frame = requestAnimationFrame(step);
+        else result = next;
+      };
+
+      frame = requestAnimationFrame(step);
+    }
+
+    /** Flip one attempt and redraw everything that depends on it. */
+    function toggle(index: number): void {
+      if (!Number.isInteger(index) || index < 0 || index >= attempts.length) return;
+      attempts = attempts.map((value, i) => (i === index ? !value : value));
+      const next = trace(attempts);
+      paintMarks();
+      if (sentence) sentence.textContent = describe(next, skill);
+      animateTo(next);
+    }
+
+    /* Upgrade the inert marks into controls. Done here rather than in the
+       template so the static rendering never offers a control that does
+       nothing. */
+    svgRoot?.classList.add('is-interactive');
+    for (const group of groups) {
+      group.setAttribute('role', 'button');
+      group.setAttribute('tabindex', '0');
+      group.addEventListener('click', () => toggle(Number(group.dataset.index)));
+    }
+    paintMarks();
+  }
+</script>
