@@ -17,13 +17,12 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-22** Header, footer, body link, button and focus styles per DESIGN.md.
 
 ---
 
 ## QUEUE
 
-- **T-22** Header, footer, body link, button and focus styles per DESIGN.md.
 - **T-23** Reskin the widget onto tokens only. Grep component code for literal
   hex, px or duration values and remove them.
 - **T-24** Token lint script failing the build on any raw hex, raw px outside
