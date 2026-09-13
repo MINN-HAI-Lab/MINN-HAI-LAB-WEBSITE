@@ -74,6 +74,14 @@
   row-gap: var(--arc-band);
 }
 
+/* With JavaScript off there are no arcs, so the band reserved for them is just
+   a hole above the tokens. The class is added by the script, so its absence is
+   exactly the condition. */
+.language:not(.is-live) .language__tokens {
+  padding-block-start: 0;
+  row-gap: var(--space-5);
+}
+
 .language__links {
   position: absolute;
   inset: 0;
