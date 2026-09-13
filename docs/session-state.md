@@ -14,17 +14,17 @@ Nothing.
 
 ## QUEUE
 
-- **S-13** `/people`: group photo, five 4:5 portraits, placeholder slots.
-- **S-14** `/about`: mission, funding, contact.
-- **S-15** `/learning`: StatLab.
-- **S-17** Accessibility floor: keyboard, visible focus, 360px.
-- **S-18** Performance: Lighthouse mobile above 85 with the glass in place.
 - **S-19** Final pass: screenshots at three widths, self-critique.
 
 ---
 
 ## DONE
 
+- **S-13** — `/people`: full-bleed group frame, five 4:5 slots at one crop, two-up on a phone and five across on a desktop, no names in any of them and each saying what it is waiting for.
+- **S-14** — `/about`: mission, affiliation, funding and contact, all four as visible gaps with the exact question and the B number attached.
+- **S-15** — `/learning`: StatLab, built as a list of one so a second resource is an entry rather than a redesign.
+- **S-17** — Accessibility floor: axe clean on all five pages and on the 3D view while it is open, Lighthouse accessibility 100 on all five, every artefact keyboard operable with a real focus ring, nothing overflowing at 360px. A new artefacts.spec.ts holds the brief's own requirements.
+- **S-18** — Lighthouse mobile performance 100 on all five pages with the glass in place. FCP and LCP 1.5s, TBT 0ms, CLS 0. No glass layers had to be given up.
 - **S-16** — Browser suite back on the new spec: 405 tests green across chromium, firefox and webkit. Found four real bugs doing it, including the webfont never loading.
 - **S-07** — The 3D view: `3d-force-graph` behind a dynamic import from the click handler, 361KB gzipped in its own chunk, never requested until the button is pressed. Same NODES and EDGES as the diagram, blanket highlighting both ways, Escape closes, and the WebGL context is released on close.
 - **S-10** — Header and footer across the five pages: current-page marking, footer navigation, and the contact gap in the one place the plan asks for it.
@@ -69,5 +69,11 @@ Nothing.
   by adding an explicit `width: 100%` next to the cap.
 - Astro emits the saliency script inline rather than as its own chunk, so
   `grep` for a `<script src>` will not find it. It is there.
+- Lighthouse, mobile preset, against the built site on the preview server:
+  performance / accessibility / best practices / SEO all 100 on /, /research,
+  /people, /learning and /about. Measured on localhost, so the network is
+  free — what those numbers say is that nothing is render-blocking, nothing
+  shifts, and no script blocks the main thread, not that a real connection is
+  this fast.
 - Contrast measured against the glass composite, not the field: --text 14.36-16.70:1, --text-muted 5.93-6.89:1, --signal 5.25-5.70:1. Tightest case is muted text on glass over --field-2 at 5.93:1 — first thing to fail if the surface alpha rises.
 
