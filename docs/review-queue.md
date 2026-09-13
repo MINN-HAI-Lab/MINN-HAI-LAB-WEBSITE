@@ -463,3 +463,32 @@ a glance.
 >
 > This is exactly the choice the process exists to give you, and it is one I
 > should not make on my own.
+
+---
+
+## Q-19 — The aesthetic brief supersedes CLAUDE.md and DESIGN.md
+
+**Raised:** S-01, 2026-09-13. **Routed around:** built to the brief.
+
+The instruction for this run lifts bans that `CLAUDE.md` calls
+"non-negotiable" and replaces the core of `design/DESIGN.md`. Recording the
+full list, because both files still say otherwise and a later reader will hit
+the contradiction.
+
+Lifted from the `CLAUDE.md` banned list: glassmorphism, backdrop blur,
+gradients, shadows, scroll-triggered motion, and the rule allowing client-side
+JavaScript in only one island.
+
+Replaced from `design/DESIGN.md`: the six-colour palette (now a dark
+instrument field with a glass surface and a single signal red), the two-radius
+rule (now a single 4px), the no-shadow rule, and the light-on-paper basis of
+every contrast figure in its table.
+
+Kept, because the brief keeps them: Literata for prose, the 4.5:1 contrast
+floor, keyboard operability with visible focus, 360px, honest data labelling,
+and the absolute rule against inventing content.
+
+> `CLAUDE.md` and `design/DESIGN.md` are now wrong about colour, motion and
+> islands. I have not edited either — `CLAUDE.md` is off-limits and DESIGN.md's
+> palette section is load-bearing for the old test suite until S-16 moves it.
+> They need reconciling with this brief when you are back.
