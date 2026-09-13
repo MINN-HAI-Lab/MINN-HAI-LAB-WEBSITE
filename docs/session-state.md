@@ -17,10 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-34** Heading structure audit across both pages. axe checks order within
-  a page; this checks there is exactly one h1 per page and no skipped level.
-
-When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
+Nothing.
 
 ---
 
@@ -95,6 +92,7 @@ history at `ec7ada9`.
 - **T-31** — 404 page on the same layout, linking only pages that exist and naming the planned ones as unlinked rather than sending readers to another 404. Added to the axe sweep.
 - **T-32** — Motion verified in a real browser in both modes: the curve draws and cleans up its dash state, toggling interpolates, and under reduced motion nothing draws, the update is instant with a static highlight, and zero transitions remain active.
 - **T-33** — Keyboard pass over all three pages: skip link first and actually moving focus to main, a non-default focus ring at every stop, no focus trap, and the widget still costing one tab stop.
+- **T-34** — Heading structure checked on all three pages: exactly one h1 each, h1 first, no skipped level, no empty heading. Failures print the outline rather than a count.
 
 ---
 
