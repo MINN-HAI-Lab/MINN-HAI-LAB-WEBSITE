@@ -17,14 +17,6 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
-
----
-
-## QUEUE
-
-Refilled 2026-09-13, eighth time. T-51 and T-52 are done.
-
 - **T-53** Do the prototypes step, late. `CLAUDE.md` says "Produce three
   visually distinct approaches in `prototypes/` ... Never one-shot a layout",
   and Q-17 records that this run skipped it entirely. Build three genuinely
@@ -36,6 +28,12 @@ Refilled 2026-09-13, eighth time. T-51 and T-52 are done.
 in the repo. That is the plan's choice, not a way of hiding them.
 
 ---
+
+---
+
+## QUEUE
+
+Refilled 2026-09-13, eighth time. T-51 and T-52 are done.
 
 ## BLOCKED
 
