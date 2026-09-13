@@ -17,7 +17,10 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-44** Append this run's design decisions to `design/decisions.md` with
+  status `proposed`. Several real choices — the favicon, the TODO marker
+  treatment, the 24px target rule, the attribution measure — exist only in
+  commit messages, where they cannot be reviewed or rejected.
 
 ---
 
@@ -25,10 +28,6 @@ Nothing.
 
 Refilled 2026-09-13, fourth time. T-39 to T-42 are done.
 
-- **T-44** Append this run's design decisions to `design/decisions.md` with
-  status `proposed`. Several real choices — the favicon, the TODO marker
-  treatment, the 24px target rule, the attribution measure — exist only in
-  commit messages, where they cannot be reviewed or rejected.
 - **T-45** Measure what a first visit downloads, and record it, so the next
   person adding something can see what it costs.
 
