@@ -101,7 +101,7 @@ history at `ec7ada9`.
 - **T-27** — Per-page title and description, noindex on the specimen. No canonical or absolute URL anywhere, because the domain is undecided and a placeholder would be a fabrication.
 - **T-28** — Favicon generated from the tokens as a rising --claim curve on --paper: the site's display idea at its smallest, no invented mark, no letter that would depend on the unconfirmed lab name.
 - **T-29** — Open Graph and Twitter tags that work without an origin, plus /share.svg generated from the real trace geometry. og:image and og:url stay out until there is a domain.
-- **T-30** — Sitemap integration configured and verified with a temporary domain: emits correctly and excludes the noindex specimen. Inert until  is set; the domain is now B-8.
+- **T-30** — Sitemap integration configured and verified with a temporary domain: emits correctly and excludes the noindex specimen. Inert until `site` is set; the domain is now B-8.
 
 ---
 
