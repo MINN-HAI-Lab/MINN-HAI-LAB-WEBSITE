@@ -149,4 +149,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-36: Tailwind's @source glob must exclude .ts. Scanning all of src/ meant a test file that quoted dark:bg-white/10 in a comment about that very bug re-created it in the shipped CSS. Only files that emit markup should be scanned.
 - T-39: a duplicated Astro frontmatter fence emits everything after the first one as content, landing between the doctype and <html>, which the browser hoists into the body. Shipped on every page for eleven commits. axe, keyboard, palette and heading tests all passed it because it is valid HTML that merely shows junk. Only a screenshot caught it.
 - T-43: preloading a unicode-range-split font defeats the split. Astro inlines @font-face into the head, so there is no stylesheet round trip for preload to save, and it forced both subsets down. Removing it halved the font payload with no change to layout shift.
+- Reading an exit code after a pipe reports the LAST command in the pipeline, not the first. 'npm run verify | tail' always looks like it exited 0. Redirect to a file and check the status, or use PIPESTATUS.
 

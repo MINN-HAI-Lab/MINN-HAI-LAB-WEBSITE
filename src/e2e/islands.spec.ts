@@ -130,13 +130,16 @@ test.describe('islands: the trace fails safe', () => {
     await page.addInitScript(() => {
       const realAdd = Element.prototype.addEventListener;
       let calls = 0;
-      Element.prototype.addEventListener = function (...args: unknown[]) {
+      Element.prototype.addEventListener = function (
+        this: Element,
+        ...args: Parameters<typeof realAdd>
+      ): void {
         calls += 1;
         // Let the first few through, then fail: a partial upgrade is the case
         // worth testing, not a total one.
         if (calls === 4) throw new Error('deliberate failure');
-        return realAdd.apply(this, args as never);
-      } as typeof Element.prototype.addEventListener;
+        realAdd.apply(this, args);
+      };
     });
 
     const errors: string[] = [];
