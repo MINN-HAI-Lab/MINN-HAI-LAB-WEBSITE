@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-21** Typographic specimen page showing every text style in context at
-  both scales.
+Nothing.
 
 ---
 
@@ -81,6 +80,7 @@ history at `ec7ada9`.
 - **T-18** — Contrast checker parses the DESIGN.md table and tokens.css, recomputes all six ratios and fails past 0.05 drift. Also asserts the 4.5 and 3.0 floors those ratios exist to protect. Verified by mutation.
 - **T-19** — Playwright harness at 390, 768 and 1440 capturing full page, trace, attribution view and focus ring, plus a JS-off capture. 13 specs, output to gitignored screenshots/.
 - **T-20** — Banned-list walk over the rendered 1440 and 390 captures. Two violations fixed: SVG text falling to ~6px against the 15px floor, and monospace used for a file path in prose. Three judgement calls logged, one defect queued as T-26.
+- **T-21** — src/pages/specimen.astro plus type.css defining the five roles. Every number is parsed from tokens.css at build time; both scales render server-side, so the page is complete with JS off.
 
 ---
 
@@ -108,4 +108,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - Two false alarms while testing keyboard, both test-sequencing errors rather than bugs: pressing arrows after focus had already tabbed past the widget onto the button, and reading scrollY after focus() had itself scrolled the mark into view. Re-check the harness before believing a keyboard failure.
 - T-19: astro preview in Astro 7 always daemonises, so Playwright's webServer block reports 'Process from config.webServer exited early'. Server lifecycle lives in the shots npm script instead. Also added vitest.config.ts restricting vitest to src/**/*.test.ts, or it would try to run the .spec.ts Playwright files itself.
 - T-20 looked at the rendered screenshots rather than reasoning from markup, which is the only reason the 6px SVG text was caught. Text inside a scaled viewBox does not obey a px floor; anything that must stay legible belongs in HTML positioned over the drawing.
+- T-21: reading a source file from Astro frontmatter needs Vite's ?raw import, not fs. By prerender the module is bundled, so import.meta.url resolves into dist/.prerender and a relative path throws ENOENT.
 

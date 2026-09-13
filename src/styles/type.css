@@ -1,0 +1,69 @@
+/* ---------------------------------------------------------------------------
+   type.css — the five text roles from design/DESIGN.md § Type.
+
+   Every value resolves through a token. Nothing here introduces a size, a
+   line height, a weight or a tracking value of its own, which is what lets the
+   specimen page satisfy the Phase 2 exit gate: "the specimen page contains no
+   value that is not in design/DESIGN.md".
+
+   opsz is set per role rather than left at the font's default. DESIGN.md:
+   "Set opsz to the rendered pixel size ... That axis is the reason for
+   choosing Literata and ignoring it wastes the choice." The --opsz-* numerals
+   mirror --size-* and flip with them at 900px, so the axis tracks the scale
+   automatically.
+--------------------------------------------------------------------------- */
+
+.type-display,
+.type-title,
+.type-section,
+.type-body,
+.type-small {
+  font-family: var(--font-literata), serif;
+  margin-block: 0;
+}
+
+.type-display {
+  font-size: var(--size-display);
+  line-height: var(--lh-display);
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" var(--opsz-display), "wght" var(--weight-display);
+}
+
+.type-title {
+  font-size: var(--size-title);
+  line-height: var(--lh-title);
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" var(--opsz-title), "wght" var(--weight-title);
+}
+
+.type-section {
+  font-size: var(--size-section);
+  line-height: var(--lh-section);
+  font-variation-settings: "opsz" var(--opsz-section), "wght" var(--weight-section);
+}
+
+.type-body {
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
+  font-variation-settings: "opsz" var(--opsz-body), "wght" var(--weight-body);
+}
+
+.type-small {
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+  font-variation-settings: "opsz" var(--opsz-small), "wght" var(--weight-small);
+}
+
+/* Metadata is --ink-muted, and DESIGN.md is explicit that it must not go below
+   15px. That is why there is no role smaller than --size-small. */
+.type-meta {
+  color: var(--ink-muted);
+}
+
+/* Monospace appears only inside real code samples. Never for data labels,
+   metadata or numbers — tabular figures do that job. */
+.type-code {
+  font-family: var(--font-mono);
+  font-size: var(--size-small);
+  line-height: var(--lh-small);
+}

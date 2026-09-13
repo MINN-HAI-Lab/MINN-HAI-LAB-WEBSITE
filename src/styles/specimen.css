@@ -1,0 +1,79 @@
+/* ---------------------------------------------------------------------------
+   specimen.css — the type specimen page only.
+
+   Layout scaffolding for showing the roles in context. No type values here;
+   those all live in type.css, which is the point of the page.
+--------------------------------------------------------------------------- */
+
+.specimen__roles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.specimen__role {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Sits above its sample. Not an eyebrow label: sentence case, no tracking, no
+   caps — those are on the banned list in CLAUDE.md. */
+.specimen__label {
+  margin: 0;
+  padding-block-end: var(--space-2);
+  border-block-end: var(--rule-width) solid var(--rule);
+}
+
+/* Tables are documents, so --radius-0 and rules rather than fills. */
+.specimen__table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: var(--radius-0);
+  text-align: start;
+}
+
+.specimen__table caption {
+  margin-block-end: var(--space-3);
+  text-align: start;
+}
+
+.specimen__table th,
+.specimen__table td {
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  border-block-end: var(--rule-width) solid var(--rule);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.specimen__table thead th {
+  color: var(--ink-muted);
+  border-block-end: var(--rule-width) solid var(--ink-muted);
+}
+
+/* A table is the one thing allowed to be wider than the measure, and only
+   inside its own scroll container. The page itself must never scroll
+   sideways. */
+.specimen__scroll {
+  max-width: var(--page-max);
+  overflow-x: auto;
+}
+
+/* A real code sample, which is the only place monospace is permitted. */
+.specimen__code {
+  max-width: var(--measure);
+  margin: 0;
+  padding: var(--space-4);
+  background-color: var(--paper-sunk);
+  border-radius: var(--radius-0);
+  border-inline-start: var(--rule-width) solid var(--ink-muted);
+  overflow-x: auto;
+}
+
+/* Exactly 66 characters at the current body size, for comparison against the
+   prose above it. */
+.specimen__ruler {
+  max-width: var(--measure);
+  overflow-x: hidden;
+  white-space: nowrap;
+}

@@ -1,0 +1,232 @@
+---
+/**
+ * Typographic specimen.
+ *
+ * Phase 2's exit gate: "the specimen page contains no value that is not in
+ * design/DESIGN.md". So no number on this page is typed in. Every value is
+ * parsed out of src/styles/tokens.css at build time, which in turn mirrors
+ * DESIGN.md and is checked against it by src/lib/contrast.test.ts. Edit the
+ * tokens and this page changes with them; state a value the tokens do not
+ * carry and it cannot appear here at all.
+ *
+ * Both scales are rendered server-side rather than read from the live window,
+ * so the page is complete with JavaScript off — and so a single screenshot
+ * shows both, which a responsive readout cannot do.
+ */
+import Base from '../layouts/Base.astro';
+// ?raw inlines the file at build time. Reading it with fs would look
+// equivalent and is not: by prerender the module has been bundled, so
+// import.meta.url points at a chunk in dist/.prerender and the relative path
+// no longer exists.
+import tokens from '../styles/tokens.css?raw';
+
+/** The mobile-first :root block, and the 900px override that follows it. */
+const wideBlock = tokens.slice(tokens.indexOf('@media (min-width: 900px)'));
+const baseBlock = tokens.slice(0, tokens.indexOf('@media (min-width: 900px)'));
+
+function read(block: string, name: string): string {
+  const match = block.match(new RegExp(`--${name}\\s*:\\s*([^;]+);`));
+  return match ? match[1]!.trim() : '';
+}
+
+/** A value at the wide scale, falling back to the base where it is not
+ *  overridden — weights are declared once and do not change at 900px. */
+const wide = (name: string): string => read(wideBlock, name) || read(baseBlock, name);
+const narrow = (name: string): string => read(baseBlock, name);
+
+const ROLES = [
+  {
+    name: 'Display',
+    className: 'type-display',
+    token: 'display',
+    use: 'One per page at most. The home page hero.',
+  },
+  {
+    name: 'Page title',
+    className: 'type-title',
+    token: 'title',
+    use: 'The h1 of an inner page.',
+  },
+  {
+    name: 'Section',
+    className: 'type-section',
+    token: 'section',
+    use: 'Headings within a page. The only role not set at 400.',
+  },
+  {
+    name: 'Body',
+    className: 'type-body',
+    token: 'body',
+    use: 'Running prose, capped at a 66 character measure.',
+  },
+  {
+    name: 'Small',
+    className: 'type-small',
+    token: 'small',
+    use: 'Metadata: venue, year, authors, captions. Never below 15px.',
+  },
+] as const;
+
+const scale = ROLES.map((role) => ({
+  ...role,
+  wideSize: wide(`size-${role.token}`),
+  wideLeading: wide(`lh-${role.token}`),
+  wideOpsz: wide(`opsz-${role.token}`),
+  narrowSize: narrow(`size-${role.token}`),
+  narrowLeading: narrow(`lh-${role.token}`),
+  narrowOpsz: narrow(`opsz-${role.token}`),
+  weight: narrow(`weight-${role.token}`),
+}));
+
+/** Long enough to show the measure and the line height doing work. */
+const SAMPLE =
+  'Knowledge tracing estimates what a learner knows from what they have ' +
+  'answered. The estimate moves with each attempt, and the interval around ' +
+  'it narrows as evidence accumulates.';
+---
+
+<Base
+  title="Type specimen"
+  description="Every text style in the MINN HAI Lab type scale, in context, at both scales."
+>
+  <section class="section">
+    <h1 class="type-display measure">Type specimen</h1>
+
+    <div class="prose measure">
+      <p class="type-body">
+        Literata, one family, with the optical size axis doing the work across
+        scales. Every number on this page is parsed from the tokens at build
+        time, so it cannot drift from the design system it describes.
+      </p>
+      <p class="type-body type-meta">
+        The samples below render at whichever scale your window is currently
+        in. The table after them lists both, so the page is readable at one
+        width and with JavaScript off.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="type-section measure">The scale in context</h2>
+
+    <div class="specimen__roles">
+      {
+        scale.map((role) => (
+          <article class="specimen__role">
+            <p class="specimen__label type-small type-meta">{role.name}</p>
+            <div class="measure">
+              <p class={role.className}>{SAMPLE}</p>
+            </div>
+            <p class="type-small type-meta measure">{role.use}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="type-section measure">Both scales</h2>
+
+    <div class="prose measure">
+      <p class="type-body">
+        Size, line height and optical size, at and above 900px and below it.
+        Weight is declared once and does not change with the scale.
+      </p>
+    </div>
+
+    <div class="specimen__scroll">
+      <table class="specimen__table type-small">
+        <caption class="type-small type-meta">
+          Parsed from tokens.css at build time. Serif body text carries the
+          higher line height on purpose.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Role</th>
+            <th scope="col">900px and up</th>
+            <th scope="col">Below 900px</th>
+            <th scope="col">Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            scale.map((role) => (
+              <tr>
+                <th scope="row">{role.name}</th>
+                <td class="tnum">
+                  {role.wideSize} / {role.wideLeading} / opsz {role.wideOpsz}
+                </td>
+                <td class="tnum">
+                  {role.narrowSize} / {role.narrowLeading} / opsz {role.narrowOpsz}
+                </td>
+                <td class="tnum">{role.weight}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="type-section measure">Figures</h2>
+
+    <div class="prose measure">
+      <p class="type-body">
+        Tabular figures for anything in a column, so years and counts line up.
+        Proportional figures everywhere else. This is what replaces reaching
+        for a monospace face for numbers, which is banned.
+      </p>
+    </div>
+
+    <div class="specimen__scroll">
+      <table class="specimen__table type-small">
+        <caption class="type-small type-meta">
+          The digits align because they share a width, not because the face is
+          monospaced.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Attempts</th>
+            <th scope="col">Estimate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="tnum">2013</td><td class="tnum">8</td><td class="tnum">0.41</td></tr>
+          <tr><td class="tnum">2018</td><td class="tnum">11</td><td class="tnum">0.68</td></tr>
+          <tr><td class="tnum">2022</td><td class="tnum">140</td><td class="tnum">0.09</td></tr>
+          <tr><td class="tnum">2025</td><td class="tnum">1008</td><td class="tnum">0.99</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="type-section measure">Monospace</h2>
+
+    <div class="prose measure">
+      <p class="type-body">
+        Monospace appears only inside real code samples. Not for data labels,
+        not for metadata, not for numbers.
+      </p>
+    </div>
+
+    <pre class="specimen__code type-code"><code>{`const result = trace(attempts);
+const percent = formatPercent(result.final);`}</code></pre>
+  </section>
+
+  <section class="section">
+    <h2 class="type-section measure">Measure</h2>
+
+    <div class="prose measure">
+      <p class="type-body">
+        Body text is capped at 66 characters. The ruler below is 66 characters
+        at the current body size, and prose should not run past its right edge.
+      </p>
+      <p class="type-small type-meta specimen__ruler">
+        123456789 123456789 123456789 123456789 123456789 123456789 123456
+      </p>
+    </div>
+  </section>
+</Base>
