@@ -254,3 +254,45 @@ wrapper and is a second package for very little.
 > If the allowlist was meant to be absolute, say so and I will take it out;
 > the accessibility checks written by hand in the harness cover a fraction of
 > it but they do cover the parts this site actually depends on.
+
+---
+
+## Q-12 — I wrote one sentence describing the lab's research
+
+**Raised:** T-27, 2026-09-13. **Routed around:** used it, flagged here.
+
+The home page needs a meta description. What is in it now:
+
+> Research on knowledge tracing for personalised learning, and on interpreting
+> tabular models with Bayesian networks and Markov blankets.
+
+Every term is taken from `CLAUDE.md`'s own framing — "Two research programmes:
+AI for personalised learning (knowledge tracing) and interpretable explanation
+of tabular models via Bayesian networks and Markov blankets." Nothing is
+invented and there is no adjective in it.
+
+But `CLAUDE.md` also says not to reword the lab's research descriptions and to
+propose edits rather than make them. A meta description is not marketing copy,
+and it does have to say something, so I wrote one — while noting that I did.
+
+> Approve it, or give me the sentence you want. It appears in search results
+> and in link previews, so it is worth being your words rather than mine.
+
+---
+
+## Q-13 — No domain, so no absolute URLs anywhere
+
+**Raised:** T-27, 2026-09-13. **Routed around:** relative metadata only.
+
+Canonical URLs, Open Graph URLs and a sitemap all need an origin. The domain
+is open question 10 in `design/decisions.md`, and D-008 ties the hosting
+decision to it.
+
+Baking a placeholder domain into production metadata is exactly the kind of
+plausible-looking fabrication that is hardest to spot later, so there is none:
+the pages carry title, description and robots, and nothing absolute. Relative
+metadata is correct at whatever origin the site eventually gets.
+
+> This blocks the sitemap (T-30) and the absolute half of the Open Graph tags
+> (T-29) outright. The moment there is a domain, both are a one-line config
+> change.

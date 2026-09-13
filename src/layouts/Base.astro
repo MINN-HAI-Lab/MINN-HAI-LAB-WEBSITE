@@ -16,9 +16,25 @@ interface Props {
   title: string;
   /** Meta description. Optional — omitted rather than filled with filler. */
   description?: string;
+  /**
+   * Keep this page out of search results. For working documents like the type
+   * specimen, which exist for whoever is building the site rather than for
+   * anyone reading it.
+   */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
+
+/**
+ * No canonical URL, and no absolute URLs anywhere.
+ *
+ * They need an origin, the domain is undecided (open question 10 in
+ * design/decisions.md, and D-008 ties hosting to it), and a placeholder domain
+ * baked into production metadata is exactly the kind of plausible-looking
+ * fabrication CLAUDE.md is about. Relative metadata is correct at any origin;
+ * canonical, Open Graph URLs and the sitemap all wait for the real one.
+ */---
 ---
 
 <!doctype html>
@@ -28,6 +44,7 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <Font cssVariable="--font-literata" preload />
     <slot name="head" />
   </head>

@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-27** Page metadata. Per-page title and description, canonical URL, and
-  `noindex` on the specimen, which is a working document rather than a page
-  for readers.
+Nothing.
 
 ---
 
@@ -101,6 +99,7 @@ history at `ec7ada9`.
 - **T-23** — Widget geometry now derives from tokens: mark, ring and swatch radii parsed from --mark-size, --curve-width and --space-1; plot width from the viewBox constant; the script's last duration literal removed. Verified by mutation.
 - **T-24** — Token lint over source stylesheets: raw hex, raw px and any shadow property. Wired to prebuild so it fails the build; verified by mutation that all three rules trip and the exit code is 1.
 - **T-25** — axe-core over both built pages plus the attribution state and the script-free rendering: zero WCAG 2.2 A/AA violations. Detection verified by mutation.
+- **T-27** — Per-page title and description, noindex on the specimen. No canonical or absolute URL anywhere, because the domain is undecided and a placeholder would be a fabrication.
 
 ---
 
