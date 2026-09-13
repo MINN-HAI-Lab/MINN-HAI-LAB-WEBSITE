@@ -91,9 +91,16 @@ Nothing.
 
 ## QUEUE
 
-Empty, and not because the work is done — because everything left needs Kaung.
-Refill from `docs/phase.md` as B-1 to B-9 land. Never queue Phase 3 without
-him.
+- **T-55** `npm run verify` silently tests whatever is listening on port 4321.
+  A dev server was running there and the whole browser suite ran against it —
+  30 failures caused by Vite's client and the Astro dev toolbar, not by the
+  site. Worse than the noise: if those tests had happened to pass, verify
+  would have reported green while testing a build nobody shipped. Give the
+  harness its own port and make it refuse to run against a dev server.
+
+Once T-55 is done the queue is empty again, and not because the work is done —
+because everything left needs Kaung. Refill from `docs/phase.md` as B-1 to B-9
+land. Never queue Phase 3 without him.
 
 ---
 
