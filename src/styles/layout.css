@@ -132,6 +132,13 @@ main {
 
 /* -- Focus ----------------------------------------------------------------- */
 
+/* main takes tabindex=-1 so the skip link can move focus to it, but it is a
+   landmark rather than a control and ringing the whole page would be noise. */
+main:focus,
+main:focus-visible {
+  outline: none;
+}
+
 /* Visible on every interactive element, keyboard and mouse alike, and never
    the browser default. Focus uses --ink deliberately: --claim means "a model
    said this" and a focus ring is not that. */

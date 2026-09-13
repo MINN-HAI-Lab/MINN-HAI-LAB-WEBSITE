@@ -76,7 +76,14 @@ const { title, description, noindex = false } = Astro.props;
 
     <Header />
 
-    <main id="main" class="page">
+    {/* tabindex="-1" so the skip link genuinely moves focus here.
+
+        Without it, activating a fragment link scrolls the page and updates the
+        sequential focus starting point, but leaves document.activeElement on
+        the body in several browsers — so the next Tab goes back to the top and
+        the skip link skips nothing. It is -1, not 0, so it never becomes a tab
+        stop of its own. */}
+    <main id="main" class="page" tabindex="-1">
       <slot />
     </main>
 

@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-33** Full-page keyboard pass. T-11 and T-17 covered the widget; this is
-  the whole document on both pages, including the skip link actually moving
-  focus to `#main`.
+Nothing.
 
 ---
 
@@ -98,6 +96,7 @@ history at `ec7ada9`.
 - **T-30** — Sitemap integration configured and verified with a temporary domain: emits correctly and excludes the noindex specimen. Inert until `site` is set; the domain is now B-8.
 - **T-31** — 404 page on the same layout, linking only pages that exist and naming the planned ones as unlinked rather than sending readers to another 404. Added to the axe sweep.
 - **T-32** — Motion verified in a real browser in both modes: the curve draws and cleans up its dash state, toggling interpolates, and under reduced motion nothing draws, the update is instant with a static highlight, and zero transitions remain active.
+- **T-33** — Keyboard pass over all three pages: skip link first and actually moving focus to main, a non-default focus ring at every stop, no focus trap, and the widget still costing one tab stop.
 
 ---
 
@@ -131,4 +130,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-24: a docblock explaining that '*/' slipped through the reason check contained '*/' and closed the comment, so half the module parsed as code. oxc reported it as a missing semicolon 78 lines later. If a TS parse error points somewhere that looks fine, check for a comment terminator upstream.
 - T-25: auditing a JS-off page needs the site's scripts stripped at the network layer, not javaScriptEnabled:false (axe needs scripting) and not setContent (relative stylesheet URLs do not resolve, so nothing is styled and axe reports phantom target-size failures against unstyled links).
 - T-32 found the Playwright config was passing --force-prefers-reduced-motion globally for 'deterministic screenshots'. Every spec since T-19 ran in reduced motion, the load animation never executed once, and the captures were not the page most people see. Motion is now on by default and specs opt into reduce.
+- T-33: a skip link needs tabindex=-1 on its target. Without it the browser scrolls and updates the sequential focus starting point but leaves activeElement on the body, so the next Tab returns to the header and the link skips nothing. Verified by reverting: activeElement id came back empty.
 
