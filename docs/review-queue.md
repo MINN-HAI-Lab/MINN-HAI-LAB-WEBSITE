@@ -114,3 +114,25 @@ generates the metric-matched fallback.
 > Two consequences. Updating Literata is now a manual re-download rather than a
 > lockfile bump. And the repo carries 153K of binary. Both seem cheaper than
 > losing the axis, but it is your call.
+
+---
+
+## Q-6 — Verification scripts live as tests, because the plan has no `scripts/`
+
+**Raised:** T-18, 2026-09-13. **Routed around:** written as vitest suites.
+
+The repository layout in `docs/plan.md` lists `docs/`, `design/`, `src/`,
+`public/` and `prototypes/`, and `CLAUDE.md` says not to create files outside
+it. A `scripts/` directory would be the conventional home for build-time
+checks like the contrast verifier, and it is not in that list.
+
+So the contrast check is `src/lib/contrast.test.ts`, running under the existing
+vitest suite, with `npm run check:contrast` as a direct entry point. This turns
+out to be better than a standalone script anyway: it runs on every `npm test`
+rather than only when someone remembers, and the pure part is reusable.
+
+The same reasoning will apply to the token lint in T-24.
+
+> If you would rather have a real `scripts/` directory, say so and I will move
+> them and add it to the layout in `docs/plan.md` — which I am not editing on
+> my own.

@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-18** Script recomputing every contrast pair in the DESIGN.md table,
-  failing if a measured ratio differs from the stated one by more than 0.05.
+Nothing.
 
 ---
 
@@ -81,6 +80,7 @@ history at `ec7ada9`.
 - **T-15** — Synthetic-data label now sits inside the SVG at --ink-muted, so a screenshot or export carries it, with the fuller statement kept in the caption.
 - **T-16** — Verified at 360, 390, 768, 900, 1180 and 1440: no horizontal scroll anywhere. Fixed tap targets that scaled to 12px on a phone; they are now >=24px at every width.
 - **T-17** — JS-off path verified in chromium with scripting disabled: 24 checks, all passing. Interactive path smoke-tested too.
+- **T-18** — Contrast checker parses the DESIGN.md table and tokens.css, recomputes all six ratios and fails past 0.05 drift. Also asserts the 4.5 and 3.0 floors those ratios exist to protect. Verified by mutation.
 
 ---
 
