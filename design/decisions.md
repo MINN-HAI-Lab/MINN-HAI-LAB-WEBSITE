@@ -545,3 +545,107 @@ This entry is the correction.
 The lesson is the cheaper half. The claim was plausible, it was about a
 browser I had not run, and nothing in the suite would have caught it — the
 whole test suite was Chromium-only until T-51. It now runs in all three.
+
+---
+
+## D-023 — The dark instrument field supersedes the light six
+
+**Status: adopted.** The brief's aesthetic override replaces everything in
+`DESIGN.md` about colour, and lifts its bans on glass, backdrop blur,
+gradients, shadows and scroll-triggered motion along with the one-island rule
+in `CLAUDE.md`.
+
+The field: `--field #070B10`, `--field-2 #0C121A`, `--surface` white at 4.5 per
+cent, `--surface-edge` white at 10 per cent, `--text #E6EDF3`, `--text-muted
+#8A9BA8`, `--signal #FF3D5A`, `--grid` white at 6 per cent. Glass is
+`blur(16px) saturate(120%)`, a one-pixel edge and a four-pixel radius, and is
+never nested.
+
+The reference point named in the brief is scientific telemetry — precise,
+thin-stroked, high-density — rather than frosted consumer panels, and that is
+what decides the borderline cases. It is why the glass carries a hairline edge
+rather than a soft one, why `--signal` appears only where a model has asserted
+something, and why there are no soft shadows anywhere despite the ban on them
+being lifted.
+
+`--signal` on near-black is, in the abstract, the "near-black with one bright
+vermilion accent" that `CLAUDE.md` bans by name. The brief asks for it by hex
+value and restricts it to model outputs, which is the discipline that makes it
+information rather than decoration. The conflict is recorded rather than
+resolved: Q-19.
+
+Contrast was measured against the glass composite rather than the field, and
+the table is in the header of `tokens.css`. The tightest case in the system is
+`--text-muted` on glass over `--field-2` at 5.93:1, which is the first thing
+that fails if the surface alpha ever rises.
+
+---
+
+## D-024 — An artefact says what its data is, on its face
+
+**Status: adopted.** Every one of the four artefacts carries a provenance line
+in its label bar — "Synthetic data", "Illustrative structure", "Openly licensed
+photograph, computed saliency", "Real tokenisation, illustrative attention" —
+and a note underneath that spells out which half of it is which.
+
+This is the load-bearing decision of the whole build. Three of the four
+artefacts are partly invented, and each one is more convincing than the thing
+it stands for: a knowledge-tracing curve looks like a recording of a learner, a
+Bayesian network looks like a learned structure, attention arcs look like a
+model's weights. A convincing picture of invented data is the single worst
+thing an academic site can publish, and it is worst precisely because it does
+not look wrong.
+
+The split is drawn at the finest grain that is honest. Artefact 4 does not say
+"illustrative" and leave it there: the tokenisation really is real and really
+is tested, and only the attention is a surface-feature kernel. Saying less than
+that would undersell the artefact; saying more would be the fabrication.
+
+`src/e2e/artefacts.spec.ts` fails if any of the four labels goes missing, and
+the provenance note has its own attribute hook so a selector cannot quietly
+stop matching it.
+
+---
+
+## D-025 — The 3D view is a second view, not a second artefact
+
+**Status: adopted.** The Bayesian network exists twice: a static SVG placed at
+build time by a deterministic force simulation, interactive with a small
+script; and a three-dimensional scene that loads on an explicit click.
+
+Both are handed the same `NODES` and `EDGES` and both call the same
+`markovBlanket()`, so they cannot disagree about what the network is. Selecting
+a node in either updates both.
+
+The 3D layer is reached by a dynamic `import()` inside the click handler, which
+is what makes Vite emit it as its own chunk. It is 361KB gzipped — three and a
+half times the hundred-kilobyte threshold in `CLAUDE.md` — and one edit away
+from being a static import that every visitor pays for. `islands.spec.ts` fails
+if it is requested on page load, and fails again if a modulepreload hint
+appears for it. The button names the cost before it is pressed.
+
+Trackball controls rather than orbit: OrbitControls threw out of its own
+pointer bookkeeping on every click on a node. The slow rotation is eleven lines
+in the label loop instead of `autoRotate`, and it stops on the first pointerdown
+or wheel — which is better behaviour than the built-in anyway, since it stops
+sliding a node out from under a cursor that is trying to aim at it.
+
+---
+
+## D-026 — Labels live outside the projection, in both dimensions and three
+
+**Status: adopted.** Extends D-018 to the 3D scene.
+
+Text inside a scaled `viewBox` scales with it, which is why the 2D network's
+labels are HTML positioned by percentage over the drawing. The same argument
+holds for a perspective projection, and more strongly: a sprite in the scene
+gets smaller as it recedes, and the node that has receded is often the one you
+are trying to read.
+
+So the 3D labels are HTML too, positioned every frame from
+`graph2ScreenCoords`, at a fixed CSS size. They fade to half opacity outside
+the current Markov blanket, which is the same statement the colours make —
+given the blanket, the rest is irrelevant — applied to the type.
+
+The side benefit is that the 3D layer needs neither `three-spritetext` nor a
+texture atlas to say "Prior knowledge".
