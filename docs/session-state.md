@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-19** Playwright screenshot harness, three widths, output to a
-  gitignored directory.
+Nothing.
 
 ---
 
@@ -80,6 +79,7 @@ history at `ec7ada9`.
 - **T-16** — Verified at 360, 390, 768, 900, 1180 and 1440: no horizontal scroll anywhere. Fixed tap targets that scaled to 12px on a phone; they are now >=24px at every width.
 - **T-17** — JS-off path verified in chromium with scripting disabled: 24 checks, all passing. Interactive path smoke-tested too.
 - **T-18** — Contrast checker parses the DESIGN.md table and tokens.css, recomputes all six ratios and fails past 0.05 drift. Also asserts the 4.5 and 3.0 floors those ratios exist to protect. Verified by mutation.
+- **T-19** — Playwright harness at 390, 768 and 1440 capturing full page, trace, attribution view and focus ring, plus a JS-off capture. 13 specs, output to gitignored screenshots/.
 
 ---
 
@@ -105,4 +105,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-17 JS-off verification, 24 checks in headless chromium with javaScriptEnabled:false. Rendered and visible: curve path, uncertainty band, all ten marks, the in-SVG 'Synthetic data' stamp, the caption's full synthetic paragraph, and the estimate sentence. No 'requires JavaScript' placeholder anywhere. Inert as intended: svg keeps role=img with alt text, zero tabindex attributes, zero role=button, attribution control and keyboard instructions both still hidden, cursor on a mark is auto rather than pointer. The same 24 checks re-run with JS on confirm the upgrade: svg becomes role=group, ten marks focusable, controls revealed, cursor pointer.
 - T-17 also smoke-tested the interactive path that T-10/T-11/T-13 could only unit-test. Click flips a mark, curve d changes, live region announces. Keyboard: Tab reaches the marks in one stop (skip-link, mark 0, button), arrows move focus with the roving tabindex following (0-1-1... to -10-1...), Home and End jump, Enter and Space both toggle, focus ring computes to solid 2px rgb(28,40,48) = --ink. Space does not scroll, verified against a control where Space on the body scrolls 428px. Attribution ring lands on marks 7,8,9.
 - Two false alarms while testing keyboard, both test-sequencing errors rather than bugs: pressing arrows after focus had already tabbed past the widget onto the button, and reading scrollY after focus() had itself scrolled the mark into view. Re-check the harness before believing a keyboard failure.
+- T-19: astro preview in Astro 7 always daemonises, so Playwright's webServer block reports 'Process from config.webServer exited early'. Server lifecycle lives in the shots npm script instead. Also added vitest.config.ts restricting vitest to src/**/*.test.ts, or it would try to run the .spec.ts Playwright files itself.
 

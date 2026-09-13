@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
-    "check:contrast": "vitest run src/lib/contrast.test.ts"
+    "check:contrast": "vitest run src/lib/contrast.test.ts",
+    "shots": "npm run build && astro preview --port 4321 && playwright test; astro preview stop"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
