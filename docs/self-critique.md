@@ -148,4 +148,9 @@ Recorded because it is the useful part of a critique.
 - **The same TODO printed thirty-seven times on `/research`**, once under every
   publication row. Every test passed. It took looking at a full-page screenshot
   to see that the annotation had buried the thing it was annotating.
+- **A test that raced the animation it was watching.** The draw-in check polled
+  for a dash array that the animation clears when it finishes, so a poll
+  landing a moment late reported that the curve had never drawn. It failed in
+  WebKit roughly one run in five — often enough to be noticed, rarely enough to
+  be re-run rather than read.
 
