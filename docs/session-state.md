@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-11** Keyboard operability: roving tabindex across attempts, Enter and
+  Space toggle, visible `--ink` focus.
 
 ---
 
 ## QUEUE
 
-- **T-11** Keyboard operability: roving tabindex across attempts, Enter and
-  Space toggle, visible `--ink` focus.
 - **T-12** ARIA live region announcing the new estimate as a plain sentence
   after each toggle. Polite, not assertive.
 - **T-13** Attribution view marking which past attempts carry the current
