@@ -17,7 +17,9 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-29** Open Graph and Twitter card metadata, plus a share image. The
+  image should be the trace, since that is the thing the site is about, and it
+  can be rendered at build time from the same geometry module.
 
 ---
 
@@ -33,9 +35,6 @@ These come from Phase 4 in `docs/phase.md` and the "Before deploy" checklist
 in `docs/handbook.md`. Phase 3 is deliberately not queued: it is publications
 and people content, and it needs Kaung.
 
-- **T-29** Open Graph and Twitter card metadata, plus a share image. The
-  image should be the trace, since that is the thing the site is about, and it
-  can be rendered at build time from the same geometry module.
 - **T-30** Sitemap, via `@astrojs/sitemap`, excluding anything marked
   `noindex`.
 - **T-31** A 404 page, using the same layout, that says what is missing
