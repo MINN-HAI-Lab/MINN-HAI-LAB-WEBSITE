@@ -17,13 +17,12 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-15** Visible label stating the data is synthetic.
 
 ---
 
 ## QUEUE
 
-- **T-15** Visible label stating the data is synthetic.
 - **T-16** Responsive pass at 390, 768, 1440. No horizontal scroll, widget
   usable at every width.
 - **T-17** Verify the JS-off path by building and loading with scripting
