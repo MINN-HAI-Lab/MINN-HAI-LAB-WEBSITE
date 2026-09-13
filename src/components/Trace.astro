@@ -429,8 +429,45 @@ const altText =
       paintMarks();
     }
 
+    /**
+     * The one orchestrated moment on load: the estimate draws itself in.
+     *
+     * The curve is the model's claim, and watching it arrive left to right is
+     * the shape of the claim being made — the estimate moving as each attempt
+     * is taken into account. Everything else on the page is still.
+     *
+     * The dash pattern is removed when it finishes. Leaving it on means a
+     * later toggle animates a path against a stale dash array, and the curve
+     * redraws with a gap in it.
+     */
+    function drawIn(): void {
+      if (!curve || reduceMotion.matches) return;
+      const length = curve.getTotalLength();
+      if (!Number.isFinite(length) || length <= 0) return;
+
+      const span = holdDuration || duration;
+      if (span <= 0) return;
+
+      curve.style.strokeDasharray = String(length);
+      curve.style.strokeDashoffset = String(length);
+
+      const started = performance.now();
+      const step = (now: number): void => {
+        const t = Math.min(1, (now - started) / span);
+        curve.style.strokeDashoffset = String(length * (1 - ease(t)));
+        if (t < 1) {
+          requestAnimationFrame(step);
+          return;
+        }
+        curve.style.strokeDasharray = '';
+        curve.style.strokeDashoffset = '';
+      };
+      requestAnimationFrame(step);
+    }
+
     try {
       upgrade();
+      drawIn();
     } catch (error) {
       // Leave a readable page rather than a broken one. The static rendering
       // is complete on its own, so this costs the interaction and nothing else.

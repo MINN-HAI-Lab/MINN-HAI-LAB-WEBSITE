@@ -17,9 +17,6 @@ Nothing.
 - **S-13** `/people`: group photo, five 4:5 portraits, placeholder slots.
 - **S-14** `/about`: mission, funding, contact.
 - **S-15** `/learning`: StatLab.
-- **S-16** Bring the remaining browser specs onto the new spec. palette.spec.ts
-  still asserts the six light colours; screenshots and weight budgets assume
-  the old payload.
 - **S-17** Accessibility floor: keyboard, visible focus, 360px.
 - **S-18** Performance: Lighthouse mobile above 85 with the glass in place.
 - **S-19** Final pass: screenshots at three widths, self-critique.
@@ -28,6 +25,7 @@ Nothing.
 
 ## DONE
 
+- **S-16** — Browser suite back on the new spec: 405 tests green across chromium, firefox and webkit. Found four real bugs doing it, including the webfont never loading.
 - **S-07** — The 3D view: `3d-force-graph` behind a dynamic import from the click handler, 361KB gzipped in its own chunk, never requested until the button is pressed. Same NODES and EDGES as the diagram, blanket highlighting both ways, Escape closes, and the WebGL context is released on close.
 - **S-10** — Header and footer across the five pages: current-page marking, footer navigation, and the contact gap in the one place the plan asks for it.
 - **S-08** — Computer vision artefact, rebuilt on a real photograph: CC0, licence read from the Commons API, Sobel edge map computed in the browser from its pixels, veil plus viridis heat gated by a Gaussian at the cursor.
@@ -54,6 +52,11 @@ Nothing.
   https://creativecommons.org/publicdomain/zero/1.0/. Licence read from the
   Commons API, not assumed. Attribution is not required by CC0; it is given
   anyway, under the artefact. Full record in Q-21.
+- The site rendered in Georgia for this entire branch. `--font-serif` named
+  "Literata" literally, but Astro's <Font> declares the face under a hashed
+  family and exposes it as `--font-literata`. No @font-face matched, so the
+  committed, subset, hashed woff2 was never fetched once. Found by the font
+  stability spec asking why zero font files were requested.
 - The 3D view uses trackball controls, not orbit. OrbitControls threw
   "Cannot read properties of undefined (reading 'x')" out of its own pointer
   bookkeeping on every click on a node; trackball does not. The slow rotation

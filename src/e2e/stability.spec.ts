@@ -16,7 +16,7 @@ import { expect, test } from '@playwright/test';
  * moving anything. If this ever rises, something has started reflowing.
  */
 
-const PAGES = ['/', '/specimen/', '/404.html'] as const;
+const PAGES = ['/', '/research/', '/people/', '/learning/', '/about/', '/404.html'] as const;
 
 /** Google's "good" CLS boundary. */
 const GOOD_CLS = 0.1;

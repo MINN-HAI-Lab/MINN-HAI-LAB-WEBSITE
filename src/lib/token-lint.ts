@@ -3,7 +3,8 @@
  *
  * Three rules, from CLAUDE.md and DESIGN.md:
  *
- *   1. No raw hex outside tokens.css. The palette lives in one file.
+ *   1. No raw colour outside tokens.css — hex or a colour function. The
+ *      palette lives in one file.
  *   2. No raw px outside tokens.css. Spacing, radii and sizes are tokens.
  *
  * The third rule — no shadow property anywhere — is gone. DESIGN.md banned
@@ -34,7 +35,7 @@ export const BREAKPOINTS = [640, 900, 1180] as const;
 export interface Violation {
   file: string;
   line: number;
-  rule: 'hex' | 'px';
+  rule: 'hex' | 'colour' | 'px';
   text: string;
   message: string;
 }
@@ -76,12 +77,13 @@ function blankComments(source: string): string {
  * whitespace" let an empty reason through, because the comment terminator
  * that immediately followed it satisfied the check.
  */
-function allowedLines(source: string): Set<number> {
+function allowedLines(source: string, rule: 'px' | 'colour'): Set<number> {
   const allowed = new Set<number>();
   const lines = source.split('\n');
+  const directive = new RegExp(`lint-allow-${rule}:\\s*(?!\\*/)[A-Za-z0-9]`);
 
   lines.forEach((line, index) => {
-    if (!/lint-allow-px:\s*(?!\*\/)[A-Za-z0-9]/.test(line)) return;
+    if (!directive.test(line)) return;
     for (let next = index + 1; next < lines.length; next += 1) {
       allowed.add(next + 1);
       // Stop at the end of the block, so an exemption cannot leak down the file.
@@ -104,7 +106,8 @@ export function lintTokens(targets: readonly LintTarget[]): Violation[] {
   const violations: Violation[] = [];
 
   for (const { file, source, isTokenFile } of targets) {
-    const allowed = allowedLines(source);
+    const allowedPx = allowedLines(source, 'px');
+    const allowedColour = allowedLines(source, 'colour');
     const code = blankComments(source);
 
     code.split('\n').forEach((line, index) => {
@@ -113,7 +116,7 @@ export function lintTokens(targets: readonly LintTarget[]): Violation[] {
 
       if (isTokenFile) return;
 
-      if (/#[0-9a-fA-F]{3,8}\b/.test(line)) {
+      if (/#[0-9a-fA-F]{3,8}\b/.test(line) && !allowedColour.has(number)) {
         violations.push({
           file,
           line: number,
@@ -122,6 +125,24 @@ export function lintTokens(targets: readonly LintTarget[]): Violation[] {
           message:
             'Raw hex outside tokens.css. The palette is declared in one place; ' +
             'use the token.',
+        });
+      }
+
+      /* Colour functions, which the hex rule missed entirely.
+
+         `rgb(255 255 255 / 0.03)` went into an input background in language.css
+         and nothing here noticed, because it is not hex. The build minifier
+         then rewrote it to #ffffff08 and the browser palette spec caught it —
+         one layer further out than it should have been caught. */
+      if (/\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/.test(line) && !allowedColour.has(number)) {
+        violations.push({
+          file,
+          line: number,
+          rule: 'colour',
+          text,
+          message:
+            'Raw colour outside tokens.css. Use a token, or justify it with ' +
+            '`lint-allow-colour: <reason>` on the line above.',
         });
       }
 
@@ -145,7 +166,7 @@ export function lintTokens(targets: readonly LintTarget[]): Violation[] {
           continue;
         }
 
-        if (allowed.has(number)) continue;
+        if (allowedPx.has(number)) continue;
 
         violations.push({
           file,

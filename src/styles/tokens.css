@@ -40,7 +40,14 @@
   /* Literata for prose, a sans stack for labels, readouts and navigation.
      Serif on a dark instrument field is the thing that stops this looking
      like every other dark AI site. */
-  --font-serif: Literata, Georgia, serif;
+  /* var(--font-literata), not the literal name.
+     Astro's <Font> declares the face under a hashed family — Literata-<hash> —
+     and exposes that name, plus a metric-matched local fallback, in the
+     variable it is asked for. Naming "Literata" directly here matched no
+     @font-face at all, so every page quietly rendered in Georgia and the woff2
+     that was committed, subset and hashed was never fetched once.
+     The fallback in the var() covers the Font component failing outright. */
+  --font-serif: var(--font-literata, Georgia, serif);
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -110,6 +117,9 @@
      surface carries both. Never stack one over another: two layers double the
      blur cost and wash the text underneath toward the surface colour. */
   --surface: rgb(255 255 255 / 0.045);
+  /* One step below the glass, for a field a reader types into. It has to read
+     as recessed against the panel it sits on, and the panel is --surface. */
+  --surface-sunk: rgb(255 255 255 / 0.03);
   --surface-edge: rgb(255 255 255 / 0.1);
   --glass-blur: blur(16px) saturate(120%);
 
@@ -217,6 +227,18 @@
      attention curves are drawn. It has to clear the tallest arc the script
      draws, which lifts at most 54px, with air above it. */
   --arc-band: 64px;
+}
+
+/* Phones get a narrower gutter.
+
+   32px on each side of a 360px screen is 18 per cent of it, and the trace pays
+   for that twice: the ten attempt targets share whatever width is left, and at
+   a 32px gutter each one came out 22.5px wide against a 24px minimum. 16px is
+   the ordinary phone gutter and it puts them at 25.7px. */
+@media (max-width: 639px) {
+  :root {
+    --gutter: var(--space-4);
+  }
 }
 
 @media (min-width: 900px) {

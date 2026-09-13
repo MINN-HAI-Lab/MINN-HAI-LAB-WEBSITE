@@ -12,7 +12,7 @@ import { expect, test } from '@playwright/test';
  * claim; this measures it.
  */
 
-const PAGES = ['/', '/specimen/', '/404.html'] as const;
+const PAGES = ['/', '/research/', '/people/', '/learning/', '/about/', '/404.html'] as const;
 
 /** Fail every font request, as a blocked or broken connection would. */
 async function blockFonts(page: import('@playwright/test').Page): Promise<void> {
@@ -85,7 +85,7 @@ test.describe('without the webfont: the trace', () => {
     await expect(page.locator('.trace__mark')).toHaveCount(12);
 
     // The labels are HTML, so they depend on the fallback and must still read.
-    await expect(page.locator('.trace__stamp')).toHaveText('Synthetic data');
+    await expect(page.locator('.artefact__provenance')).toHaveText('Synthetic data');
     await expect(page.locator('[data-sentence]')).toContainText('per cent');
 
     // And the interaction still works: the font has nothing to do with it.

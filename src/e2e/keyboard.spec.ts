@@ -14,20 +14,48 @@ import { expect, test } from '@playwright/test';
 
 const PAGES = [
   { name: 'home', path: '/' },
-  { name: 'specimen', path: '/specimen/' },
+  { name: 'research', path: '/research/' },
+  { name: 'people', path: '/people/' },
+  { name: 'learning', path: '/learning/' },
+  { name: 'about', path: '/about/' },
   { name: '404', path: '/404.html' },
 ] as const;
 
-/** A short, stable description of whatever currently has focus. */
-async function focused(page: import('@playwright/test').Page): Promise<string> {
+interface Stop {
+  /** Document-order index: identity, so two look-alike links are two stops. */
+  key: string;
+  /** A short description, for the failure message. */
+  label: string;
+}
+
+/**
+ * Whatever currently has focus: what it is, and which element it is.
+ *
+ * The label alone used to be the identity, and that broke the moment the
+ * header grew five navigation links with the same class. Two consecutive
+ * `a.site-header__link` stops looked to the walker below like focus that had
+ * stopped moving, so it gave up four stops in and reported that the page had
+ * no focusable attempts on it — on a page whose eighth stop is an attempt.
+ *
+ * The index is identity and the label is prose. They are different jobs.
+ */
+async function focused(page: import('@playwright/test').Page): Promise<Stop> {
   return page.evaluate(() => {
     const el = document.activeElement;
-    if (!el || el === document.body) return 'body';
+    if (!el || el === document.body) return { key: 'body', label: 'body' };
+
     const index = (el as HTMLElement).dataset?.index;
-    if (index !== undefined) return `attempt ${index}`;
     const cls = (el.className as unknown as { baseVal?: string })?.baseVal ?? el.className;
     const first = String(cls ?? '').split(' ')[0];
-    return first ? `${el.tagName.toLowerCase()}.${first}` : el.tagName.toLowerCase();
+    const label =
+      index !== undefined
+        ? `attempt ${index}`
+        : first
+          ? `${el.tagName.toLowerCase()}.${first}`
+          : el.tagName.toLowerCase();
+
+    const key = String([...document.querySelectorAll('*')].indexOf(el));
+    return { key, label };
   });
 }
 
@@ -43,23 +71,27 @@ async function focused(page: import('@playwright/test').Page): Promise<string> {
  */
 async function tabThrough(
   page: import('@playwright/test').Page,
-  limit = 30,
+  limit = 40,
 ): Promise<string[]> {
-  const seen: string[] = [];
+  const labels: string[] = [];
+  const keys: string[] = [];
   let previous = '';
+
   for (let i = 0; i < limit; i += 1) {
     await page.keyboard.press('Tab');
-    const where = await focused(page);
-    if (where === 'body') break;
-    // Same element twice running: focus has left the document and the engine
-    // is not reporting it.
-    if (where === previous) break;
+    const stop = await focused(page);
+    if (stop.key === 'body') break;
+    // The same element twice running: focus has left the document and the
+    // engine is not reporting it.
+    if (stop.key === previous) break;
     // Back to the first stop: the order has wrapped.
-    if (seen.length > 1 && where === seen[0]) break;
-    seen.push(where);
-    previous = where;
+    if (keys.length > 1 && stop.key === keys[0]) break;
+    keys.push(stop.key);
+    labels.push(stop.label);
+    previous = stop.key;
   }
-  return seen;
+
+  return labels;
 }
 
 /**
@@ -79,14 +111,14 @@ for (const { name, path } of PAGES) {
 
       if (TAB_REACHES_LINKS(browserName)) {
         await page.keyboard.press('Tab');
-        expect(await focused(page), 'the skip link should be the first tab stop').toBe(
+        expect((await focused(page)).label, 'the skip link should be the first tab stop').toBe(
           'a.skip-link',
         );
       } else {
         // Safari keeps links out of the tab order by default. The link still
         // has to exist, take focus and work.
         await page.locator('.skip-link').focus();
-        expect(await focused(page), 'the skip link should be focusable').toBe('a.skip-link');
+        expect((await focused(page)).label, 'the skip link should be focusable').toBe('a.skip-link');
       }
 
       // Visible only once focused — off-screen otherwise, but never

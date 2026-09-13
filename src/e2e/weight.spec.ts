@@ -25,7 +25,7 @@ const TOTAL_BUDGET_KB = 120;
  *  is where a fourth stylesheet or a stray dependency would show up. */
 const SITE_BUDGET_KB = 25;
 
-const PAGES = ['/', '/specimen/', '/404.html'] as const;
+const PAGES = ['/', '/research/', '/people/', '/learning/', '/about/', '/404.html'] as const;
 
 interface Weights {
   total: number;

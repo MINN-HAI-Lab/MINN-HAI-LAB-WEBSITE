@@ -95,6 +95,11 @@
   flex: none;
   border-radius: var(--radius-glass);
   border: var(--rule-width) solid var(--surface-edge);
+  /* lint-allow-colour: the eight viridis stops. They are a scale, not palette
+     colours, and they have to match src/lib/saliency.ts stop for stop — a
+     token indirection between the two would make that harder to check, not
+     easier. The override allows a ramp inside a data visualisation, and this
+     is the key to one. */
   background-image: linear-gradient(
     to right,
     rgb(68 1 84),

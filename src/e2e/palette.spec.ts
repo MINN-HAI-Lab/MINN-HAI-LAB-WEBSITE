@@ -12,22 +12,65 @@ import { expect, test } from '@playwright/test';
  *
  * So this reads what the browser actually downloads.
  *
- * DESIGN.md: "Six values. There is no seventh."
- * D-009: no dark mode in v1.
+ * The palette is the dark instrument field from the brief's aesthetic
+ * override, which replaces DESIGN.md's six light values. The conflict is
+ * logged as Q-19.
  */
 
-/** The six, lowercase, from DESIGN.md § Colour. */
+/** The field itself. Five values, and there is no sixth. */
 const PALETTE = new Set([
-  '#eff1f2', // --paper
-  '#e3e7e9', // --paper-sunk
-  '#1c2830', // --ink
-  '#4e5d65', // --ink-muted
-  '#c9d0d3', // --rule
-  '#b4133f', // --claim
+  '#070b10', // --field
+  '#0c121a', // --field-2
+  '#e6edf3', // --text
+  '#8a9ba8', // --text-muted
+  '#ff3d5a', // --signal
+]);
+
+/**
+ * The viridis ramp, which is a scale rather than a colour.
+ *
+ * The override allows colour ramps "inside data visualisations only", and this
+ * one is the key and the overlay in artefact 3. It is written as rgb() in
+ * saliency.css, but the minifier rewrites those to hex, so it arrives here as
+ * eight more hex values and has to be named. Every one of the eight is a stop
+ * on the ramp in src/lib/saliency.ts; if a ninth colour appears, that is a
+ * real finding rather than a stale list.
+ */
+const VIRIDIS = new Set([
+  '#440154',
+  '#482878',
+  '#3e4a89',
+  '#31688e',
+  '#26828e',
+  '#1f9e89',
+  '#35b779',
+  '#fde725',
 ]);
 
 /** Fully transparent, in the spellings a minifier produces. Not a colour. */
 const TRANSPARENT = new Set(['#0000', '#00000000']);
+
+/**
+ * White, but only ever translucent.
+ *
+ * The glass is white at a few per cent over the field: --surface at 0.045,
+ * --surface-edge at 0.10, --grid at 0.06, --surface-sunk at 0.03. The minifier
+ * writes those as #ffffff0c and friends, so they arrive here as white with an
+ * alpha channel.
+ *
+ * Opaque #ffffff still fails. A solid white anywhere on this field would be a
+ * hole in it, and that is worth failing over — so the alpha is checked rather
+ * than the base colour allowlisted.
+ */
+function isTranslucentWhite(raw: string): boolean {
+  const value = raw.slice(1).toLowerCase();
+  const hasAlpha = value.length === 4 || value.length === 8;
+  if (!hasAlpha) return false;
+  const expanded = value.length === 4
+    ? value.split('').map((c) => c + c).join('')
+    : value;
+  return expanded.slice(0, 6) === 'ffffff' && expanded.slice(6) !== 'ff';
+}
 
 /**
  * Remove Tailwind's internal plumbing before scanning.
@@ -76,11 +119,11 @@ async function stylesheets(page: import('@playwright/test').Page): Promise<strin
   return [...fetched, ...inline];
 }
 
-const PAGES = ['/', '/specimen/', '/404.html'] as const;
+const PAGES = ['/', '/research/', '/people/', '/learning/', '/about/', '/404.html'] as const;
 
 for (const path of PAGES) {
   test.describe(`palette: ${path}`, () => {
-    test('ships only the six colours', async ({ page }) => {
+    test('ships only the palette, plus the one allowed ramp', async ({ page }) => {
       await page.goto(path);
       await page.waitForLoadState('networkidle');
 
@@ -90,17 +133,24 @@ for (const path of PAGES) {
           const raw = match[0];
           if (TRANSPARENT.has(raw.toLowerCase())) continue;
           const base = normalise(raw);
-          if (!PALETTE.has(base)) found.set(base, raw);
+          if (isTranslucentWhite(raw)) continue;
+          if (!PALETTE.has(base) && !VIRIDIS.has(base)) found.set(base, raw);
         }
       }
 
       expect(
         [...found.entries()].map(([base, raw]) => `${raw} (${base})`),
-        'a colour that is not one of the six reached the built CSS',
+        'a colour outside the palette and the viridis ramp reached the built CSS',
       ).toEqual([]);
     });
 
-    test('ships no dark-mode rule', async ({ page }) => {
+    /* The site is dark in every mode.
+
+       D-009 kept dark mode out of the light version; the field is now the
+       design, so a prefers-color-scheme rule would mean two palettes rather
+       than one — and the contrast figures in tokens.css were measured against
+       exactly one. */
+    test('ships one palette rather than a light and a dark one', async ({ page }) => {
       await page.goto(path);
       await page.waitForLoadState('networkidle');
 
@@ -113,7 +163,7 @@ for (const path of PAGES) {
 
       expect(
         offending,
-        'D-009 keeps dark mode out of v1, and a prefers-color-scheme rule is in the CSS',
+        'a prefers-color-scheme rule is in the CSS; the field is the only palette',
       ).toEqual([]);
     });
   });

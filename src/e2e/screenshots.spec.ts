@@ -106,7 +106,7 @@ for (const { name, width, height } of WIDTHS) {
       );
       expect(inTabOrder, 'roving tabindex should leave exactly one stop').toBe(1);
 
-      await page.locator('.trace__panel').screenshot({ path: `${OUT}/${name}-focus.png` });
+      await page.locator('.artefact__panel').screenshot({ path: `${OUT}/${name}-focus.png` });
     });
   });
 }
@@ -154,7 +154,7 @@ test.describe('with JavaScript disabled', () => {
     // The static rendering has to be a real one, not a placeholder.
     await expect(page.locator('.trace__curve')).toBeVisible();
     await expect(page.locator('.trace__band')).toBeVisible();
-    await expect(page.locator('.trace__stamp')).toHaveText('Synthetic data');
+    await expect(page.locator('.artefact__provenance')).toHaveText('Synthetic data');
     await expect(page.locator('[data-sentence]')).toContainText('per cent');
 
     // And it must not pretend to be interactive.

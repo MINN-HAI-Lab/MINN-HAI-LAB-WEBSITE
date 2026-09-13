@@ -15,7 +15,10 @@ import { expect, test } from '@playwright/test';
 
 const PAGES = [
   { name: 'home', path: '/' },
-  { name: 'specimen', path: '/specimen/' },
+  { name: 'research', path: '/research/' },
+  { name: 'people', path: '/people/' },
+  { name: 'learning', path: '/learning/' },
+  { name: 'about', path: '/about/' },
   { name: '404', path: '/404.html' },
 ] as const;
 

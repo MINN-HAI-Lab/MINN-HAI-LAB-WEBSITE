@@ -27,7 +27,7 @@
   font-size: var(--size-body);
   line-height: 1.4;
   color: var(--text);
-  background-color: rgb(255 255 255 / 0.03);
+  background-color: var(--surface-sunk);
   border: var(--rule-width) solid var(--surface-edge);
   border-radius: var(--radius-glass);
   padding: var(--space-3) var(--space-4);

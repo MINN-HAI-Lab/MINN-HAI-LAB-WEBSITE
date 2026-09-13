@@ -17,7 +17,7 @@ import { expect, test } from '@playwright/test';
  * resolved — and they cannot decide that without seeing the list.
  */
 
-const PAGES = ['/', '/specimen/', '/404.html'] as const;
+const PAGES = ['/', '/research/', '/people/', '/learning/', '/about/', '/404.html'] as const;
 
 interface Marker {
   page: string;

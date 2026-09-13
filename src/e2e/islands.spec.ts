@@ -2,11 +2,11 @@ import { gzipSync } from 'node:zlib';
 import { expect, test } from '@playwright/test';
 
 /**
- * The island rules from CLAUDE.md, as a test.
+ * Where script is allowed to go, as a test.
  *
- *   "Client-side JavaScript is allowed in interactive islands only. There are
- *    two: the trace widget on the home page, and the Markov blanket graph on
- *    /research. Everything else ships as HTML and CSS."
+ * CLAUDE.md's one-island rule is lifted by the brief's aesthetic override
+ * (Q-19) — the site now has four live artefacts, on two pages. What survives
+ * from it, because it was never about the count:
  *
  *   "It renders a real static version server-side. Not a placeholder, not a
  *    'this requires JavaScript' notice — an actual readable rendering of the
@@ -15,20 +15,27 @@ import { expect, test } from '@playwright/test';
  *   "And any island whose payload exceeds roughly 100KB gzipped loads on
  *    explicit interaction, never on page load."
  *
- * All three were verified by hand while the widget was built. None of them was
- * enforced, and every one is the kind of thing that erodes a script at a time.
+ * The second rule is why this file matters now more than it did. The 3D graph
+ * is 361KB gzipped — three and a half times the threshold — and the only thing
+ * keeping it out of the first paint is a dynamic import inside a click
+ * handler. That is one edit away from being a static import at the top of a
+ * file, at which point every visitor to /research downloads Three.js and
+ * nothing tells anyone.
  */
 
 /** Roughly 100KB gzipped, from CLAUDE.md. Past this an island must be
  *  click-to-load rather than loaded with the page. */
 const CLICK_TO_LOAD_THRESHOLD = 100 * 1024;
 
-/** Pages that are allowed to ship script, and why. */
-const ISLAND_PAGES = new Set(['/']);
+/** Pages carrying a live artefact, and so allowed to ship script. */
+const ISLAND_PAGES = new Set(['/', '/research/']);
 
 const PAGES = [
   { name: 'home', path: '/' },
-  { name: 'specimen', path: '/specimen/' },
+  { name: 'research', path: '/research/' },
+  { name: 'people', path: '/people/' },
+  { name: 'learning', path: '/learning/' },
+  { name: 'about', path: '/about/' },
   { name: '404', path: '/404.html' },
 ] as const;
 
@@ -50,13 +57,23 @@ for (const { name, path } of PAGES) {
       );
 
       if (ISLAND_PAGES.has(path)) {
-        expect(scripts.length, 'the home page should load the trace island').toBeGreaterThan(0);
+        expect(
+          scripts.length,
+          `${name} carries a live artefact and should load its script`,
+        ).toBeGreaterThan(0);
       } else {
         expect(
           scripts,
           `${name} has no island and should ship no script: ${scripts.join(', ')}`,
         ).toEqual([]);
-        expect(inline, `${name} should have no inline script`).toBe(0);
+        /* One inline script is allowed everywhere: the section reveal in
+           Base.astro, which is a few hundred bytes and applies the hidden
+           state it later removes. Anything beyond it is an artefact that has
+           wandered onto a page with no artefact on it. */
+        expect(
+          inline,
+          `${name} should carry only the reveal script, and has ${inline} inline scripts`,
+        ).toBeLessThanOrEqual(1);
       }
     });
 
@@ -173,5 +190,38 @@ test.describe('islands: the trace fails safe', () => {
     // The drawing itself is still real.
     const d = await page.locator('.trace__curve').getAttribute('d');
     expect(d?.length ?? 0).toBeGreaterThan(50);
+  });
+});
+
+
+test.describe('islands: the 3D graph stays out of the first paint', () => {
+  test('the library is not requested until the button is pressed', async ({ page }) => {
+    const requested: string[] = [];
+    page.on('request', (request) => requested.push(new URL(request.url()).pathname));
+
+    await page.goto('/research/');
+    await page.waitForLoadState('networkidle');
+
+    const before = requested.filter((path) => path.includes('network-3d'));
+    expect(
+      before,
+      'the 3D chunk was requested on page load; the import must stay inside the click handler',
+    ).toEqual([]);
+
+    /* A modulepreload hint would defeat the whole arrangement just as
+       thoroughly as a static import, and it would be added by the bundler
+       rather than by anyone editing this code. */
+    const preloads = await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"], link[rel="preload"]')]
+        .map((link) => link.href)
+        .filter((href) => href.includes('network-3d')),
+    );
+    expect(preloads, 'a preload hint pulls the 3D chunk into the first paint').toEqual([]);
+
+    await page.locator('[data-load-3d]').click();
+    await page.waitForTimeout(2500);
+
+    const after = requested.filter((path) => path.includes('network-3d'));
+    expect(after.length, 'the click should fetch the 3D chunk').toBeGreaterThan(0);
   });
 });
