@@ -23,15 +23,30 @@ Nothing.
 
 ## QUEUE
 
-Refilled 2026-09-13 after T-01 to T-26 completed. Phase 2 is done: tokens
-(T-02), header, footer, link and focus styles (T-22), the specimen page
-(T-21), and the widget reskinned onto tokens (T-23). Its exit gate is met —
-the specimen carries no value that is not in DESIGN.md, because every number
-on it is parsed from tokens.css at build time.
+Refilled again 2026-09-13. T-27 to T-34 are done. What remains of Phase 4 in
+`docs/phase.md` is "remove every remaining TODO:", which is blocked on B-1 to
+B-5, and the handbook's publications check, which is Phase 3.
 
-These come from Phase 4 in `docs/phase.md` and the "Before deploy" checklist
-in `docs/handbook.md`. Phase 3 is deliberately not queued: it is publications
-and people content, and it needs Kaung.
+So these are the constraints that CLAUDE.md and DESIGN.md state but nothing
+currently enforces. Each was verified by hand once and could regress silently.
+
+- **T-35** Enforce the island rules from `CLAUDE.md` as a test: only the two
+  sanctioned islands ship JavaScript, each renders a real static version
+  server-side, and the bundle stays under the ~100KB gzipped threshold that
+  would force click-to-load.
+- **T-36** Enforce the palette in the built output: only the six DESIGN.md
+  colours reach the CSS, and no `prefers-color-scheme` rule survives, since
+  D-009 keeps dark mode out of v1. Tailwind smuggled one in once already.
+- **T-37** One `npm run verify` that runs the type check, unit tests, token
+  lint, contrast check and the browser suite, so the pre-deploy gate in
+  `docs/handbook.md` is a single command rather than five remembered ones.
+- **T-38** TODO audit. Every visible `TODO:` in the built output should name
+  what is missing and who supplies it, and `verify` should list them rather
+  than let one ship unnoticed.
+
+When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
+
+---
 
 ## BLOCKED
 
