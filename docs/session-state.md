@@ -58,6 +58,9 @@ judgement call.
   https://creativecommons.org/publicdomain/zero/1.0/. Licence read from the
   Commons API, not assumed. Attribution is not required by CC0; it is given
   anyway, under the artefact. Full record in Q-21.
+- The weight budget is per page, not one number: /research legitimately ships
+  three times the script the home page does, and a single budget either failed
+  there or was slack enough on /people to catch nothing.
 - The site rendered in Georgia for this entire branch. `--font-serif` named
   "Literata" literally, but Astro's <Font> declares the face under a hashed
   family and exposes it as `--font-literata`. No @font-face matched, so the

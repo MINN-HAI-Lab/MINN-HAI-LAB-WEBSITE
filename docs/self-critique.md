@@ -66,7 +66,10 @@ would cut them.
 - The saliency map is a Sobel gradient over a real photograph's own pixels,
   computed in the browser. Put the cursor on the cat's eye and the peak reads
   0.74; put it on the thrown-out background and it reads 0.30. That difference
-  is the artefact's entire argument and it is measured, not asserted.
+  is the artefact's entire argument and it is measured, not asserted. It also
+  makes the argument by itself: the first time it comes into view the fixation
+  sweeps once along the eye line, which is the only version of this artefact a
+  phone reader would otherwise never see.
 - The tokeniser genuinely tokenises, on every keystroke, and a test asserts it
   never drops or invents a character.
 
