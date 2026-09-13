@@ -19,8 +19,15 @@ export default defineConfig({
 
   use: {
     baseURL: 'http://localhost:4321',
-    // Deterministic rendering: no OS animation timing in the captures.
-    launchOptions: { args: ['--force-prefers-reduced-motion'] },
+    /* Motion is ON by default, and that matters.
+     *
+     * This previously passed --force-prefers-reduced-motion to Chromium for
+     * "deterministic screenshots", which silently forced every spec in the
+     * suite into reduced motion. The load animation never ran in a single
+     * test, and the captures were not of the page most people see. Specs that
+     * want the reduced path now ask for it explicitly with
+     * test.use({ reducedMotion: 'reduce' }). */
+    reducedMotion: 'no-preference',
   },
 
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],

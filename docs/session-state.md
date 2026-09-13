@@ -17,9 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-32** Reduced-motion pass in a real browser. The handbook asks that
-  nothing jumps; T-14 built the path but only the CSS has been read, not the
-  rendered behaviour.
+Nothing.
 
 ---
 
@@ -100,6 +98,7 @@ history at `ec7ada9`.
 - **T-29** — Open Graph and Twitter tags that work without an origin, plus /share.svg generated from the real trace geometry. og:image and og:url stay out until there is a domain.
 - **T-30** — Sitemap integration configured and verified with a temporary domain: emits correctly and excludes the noindex specimen. Inert until `site` is set; the domain is now B-8.
 - **T-31** — 404 page on the same layout, linking only pages that exist and naming the planned ones as unlinked rather than sending readers to another 404. Added to the axe sweep.
+- **T-32** — Motion verified in a real browser in both modes: the curve draws and cleans up its dash state, toggling interpolates, and under reduced motion nothing draws, the update is instant with a static highlight, and zero transitions remain active.
 
 ---
 
@@ -132,4 +131,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-22 caught a T-20 regression: the axis-label gutter narrowed the SVG and tap targets fell from 24px to 22px at 360, with nothing failing. Narrow-width padding trimmed, and the 24px floor is now asserted in the browser harness across four widths rather than only in unit arithmetic.
 - T-24: a docblock explaining that '*/' slipped through the reason check contained '*/' and closed the comment, so half the module parsed as code. oxc reported it as a missing semicolon 78 lines later. If a TS parse error points somewhere that looks fine, check for a comment terminator upstream.
 - T-25: auditing a JS-off page needs the site's scripts stripped at the network layer, not javaScriptEnabled:false (axe needs scripting) and not setContent (relative stylesheet URLs do not resolve, so nothing is styled and axe reports phantom target-size failures against unstyled links).
+- T-32 found the Playwright config was passing --force-prefers-reduced-motion globally for 'deterministic screenshots'. Every spec since T-19 ran in reduced motion, the load animation never executed once, and the captures were not the page most people see. Motion is now on by default and specs opt into reduce.
 
