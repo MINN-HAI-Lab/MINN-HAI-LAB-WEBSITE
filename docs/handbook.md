@@ -152,3 +152,22 @@ Still needs a person:
   who supplies it, and its tracker — but deciding they are all resolved is a
   judgement, not a check.
 - Look at the screenshots. `npm run shots` writes them to `screenshots/`.
+
+## What a page weighs
+
+Measured 2026-09-13, cold first visit, compressed as served:
+
+| Page | Total | Of which font | The site's own |
+|---|---|---|---|
+| `/` | 94.4KB | 83.8KB | 10.6KB |
+| `/specimen/` | 91.3KB | 83.8KB | 7.5KB |
+| `/404.html` | 89.7KB | 83.8KB | 5.9KB |
+
+The split is the useful part. One webfont costs eight times the entire rest of
+the site, so there is no point optimising the 3.2KB of JavaScript. If the
+weight ever needs to come down, the only lever that matters is Literata:
+subsetting it further to the glyphs actually used would take most of it.
+
+`npm run verify` fails if a page exceeds 120KB, or if the site's own HTML, CSS
+and script exceed 25KB. Those are the measurements above plus headroom, not
+design values — move them deliberately rather than to make a build pass.

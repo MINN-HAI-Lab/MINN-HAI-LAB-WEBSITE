@@ -17,12 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-45** Measure what a first visit downloads, and record it, so the next
-  person adding something can see what it costs.
-
-When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
-
----
+Nothing.
 
 ---
 
@@ -103,6 +98,7 @@ history at `ec7ada9`.
 - **T-42** — Annotation column rendered on the specimen and covered at both breakpoints. Rendering it exposed two defects: no paragraph rhythm inside it, and no measure cap below 1180 where the grid stops enforcing one.
 - **T-43** — Dropped the font preload: it forced both subsets down for 152.8KB where the browser needs one at 83.8KB. Layout shift stays at zero. Covered by a test that fails if a second font is fetched.
 - **T-44** — Appended D-014 to D-021 as proposed: the favicon, TODO markers as content, target sizing in rendered pixels, the attribution measure, text outside the drawing, navigation showing only what exists, JS interpolation over CSS transitions, and no font preload.
+- **T-45** — First visit measured at 94.4KB, 83.8KB of it Literata and 10.6KB the site's own. Recorded in the handbook with a 120KB total and 25KB own-code budget enforced by verify.
 
 ---
 
