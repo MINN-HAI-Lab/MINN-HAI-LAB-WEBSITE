@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-20** Self-critique pass: walk the built page against the banned list in
+  `CLAUDE.md`. Fix unambiguous violations, log judgement calls.
 
 ---
 
 ## QUEUE
 
-- **T-20** Self-critique pass: walk the built page against the banned list in
-  `CLAUDE.md`. Fix unambiguous violations, log judgement calls.
 - **T-21** Typographic specimen page showing every text style in context at
   both scales.
 - **T-22** Header, footer, body link, button and focus styles per DESIGN.md.
