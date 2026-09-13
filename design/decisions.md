@@ -510,3 +510,38 @@ was doing that work, not the preload.
 
 The latin-ext subset stays available and will be fetched the moment an author
 name needs it, which is when it should be.
+
+---
+
+## D-022 — D-020 named the wrong browser
+
+**Status:** proposed · 2026-09-13
+
+D-020 says the estimate is interpolated in JavaScript because "`d` is
+animatable in Chromium and Safari but not reliably in Firefox". That is
+backwards, and it was asserted rather than measured.
+
+Measured on 2026-09-13, transitioning `d` on an SVG path:
+
+| Engine | Transitions `d` |
+|---|---|
+| Chromium | yes |
+| Firefox | yes |
+| WebKit | no |
+
+Firefox does it. WebKit does not: the mid-flight computed value is still the
+start value, so the path snaps at the end of the transition.
+
+**The decision stands, the reasoning does not.** Safari is not a browser this
+site can animate differently in, and DESIGN.md says the movement of the
+estimate is the information — so a CSS transition on `d` would drop that
+information for every Safari reader. The second reason in D-020 is unaffected:
+interpolating in JavaScript is what lets the reduced-motion path skip the
+animation outright rather than zero a duration.
+
+D-020 is left as written, per the rule that existing entries are not edited.
+This entry is the correction.
+
+The lesson is the cheaper half. The claim was plausible, it was about a
+browser I had not run, and nothing in the suite would have caught it — the
+whole test suite was Chromium-only until T-51. It now runs in all three.

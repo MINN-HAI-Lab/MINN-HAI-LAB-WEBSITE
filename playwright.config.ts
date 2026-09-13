@@ -30,7 +30,16 @@ export default defineConfig({
     reducedMotion: 'no-preference',
   },
 
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  /* Three engines, because two of this site's decisions turn on engine
+     behaviour: D-020 on whether `d` can be transitioned, and the trace's
+     reliance on SVG elements being focusable. Chromium alone would have let
+     both go unverified — and did, until T-51 found D-020 named the wrong
+     browser. */
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+  ],
 
   /* No webServer block on purpose.
    *

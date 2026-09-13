@@ -17,11 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-51** Run the browser suite in Firefox and WebKit. Everything so far has
-  been Chromium only. D-020 asserts that `d` is not reliably animatable in
-  Firefox and the whole JavaScript-interpolation approach rests on that; it
-  was asserted, not measured. If it is wrong, the decision is built on a false
-  premise and should be revised.
+Nothing.
 
 ---
 
@@ -116,6 +112,7 @@ history at `ec7ada9`.
 - **T-48** — Specimen renamed to Design specimen, since it now covers layout primitives as well as type. Logged Q-16 about the trace being cramped at phone widths.
 - **T-49** — Process audit logged as Q-17: step 2 (three prototypes, let me pick) was skipped entirely — every layout here was one-shot. Steps 3 and 4 were followed late.
 - **T-50** — Clean rebuild from a wiped dist, .astro and screenshots: verify exits 0, three pages build, 147 unit tests and 80 browser specs pass, five TODO markers all well-formed, and the pages read correctly at 1440 and 390.
+- **T-51** — Suite now runs in Chromium, Firefox and WebKit: 243 specs pass. Found D-020's premise was backwards and corrected it as D-022; fixed three keyboard tests that encoded Chromium-only assumptions.
 
 ---
 
@@ -154,4 +151,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-39: a duplicated Astro frontmatter fence emits everything after the first one as content, landing between the doctype and <html>, which the browser hoists into the body. Shipped on every page for eleven commits. axe, keyboard, palette and heading tests all passed it because it is valid HTML that merely shows junk. Only a screenshot caught it.
 - T-43: preloading a unicode-range-split font defeats the split. Astro inlines @font-face into the head, so there is no stylesheet round trip for preload to save, and it forced both subsets down. Removing it halved the font payload with no change to layout shift.
 - Reading an exit code after a pipe reports the LAST command in the pipeline, not the first. 'npm run verify | tail' always looks like it exited 0. Redirect to a file and check the status, or use PIPESTATUS.
+- T-51: D-020 claimed Firefox cannot transition the SVG d property. Measured, it is the opposite — Chromium and Firefox both can, WebKit cannot. The decision survives because Safari is the one that matters, but the premise was asserted, not tested, and a Chromium-only suite could never have caught it.
 

@@ -2,10 +2,15 @@
  * Cubic bezier easing, evaluated in JavaScript.
  *
  * The trace animates by interpolating path coordinates frame by frame rather
- * than by handing a CSS transition the `d` property. `d` is animatable in
- * Chromium and Safari but not reliably in Firefox, and DESIGN.md is explicit
- * that the movement of the estimate *is* the information — losing it in one
- * browser would lose the point of the widget there.
+ * than by handing a CSS transition the `d` property. Measured: Chromium and
+ * Firefox transition `d`; WebKit does not, and the path snaps at the end
+ * instead. DESIGN.md is explicit that the movement of the estimate *is* the
+ * information, so a CSS transition would drop that information for every
+ * Safari reader.
+ *
+ * D-020 originally named Firefox as the engine that could not do this. It was
+ * backwards, and it was asserted rather than measured; D-022 is the
+ * correction.
  *
  * Interpolating in JS also makes the reduced-motion path exact: it can be
  * skipped outright rather than given a zero duration, which DESIGN.md warns
