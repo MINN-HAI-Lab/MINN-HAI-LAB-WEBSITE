@@ -17,14 +17,13 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-23** Reskin the widget onto tokens only. Grep component code for literal
+  hex, px or duration values and remove them.
 
 ---
 
 ## QUEUE
 
-- **T-23** Reskin the widget onto tokens only. Grep component code for literal
-  hex, px or duration values and remove them.
 - **T-24** Token lint script failing the build on any raw hex, raw px outside
   tokens.css, or shadow property anywhere.
 - **T-25** Run axe-core over every built page. Fix violations, log design
