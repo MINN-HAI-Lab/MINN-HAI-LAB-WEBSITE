@@ -17,12 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-50** Final coherence pass. Rebuild from clean, look at every page at
-  1440 and 390, and confirm nothing regressed across forty-eight tasks.
-
-After T-50 the queue is genuinely exhausted of work that does not need Kaung.
-
----
+Nothing.
 
 ---
 
@@ -112,6 +107,7 @@ history at `ec7ada9`.
 - **T-47** — Dead-CSS check over every class selector in the stylesheets. Nothing is currently dead; verified by planting one, which fails with the class and its file named.
 - **T-48** — Specimen renamed to Design specimen, since it now covers layout primitives as well as type. Logged Q-16 about the trace being cramped at phone widths.
 - **T-49** — Process audit logged as Q-17: step 2 (three prototypes, let me pick) was skipped entirely — every layout here was one-shot. Steps 3 and 4 were followed late.
+- **T-50** — Clean rebuild from a wiped dist, .astro and screenshots: verify exits 0, three pages build, 147 unit tests and 80 browser specs pass, five TODO markers all well-formed, and the pages read correctly at 1440 and 390.
 
 ---
 
