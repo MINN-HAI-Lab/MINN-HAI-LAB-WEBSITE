@@ -17,7 +17,9 @@ stop the run.
 
 ## IN PROGRESS
 
-Nothing.
+- **T-27** Page metadata. Per-page title and description, canonical URL, and
+  `noindex` on the specimen, which is a working document rather than a page
+  for readers.
 
 ---
 
@@ -33,9 +35,6 @@ These come from Phase 4 in `docs/phase.md` and the "Before deploy" checklist
 in `docs/handbook.md`. Phase 3 is deliberately not queued: it is publications
 and people content, and it needs Kaung.
 
-- **T-27** Page metadata. Per-page title and description, canonical URL, and
-  `noindex` on the specimen, which is a working document rather than a page
-  for readers.
 - **T-28** Favicon. SVG, from the design tokens, no invented mark.
 - **T-29** Open Graph and Twitter card metadata, plus a share image. The
   image should be the trace, since that is the thing the site is about, and it
