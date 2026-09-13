@@ -23,9 +23,19 @@ Nothing.
 
 ## QUEUE
 
-Refilled 2026-09-13, seventh time. T-49 and T-50 are done.
+Refilled 2026-09-13, eighth time. T-51 and T-52 are done.
 
-Two claims this run made and never tested.
+- **T-53** Do the prototypes step, late. `CLAUDE.md` says "Produce three
+  visually distinct approaches in `prototypes/` ... Never one-shot a layout",
+  and Q-17 records that this run skipped it entirely. Build three genuinely
+  different treatments of the trace so there is something to choose between,
+  rather than one thing that happens to exist. One of them should be what is
+  currently built, so the comparison is fair.
+
+`prototypes/` is gitignored per `docs/plan.md`, so these live on disk and not
+in the repo. That is the plan's choice, not a way of hiding them.
+
+---
 
 ## BLOCKED
 
