@@ -2,13 +2,17 @@
 /**
  * The publication list.
  *
- * Dense rows, not cards: forty entries in cards is unreadable and this list
+ * Dense rows, not cards: fourteen entries in cards is unreadable and this list
  * grows. Every field comes from src/data/publications.ts and nothing is
  * rendered that is not in it.
  *
- * Authors and links are missing from the supplied list, so each row says so
- * rather than showing a plausible-looking citation. That gap is the correct
- * output until B-4 lands.
+ * Authors and links are missing from the supplied list, and every row is
+ * missing them in the same way. The first version printed the whole TODO under
+ * each row, which meant the same four lines fourteen times: on /research that
+ * was thirty-seven repetitions of one sentence, and it buried the papers it
+ * was annotating. The gap is now stated once above the list, and each row
+ * carries a short marker so it is still visible per entry rather than only in
+ * aggregate.
  */
 import type { Publication } from '../data/publications.ts';
 
@@ -17,7 +21,22 @@ interface Props {
 }
 
 const { publications } = Astro.props;
+
+/** How many of these rows are still missing their authors or their link. */
+const incomplete = publications.filter((p) => p.authors === null || p.paperUrl === null).length;
 ---
+
+{
+  incomplete > 0 && (
+    <p class="todo measure">
+      TODO: authors and paper links for {incomplete === publications.length ? 'every' : `${incomplete} of these`}{' '}
+      {publications.length === 1 ? 'entry' : 'entries'}. The supplied list has
+      short names, venues and years only, and a plausible-looking author list or
+      DOI is the worst thing this site could ship — it would not look wrong to a
+      reader. Kaung to supply. Tracked as B-4.
+    </p>
+  )
+}
 
 <ol class="publications">
   {
@@ -29,11 +48,11 @@ const { publications } = Astro.props;
           <span class="publications__meta label">
             {publication.venue}
             {publication.hasCode && <span class="publications__flag">code</span>}
+            {(publication.authors === null || publication.paperUrl === null) && (
+              <span class="publications__gap">authors and link not supplied</span>
+            )}
           </span>
-          <span class="publications__gap">
-            TODO: authors and a paper link. The supplied list has titles and
-            venues only. Kaung to supply. Tracked as B-4.
-          </span>
+          {publication.note && <span class="publications__note label">{publication.note}</span>}
         </span>
       </li>
     ))

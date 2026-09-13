@@ -13,7 +13,7 @@
  * when the photographs arrive they drop in without a redesign.
  */
 import Base from '../layouts/Base.astro';
-import { PEOPLE, unnamedCount } from '../data/people.ts';
+import { PEOPLE, PEOPLE_TODO, unnamedCount } from '../data/people.ts';
 
 const missing = unnamedCount();
 ---
@@ -26,12 +26,18 @@ const missing = unnamedCount();
        right shape, which is what an honest placeholder looks like. -->
   <section class="bleed group">
     <div class="group__frame" role="img" aria-label="A group photograph of the lab will appear here. It has not been supplied yet.">
-      <p class="group__todo todo">
-        TODO: a group photograph of the lab, landscape, at least 2400px wide.
-        It sits full-bleed at the top of this page, so faces should sit in the
-        middle third — the top and bottom are cropped at wide viewports.
-        Kaung to supply. Tracked as B-6.
-      </p>
+      {/* Wrapped in .page rather than carrying it, so the marker lines up
+          with the heading below. Putting both classes on one element did not
+          work: .todo's `padding` shorthand comes later in the stylesheet than
+          .page's `padding-inline` and silently won. */}
+      <div class="page group__todo">
+        <p class="todo measure">
+          TODO: a group photograph of the lab, landscape, at least 2400px wide.
+          It sits full-bleed at the top of this page, so faces should sit in the
+          middle third — the top and bottom are cropped at wide viewports.
+          Kaung to supply. Tracked as B-6.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -54,6 +60,8 @@ const missing = unnamedCount();
         link.
       </p>
 
+      {missing > 0 && <p class="todo measure">{PEOPLE_TODO}</p>}
+
       {/* Same section as the paragraph above it, not a new one. Two adjacent
           sections on the same ground pay the section rhythm twice, and at
           desktop width that put nearly four hundred pixels of nothing between
@@ -73,7 +81,14 @@ const missing = unnamedCount();
                     : `Portrait slot ${index + 1}. No photograph has been supplied.`
                 }
               >
-                <span class="people__index label" aria-hidden="true">{index + 1}</span>
+                {/* No visible number.
+
+                    CLAUDE.md bans numbered markers "unless the content is
+                    genuinely a sequence", and five members are a set, not an
+                    order. The frames plus five "Not named yet" captions already
+                    say there are five distinct slots. The number survives in
+                    the accessible name, where it is the only way to tell one
+                    empty frame from another. */}
               </div>
 
               {/* Name and role in type, under the portrait. Never over it: a
@@ -83,7 +98,7 @@ const missing = unnamedCount();
                 {person.name ?? <span class="people__unnamed">Not named yet</span>}
               </p>
               <p class="people__role label">{person.role ?? 'Role not supplied'}</p>
-              <p class="people__todo todo">TODO: {person.todo}</p>
+              {person.todo && <p class="people__todo todo">TODO: {person.todo}</p>}
             </li>
           ))
         }

@@ -17,7 +17,7 @@ import PublicationList from '../components/PublicationList.astro';
 import Saliency from '../components/Saliency.astro';
 import Trace from '../components/Trace.astro';
 import { RESEARCH_AREAS } from '../data/navigation.ts';
-import { PUBLICATIONS, byProgramme } from '../data/publications.ts';
+import { byProgramme } from '../data/publications.ts';
 
 const [tracing, bayesian, vision, language] = RESEARCH_AREAS;
 
@@ -118,15 +118,4 @@ const bayesianPapers = byProgramme('interpretability');
     </div>
   </section>
 
-  <!-- Everything, in one list ------------------------------------------------ -->
-  <section class="section section--raised" id="all" data-reveal>
-    <div class="page">
-      <h2 class="type-title">All publications</h2>
-      <p class="type-body type-muted measure">
-        All {PUBLICATIONS.length} entries in the supplied list, most recent
-        first, across both programmes.
-      </p>
-      <PublicationList publications={PUBLICATIONS.slice().sort((a, b) => b.year - a.year)} />
-    </div>
-  </section>
 </Base>

@@ -190,14 +190,19 @@
   color: var(--text-muted);
 }
 
-/* The visible gap where a citation would be. Deliberately not styled to look
-   like a citation. */
+/* The visible gap where a citation would be, per row.
+
+   Deliberately not styled to look like a citation, and deliberately not a
+   flag: a flag says "this entry has something", and this says the opposite.
+   The detail sits in the one TODO above the list. */
 .publications__gap {
-  font-family: var(--font-sans);
-  font-size: var(--label-size);
-  line-height: 1.5;
   color: var(--text-muted);
-  border-inline-start: calc(var(--rule-width) * 2) solid var(--surface-edge);
-  padding-inline-start: var(--space-3);
+  font-style: italic;
+}
+
+/* Anything the supplied list itself flags as uncertain — a title read one way
+   rather than another, a programme that may be filed wrongly. */
+.publications__note {
+  color: var(--text-muted);
   max-width: var(--measure);
 }

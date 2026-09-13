@@ -359,8 +359,11 @@ main:focus-visible {
 
 /* -- Site footer ----------------------------------------------------------- */
 
+/* No top margin. The last section on every page already ends with a full
+   section rhythm of padding, and adding another on top of it left a band of
+   nothing between the last sentence and the footer rule that looked like the
+   page had stopped rendering. */
 .site-footer {
-  margin-block-start: var(--rhythm-section);
   border-block-start: var(--rule-width) solid var(--grid);
 }
 

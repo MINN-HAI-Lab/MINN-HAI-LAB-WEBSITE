@@ -53,10 +53,6 @@
   background-color: var(--field-2);
   border: var(--rule-width) solid var(--surface-edge);
   border-radius: var(--radius-0);
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding: var(--space-3);
   position: relative;
   overflow: hidden;
 }
@@ -74,12 +70,6 @@
     transparent calc(50% + var(--rule-width))
   );
   pointer-events: none;
-}
-
-.people__index {
-  color: var(--text-muted);
-  position: relative;
-  z-index: 1;
 }
 
 .people__name {
@@ -110,7 +100,7 @@
 .group__frame {
   position: relative;
   aspect-ratio: 3 / 2;
-  max-block-size: 60vh;
+  max-block-size: 50vh;
   background-color: var(--field-2);
   border-block-end: var(--rule-width) solid var(--surface-edge);
   display: flex;
@@ -121,11 +111,19 @@
 
 @media (width >= 900px) {
   .group__frame {
-    aspect-ratio: 3 / 1;
+    /* Wider than it is tall by a good margin. An empty band is honest but it
+       should not eat half a screen before the page has said what it is. */
+    aspect-ratio: 4 / 1;
   }
 }
 
+/* Wraps the marker in the page column, so its left edge is the site's left
+   edge rather than the middle of an empty band. */
 .group__todo {
-  max-width: var(--measure);
-  text-align: start;
+  inline-size: 100%;
+}
+
+.group__frame {
+  justify-content: flex-start;
+  padding-inline: 0;
 }

@@ -1,0 +1,146 @@
+# Self-critique
+
+Five pages, three widths, read against CLAUDE.md's banned list and against the
+brief's own floor. Written at the end of the build, before anyone else has seen
+it.
+
+The honest summary: the artefacts are the site, and they work. The pages around
+them are thin, and they are thin because the content to fill them does not
+exist yet — which is the correct state, but it means anyone judging this site
+today is judging four working artefacts and a scaffold.
+
+---
+
+## Against the banned list
+
+CLAUDE.md's banned visual defaults, item by item. The brief's aesthetic
+override lifts several of them explicitly; those are marked and the conflict is
+logged as Q-19.
+
+| Banned | Status |
+|---|---|
+| Warm cream with terracotta accent | Not present. Dark field. |
+| **Near-black with one bright vermilion accent** | **Present, and prescribed.** The override names `--field #070B10` and `--signal #FF3D5A` and restricts the signal to model outputs. This is the one banned item the brief asks for by hex value. |
+| Tinted near-black standing in for a real dark value | Not present. `#070B10` is a measured value with a contrast table in `tokens.css`, not a vague `#111`. |
+| Tracked-out all-caps eyebrow labels | Not present. Labels are sentence case at 12px with 0.02em tracking. |
+| Meta strings joined with middle dots | Not present. |
+| `WORD — fragment` labels | Not present. |
+| Monospace for data labels | Not present. `--font-mono` is declared and `.type-code` uses it; nothing on any page does. |
+| `→` appended to link text | Not present. |
+| Identical rounded cards in a three-column grid | Not present. The portrait frames are square-cornered 4:5 rectangles at `--radius-0`; the publications are ruled rows. |
+| **Gradients, glassmorphism, backdrop blur** | **Present, and prescribed.** Glass is the override's central instruction, with its own blur, edge and radius values. |
+| Particle fields, floating nodes, animated neural-network backgrounds | Judgement call, argued below. |
+| Numbered `01 / 02 / 03` markers | Removed during this pass. The portrait frames carried a visible 1–5; five members are a set, not a sequence. The number survives only in each frame's accessible name, where it is the only way to tell one empty frame from another. |
+| Accenting one word in a headline | Not present. |
+| **Fade-and-slide-up on every section** | **Present, and prescribed.** The override asks for "one entrance reveal per section on scroll, once, never repeating". |
+| Hover lift on every card | Not present. |
+| Inter, Geist or a UI default as the display face | Not present. Literata for prose; the sans is only for labels, readouts and navigation. |
+
+### The one I want to argue rather than tick
+
+**Particles.** The 3D view draws two travelling dots along each Markov-blanket
+link. That is close to a banned "animated neural-network background", and I
+considered removing it.
+
+It stays because it is carrying information rather than atmosphere: in three
+dimensions an arrowhead is frequently pointing away from the camera, and the
+direction of a dependency is the whole content of a Bayesian network. The dots
+move parent to child. They appear only on blanket links — the set the artefact
+is currently asserting — never on the other edges, and never under reduced
+motion. If they were on all thirteen edges they would be a screensaver, and I
+would cut them.
+
+---
+
+## What is actually good
+
+**The four artefacts.** Each one does a real thing:
+
+- The trace runs Bayesian knowledge tracing, and the parameters were searched
+  rather than picked so that every one of the ten clicks moves the headline by
+  at least twenty points instead of saturating at 100 per cent.
+- The Markov blanket is computed properly — parents, children, and the
+  children's other parents — and the same function places the static SVG at
+  build time, answers a click in 2D, and colours the 3D scene. The three cannot
+  disagree about what the network is.
+- The saliency map is a Sobel gradient over a real photograph's own pixels,
+  computed in the browser. Put the cursor on the cat's eye and the peak reads
+  0.74; put it on the thrown-out background and it reads 0.30. That difference
+  is the artefact's entire argument and it is measured, not asserted.
+- The tokeniser genuinely tokenises, on every keystroke, and a test asserts it
+  never drops or invents a character.
+
+**Every artefact says what its data is**, on its face, in the label bar, and
+again in a note underneath. `artefacts.spec.ts` fails if any of those four
+labels goes missing.
+
+**The gaps are visible and specific.** No invented publication, author, venue,
+year, DOI, funder, affiliation, member name, role or photograph appears
+anywhere. Every gap names what is missing, who supplies it and a tracker, and a
+test enforces all three.
+
+**It is fast and it is accessible.** Lighthouse mobile: 100 for performance,
+accessibility, best practices and SEO on all five pages, with every glass layer
+in place. 450 browser tests green across Chromium, Firefox and WebKit.
+
+---
+
+## What is weak
+
+**1. The pages around the artefacts are mostly gaps.** `/people` has five empty
+frames. `/about` has four TODO blocks and two real paragraphs. `/learning` has
+one link. This is the correct output — the content does not exist and inventing
+it would be the worst thing this site could do — but it should not be mistaken
+for a finished site. It is a finished *frame* waiting on about eight facts.
+
+**2. `/learning` is thinner than it should be.** The brief asked for it to be
+"built to take more resources later", so it is a list of one. A list of one
+looks like an oversight even when it is not. If StatLab had a screenshot or an
+embedded preview the page would carry its own weight; there is no screenshot to
+use and I would not fabricate one.
+
+**3. The group photograph frame is a large empty band.** Four units wide to one
+tall at desktop, with a marker in it. It is honest, it is the right shape for
+what will replace it, and it is still the first thing on `/people` and it is
+empty.
+
+**4. The 3D chunk is 361KB gzipped.** Opt-in, absent from the first paint,
+verified by a test that fails if it is ever requested on load. But someone who
+presses the button on a poor connection waits, and the button does not say how
+much it is about to fetch. It says "Loading the 3D view…" once pressed, which
+is late.
+
+**5. The illustrative network is illustrative.** Ten plausible
+learning-analytics variables with plausible dependencies, and the artefact says
+so three times. It would be much stronger with the lab's real structure. That
+is a content gap rather than a build one, but it is the gap that most limits
+artefact 2.
+
+**6. The attention in artefact 4 is a distance kernel with a stem bonus.** It
+has the shape of attention and the arithmetic of a real head, and it is labelled
+illustrative in the bar and explained in the note. It is still not a model. If
+the lab can export real weights, that artefact improves enormously and the
+drawing does not have to change.
+
+---
+
+## What nearly shipped broken
+
+Recorded because it is the useful part of a critique.
+
+- **The site rendered in Georgia for the whole branch.** `--font-serif` named
+  "Literata" literally; Astro's `<Font>` declares the face under a hashed family
+  and exposes it as `--font-literata`. No `@font-face` matched, so the woff2
+  that was subset, hashed and committed was never fetched once. Found by a test
+  asking why zero font files were requested, not by looking — the fallback is a
+  serif and it looked fine.
+- **Tap targets at 22.5px against a 24px minimum**, because the phone gutter was
+  eighteen per cent of the screen.
+- **`margin-inline: auto` on a flex item in a column** makes it shrink to
+  content rather than stretch. This has now caused two bugs in this repo: a plot
+  drawing at 324px in a 1116px panel, and the 3D canvas sizing itself from
+  `window.innerWidth` and pushing a scrollbar onto the page at 360px.
+- **The same TODO printed thirty-seven times on `/research`**, once under every
+  publication row. Every test passed. It took looking at a full-page screenshot
+  to see that the annotation had buried the thing it was annotating.
+

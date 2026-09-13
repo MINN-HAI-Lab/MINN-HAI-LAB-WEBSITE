@@ -33,9 +33,29 @@ export interface Person {
   photo: string | null;
   /** A personal or institutional page. Null until supplied — never guessed. */
   href: string | null;
-  /** What this particular slot is waiting on, shown on the page. */
-  todo: string;
+  /**
+   * Anything this slot in particular is waiting on, beyond what every empty
+   * slot is waiting on.
+   *
+   * Normally absent. The five identical "name, role and a link" markers that
+   * used to live here printed the same sentence five times down a phone
+   * screen, which made the gap harder to read rather than easier; that
+   * sentence is now stated once, above the row. Use this only when one slot
+   * genuinely differs from the others.
+   */
+  todo?: string;
 }
+
+/**
+ * What every empty slot is waiting for, said once.
+ *
+ * Rendered above the row rather than five times inside it.
+ */
+export const PEOPLE_TODO =
+  'TODO: names, roles and links for the five members, and a portrait for each ' +
+  'at 4:5 once they consent to appearing. docs/plan.md asks for the principal ' +
+  'investigator at minimum, and lists people as blocking launch. Kaung to ' +
+  'supply. Tracked as B-5.';
 
 /**
  * Five slots, because the brief says five members.
@@ -50,35 +70,30 @@ export const PEOPLE: readonly Person[] = [
     role: null,
     photo: null,
     href: null,
-    todo: 'Member 1 — name, role and a link. The plan asks for the principal investigator at minimum. Kaung to supply. Tracked as B-5.',
   },
   {
     name: null,
     role: null,
     photo: null,
     href: null,
-    todo: 'Member 2 — name, role and a link, if they consent to appearing. Kaung to supply. Tracked as B-5.',
   },
   {
     name: null,
     role: null,
     photo: null,
     href: null,
-    todo: 'Member 3 — name, role and a link, if they consent to appearing. Kaung to supply. Tracked as B-5.',
   },
   {
     name: null,
     role: null,
     photo: null,
     href: null,
-    todo: 'Member 4 — name, role and a link, if they consent to appearing. Kaung to supply. Tracked as B-5.',
   },
   {
     name: null,
     role: null,
     photo: null,
     href: null,
-    todo: 'Member 5 — name, role and a link, if they consent to appearing. Kaung to supply. Tracked as B-5.',
   },
 ];
 
