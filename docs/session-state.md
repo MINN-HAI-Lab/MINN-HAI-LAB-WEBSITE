@@ -23,12 +23,32 @@ Nothing.
 
 ## QUEUE
 
-Refilled again 2026-09-13. T-27 to T-34 are done. What remains of Phase 4 in
-`docs/phase.md` is "remove every remaining TODO:", which is blocked on B-1 to
-B-5, and the handbook's publications check, which is Phase 3.
+Refilled 2026-09-13, third time. T-35 to T-38 are done. Phase 4's remaining
+item is "remove every remaining TODO:", which is blocked on B-1 to B-5 and
+B-9, and the handbook's publications check is Phase 3.
 
-So these are the constraints that CLAUDE.md and DESIGN.md state but nothing
-currently enforces. Each was verified by hand once and could regress silently.
+These are gaps I can see in what has been built rather than new features:
+things made but never looked at, and assumptions never tested.
+
+- **T-39** Look at the screenshots that have never been reviewed. T-20
+  critiqued the 1440 and 390 full-page captures; the 768 tablet width, the
+  attribution view, the focus ring and the no-JS capture have all been
+  generated and never opened.
+- **T-40** Base-path robustness. Every internal URL is absolute from the root
+  (`/favicon.svg`, `/share.svg`, `/`). D-008 names GitHub Pages as the
+  likeliest host, and a project page there serves from `/<repo>/`, which
+  breaks every one of them. Establish whether that is a real risk and either
+  handle it or log it clearly against D-008.
+- **T-41** Layout stability. The metric-matched font fallback and the curve
+  draw both run on load; neither has been measured for the shift they cause.
+- **T-42** The annotation column in `layout.css` is specified in DESIGN.md,
+  built, and used by nothing — `/research` is Phase 3. Give it a fixture and
+  a test at the 1180px breakpoint so it is not discovered to be broken on the
+  day someone needs it.
+
+When this empties, refill again from `docs/phase.md`. Never queue Phase 3.
+
+---
 
 ## BLOCKED
 
