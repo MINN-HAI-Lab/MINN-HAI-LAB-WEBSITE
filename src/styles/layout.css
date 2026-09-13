@@ -209,7 +209,11 @@ a.link:hover {
 /* -- Visually hidden ------------------------------------------------------- */
 
 /* Off-screen but still announced. Not display:none and not visibility:hidden,
-   either of which would remove it from the accessibility tree entirely. */
+   either of which would remove it from the accessibility tree entirely.
+
+   lint-allow-px: the clip rectangle is an accessibility idiom, not a design
+   value. It has to be a real one-pixel box for screen readers to treat the
+   content as rendered; a spacing token here would be meaningless. */
 .visually-hidden {
   position: absolute;
   inline-size: 1px;

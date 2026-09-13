@@ -17,8 +17,7 @@ stop the run.
 
 ## IN PROGRESS
 
-- **T-24** Token lint script failing the build on any raw hex, raw px outside
-  tokens.css, or shadow property anywhere.
+Nothing.
 
 ---
 
@@ -77,6 +76,7 @@ history at `ec7ada9`.
 - **T-26** — Type scale applied at element level for h1-h6; home h1 opts up to Display. Verified computed sizes at both scales: 56/18/15 above 900px, 34/17/14 below, with component overrides intact.
 - **T-22** — Header with set type and built-pages-only nav, footer carrying the contact TODO, plus link, button and focus states verified against DESIGN.md § States.
 - **T-23** — Widget geometry now derives from tokens: mark, ring and swatch radii parsed from --mark-size, --curve-width and --space-1; plot width from the viewBox constant; the script's last duration literal removed. Verified by mutation.
+- **T-24** — Token lint over source stylesheets: raw hex, raw px and any shadow property. Wired to prebuild so it fails the build; verified by mutation that all three rules trip and the exit code is 1.
 
 ---
 
@@ -107,4 +107,5 @@ Failed approaches and values that had to be chosen. Two lines each.
 - T-21: reading a source file from Astro frontmatter needs Vite's ?raw import, not fs. By prerender the module is bundled, so import.meta.url resolves into dist/.prerender and a relative path throws ENOENT.
 - T-26: only h1-h6 need element rules. Tailwind preflight resets headings to font-size:inherit but leaves p and li alone, so both already inherit --size-body from body. An li rule would outrank .trace__key's inherited Small and silently enlarge the widget key.
 - T-22 caught a T-20 regression: the axis-label gutter narrowed the SVG and tap targets fell from 24px to 22px at 360, with nothing failing. Narrow-width padding trimmed, and the 24px floor is now asserted in the browser harness across four widths rather than only in unit arithmetic.
+- T-24: a docblock explaining that '*/' slipped through the reason check contained '*/' and closed the comment, so half the module parsed as code. oxc reported it as a missing semicolon 78 lines later. If a TS parse error points somewhere that looks fine, check for a comment terminator upstream.
 
