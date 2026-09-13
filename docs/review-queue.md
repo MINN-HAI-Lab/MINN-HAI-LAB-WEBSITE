@@ -620,3 +620,61 @@ site exists not to make.
 If the lab has a model whose weights could be exported, this artefact is the
 obvious place for them and the drawing would not have to change — only the
 label and the source of the numbers.
+
+---
+
+## Q-23 — the portrait placeholders are drawn, not an image file
+
+The brief asks for "a neutral placeholder image at the right aspect ratio" in
+each of the five people slots. What is built is a 4:5 box with the field-two
+ground, a hairline edge and a faint diagonal rule: the right aspect ratio and
+the right neutrality, drawn in CSS rather than served as a file.
+
+Why not a file:
+
+- **It weighs nothing.** Five placeholder images is five requests and a few
+  kilobytes for something whose entire content is "nothing here yet".
+- **It cannot be mistaken for a photograph.** A grey rectangle served as a
+  `.png` is the kind of thing that ships. A ruled empty frame with "Not named
+  yet" under it is legible as a gap at a glance, which is the point.
+- **The swap is one line.** `Person.photo` is null on every slot; the moment it
+  is a path, the box becomes an `<Image>` at the same aspect ratio and nothing
+  else moves.
+
+The requirement behind the instruction — a neutral thing of the right shape, so
+the layout is built at full size around photographs that do not exist — is met
+in full. Only the delivery mechanism differs, and it differs in the direction
+of weighing less and lying less.
+
+---
+
+## Q-24 — the domain is an environment variable, not a blank
+
+`site` was left unset in `astro.config.mjs` with a TODO, which was right: the
+domain is undecided (B-8) and a plausible placeholder in production metadata is
+the fabrication that survives review because it looks right.
+
+The cost was that `@astrojs/sitemap` printed a warning on **every single
+build**. A build that always warns is a build whose output nobody reads, and
+this repository has already had one bug — a stray `---` on every page for
+eleven commits — that survived precisely because nothing in the output looked
+unusual.
+
+So the domain is now read from `SITE_URL` at build time:
+
+```
+SITE_URL=https://the-real-domain.example npm run build
+```
+
+Unset, which is the state in this repository: no sitemap integration, no
+canonical URL, no `og:url`, no absolute `og:image`, and a silent build.
+Set: all four appear together with no further edit anywhere.
+
+Still nothing invented. The difference is that the gap is now filled by
+supplying a fact at the moment of deploy rather than by editing a source file,
+and the build stopped complaining about a decision that has not been made yet.
+
+`src/e2e/outbound.spec.ts` holds the line: it fails if any origin outside a
+three-entry allowlist appears in the built markup, and fails again if any page
+fetches anything from another origin at all. It caught a stray `example.test`
+from a test build within a minute of being written.

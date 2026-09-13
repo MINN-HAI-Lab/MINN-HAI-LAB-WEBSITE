@@ -3,32 +3,33 @@ import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+/**
+ * The lab's domain, supplied at build time rather than written down here.
+ *
+ * TODO: nothing in this repository knows the domain. It is open question 10 in
+ * design/decisions.md, D-008 ties hosting to it, and it is tracked as B-8.
+ * Kaung to supply. Set it as an environment variable when building:
+ *
+ *   SITE_URL=https://the-real-domain.example npm run build
+ *
+ * It is not written here as a plausible placeholder, because a wrong domain in
+ * a sitemap is worse than no sitemap: it is the kind of thing that looks
+ * finished, ships, and is only noticed when the search results are wrong.
+ *
+ * With it set, three things switch on together: the sitemap, the canonical
+ * URLs, and an absolute og:image (Q-13, Q-14). Without it, none of them
+ * appear and the build says nothing about it — the sitemap integration used to
+ * warn on every single build, which is how a project learns to stop reading
+ * its own build output.
+ */
+const site = process.env.SITE_URL;
+
 // Static output. No adapter, no SSR. See docs/plan.md.
 export default defineConfig({
   output: 'static',
+  ...(site ? { site } : {}),
 
-  // TODO: set `site` to the lab's domain. Everything below waits on it.
-  //
-  // A sitemap needs absolute URLs, so @astrojs/sitemap emits nothing at all
-  // without this and says so during the build. The same value unblocks
-  // canonical URLs and og:image (Q-13, Q-14).
-  //
-  // It is left unset rather than pointed at a plausible placeholder, because a
-  // wrong domain in a sitemap is worse than no sitemap: it is the kind of
-  // thing that looks finished, ships, and is only noticed when the search
-  // results are wrong. The domain is open question 10 in design/decisions.md
-  // and D-008 ties hosting to it. Kaung to supply.
-  //
-  // site: 'https://example.org',
-
-  integrations: [
-    sitemap({
-      // The type specimen is a working document and carries noindex, so it has
-      // no business in a sitemap either. Keep this in step with the `noindex`
-      // props in src/pages.
-      filter: (page) => !page.includes('/specimen'),
-    }),
-  ],
+  integrations: site ? [sitemap()] : [],
 
   // Literata, self-hosted. The two woff2 files in src/assets/fonts are the
   // latin and latin-ext subsets of the *two-axis* build, carrying both wght
