@@ -804,15 +804,18 @@ kept as record.
 
 ---
 
-## Q-29 — the first Pages deploy failed, and why
+## Q-29 — the first Pages deploys, and why the root 404ed
 
-The repository's Pages source was set to "deploy from a branch", so GitHub's
-built-in Jekyll build ran against `main` — which at that point held the
-previous site's Astro source, not a built site — and failed
-(run 34843437780). `auto/site`, with the redesign and the deploy workflow,
-had never been pushed.
+The repository's Pages source was set to "Deploy from a branch". Two things
+followed. First, GitHub's built-in Jekyll build ran against `main` while it
+still held the previous site's Astro source, and failed (run 34843437780).
+Then, once `main` was fast-forwarded to the redesign with the deploy
+workflow, *both* deployed: the workflow's build of `dist/`, and eleven seconds
+later the Jekyll build of the raw tree — which won, so the root 404ed and
+`/docs/plan.md` answered 200.
 
-Fixed by pushing the work and fast-forwarding `main` to it, and by having the
-workflow enable Pages in Actions mode itself (`actions/configure-pages` with
-`enablement: true`), so nothing has to be flipped by hand in the settings.
-The site is at https://minn-hai-lab.github.io/MINN-HAI-LAB-WEBSITE/.
+`actions/configure-pages` with `enablement: true` creates a Pages site when
+none exists; it does not change an existing branch-mode site to Actions
+mode. That is one setting, once, by hand: Settings → Pages → Build and
+deployment → Source → **GitHub Actions**. After that only the workflow
+deploys, and the site is at https://minn-hai-lab.github.io/MINN-HAI-LAB-WEBSITE/.

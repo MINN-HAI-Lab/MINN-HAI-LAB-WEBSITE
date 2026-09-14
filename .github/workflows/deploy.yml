@@ -6,10 +6,12 @@
 # The base path and the site URL are derived from the repository name, so
 # nothing here has to change if the repo is renamed.
 #
-# No setup in the repository settings: the configure-pages step below enables
-# Pages in "GitHub Actions" mode on the first run. (The first attempt at
-# hosting used "deploy from a branch", whose built-in Jekyll build ran on the
-# Astro source and failed — Q-29.)
+# One setting, once: Settings → Pages → Build and deployment → Source →
+# "GitHub Actions". While Source is "Deploy from a branch", GitHub's own
+# Jekyll build runs alongside this workflow and publishes the raw repository
+# tree instead of dist/ — so the root 404s and /docs/plan.md answers. The
+# configure-pages step below creates a Pages site if there is none; it does
+# not switch an existing branch-mode site. Q-29.
 name: Deploy to GitHub Pages
 
 on:
