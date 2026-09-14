@@ -12,7 +12,9 @@ cursor toward the centre and both reach in until the index fingertips almost
 meet. Behind the gap, a cybernetic instrument field — rings, ticks, a
 wireframe icosahedron, a glowing arc. After Michelangelo, *The Creation of
 Adam*. Everything in the frame is live 3D. The frame is 920px tall on a
-1340px canvas.
+1340px canvas; on a wider screen the camera comes in so the frame shows the
+same width of the scene, and the forearms are long enough to leave the
+frame at any size, so their ends are never in view.
 
 Direction 1d is the rest of the page, in this order: a research header band
 over a lattice field; two programme rows (`200px | 1fr | 300px`); the paper
