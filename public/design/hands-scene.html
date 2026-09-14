@@ -176,11 +176,14 @@ addEventListener('pointerleave', () => { if (!ptr.lock) ptr.treach = 0; });
 addEventListener('message', e => { const d = e.data; if (d && d.type === 'mh-pointer') { if (d.out) { if (!ptr.lock) ptr.treach = 0; } else setPtr(d.x, d.y); } });
 
 /* The artboard is 1340x920. On a wider frame the camera comes in so the frame
-   shows the same width of the scene the artboard did; on a narrower one it
-   stays put, so the hands keep their size. */
+   shows about the same width of the scene the artboard did — but no closer
+   than 0.82 of its distance, or on an ultrawide frame the hands crowd the
+   edges and the top of the human hand goes under the header. Past that the
+   long forearms carry it: they leave the frame at any width. On a narrower
+   frame the camera stays put, so the hands keep their size. */
 const ART_ASPECT = 1340 / 920, CAM_Z = 7.6;
 let camZ = CAM_Z;
-const resize = () => { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camZ = CAM_Z * Math.min(1, ART_ASPECT / camera.aspect); camera.position.z = camZ; camera.updateProjectionMatrix(); };
+const resize = () => { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camZ = CAM_Z * Math.max(0.82, Math.min(1, ART_ASPECT / camera.aspect)); camera.position.z = camZ; camera.updateProjectionMatrix(); };
 addEventListener('resize', resize); resize();
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
