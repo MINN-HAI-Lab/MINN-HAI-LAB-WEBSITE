@@ -800,3 +800,19 @@ site talks to nothing at runtime went with the previous build.
 
 Everything else in this file up to Q-27 describes the previous build and is
 kept as record.
+
+
+---
+
+## Q-29 — the first Pages deploy failed, and why
+
+The repository's Pages source was set to "deploy from a branch", so GitHub's
+built-in Jekyll build ran against `main` — which at that point held the
+previous site's Astro source, not a built site — and failed
+(run 34843437780). `auto/site`, with the redesign and the deploy workflow,
+had never been pushed.
+
+Fixed by pushing the work and fast-forwarding `main` to it, and by having the
+workflow enable Pages in Actions mode itself (`actions/configure-pages` with
+`enablement: true`), so nothing has to be flipped by hand in the settings.
+The site is at https://minn-hai-lab.github.io/MINN-HAI-LAB-WEBSITE/.

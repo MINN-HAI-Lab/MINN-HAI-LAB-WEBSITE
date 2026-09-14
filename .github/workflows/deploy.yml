@@ -6,7 +6,10 @@
 # The base path and the site URL are derived from the repository name, so
 # nothing here has to change if the repo is renamed.
 #
-# One-time setup in the repository settings: Pages → Source → GitHub Actions.
+# No setup in the repository settings: the configure-pages step below enables
+# Pages in "GitHub Actions" mode on the first run. (The first attempt at
+# hosting used "deploy from a branch", whose built-in Jekyll build ran on the
+# Astro source and failed — Q-29.)
 name: Deploy to GitHub Pages
 
 on:
@@ -33,6 +36,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Enable Pages in Actions mode
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Work out where the site will live
         run: |
           OWNER="${GITHUB_REPOSITORY_OWNER,,}"
