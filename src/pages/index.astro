@@ -60,14 +60,16 @@ a{color:#E6EDF0}a:hover{color:#fff}
   .mh-wrap{flex-wrap:wrap!important}
   .mh-name{white-space:nowrap}
   /* The 54px line on a 360px screen ran under the credit bar. */
-  .mh-hero-copy{left:24px!important;right:24px!important;bottom:170px!important}
+  .mh-hero-copy{left:24px!important;right:24px!important;bottom:210px!important}
   .mh-hero-title{font-size:40px!important}
+  .mh-hero-hint{display:none}
 }
     </style>
     <script is:inline src="/design/mh-bg.js"></script>
   </head>
   <body>
     <div class="mh-page">
+<div class="mh-hero" style="position:relative">
 <div id="top" style="position:relative;height:920px;background:#06080A;overflow:hidden">
 <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,#10151a 0%,#090c0f 55%,#06080A 100%)"></div>
 <iframe data-mh-scene src="/design/hands-scene.html" title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
@@ -86,7 +88,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
   <div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;border-radius:50%;background:#D61A4A;animation:mh-blink 2.6s ease-in-out infinite"></span><span style="font-size:12px;color:rgba(230,237,240,.6)">Human-centered AI</span></div>
   <h1 class="mh-hero-title" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:54px;line-height:1.02;letter-spacing:-.025em;color:#F2F6F8;text-wrap:pretty">The gap is the whole discipline.</h1>
   <p style="margin:0;font-size:17px;line-height:1.62;color:rgba(230,237,240,.72);max-width:42ch">We build AI that reaches back on human terms — adaptive, interpretable, accountable for how it arrived at what it says.</p>
-  <span style="font-size:12px;color:rgba(230,237,240,.45)">Move the cursor to the centre.</span>
+  <span class="mh-hero-hint" style="font-size:12px;color:rgba(230,237,240,.45)">Move the cursor to the centre.</span>
 </div>
 
 </div>
@@ -100,6 +102,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
       <a href="#research" style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border-bottom:1px solid rgba(230,237,240,.4);padding-bottom:2px">Enter the lab</a>
     </div>
   </div>
+</div>
 </div>
 <div style="display:flex;flex-direction:column;background:#06080A">
 
