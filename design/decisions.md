@@ -721,3 +721,16 @@ Fonts come from Google Fonts, as the canvas loads them.
 The canvas's copy is on the page as written, including its claims about
 partners, a teaching assistant and hiring. Those are Kaung's to confirm; the
 canvas's own `TODO:` markers for the paper detail and course materials stay.
+
+
+---
+
+## D-029 — Full width, every screen
+
+**Status: adopted, 2026-09-14.** The transcribed canvas was centred at its
+artboard width with the field showing either side. Kaung asked for the site
+at full scale on every device, the way a Bootstrap grid behaves. The page now
+fills the screen and scales the artboard's gutters, grids and display sizes
+through Bootstrap's own breakpoints; the rules are in one block at the top of
+`src/pages/index.astro` and described in `design/DESIGN.md`. The canvas's
+values at 1400px and above are unchanged.

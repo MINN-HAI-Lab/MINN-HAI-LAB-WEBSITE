@@ -63,8 +63,19 @@ footer.
 - All of it eases to a still under `prefers-reduced-motion`, in the scene's
   and the fields' own code.
 
-## Below 1340px
+## Every screen
 
-The canvas is drawn at one width. The page adds four rules and nothing else:
-the rows, the three-column strip, the learning split and the people grid stack
-below 900px; the hero's navigation steps out below 640px.
+The canvas is drawn at one width, 1340px. The page fills whatever screen it is
+on and scales the artboard through Bootstrap's breakpoints — 576, 768, 992,
+1200, 1400 — in one stylesheet at the top of `src/pages/index.astro`:
+
+- The gutter steps 48 → 40 → 32 → 28 → 24 → 20px.
+- The programme rows go `200 | 1fr | 300` → `160 | 1fr | 260` → one column
+  below 992px. The learning split's aside goes 440 → 380 → full width. The
+  people grid goes 5 → 3 → 2 across.
+- The hero fills the viewport height; its display line steps 54 → 44 → 38px;
+  the section titles 52 → 40 → 34px.
+- Below 768px the header's links become a Menu button that opens a stacked
+  list.
+
+Nothing else about the canvas changes with the screen.

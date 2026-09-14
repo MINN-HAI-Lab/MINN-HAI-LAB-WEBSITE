@@ -12,9 +12,11 @@
  *     stood for, wired up in the script at the foot of the page;
  *   - the canvas's internal links (#1a, #1d) are this page's anchors;
  *   - 1d's own header is dropped, because 2a's header is the page's;
- *   - three grids and four flex rows get a class so they can stack or wrap on
- *     a phone, and the hero's nav steps out below 640px, since the canvas is
- *     drawn at 1340px only.
+ *   - the page fills the screen rather than the 1340px artboard: every
+ *     container with the artboard's 44/48px gutter carries .mh-gutter, the
+ *     grids and the hero copy carry classes, and one stylesheet scales them
+ *     through Bootstrap's breakpoints (576, 768, 992, 1200, 1400). Below
+ *     768px the header's links become a Menu button.
  *
  * The 3D scene is public/design/hands-scene.html, and the fields are
  * public/design/mh-bg.js — both copied from the design folder untouched.
@@ -43,26 +45,67 @@ a{color:#E6EDF0}a:hover{color:#fff}
 @keyframes mh-blink{0%,100%{opacity:.25}50%{opacity:1}}
 @keyframes mh-drift{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
 
-/* The canvas is drawn at 1340px. Below that the rows, the people grid and the
-   learning split stack, and the hero's copy keeps its left edge. */
-.mh-page{max-width:1340px;margin:0 auto;width:100%}
-@media (max-width:900px){
-  .mh-row{grid-template-columns:minmax(0,1fr)!important}
+/* -- Full-scale layout ---------------------------------------------------
+   The canvas is drawn on a 1340px artboard. The page fills whatever screen it
+   is on instead, and scales the artboard's gutters, grids and display sizes
+   through the same breakpoints Bootstrap uses: 576, 768, 992, 1200, 1400.
+   Inline styles are the canvas's own, so the overrides carry !important. */
+html{scroll-behavior:smooth}
+.mh-page{width:100%}
+.mh-frame{height:100vh!important;height:100svh!important;min-height:640px;max-height:1100px}
+.mh-menu{display:none}
+/* The hidden attribute has to beat the nav's inline display:flex. */
+.mh-mobile-nav[hidden]{display:none!important}
+
+/* ≥1400: the artboard's own gutters, and the display sizes as drawn. */
+
+/* <1400 */
+@media (max-width:1399.98px){
+  .mh-gutter{padding-left:40px!important;padding-right:40px!important}
+}
+/* <1200 */
+@media (max-width:1199.98px){
+  .mh-gutter{padding-left:32px!important;padding-right:32px!important}
+  .mh-row{grid-template-columns:160px minmax(0,1fr) 260px!important;gap:28px!important}
+  .mh-split{grid-template-columns:minmax(0,1fr) 380px!important}
+}
+/* <992 */
+@media (max-width:991.98px){
+  .mh-gutter{padding-left:28px!important;padding-right:28px!important}
+  .mh-row{grid-template-columns:minmax(0,1fr)!important;gap:20px!important}
   .mh-three{grid-template-columns:minmax(0,1fr)!important}
   .mh-three>div{border-right:0!important;border-bottom:1px solid rgba(230,237,240,.1)}
-  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .mh-people{grid-template-columns:repeat(3,minmax(0,1fr))!important}
   .mh-split{grid-template-columns:minmax(0,1fr)!important}
   .mh-split>div{border-right:0!important}
+  .mh-split>div:first-child{border-bottom:1px solid rgba(230,237,240,.1)}
+  .mh-hero-copy{max-width:520px!important}
 }
-@media (max-width:640px){
-  /* Inline styles win over a class, so these carry !important. */
+/* <768 */
+@media (max-width:767.98px){
+  .mh-gutter{padding-left:24px!important;padding-right:24px!important}
   .mh-hero-nav{display:none!important}
+  .mh-menu{display:inline-block}
   .mh-wrap{flex-wrap:wrap!important}
-  .mh-name{white-space:nowrap}
-  /* The 54px line on a 360px screen ran under the credit bar. */
-  .mh-hero-copy{left:24px!important;right:24px!important;bottom:210px!important}
-  .mh-hero-title{font-size:40px!important}
+  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .mh-hero-copy{left:24px!important;right:24px!important;bottom:200px!important;max-width:none!important}
+  .mh-hero-title{font-size:44px!important}
   .mh-hero-hint{display:none}
+  h2[style*="font-size:52px"]{font-size:40px!important}
+  h3[style*="font-size:44px"]{font-size:34px!important}
+  h3[style*="font-size:34px"]{font-size:28px!important}
+  h3[style*="font-size:30px"]{font-size:26px!important}
+}
+/* <576 */
+@media (max-width:575.98px){
+  .mh-gutter{padding-left:20px!important;padding-right:20px!important}
+  .mh-name{white-space:nowrap}
+  .mh-hero-copy{left:20px!important;right:20px!important;bottom:190px!important}
+  .mh-hero-title{font-size:38px!important}
+  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+  h2[style*="font-size:52px"]{font-size:34px!important}
+  h3[style*="font-size:44px"]{font-size:30px!important}
+  [style*="grid-template-columns:140px"]{grid-template-columns:minmax(0,1fr)!important;gap:6px!important}
 }
     </style>
     <script is:inline src="/design/mh-bg.js"></script>
@@ -70,12 +113,13 @@ a{color:#E6EDF0}a:hover{color:#fff}
   <body>
     <div class="mh-page">
 <div class="mh-hero" style="position:relative">
-<div id="top" style="position:relative;height:920px;background:#06080A;overflow:hidden">
+<div id="top" class="mh-frame" style="position:relative;height:920px;background:#06080A;overflow:hidden">
 <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,#10151a 0%,#090c0f 55%,#06080A 100%)"></div>
 <iframe data-mh-scene src="/design/hands-scene.html" title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
 
-<div style="position:absolute;z-index:2;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:26px 48px;pointer-events:none">
+<div class="mh-gutter" style="position:absolute;z-index:2;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:26px 48px;pointer-events:none">
   <span class="mh-name" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em">MINN HAI Lab</span>
+  <button class="mh-menu" type="button" aria-expanded="false" aria-controls="mh-mobile-nav" style="pointer-events:auto;font:500 12.5px 'Space Grotesk',sans-serif;color:#E6EDF0;background:transparent;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px;cursor:pointer">Menu</button>
   <div class="mh-hero-nav" style="display:flex;gap:32px;align-items:center;pointer-events:auto">
     <a href="#research" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Research</a>
     <a href="#learning" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Learning</a>
@@ -84,6 +128,13 @@ a{color:#E6EDF0}a:hover{color:#fff}
   </div>
 </div>
 
+
+<nav id="mh-mobile-nav" class="mh-mobile-nav" hidden aria-label="Menu" style="position:absolute;z-index:6;left:0;right:0;top:78px;display:flex;flex-direction:column;background:rgba(6,8,10,.96);border-top:1px solid rgba(230,237,240,.1);border-bottom:1px solid rgba(230,237,240,.1)">
+  <a href="#research" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Research</a>
+  <a href="#learning" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Learning</a>
+  <a href="#people" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">People</a>
+  <a href="#join" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px">Partner with us</a>
+</nav>
 <div class="mh-hero-copy" style="position:absolute;z-index:4;left:48px;bottom:118px;max-width:440px;display:flex;flex-direction:column;gap:20px;pointer-events:none">
   <div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;border-radius:50%;background:#D61A4A;animation:mh-blink 2.6s ease-in-out infinite"></span><span style="font-size:12px;color:rgba(230,237,240,.6)">Human-centered AI</span></div>
   <h1 class="mh-hero-title" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:54px;line-height:1.02;letter-spacing:-.025em;color:#F2F6F8;text-wrap:pretty">The gap is the whole discipline.</h1>
@@ -94,7 +145,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
 </div>
 
 <div style="position:absolute;z-index:5;left:0;right:0;bottom:0;border-top:1px solid rgba(230,237,240,.12);background:rgba(6,8,10,.62);backdrop-filter:blur(10px);pointer-events:none">
-  <div class="mh-wrap" style="display:flex;align-items:center;justify-content:space-between;gap:32px;padding:20px 48px">
+  <div class="mh-gutter mh-wrap" style="display:flex;align-items:center;justify-content:space-between;gap:32px;padding:20px 48px">
     <span style="font-size:12.5px;color:rgba(230,237,240,.55)">After Michelangelo, <i>The Creation of Adam</i>. Everything in the frame is live 3D.</span>
     <div class="mh-wrap" style="display:flex;gap:26px;align-items:center;pointer-events:auto">
       <span style="font-size:12.5px;color:rgba(230,237,240,.6)">Knowledge tracing</span>
@@ -110,7 +161,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
     <div style="position:relative;height:280px;overflow:hidden">
       <mh-bg mode="lattice" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
       <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,8,10,.7) 0%,rgba(6,8,10,.35) 40%,rgba(6,8,10,.95) 100%)"></div>
-      <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:44px">
+      <div class="mh-gutter" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:44px">
         <h2 style="margin:0;font-family:Literata,serif;font-weight:300;font-size:52px;line-height:1;letter-spacing:-.025em">Research</h2>
         <p style="margin:14px 0 0;font-size:16px;color:rgba(230,237,240,.68);max-width:54ch">Two programmes. Each ships a live artefact you can operate, not a figure you have to take on faith.</p>
       </div>
@@ -118,7 +169,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
   </div>
 
   <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:0;border-bottom:1px solid rgba(230,237,240,.1)">
-    <div class="mh-row" style="display:grid;grid-template-columns:200px minmax(0,1fr) 300px;gap:40px;align-items:start;padding:40px 44px;border-bottom:1px solid rgba(230,237,240,.1)">
+    <div class="mh-gutter mh-row" style="display:grid;grid-template-columns:200px minmax(0,1fr) 300px;gap:40px;align-items:start;padding:40px 44px;border-bottom:1px solid rgba(230,237,240,.1)">
       <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Programme 01<br>Active</div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">AI for personalised learning</h3>
@@ -146,7 +197,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
       </div>
     </div>
 
-    <div class="mh-row" style="display:grid;grid-template-columns:200px minmax(0,1fr) 300px;gap:40px;align-items:start;padding:40px 44px">
+    <div class="mh-gutter mh-row" style="display:grid;grid-template-columns:200px minmax(0,1fr) 300px;gap:40px;align-items:start;padding:40px 44px">
       <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Programme 02<br>Active</div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Interpretable explanation of tabular models</h3>
@@ -164,7 +215,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
   </div>
 
   <div id="learning" class="mh-split" style="display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:0;border-bottom:1px solid rgba(230,237,240,.1)">
-    <div style="padding:44px;display:flex;flex-direction:column;gap:20px;border-right:1px solid rgba(230,237,240,.1)">
+    <div class="mh-gutter" style="padding:44px;display:flex;flex-direction:column;gap:20px;border-right:1px solid rgba(230,237,240,.1)">
       <div style="font-size:12px;color:rgba(230,237,240,.45)">Publication</div>
       <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:34px;line-height:1.12;letter-spacing:-.02em;max-width:26ch">Paper detail template</h3>
       <div>
@@ -176,7 +227,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
         <div style="display:grid;grid-template-columns:140px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid rgba(230,237,240,.1)"><span style="font-size:12.5px;color:rgba(230,237,240,.45)">Code</span><span style="font-size:14px;color:rgba(230,237,240,.55)">awaiting source</span></div>
       </div>
     </div>
-    <div style="padding:44px;display:flex;flex-direction:column;gap:18px;background:rgba(11,15,18,.7)">
+    <div class="mh-gutter" style="padding:44px;display:flex;flex-direction:column;gap:18px;background:rgba(11,15,18,.7)">
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:12px;color:rgba(230,237,240,.45)">Learning resources</span><span style="font-size:12px;color:rgba(230,237,240,.45)">Three, and growing</span></div>
       <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:26px;line-height:1.2">What the lab gives you to learn with</h3>
       <div style="display:flex;flex-wrap:wrap;gap:8px" role="tablist">
@@ -222,7 +273,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
     </div>
   </div>
 
-  <div id="people" style="padding:44px;border-bottom:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:24px">
+  <div class="mh-gutter" id="people" style="padding:44px;border-bottom:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:24px">
     <div style="display:flex;align-items:baseline;justify-content:space-between"><h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;letter-spacing:-.015em">People</h3><span style="font-size:12.5px;color:rgba(230,237,240,.5)">Principal investigator, researchers, students</span></div>
     <div class="mh-people" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px">
       <div style="display:flex;flex-direction:column;gap:12px"><div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span></div><div><div style="font-family:Literata,serif;font-size:16px">TODO: name</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">Principal investigator</div></div></div>
@@ -243,7 +294,7 @@ a{color:#E6EDF0}a:hover{color:#fff}
     </div>
   </div>
 
-  <div class="mh-wrap" style="display:flex;justify-content:space-between;gap:40px;padding:32px 44px;border-top:1px solid rgba(230,237,240,.1)">
+  <div class="mh-gutter mh-wrap" style="display:flex;justify-content:space-between;gap:40px;padding:32px 44px;border-top:1px solid rgba(230,237,240,.1)">
     <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:Literata,serif;font-size:17px">MINN HAI Lab</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">Human-centered AI</span></div>
     <div class="mh-wrap" style="display:flex;gap:28px;align-items:flex-start"><a href="#research" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Research</a><a href="#learning" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Learning</a><a href="#people" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">People</a><a href="#join" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Join</a><a href="#join" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Contact</a></div>
   </div>
@@ -264,6 +315,20 @@ a{color:#E6EDF0}a:hover{color:#fff}
             fr.contentWindow.postMessage(out ? { type: 'mh-pointer', out: true } : { type: 'mh-pointer', x: x, y: y }, '*');
           });
         }, { passive: true });
+
+        var menu = document.querySelector('.mh-menu');
+        var mobileNav = document.getElementById('mh-mobile-nav');
+        if (menu && mobileNav) {
+          menu.addEventListener('click', function () {
+            var open = mobileNav.hidden;
+            mobileNav.hidden = !open;
+            menu.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menu.textContent = open ? 'Close' : 'Menu';
+          });
+          mobileNav.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', function () { mobileNav.hidden = true; menu.setAttribute('aria-expanded', 'false'); menu.textContent = 'Menu'; });
+          });
+        }
 
         var tabs = document.querySelectorAll('[data-mh-tab]');
         var panels = document.querySelectorAll('[data-mh-panel]');

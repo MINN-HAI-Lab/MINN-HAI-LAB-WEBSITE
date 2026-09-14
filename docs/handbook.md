@@ -27,4 +27,4 @@ npm run verify     # build, serve on 4331, run tests/site.spec.ts
 - `SITE_URL` set at build time for canonical URLs.
 - The hero and the fields checked in a browser with a GPU: the scene is
   Three.js from unpkg and the fields draw to canvas.
-- Looked at, at 1440 and 360.
+- Looked at, at 1920, 1440, 1024, 768 and 360.
