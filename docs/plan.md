@@ -11,6 +11,9 @@ to:
 | Anchor | Section |
 |---|---|
 | `#top` | The reach — the hero (2a) |
+| `#deep-field` | Deep Field (1a) — the network, the live-output panel, the three-column strip |
+| `#lattice` | Lattice (1b) — the two programme rows over the lattice field |
+| `#signal-plane` | Signal Plane (1c) — "We model the learner, not the average." over the plane |
 | `#research` | Research header band, then the two programme rows |
 | `#learning` | Paper detail template beside the learning panel (teaching assistant, StatLab, course materials) |
 | `#people` | Five portrait frames and the hiring card |
