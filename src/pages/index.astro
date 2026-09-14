@@ -1,169 +1,277 @@
 ---
 /**
- * Home, in the design canvas's language.
+ * MINN HAI Lab — the site, copied from the design canvas.
  *
- * The reach as the hero. Under it, the canvas's three-column strip, the two
- * programmes and two directions as ruled rows with the live artefacts where
- * the canvas puts a live panel, the five most recent publications, and the
- * closing band.
+ * Source: "MINN HAI LAB UI Design/MINN HAI LAB.dc.html". Direction 2a is the
+ * hero; direction 1d is the rest of the site, in order. The markup below is
+ * the canvas's own, with its inline styles, values and copy. What changed in
+ * the transcription and nothing else:
+ *
+ *   - the design viewer's `x-import` wrapper is the `<mh-bg>` element it
+ *     wrapped, and its `sc-if` / {{ }} template bits are the tab state they
+ *     stood for, wired up in the script at the foot of the page;
+ *   - the canvas's internal links (#1a, #1d) are this page's anchors;
+ *   - 1d's own header is dropped, because 2a's header is the page's;
+ *   - three grids and four flex rows get a class so they can stack or wrap on
+ *     a phone, and the hero's nav steps out below 640px, since the canvas is
+ *     drawn at 1340px only.
+ *
+ * The 3D scene is public/design/hands-scene.html, and the fields are
+ * public/design/mh-bg.js — both copied from the design folder untouched.
  */
-import Base from '../layouts/Base.astro';
-import Field from '../components/Field.astro';
-import Hero from '../components/Hero.astro';
-import PublicationList from '../components/PublicationList.astro';
-import Trace from '../components/Trace.astro';
-import { LAB_NAME, RESEARCH_AREAS, STATLAB } from '../data/navigation.ts';
-import { mostRecent } from '../data/publications.ts';
-import { withBase } from '../lib/paths.ts';
-
-const recent = mostRecent(5);
-const [tracing, bayesian, vision, language] = RESEARCH_AREAS;
 ---
 
-<Base
-  title={LAB_NAME}
-  description="Human-centered AI: knowledge tracing, Bayesian explanation, computer vision and language, with the working artefacts rather than descriptions of them."
->
-  <Hero />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MINN HAI Lab</title>
+    <meta name="description" content="MINN HAI Lab — human-centered AI. Adaptive, interpretable, socially responsible systems." />
+    <meta name="theme-color" content="#06080A" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;1,7..72,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style is:inline>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#15181b;font-family:"Space Grotesk",system-ui,sans-serif;color:#E6EDF0}
+a{color:#E6EDF0}a:hover{color:#fff}
+.mh-tab{font:500 12.5px "Space Grotesk",sans-serif;border-radius:999px;padding:9px 15px;cursor:pointer;border:1px solid rgba(230,237,240,.18);background:transparent;color:rgba(230,237,240,.68);transition:background .12s ease,color .12s ease,border-color .12s ease}
+.mh-tab:hover{color:#E6EDF0;border-color:rgba(230,237,240,.42)}
+.mh-tab[aria-selected="true"]{background:#E6EDF0;color:#06080A;border-color:#E6EDF0}
+@keyframes mh-spark{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.4);opacity:1}}
+@keyframes mh-blink{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes mh-drift{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
 
-  <!-- The strip. Three things, each real. -->
-  <section class="section" style="padding-block: 0">
-    <div class="page cols">
-      <a class="cols__item" href={withBase(`/research#${tracing.id}`)}>
-        <span class="type-name">Knowledge tracing</span>
-        <span class="label">Per-learner mastery, estimated attempt by attempt</span>
-      </a>
-      <a class="cols__item" href={withBase(`/research#${bayesian.id}`)}>
-        <span class="type-name">Interpretable tabular models</span>
-        <span class="label">Bayesian networks and Markov blankets</span>
-      </a>
-      <a class="cols__item" href={withBase('/learning')}>
-        <span class="type-name">{STATLAB.name}</span>
-        <span class="label">{STATLAB.description}</span>
-      </a>
+/* The canvas is drawn at 1340px. Below that the rows, the people grid and the
+   learning split stack, and the hero's copy keeps its left edge. */
+.mh-page{max-width:1340px;margin:0 auto;width:100%}
+@media (max-width:900px){
+  .mh-row{grid-template-columns:minmax(0,1fr)!important}
+  .mh-three{grid-template-columns:minmax(0,1fr)!important}
+  .mh-three>div{border-right:0!important;border-bottom:1px solid rgba(230,237,240,.1)}
+  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .mh-split{grid-template-columns:minmax(0,1fr)!important}
+  .mh-split>div{border-right:0!important}
+}
+@media (max-width:640px){
+  /* Inline styles win over a class, so these carry !important. */
+  .mh-hero-nav{display:none!important}
+  .mh-wrap{flex-wrap:wrap!important}
+  .mh-name{white-space:nowrap}
+  /* The 54px line on a 360px screen ran under the credit bar. */
+  .mh-hero-copy{left:24px!important;right:24px!important;bottom:170px!important}
+  .mh-hero-title{font-size:40px!important}
+}
+    </style>
+    <script is:inline src="/design/mh-bg.js"></script>
+  </head>
+  <body>
+    <div class="mh-page">
+<div id="top" style="position:relative;height:920px;background:#06080A;overflow:hidden">
+<div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,#10151a 0%,#090c0f 55%,#06080A 100%)"></div>
+<iframe data-mh-scene src="/design/hands-scene.html" title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
+
+<div style="position:absolute;z-index:2;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:26px 48px;pointer-events:none">
+  <span class="mh-name" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em">MINN HAI Lab</span>
+  <div class="mh-hero-nav" style="display:flex;gap:32px;align-items:center;pointer-events:auto">
+    <a href="#research" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Research</a>
+    <a href="#learning" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Learning</a>
+    <a href="#people" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">People</a>
+    <a href="#join" style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px">Partner with us</a>
+  </div>
+</div>
+
+<div class="mh-hero-copy" style="position:absolute;z-index:4;left:48px;bottom:118px;max-width:440px;display:flex;flex-direction:column;gap:20px;pointer-events:none">
+  <div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;border-radius:50%;background:#D61A4A;animation:mh-blink 2.6s ease-in-out infinite"></span><span style="font-size:12px;color:rgba(230,237,240,.6)">Human-centered AI</span></div>
+  <h1 class="mh-hero-title" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:54px;line-height:1.02;letter-spacing:-.025em;color:#F2F6F8;text-wrap:pretty">The gap is the whole discipline.</h1>
+  <p style="margin:0;font-size:17px;line-height:1.62;color:rgba(230,237,240,.72);max-width:42ch">We build AI that reaches back on human terms — adaptive, interpretable, accountable for how it arrived at what it says.</p>
+  <span style="font-size:12px;color:rgba(230,237,240,.45)">Move the cursor to the centre.</span>
+</div>
+
+</div>
+
+<div style="position:absolute;z-index:5;left:0;right:0;bottom:0;border-top:1px solid rgba(230,237,240,.12);background:rgba(6,8,10,.62);backdrop-filter:blur(10px);pointer-events:none">
+  <div class="mh-wrap" style="display:flex;align-items:center;justify-content:space-between;gap:32px;padding:20px 48px">
+    <span style="font-size:12.5px;color:rgba(230,237,240,.55)">After Michelangelo, <i>The Creation of Adam</i>. Everything in the frame is live 3D.</span>
+    <div class="mh-wrap" style="display:flex;gap:26px;align-items:center;pointer-events:auto">
+      <span style="font-size:12.5px;color:rgba(230,237,240,.6)">Knowledge tracing</span>
+      <span style="font-size:12.5px;color:rgba(230,237,240,.6)">Interpretable models</span>
+      <a href="#research" style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border-bottom:1px solid rgba(230,237,240,.4);padding-bottom:2px">Enter the lab</a>
     </div>
-  </section>
+  </div>
+</div>
+<div style="display:flex;flex-direction:column;background:#06080A">
 
-  <!-- The programmes. -->
-  <section class="section" style="padding-block: 0" data-reveal>
-    <div class="page">
-      <div class="row">
-        <p class="row__label label">Programme 01<br />Active</p>
-        <div class="row__body">
-          <h2 class="type-section">AI for personalised learning</h2>
-          <p class="type-body type-muted measure">
-            Knowledge tracing: estimating what a learner has mastered, attempt
-            by attempt, and reporting how uncertain that estimate is. The
-            estimate is the model's claim about a person, so it is always shown
-            with its band.
-          </p>
-          <ul class="tags">
-            <li class="tag">Live trace widget</li>
-            <li class="tag">Synthetic data, labelled</li>
-          </ul>
+  <div id="research" style="position:relative;padding:0;border-bottom:1px solid rgba(230,237,240,.1)">
+    <div style="position:relative;height:280px;overflow:hidden">
+      <mh-bg mode="lattice" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
+      <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,8,10,.7) 0%,rgba(6,8,10,.35) 40%,rgba(6,8,10,.95) 100%)"></div>
+      <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:44px">
+        <h2 style="margin:0;font-family:Literata,serif;font-weight:300;font-size:52px;line-height:1;letter-spacing:-.025em">Research</h2>
+        <p style="margin:14px 0 0;font-size:16px;color:rgba(230,237,240,.68);max-width:54ch">Two programmes. Each ships a live artefact you can operate, not a figure you have to take on faith.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:0;border-bottom:1px solid rgba(230,237,240,.1)">
+    <div class="mh-row" style="display:grid;grid-template-columns:200px minmax(0,1fr) 300px;gap:40px;align-items:start;padding:40px 44px;border-bottom:1px solid rgba(230,237,240,.1)">
+      <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Programme 01<br>Active</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">AI for personalised learning</h3>
+        <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7);max-width:60ch">Knowledge tracing: estimating what a learner has mastered, attempt by attempt, and reporting how uncertain that estimate is. The estimate is the model's claim about a person, so it is always shown with its band.</p>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:12px;color:rgba(230,237,240,.62);border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:6px 11px">Live trace widget</span>
+          <span style="font-size:12px;color:rgba(230,237,240,.62);border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:6px 11px">Synthetic data, labelled</span>
         </div>
-        <div class="row__aside">
-          <div class="panel" data-live-panel>
-            <p class="micro">Live model output</p>
-            <p class="panel__figure">
-              <span class="figure readout--signal" data-live-estimate>—</span>
-              <span class="label" data-live-caption>mastery estimate, from the trace below</span>
-            </p>
-            <span class="panel__rule" aria-hidden="true"></span>
-            <p class="label">Red is the machine's opinion. Ink is fact. The accent appears nowhere else on the site.</p>
+      </div>
+      <div style="border:1px solid rgba(230,237,240,.14);border-radius:4px;padding:18px;background:rgba(12,16,19,.7)">
+        <div style="font-size:11.5px;color:rgba(230,237,240,.5);margin-bottom:12px">Mastery estimate over 10 attempts</div>
+        <div style="display:flex;align-items:flex-end;gap:5px;height:74px">
+          <div style="flex:1;height:22%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:30%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:28%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:44%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:52%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:49%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:63%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:71%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:68%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+          <div style="flex:1;height:80%;background:rgba(214,26,74,.5);border-top:1px solid #D61A4A"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:rgba(230,237,240,.45)"><span>attempt 1</span><span>attempt 10</span></div>
+      </div>
+    </div>
+
+    <div class="mh-row" style="display:grid;grid-template-columns:200px minmax(0,1fr) 300px;gap:40px;align-items:start;padding:40px 44px">
+      <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Programme 02<br>Active</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Interpretable explanation of tabular models</h3>
+        <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7);max-width:60ch">Bayesian networks and Markov blankets: identifying the smallest set of variables that renders a target conditionally independent of everything else, so an explanation names variables rather than gesturing at importance scores.</p>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:12px;color:rgba(230,237,240,.62);border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:6px 11px">3D blanket graph, click to load</span>
+          <span style="font-size:12px;color:rgba(230,237,240,.62);border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:6px 11px">Static SVG fallback</span>
+        </div>
+      </div>
+      <div style="position:relative;border:1px solid rgba(230,237,240,.14);border-radius:4px;height:150px;overflow:hidden;background:#080A0D">
+        <mh-bg mode="lattice" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
+        <span style="position:absolute;z-index:2;left:14px;bottom:12px;font-size:11.5px;color:rgba(230,237,240,.62)">Loaded on interaction, never on page load</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="learning" class="mh-split" style="display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:0;border-bottom:1px solid rgba(230,237,240,.1)">
+    <div style="padding:44px;display:flex;flex-direction:column;gap:20px;border-right:1px solid rgba(230,237,240,.1)">
+      <div style="font-size:12px;color:rgba(230,237,240,.45)">Publication</div>
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:34px;line-height:1.12;letter-spacing:-.02em;max-width:26ch">Paper detail template</h3>
+      <div>
+        <div style="border-left:3px solid rgba(230,237,240,.4);background:rgba(12,16,19,.9);border-radius:3px;padding:16px 18px;font-size:13.5px;line-height:1.6;color:rgba(230,237,240,.82);max-width:66ch">TODO: title, authors, venue, year, DOI and abstract come from <span style="color:#fff">src/data/publications.ts</span>. Nothing is invented here — supply the entries and this page fills itself.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(230,237,240,.14);margin-top:6px">
+        <div style="display:grid;grid-template-columns:140px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid rgba(230,237,240,.1)"><span style="font-size:12.5px;color:rgba(230,237,240,.45)">Authors</span><span style="font-size:14px;color:rgba(230,237,240,.55)">awaiting source</span></div>
+        <div style="display:grid;grid-template-columns:140px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid rgba(230,237,240,.1)"><span style="font-size:12.5px;color:rgba(230,237,240,.45)">Venue, year</span><span style="font-size:14px;color:rgba(230,237,240,.55)">awaiting source</span></div>
+        <div style="display:grid;grid-template-columns:140px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid rgba(230,237,240,.1)"><span style="font-size:12.5px;color:rgba(230,237,240,.45)">Code</span><span style="font-size:14px;color:rgba(230,237,240,.55)">awaiting source</span></div>
+      </div>
+    </div>
+    <div style="padding:44px;display:flex;flex-direction:column;gap:18px;background:rgba(11,15,18,.7)">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><span style="font-size:12px;color:rgba(230,237,240,.45)">Learning resources</span><span style="font-size:12px;color:rgba(230,237,240,.45)">Three, and growing</span></div>
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:26px;line-height:1.2">What the lab gives you to learn with</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px" role="tablist">
+        <button class="mh-tab" type="button" role="tab" aria-selected="true" data-mh-tab="0">Teaching assistant</button>
+        <button class="mh-tab" type="button" role="tab" aria-selected="false" data-mh-tab="1">StatLab</button>
+        <button class="mh-tab" type="button" role="tab" aria-selected="false" data-mh-tab="2">Course materials</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;min-height:206px">
+        <div data-mh-panel="0">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div style="font-family:Literata,serif;font-size:19px;line-height:1.3">A tutor that states its evidence</div><span style="font-size:11px;color:rgba(230,237,240,.6);border:1px solid rgba(230,237,240,.22);border-radius:999px;padding:3px 9px">in development</span></div>
+            <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(230,237,240,.68)">The lab's teaching assistant names the mastery estimate it is acting on before it answers, so a student — or a teacher — can disagree with the model rather than with the tutor.</p>
+            <div style="border:1px solid rgba(230,237,240,.14);border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:8px;background:rgba(6,8,10,.55)">
+              <span style="font-size:12.5px;color:rgba(230,237,240,.55)">Student asks about factoring</span>
+              <span style="font-size:13.5px;line-height:1.55;color:rgba(230,237,240,.85)">Working from a mastery estimate of <span style="color:#D61A4A">0.71</span>, I will skip the definition and start at the worked example.</span>
+            </div>
+            <span style="font-size:12.5px;color:#E6EDF0;border-bottom:1px solid rgba(230,237,240,.4);align-self:flex-start;padding-bottom:2px">Open the teaching assistant</span>
           </div>
         </div>
-        <div class="row__wide">
-          <Trace />
+        <div data-mh-panel="1" hidden>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">StatLab — fit, inspect, export</div>
+            <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(230,237,240,.68)">The toolkit under the assistant: fit a knowledge-tracing model, read the mastery estimate with its band, inspect the Markov blanket behind an explanation, and export a trace a reviewer can re-run.</p>
+            <div style="display:flex;align-items:baseline;gap:10px;padding-top:4px;border-top:1px solid rgba(230,237,240,.14)"><span style="font-family:Literata,serif;font-size:26px;color:#D61A4A">0.71</span><span style="font-size:12.5px;color:rgba(230,237,240,.6)">±0.09 on synthetic data, labelled in the widget</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-top:1px solid rgba(230,237,240,.1)"><span style="color:rgba(230,237,240,.62)">Runs on the same code as the papers</span><span style="color:rgba(230,237,240,.85)">yes</span></div>
+          </div>
         </div>
-      </div>
-
-      <div class="row">
-        <p class="row__label label">Programme 02<br />Active</p>
-        <div class="row__body">
-          <h2 class="type-section">Interpretable explanation of tabular models</h2>
-          <p class="type-body type-muted measure">
-            Bayesian networks and Markov blankets: identifying the smallest set
-            of variables that renders a target conditionally independent of
-            everything else, so an explanation names variables rather than
-            gesturing at importance scores.
-          </p>
-          <ul class="tags">
-            <li class="tag">3D blanket graph, click to load</li>
-            <li class="tag">Static SVG fallback</li>
-          </ul>
-          <p>
-            <a class="link--quiet" href={withBase(`/research#${bayesian.id}`)}>Open the network</a>
-          </p>
-        </div>
-        <div class="row__aside">
-          <div class="aside-field">
-            <Field mode="bayes" />
-            <p class="aside-field__caption micro">The lab's network, blanket of Mastery lit</p>
+        <div data-mh-panel="2" hidden>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">Course materials</div>
+            <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(230,237,240,.68)">Notes, problem sets and worked examples the assistant draws on, published as the lab teaches them.</p>
+            <div>
+              <div style="border-left:3px solid rgba(230,237,240,.4);background:rgba(6,8,10,.75);border-radius:3px;padding:14px 16px;font-size:13px;line-height:1.6;color:rgba(230,237,240,.82)">TODO: which courses and materials go public, and who owns them. Nothing listed until you supply it.</div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="row row--no-aside">
-        <p class="row__label label">Directions<br />No published work yet</p>
-        <div class="row__body">
-          <h2 class="type-section">{vision.name}, and {language.name.toLowerCase()}</h2>
-          <p class="type-body type-muted measure">{vision.line}</p>
-          <p class="type-body type-muted measure">{language.line}</p>
-          <ul class="tags">
-            <li class="tag">Saliency map, real photograph</li>
-            <li class="tag">Live tokeniser, illustrative attention</li>
-          </ul>
-          <p>
-            <a class="link--quiet" href={withBase(`/research#${vision.id}`)}>See both artefacts</a>
-          </p>
-        </div>
+      <div style="display:flex;gap:12px;margin-top:4px">
+        <span style="font-size:13px;color:#06080A;background:#E6EDF0;border-radius:2px;padding:12px 20px;font-weight:500">Request access</span>
+        <span style="font-size:13px;color:#E6EDF0;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:12px 20px">Read the docs</span>
       </div>
+      <div style="margin-top:auto;padding-top:22px;border-top:1px solid rgba(230,237,240,.14);font-size:12.5px;color:rgba(230,237,240,.5)">Works with JavaScript disabled. Every island has a real static rendering.</div>
     </div>
-  </section>
+  </div>
 
-  <!-- Recent work. -->
-  <section class="section" data-reveal>
-    <div class="page">
-      <div class="recent__head">
-        <h2 class="type-section">Recent work</h2>
-        <p class="label">
-          The five most recent of fourteen. The full list is on the{' '}
-          <a class="link" href={withBase('/research')}>research page</a>.
-        </p>
-      </div>
-      <PublicationList publications={recent} />
+  <div id="people" style="padding:44px;border-bottom:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between"><h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;letter-spacing:-.015em">People</h3><span style="font-size:12.5px;color:rgba(230,237,240,.5)">Principal investigator, researchers, students</span></div>
+    <div class="mh-people" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px">
+      <div style="display:flex;flex-direction:column;gap:12px"><div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span></div><div><div style="font-family:Literata,serif;font-size:16px">TODO: name</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">Principal investigator</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:12px"><div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span></div><div><div style="font-family:Literata,serif;font-size:16px">TODO: name</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">TODO: role</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:12px"><div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span></div><div><div style="font-family:Literata,serif;font-size:16px">TODO: name</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">TODO: role</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:12px"><div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span></div><div><div style="font-family:Literata,serif;font-size:16px">TODO: name</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">TODO: role</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:12px"><div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span></div><div><div style="font-family:Literata,serif;font-size:16px">TODO: name</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">TODO: role</div></div></div>
     </div>
-  </section>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;border:1px solid rgba(230,237,240,.14);border-radius:3px;padding:22px 24px"><div style="font-family:Literata,serif;font-size:20px;line-height:1.25">We are hiring research engineers.</div><span style="font-size:12.5px;color:#E6EDF0;border-bottom:1px solid rgba(230,237,240,.4);padding-bottom:2px">See open roles</span></div>
+  </div>
 
-  <!-- The closing band. -->
-  <section class="close" data-reveal>
-    <Field mode="grid" class="close__field" />
-    <div class="close__veil" aria-hidden="true"></div>
-    <div class="page close__text">
-      <h2 class="type-title" style="max-width: 24ch">Bring us a problem that needs an explanation.</h2>
-      <div class="close__actions">
-        <a class="button button--fill" href={withBase('/about#contact')}>Partner with the lab</a>
-        <a class="button" href={withBase('/about#join')}>Join</a>
-      </div>
+  <div id="join" style="position:relative;height:300px;overflow:hidden">
+    <mh-bg mode="grid" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
+    <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(60% 70% at 50% 40%,rgba(6,8,10,.86) 0%,rgba(6,8,10,.4) 60%,rgba(6,8,10,.1) 100%)"></div>
+    <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:0 44px">
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:300;font-size:44px;line-height:1.05;letter-spacing:-.025em;max-width:24ch">Bring us a problem that needs an explanation.</h3>
+      <div style="display:flex;gap:12px"><span style="font-size:13px;color:#06080A;background:#E6EDF0;border-radius:2px;padding:13px 22px;font-weight:500">Partner with the lab</span><span style="font-size:13px;color:#E6EDF0;border:1px solid rgba(230,237,240,.3);border-radius:2px;padding:13px 22px">Open roles</span></div>
     </div>
-  </section>
-</Base>
+  </div>
 
-<script>
-  /* The live panel reads the trace's current estimate, so the number in the
-     canvas's "0.71" card is the model's actual output rather than a typed one.
-     The trace announces every change in its sentence; this listens to it. */
-  const panel = document.querySelector<HTMLElement>('[data-live-panel]');
-  const out = panel?.querySelector<HTMLElement>('[data-live-estimate]');
-  const sentence = document.querySelector<HTMLElement>('[data-sentence]');
+  <div class="mh-wrap" style="display:flex;justify-content:space-between;gap:40px;padding:32px 44px;border-top:1px solid rgba(230,237,240,.1)">
+    <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:Literata,serif;font-size:17px">MINN HAI Lab</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">Human-centered AI</span></div>
+    <div class="mh-wrap" style="display:flex;gap:28px;align-items:flex-start"><a href="#research" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Research</a><a href="#learning" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Learning</a><a href="#people" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">People</a><a href="#join" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Join</a><a href="#join" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Contact</a></div>
+  </div>
+</div>
+    </div>
 
-  if (panel && out && sentence) {
-    const read = (): void => {
-      const match = sentence.textContent?.match(/(\d+) per cent/);
-      if (match) out.textContent = (Number(match[1]) / 100).toFixed(2);
-    };
-    read();
-    new MutationObserver(read).observe(sentence, { childList: true, characterData: true, subtree: true });
-  }
-</script>
+    <script is:inline>
+      // From the canvas's own script: forward the pointer into the 3D scene's
+      // frame so the overlays do not block the reach, and switch the learning
+      // panel's tabs.
+      (function () {
+        window.addEventListener('pointermove', function (e) {
+          document.querySelectorAll('iframe[data-mh-scene]').forEach(function (fr) {
+            var r = fr.getBoundingClientRect();
+            if (!r.width || !fr.contentWindow) return;
+            var x = ((e.clientX - r.left) / r.width) * 2 - 1, y = ((e.clientY - r.top) / r.height) * 2 - 1;
+            var out = x < -1.1 || x > 1.1 || y < -1.1 || y > 1.1;
+            fr.contentWindow.postMessage(out ? { type: 'mh-pointer', out: true } : { type: 'mh-pointer', x: x, y: y }, '*');
+          });
+        }, { passive: true });
+
+        var tabs = document.querySelectorAll('[data-mh-tab]');
+        var panels = document.querySelectorAll('[data-mh-panel]');
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var i = tab.getAttribute('data-mh-tab');
+            tabs.forEach(function (t) { t.setAttribute('aria-selected', t.getAttribute('data-mh-tab') === i ? 'true' : 'false'); });
+            panels.forEach(function (p) { p.hidden = p.getAttribute('data-mh-panel') !== i; });
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

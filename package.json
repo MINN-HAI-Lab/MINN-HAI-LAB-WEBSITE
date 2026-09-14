@@ -8,28 +8,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "vitest run",
-    "check:contrast": "vitest run src/lib/contrast.test.ts",
-    "shots": "npm run build && astro preview --port 4331 && npm run e2e; s=$?; astro preview stop >/dev/null 2>&1; exit $s",
-    "lint:tokens": "vitest run src/lib/token-lint.test.ts",
-    "prebuild": "vitest run src/lib/token-lint.test.ts src/lib/contrast.test.ts",
     "e2e": "playwright test",
-    "verify": "npm run check && npm test && npm run build && astro preview --port 4331 && npm run e2e; s=$?; astro preview stop >/dev/null 2>&1; exit $s"
+    "verify": "npm run check && npm run build && astro preview --port 4331 && npm run e2e; s=$?; astro preview stop >/dev/null 2>&1; exit $s"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.63.0",
-    "@tailwindcss/vite": "^4.3.3",
-    "@types/three": "^0.186.0",
     "astro": "^7.3.2",
-    "axe-core": "^4.13.0",
-    "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
-  },
-  "dependencies": {
-    "@astrojs/sitemap": "^3.7.4",
-    "3d-force-graph": "^1.80.0",
-    "three": "^0.186.0"
+    "typescript": "^6.0.3"
   }
 }

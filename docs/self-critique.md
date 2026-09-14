@@ -204,3 +204,14 @@ lab's graph with every variable named.
 4. **The mission paragraph came through the design file.** It reads as the
    lab's own and it is on the page, marked to be confirmed rather than
    assumed. If it is not the lab's wording, B-3 is where that gets fixed.
+
+
+---
+
+## 2026-09-14, later: the canvas copied
+
+Everything above describes builds that no longer exist. The site is now the
+design canvas transcribed, and the only honest critique of a transcription is
+whether it is faithful — the notes at the top of `src/pages/index.astro` list
+every place it is not, and there are four, all of them so the page survives a
+phone. The design itself is Kaung's, drawn in the canvas, and changes there.

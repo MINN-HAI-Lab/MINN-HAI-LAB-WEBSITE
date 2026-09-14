@@ -773,3 +773,30 @@ declaration file — so it is added as a devDependency without asking, on the
 reading that the rule is about what the site loads. If that reading is wrong,
 the alternative is a one-line `declare module 'three'` and the loss of types
 in `hands.ts`.
+
+
+---
+
+## Q-28 — the site is the canvas, copied
+
+2026-09-14, second instruction of the day: throw away the previous UI, follow
+only the design in `MINN HAI LAB UI Design/`, copy its code in, and let the
+canvas overrule every design document. Done, as D-028 records.
+
+Two things to know, neither a departure:
+
+**The canvas's copy is on the page as written.** That includes sentences the
+earlier build had held back as unconfirmed — "Deployed with partners:
+education, health and public-sector pilots", a teaching assistant "in
+development", "We are hiring research engineers". They are on the page
+because the canvas is the design and the instruction was to copy it. They are
+listed in `docs/phase.md` as the copy to confirm or change, in the canvas,
+before the site is public.
+
+**The scene and the fonts come from outside.** The canvas loads Three.js from
+unpkg (pinned, with integrity hashes) and Literata and Space Grotesk from
+Google Fonts, and the page does the same. The previous build's rule that the
+site talks to nothing at runtime went with the previous build.
+
+Everything else in this file up to Q-27 describes the previous build and is
+kept as record.

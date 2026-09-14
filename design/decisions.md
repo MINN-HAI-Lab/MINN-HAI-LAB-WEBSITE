@@ -688,3 +688,36 @@ What the canvas leaves to judgement, and what was decided:
   the reason in Q-25.
 - The canvas's "Join" page is a section on `/about`, alongside contact,
   because both are gaps waiting on the same person.
+
+---
+
+## D-028 — The canvas is copied, not interpreted
+
+**Status: adopted, 2026-09-14. Supersedes D-023 to D-027 and every earlier
+visual decision.**
+
+Kaung's instruction: throw away the previous UI entirely, follow only the
+design in `MINN HAI LAB UI Design/`, and copy its code into the site. So the
+site is now the canvas transcribed — direction 2a as the hero, direction 1d as
+the rest — with its own inline styles, values and copy, on one page.
+
+What that removes: the four artefacts, the token system, the self-hosted
+fonts, the ported Three.js module, the browser suite built around all of it,
+and the documents that described them. `git log` has them.
+
+What the transcription touches, and only this:
+
+- the design viewer's `x-import` wrapper becomes the `<mh-bg>` element it
+  wrapped; its `sc-if` and `{{ }}` template bits become the tab state they
+  stood for, in twelve lines of script copied from the canvas's own;
+- the canvas's internal links become the page's anchors;
+- 1d's header is dropped because 2a's is the page's;
+- three grids get a class so they stack on a phone.
+
+The scene and the fields are the canvas's files, copied to `public/design/`
+untouched. Three.js comes from unpkg with the canvas's integrity hashes.
+Fonts come from Google Fonts, as the canvas loads them.
+
+The canvas's copy is on the page as written, including its claims about
+partners, a teaching assistant and hiring. Those are Kaung's to confirm; the
+canvas's own `TODO:` markers for the paper detail and course materials stay.

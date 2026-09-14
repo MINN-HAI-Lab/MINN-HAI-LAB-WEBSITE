@@ -1,7 +1,16 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", "test-results", "screenshots"],
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "test-results",
+    "MINN HAI LAB UI Design",
+    "astro.config.mjs"
+  ],
   "compilerOptions": {
     "strictNullChecks": true,
     "allowJs": true
