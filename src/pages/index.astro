@@ -11,7 +11,8 @@
  *     wrapped, and its `sc-if` / {{ }} template bits are the tab state they
  *     stood for, wired up in the script at the foot of the page;
  *   - the canvas's internal links (#1a, #1d) are this page's anchors;
- *   - 1d's own header is dropped, because 2a's header is the page's;
+ *   - there is one header: 2a's, fixed to the top of the page. The headers
+ *     drawn inside 1a, 1b, 1c and 1d are not repeated;
  *   - the three hero directions from the canvas's first turn (1a, 1b, 1c)
  *     sit between the reach and the research index, in order, with their
  *     copy as drawn, to be changed later; their h1s are h2s so the page has
@@ -55,8 +56,13 @@ a{color:#E6EDF0}a:hover{color:#fff}
    through the same breakpoints Bootstrap uses: 576, 768, 992, 1200, 1400.
    Inline styles are the canvas's own, so the overrides carry !important. */
 html{scroll-behavior:smooth}
+[id]{scroll-margin-top:96px}
 .mh-page{width:100%}
-.mh-frame{height:100vh!important;height:100svh!important;min-height:640px;max-height:1100px}
+/* The reach keeps a fixed frame because its copy is positioned inside it.
+   The other frames grow with their content, so a stacked phone layout is
+   never taller than the frame that holds it. */
+.mh-frame{height:auto!important;min-height:100vh;min-height:100svh}
+#top.mh-frame{height:100vh!important;height:100svh!important;min-height:640px;max-height:1100px}
 .mh-menu{display:none}
 /* The hidden attribute has to beat the nav's inline display:flex. */
 .mh-mobile-nav[hidden]{display:none!important}
@@ -123,12 +129,10 @@ html{scroll-behavior:smooth}
   </head>
   <body>
     <div class="mh-page">
-<div class="mh-hero" style="position:relative">
-<div id="top" class="mh-frame" style="position:relative;height:920px;background:#06080A;overflow:hidden">
-<div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,#10151a 0%,#090c0f 55%,#06080A 100%)"></div>
-<iframe data-mh-scene src="/design/hands-scene.html" title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
-
-<div class="mh-gutter" style="position:absolute;z-index:2;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:26px 48px;pointer-events:none">
+<!-- The one header. 2a's, fixed to the top of the page with 1d's ground
+     behind it; the headers drawn inside 1a, 1b and 1c are not repeated. -->
+<header class="mh-header" style="position:fixed;z-index:50;left:0;right:0;top:0;background:rgba(6,8,10,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,237,240,.1)">
+<div class="mh-gutter" style="display:flex;align-items:center;justify-content:space-between;padding:26px 48px">
   <span class="mh-name" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em">MINN HAI Lab</span>
   <button class="mh-menu" type="button" aria-expanded="false" aria-controls="mh-mobile-nav" style="pointer-events:auto;font:500 12.5px 'Space Grotesk',sans-serif;color:#E6EDF0;background:transparent;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px;cursor:pointer">Menu</button>
   <div class="mh-hero-nav" style="display:flex;gap:32px;align-items:center;pointer-events:auto">
@@ -138,14 +142,22 @@ html{scroll-behavior:smooth}
     <a href="#join" style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px">Partner with us</a>
   </div>
 </div>
-
-
-<nav id="mh-mobile-nav" class="mh-mobile-nav" hidden aria-label="Menu" style="position:absolute;z-index:6;left:0;right:0;top:78px;display:flex;flex-direction:column;background:rgba(6,8,10,.96);border-top:1px solid rgba(230,237,240,.1);border-bottom:1px solid rgba(230,237,240,.1)">
+<nav id="mh-mobile-nav" class="mh-mobile-nav" hidden aria-label="Menu" style="position:absolute;z-index:6;left:0;right:0;top:100%;display:flex;flex-direction:column;background:rgba(6,8,10,.96);border-top:1px solid rgba(230,237,240,.1);border-bottom:1px solid rgba(230,237,240,.1)">
   <a href="#research" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Research</a>
   <a href="#learning" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Learning</a>
   <a href="#people" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">People</a>
   <a href="#join" style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px">Partner with us</a>
 </nav>
+</header>
+<div class="mh-hero" style="position:relative">
+<div id="top" class="mh-frame" style="position:relative;height:920px;background:#06080A;overflow:hidden">
+<div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,#10151a 0%,#090c0f 55%,#06080A 100%)"></div>
+<iframe data-mh-scene src="/design/hands-scene.html" title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
+
+
+
+
+
 <div class="mh-hero-copy" style="position:absolute;z-index:4;left:48px;bottom:118px;max-width:440px;display:flex;flex-direction:column;gap:20px;pointer-events:none">
   <div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;border-radius:50%;background:#D61A4A;animation:mh-blink 2.6s ease-in-out infinite"></span><span style="font-size:12px;color:rgba(230,237,240,.6)">Human-centered AI</span></div>
   <h1 class="mh-hero-title" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:54px;line-height:1.02;letter-spacing:-.025em;color:#F2F6F8;text-wrap:pretty">The gap is the whole discipline.</h1>
@@ -177,16 +189,7 @@ html{scroll-behavior:smooth}
 </div>
 <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(6,8,10,.96) 0%,rgba(6,8,10,.7) 38%,rgba(6,8,10,0) 60%)"></div>
 <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column">
-  <div class="mh-gutter" style="display:flex;align-items:center;justify-content:space-between;padding:26px 48px;border-bottom:1px solid rgba(230,237,240,.1)">
-    <a href="#research" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em;color:#E6EDF0;text-decoration:none">MINN HAI Lab</a>
-    <div class="mh-hero-nav" style="display:flex;gap:34px;align-items:center">
-      <a href="#research" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Research</a>
-      <a href="#learning" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Learning</a>
-      <a href="#people" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">People</a>
-      <a href="#join" style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Join</a>
-      <a href="#join" style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px">Partner with us</a>
-    </div>
-  </div>
+  
   <div class="mh-gutter mh-hero-grid" style="flex:1;display:grid;grid-template-columns:minmax(0,1fr) 380px;align-items:end;gap:48px;padding:48px">
     <div style="display:flex;flex-direction:column;gap:28px;max-width:820px">
       <div style="display:flex;align-items:center;gap:12px">
@@ -219,18 +222,7 @@ html{scroll-behavior:smooth}
 <mh-bg mode="lattice" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
 <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.6) 46%,rgba(7,9,12,.2) 100%)"></div>
 <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column">
-  <div class="mh-gutter" style="display:flex;align-items:center;justify-content:space-between;padding:24px 44px">
-    <div style="display:flex;align-items:baseline;gap:16px">
-      <span style="font-family:Literata,serif;font-size:19px">MINN HAI Lab</span>
-      <span style="font-size:11.5px;color:rgba(230,237,240,.42)">Human-centered AI</span>
-    </div>
-    <div class="mh-hero-nav" style="display:flex;gap:8px;align-items:center;padding:5px;border:1px solid rgba(230,237,240,.14);border-radius:999px;background:rgba(7,9,12,.5)">
-      <a href="#research" style="font-size:12.5px;color:#07090C;background:#E6EDF0;text-decoration:none;border-radius:999px;padding:8px 16px">Research</a>
-      <a href="#learning" style="font-size:12.5px;color:rgba(230,237,240,.7);text-decoration:none;border-radius:999px;padding:8px 16px">Learning</a>
-      <a href="#people" style="font-size:12.5px;color:rgba(230,237,240,.7);text-decoration:none;border-radius:999px;padding:8px 16px">People</a>
-      <a href="#join" style="font-size:12.5px;color:rgba(230,237,240,.7);text-decoration:none;border-radius:999px;padding:8px 16px">Join</a>
-    </div>
-  </div>
+  
   <div style="flex:1;display:flex;align-items:center;padding:0 44px">
     <div style="display:flex;flex-direction:column;gap:26px;max-width:660px">
       <h2 class="mh-display-68" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:68px;line-height:1.04;letter-spacing:-.025em;color:#F2F6F8">Between human understanding and machine inference.</h2>
@@ -252,10 +244,7 @@ html{scroll-behavior:smooth}
 <mh-bg mode="grid" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
 <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(70% 55% at 50% 34%,rgba(8,10,13,.9) 0%,rgba(8,10,13,.45) 55%,rgba(8,10,13,0) 80%)"></div>
 <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column">
-  <div class="mh-gutter" style="display:flex;align-items:center;justify-content:space-between;padding:26px 44px">
-    <span style="font-family:Literata,serif;font-size:19px">MINN HAI Lab</span>
-    <a href="#research" style="font-size:12.5px;color:#E6EDF0;text-decoration:none;display:flex;align-items:center;gap:12px"><span style="display:block;width:26px;height:1px;background:#E6EDF0"></span>Menu</a>
-  </div>
+  
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center;padding:0 44px">
     <span style="font-size:12px;color:rgba(230,237,240,.5)">Established research group · Human-centered AI</span>
     <h2 class="mh-display-104" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:104px;line-height:.95;letter-spacing:-.035em;color:#F4F8FA;max-width:16ch">We model the learner, not the average.</h2>

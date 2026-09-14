@@ -75,7 +75,9 @@ on and scales the artboard through Bootstrap's breakpoints — 576, 768, 992,
   people grid goes 5 → 3 → 2 across.
 - The hero fills the viewport height; its display line steps 54 → 44 → 38px;
   the section titles 52 → 40 → 34px.
-- Below 768px the header's links become a Menu button that opens a stacked
+- There is one header — 2a's — fixed to the top of the page on 1d's
+  translucent ground; the headers drawn inside 1a, 1b, 1c and 1d are not
+  repeated. Below 768px its links become a Menu button that opens a stacked
   list.
 
 Nothing else about the canvas changes with the screen.
