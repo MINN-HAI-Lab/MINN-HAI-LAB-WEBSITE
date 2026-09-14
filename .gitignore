@@ -38,3 +38,8 @@ prototypes/
 
 # per-machine agent settings, not shared
 .claude/settings.local.json
+
+# the design canvas is checked in; the copies of this repository's own files
+# that the design tool uploaded alongside it are not
+MINN HAI LAB UI Design/uploads/existing_files-*
+MINN HAI LAB UI Design/support.js

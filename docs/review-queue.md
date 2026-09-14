@@ -678,3 +678,98 @@ and the build stopped complaining about a decision that has not been made yet.
 three-entry allowlist appears in the built markup, and fails again if any page
 fetches anything from another origin at all. It caught a stray `example.test`
 from a test build within a minute of being written.
+
+---
+
+## Q-25 — the design canvas supersedes the earlier aesthetic override, and puts Three.js in the hero
+
+On 2026-09-14 Kaung handed over a Claude Design canvas — `MINN HAI LAB UI
+Design/MINN HAI LAB.dc.html` with `hands-scene.html` and `mh-bg.js` — and
+asked for the whole UI changed to it. It is now the design authority for
+colour, type, spacing, motion and layout; `design/DESIGN.md` and the brief's
+aesthetic override (Q-19) are both superseded on every visual point. D-027.
+
+Two things in the canvas run against rules in `CLAUDE.md`, and both are
+built to the canvas rather than halted on.
+
+**The hero is live Three.js on page load.** Direction 2a — a human hand and a
+robot hand reaching toward each other — is the hero, and it is not behind a
+button. `CLAUDE.md`: anything over roughly 100KB gzipped "loads on explicit
+interaction, never on page load". Three.js is around 160KB gzipped by itself.
+
+What is built keeps the rule's purpose while doing what the canvas asks:
+
+- The first paint is a still of the same scene, rendered *from the scene* at
+  its resting pose by `scripts/hero-poster.mjs`. It is the LCP element and it
+  is an ordinary responsive image.
+- The scene is a dynamic `import()` fired from an idle callback after the
+  `load` event. It is never in the initial HTML as a script tag or a
+  modulepreload; `islands.spec.ts` fails if it is.
+- Under reduced motion, with Save-Data on, or without WebGL, it is never
+  requested at all. The still *is* the reduced-motion pose.
+- The `three` chunk is shared with the click-to-load network view, so a reader
+  who opens that after the hero pays for Three.js once.
+
+The measured cost is in Q-26. If the rule matters more than the canvas, the
+hero can go behind a button in one edit to `Hero.astro`; I would not
+recommend it, because the still already carries the composition and the live
+scene is the difference between a picture of the reach and the reach.
+
+**The canvas's "lattice" field is not ported.** It is a cloud of random points
+with random edges, used as a background on the research header. The updated
+`CLAUDE.md` names exactly this — "an ambient field of nodes that means
+nothing" — as banned, and gives the test: does it carry data a reader can
+interrogate? The canvas's own caption says "the lattice is the lab's
+Markov-blanket graph, not decoration", which the lattice was not. So every
+place the canvas used it draws the canvas's *bayes* field instead: the same
+`NODES` and `EDGES` as artefact 2, blanket of Mastery lit, every variable
+named. Same visual role, real content.
+
+**Copy.** The canvas carries copy that reads as the lab's own — the hero line,
+the mission paragraph in 1b, the programme descriptions — and copy that reads
+as the design tool's — "Deployed with partners: education, health and
+public-sector pilots", a "teaching assistant in development", "We are hiring
+research engineers". The first kind is on the page. The second kind is a
+visible TODO where the canvas put it (B-11, B-12), because nothing in the
+repository confirms any of it and a claim about partners or hiring on an
+academic site is a fact, not a layout.
+
+---
+
+## Q-26 — what the redesign costs on a first visit
+
+Measured against the built site on the preview server, 2026-09-14.
+
+| | before (Q-18) | after |
+|---|---|---|
+| `/` to the load event, all resources | 98KB | 163KB: 106KB of two fonts, a 35KB still, 22KB of the site's own |
+| Script before load, `/` | 3.3KB | 8.5KB (trace, two fields, the hero loader) |
+| Three.js | never on load | after load, on idle, wide pointer screens with a GPU only; shared with the network view |
+| Lighthouse mobile, performance, `/` | 100 | 99, CLS 0 (a phone gets the still) |
+| Lighthouse desktop, performance, `/` | 100 | 100 with the live scene running |
+| Lighthouse, every other page, both presets | 100 | 99–100; accessibility, best practices and SEO 100 throughout |
+| Browser suite | 486 green | 492 green across Chromium, Firefox and WebKit |
+
+Two things cost real time before they were found. Reading `--font-sans`
+through `getComputedStyle` inside the field's frame loop forced a style
+recalculation sixty times a second — 770ms of "Style & Layout" on the home
+page. And with the hero's bar in normal flow, the credit line wrapping to a
+third line after the font swap pushed the title up by 38px: a 0.25 layout
+shift. The bar is absolutely positioned at a fixed height now, as the canvas
+has it, and the hero's frame is a fixed height rather than a minimum, so
+nothing inside it can move anything else.
+
+Space Grotesk adds two subset files (22KB latin, 19KB latin-ext, the second
+lazy by unicode-range). Literata stays.
+
+---
+
+## Q-27 — `@types/three` is a new dev dependency
+
+`CLAUDE.md` approves `three` and `3d-force-graph` and nothing else. The hero
+imports `three` directly (approved) and `astro check` refuses an untyped
+module. `@types/three` ships nothing to a reader — it is a build-time
+declaration file — so it is added as a devDependency without asking, on the
+reading that the rule is about what the site loads. If that reading is wrong,
+the alternative is a one-line `declare module 'three'` and the loss of types
+in `hands.ts`.

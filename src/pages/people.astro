@@ -1,50 +1,37 @@
 ---
 /**
- * People.
+ * People, in the design canvas's language: a header band, then five 4:5
+ * frames in a row with the name in the serif under each, then the hiring
+ * card.
  *
- * A full-bleed group photograph, then five portraits in a row that breaks to
- * two-up on a phone. No circles, no cards, no hover lift. Names and roles are
- * set in type under each portrait, never laid over the face.
- *
- * There are no names and no photographs yet, so every slot renders its gap:
- * a neutral field at the right aspect ratio, and a visible TODO saying what is
- * missing and who supplies it. That is the correct output, not a shortfall to
- * be dressed up. The layout is built at full size around the real thing, so
- * when the photographs arrive they drop in without a redesign.
+ * There are no names and no photographs yet, so every frame shows its gap.
+ * The hatched fill is the canvas's own placeholder; the caption inside it is
+ * set in the grotesk, not the monospace the canvas used, because CLAUDE.md
+ * keeps monospace for code. The canvas writes "TODO: name" under each frame;
+ * here that reads "Not named yet", because a TODO on this site has to say who
+ * supplies it and carry a tracker, and one marker above the row does that for
+ * all five rather than five markers saying it badly.
  */
 import Base from '../layouts/Base.astro';
+import Field from '../components/Field.astro';
 import { PEOPLE, PEOPLE_TODO, unnamedCount } from '../data/people.ts';
+import { withBase } from '../lib/paths.ts';
 
 const missing = unnamedCount();
 ---
 
-<Base
-  title="People — MINN HAI Lab"
-  description="The people of the MINN HAI Lab."
->
-  <!-- The group photograph. Full-bleed, and currently an empty field of the
-       right shape, which is what an honest placeholder looks like. -->
-  <section class="bleed group">
-    <div class="group__frame" role="img" aria-label="A group photograph of the lab will appear here. It has not been supplied yet.">
-      {/* Wrapped in .page rather than carrying it, so the marker lines up
-          with the heading below. Putting both classes on one element did not
-          work: .todo's `padding` shorthand comes later in the stylesheet than
-          .page's `padding-inline` and silently won. */}
-      <div class="page group__todo">
-        <p class="todo measure">
-          TODO: a group photograph of the lab, landscape, at least 2400px wide.
-          It sits full-bleed at the top of this page, so faces should sit in the
-          middle third — the top and bottom are cropped at wide viewports.
-          Kaung to supply. Tracked as B-6.
-        </p>
-      </div>
+<Base title="People — MINN HAI Lab" description="The people of the MINN HAI Lab.">
+  <header class="band">
+    <Field mode="bayes" class="band__field" />
+    <div class="band__veil" aria-hidden="true"></div>
+    <div class="page band__text">
+      <h1 class="type-title">People</h1>
+      <p class="band__lede type-body">Principal investigator, researchers, students.</p>
     </div>
-  </section>
+  </header>
 
   <section class="section">
     <div class="page">
-      <h1 class="type-display">People</h1>
-
       <p class="type-body measure">
         The lab has five members.
         {
@@ -53,25 +40,12 @@ const missing = unnamedCount();
             : ` ${missing} of the five are not named here yet.`
         }
       </p>
+      {missing > 0 && <p class="todo">{PEOPLE_TODO}</p>}
 
-      <p class="type-body type-muted measure">
-        Each slot below shows what it is waiting for. They fill in one at a
-        time, as people consent to appearing and supply a name, a role and a
-        link.
-      </p>
-
-      {missing > 0 && <p class="todo measure">{PEOPLE_TODO}</p>}
-
-      {/* Same section as the paragraph above it, not a new one. Two adjacent
-          sections on the same ground pay the section rhythm twice, and at
-          desktop width that put nearly four hundred pixels of nothing between
-          a sentence and the thing it introduces. */}
       <ul class="people">
         {
           PEOPLE.map((person, index) => (
             <li class="people__slot">
-              {/* 4:5, the same crop for all five, so the row reads as one
-                  photograph taken five times rather than five photographs. */}
               <div
                 class="people__portrait"
                 role="img"
@@ -81,40 +55,43 @@ const missing = unnamedCount();
                     : `Portrait slot ${index + 1}. No photograph has been supplied.`
                 }
               >
-                {/* No visible number.
-
-                    CLAUDE.md bans numbered markers "unless the content is
-                    genuinely a sequence", and five members are a set, not an
-                    order. The frames plus five "Not named yet" captions already
-                    say there are five distinct slots. The number survives in
-                    the accessible name, where it is the only way to tell one
-                    empty frame from another. */}
+                <span class="micro people__caption" aria-hidden="true">portrait</span>
               </div>
-
-              {/* Name and role in type, under the portrait. Never over it: a
-                  caption laid across a face is a magazine device, and this is
-                  a list of people to email. */}
-              <p class="people__name">
+              <p class="people__name type-name">
                 {person.name ?? <span class="people__unnamed">Not named yet</span>}
               </p>
               <p class="people__role label">{person.role ?? 'Role not supplied'}</p>
-              {person.todo && <p class="people__todo todo">TODO: {person.todo}</p>}
+              {person.todo && <p class="todo">TODO: {person.todo}</p>}
             </li>
           ))
         }
       </ul>
+
+      <!-- The canvas's hiring card. Whether the lab is hiring is not known
+           here, so the card carries the question rather than the claim. -->
+      <div class="card" id="roles">
+        <p class="type-name">Open roles</p>
+        <p class="todo">
+          TODO: whether the lab is hiring, and for what. The design canvas
+          says "We are hiring research engineers"; nothing in the repository
+          confirms it. docs/plan.md files an open positions section as missing.
+          Kaung to supply. Tracked as B-12.
+        </p>
+        <p><a class="link--quiet" href={withBase('/about#join')}>How to join</a></p>
+      </div>
     </div>
   </section>
 
-  <section class="section section--raised" data-reveal>
-    <div class="page">
-      <h2 class="type-title">Why this page is empty</h2>
-      <p class="type-body measure">
-        A lab site with invented members is worse than one with none. Every
-        name here will be a real person who agreed to be listed, with a role
-        they recognise and a link they chose. Until then the slots stay open
-        and say so.
-      </p>
+  <section class="bleed group">
+    <div class="group__frame" role="img" aria-label="A group photograph of the lab will appear here. It has not been supplied yet.">
+      <div class="page group__todo">
+        <p class="todo">
+          TODO: a group photograph of the lab, landscape, at least 2400px wide.
+          It sits full-bleed at the foot of this page, so faces should sit in
+          the middle third — the top and bottom are cropped at wide viewports.
+          Kaung to supply. Tracked as B-6.
+        </p>
+      </div>
     </div>
   </section>
 </Base>

@@ -1,0 +1,142 @@
+---
+/**
+ * The reach. Direction 2a from the design canvas.
+ *
+ * A human hand upper-left, a robot hand lower-right, modelled and lit in
+ * Three.js. Bring the cursor toward the centre and both reach in until the
+ * fingertips almost meet. After Michelangelo, The Creation of Adam.
+ *
+ * What ships in the first paint is a still of the same scene, rendered from
+ * the scene itself at its resting pose by scripts/hero-poster.mjs. The live
+ * scene arrives after the page has loaded, behind the poster, and fades in
+ * over it. A reader with JavaScript off, reduced motion on, or no WebGL keeps
+ * the still — which is a true picture of the thing, not an illustration of it.
+ *
+ * Three.js is several hundred kilobytes and CLAUDE.md says anything that size
+ * loads on interaction, never on page load. This does not wait for a click,
+ * and that is recorded rather than hidden: Q-25.
+ */
+import { Image } from 'astro:assets';
+import poster from '../assets/hero-poster.jpg';
+import { withBase } from '../lib/paths.ts';
+
+const alt =
+  'A human hand reaching in from the upper left and a robot hand reaching in ' +
+  'from the lower right, index fingers extended toward each other across a ' +
+  'dark field, with a thin ring of instrument marks and a wireframe sphere ' +
+  'between them.';
+---
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <div class="hero__ground" aria-hidden="true"></div>
+
+  <Image
+    class="hero__poster"
+    src={poster}
+    alt={alt}
+    widths={[720, 1080, 1440, 2160]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    data-poster
+  />
+
+  <canvas class="hero__scene" data-scene aria-hidden="true"></canvas>
+
+  <div class="page hero__text">
+    <p class="status">Human-centered AI</p>
+    <h1 class="type-display hero__title" id="hero-title">The gap is the whole discipline.</h1>
+    <p class="type-body hero__lede">
+      We build AI that reaches back on human terms — adaptive, interpretable,
+      accountable for how it arrived at what it says.
+    </p>
+    <p class="micro hero__hint" data-hint>Move the cursor to the centre.</p>
+  </div>
+
+  <div class="hero__bar">
+    <div class="page hero__bar-inner">
+      <p class="label hero__credit">
+        After Michelangelo, <i>The Creation of Adam</i>. Everything in the frame
+        is live 3D.
+      </p>
+      <ul class="hero__links">
+        <li><a class="hero__link" href={withBase('/research#knowledge-tracing')}>Knowledge tracing</a></li>
+        <li><a class="hero__link" href={withBase('/research#bayesian-explanation')}>Interpretable models</a></li>
+        <li><a class="link--quiet" href={withBase('/research')}>Enter the lab</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  /**
+   * Load the scene after the page has painted, never before.
+   *
+   * The poster is the LCP element and it is already there. The 3D chunk is a
+   * dynamic import fired from an idle callback after `load`, so it competes
+   * with nothing a reader is waiting on. Under reduced motion it is never
+   * requested — the poster is the resting pose already.
+   */
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const canvas = hero?.querySelector<HTMLCanvasElement>('[data-scene]');
+  const poster = hero?.querySelector<HTMLImageElement>('[data-poster]');
+  const hint = hero?.querySelector<HTMLElement>('[data-hint]');
+
+  if (hero && canvas && poster) {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    /* WebGL, and WebGL on a GPU. A software renderer — SwiftShader in a
+       headless browser, llvmpipe on a machine without drivers — draws this
+       scene at a few frames a second and starves everything else on the
+       page; the still is the better hero there. */
+    const gpu = (() => {
+      try {
+        const probe = document.createElement('canvas');
+        const gl = (probe.getContext('webgl2') || probe.getContext('webgl')) as WebGLRenderingContext | null;
+        if (!gl) return false;
+        const info = gl.getExtension('WEBGL_debug_renderer_info');
+        // Newer browsers put the real name in RENDERER and drop the extension;
+        // older ones mask RENDERER and keep it. Read both.
+        const renderer = [
+          info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : '',
+          gl.getParameter(gl.RENDERER),
+        ].join(' ');
+        return !/swiftshader|llvmpipe|software|mesa offscreen/i.test(renderer);
+      } catch {
+        return false;
+      }
+    })();
+
+    /* The reach needs a cursor and room. On a phone there is neither: the
+       composition is cropped, there is nothing to bring to the centre, and
+       Three.js on a throttled mobile CPU cost eleven seconds of blocking time
+       in Lighthouse for a scene the reader could not steer. The still is the
+       hero there. The live scene is for a pointer on a wide screen. */
+    const roomy = window.matchMedia('(hover: hover) and (min-width: 900px)').matches;
+
+    hero.dataset.scene = still ? 'still' : saveData ? 'save-data' : !roomy ? 'small' : !gpu ? 'software-gl' : 'loading';
+
+    if (hero.dataset.scene === 'loading') {
+      const start = async (): Promise<void> => {
+        try {
+          const { mountHands } = await import('../lib/hands.ts');
+          mountHands(hero, canvas, { autoReach: false });
+          hero.classList.add('is-live');
+          hero.dataset.scene = 'live';
+          if (hint) hint.classList.add('is-shown');
+        } catch (error) {
+          // The poster stays. Nothing else changes.
+          hero.dataset.scene = 'failed';
+          console.error('The hero scene could not start.', error);
+        }
+      };
+      const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+      const go = (): void => {
+        if (idle) idle(() => void start(), { timeout: 2000 });
+        else window.setTimeout(() => void start(), 300);
+      };
+      if (document.readyState === 'complete') go();
+      else window.addEventListener('load', go, { once: true });
+    }
+  }
+</script>

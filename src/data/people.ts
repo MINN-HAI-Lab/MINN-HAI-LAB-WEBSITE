@@ -67,7 +67,9 @@ export const PEOPLE_TODO =
 export const PEOPLE: readonly Person[] = [
   {
     name: null,
-    role: null,
+    // The one role that is not a guess: a lab has a principal investigator,
+    // and docs/plan.md asks for that person first. Who it is stays a gap.
+    role: 'Principal investigator',
     photo: null,
     href: null,
   },

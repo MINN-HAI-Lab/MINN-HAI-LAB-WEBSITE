@@ -1,91 +1,116 @@
 ---
 /**
- * Learning.
+ * Learning, in the design canvas's language: a header band, then the tabbed
+ * "what the lab gives you to learn with" panel.
  *
- * StatLab today, and a page shaped to take more than StatLab tomorrow. The
- * brief asks for it to be "built to take more resources later", so the list is
- * a list from the start — one entry in a structure that holds many, rather
- * than a single callout that would have to be dismantled to add a second.
- *
- * Nothing here is invented: StatLab's name, link and one-line description come
- * from the brief. There is no course list, no syllabus and no teaching
- * material, because none was supplied.
+ * The canvas tabs three things: a teaching assistant, StatLab and course
+ * materials. StatLab is real and is the selected tab. The other two are gaps
+ * — nothing in this repository describes a teaching assistant or a course,
+ * and the canvas's copy for them was written by the design tool, not the lab
+ * — so each opens on a marker saying what is missing rather than on prose
+ * that would look finished.
  */
 import Base from '../layouts/Base.astro';
+import Field from '../components/Field.astro';
 import { LAB_NAME, STATLAB } from '../data/navigation.ts';
-
-/**
- * The teaching resources, as a list of one.
- *
- * docs/plan.md files teaching material under "missing, does not block
- * launch". When there is a second entry it goes here and the page needs no
- * other change.
- */
-const RESOURCES = [
-  {
-    name: STATLAB.name,
-    description: STATLAB.description,
-    href: STATLAB.href,
-    note:
-      'Runs in the browser. Nothing to install, nothing to sign in to, and it ' +
-      'works on a phone.',
-  },
-];
 ---
 
 <Base
   title={`Learning — ${LAB_NAME}`}
   description="Teaching resources from the lab, starting with StatLab, an interactive introduction to probability and statistics."
 >
-  <section class="section">
-    <div class="page">
-      <h1 class="type-display">Learning</h1>
-
-      <p class="type-body measure">
+  <header class="band">
+    <Field mode="grid" class="band__field" />
+    <div class="band__veil" aria-hidden="true"></div>
+    <div class="page band__text">
+      <h1 class="type-title">Learning</h1>
+      <p class="band__lede type-body">
         Things the lab has built for people learning the material rather than
-        reading about the research. There is one so far.
+        reading about the research.
       </p>
     </div>
-  </section>
+  </header>
 
-  <section class="section section--raised" data-reveal>
-    <div class="page">
-      <ul class="resources">
-        {
-          RESOURCES.map((resource) => (
-            <li class="resources__item">
-              <div class="resources__text">
-                <h2 class="type-title">{resource.name}</h2>
-                <p class="type-body measure">{resource.description}</p>
-                <p class="type-body type-muted measure">{resource.note}</p>
-              </div>
-              <p class="resources__action">
-                <a class="button" href={resource.href} rel="noopener">
-                  Open {resource.name}
-                </a>
-              </p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+  <section class="section" style="padding-block: 0">
+    <div class="page split">
+      <div class="split__main">
+        <p class="label">Learning resources</p>
+        <h2 class="type-section">What the lab gives you to learn with</h2>
+        <p class="type-body type-muted measure">
+          One resource is live. Two more have a place here already, so that
+          when they are supplied they are an entry rather than a redesign.
+        </p>
+        <p class="label">Works with JavaScript disabled. Every island has a real static rendering.</p>
+      </div>
 
-  <section class="section" data-reveal>
-    <div class="page">
-      <h2 class="type-title">More to come</h2>
+      <div class="split__aside" data-tabs>
+        <div class="tabs" role="tablist" aria-label="Learning resources">
+          <button class="tab" type="button" role="tab" id="tab-statlab" aria-selected="true" aria-controls="panel-statlab">StatLab</button>
+          <button class="tab" type="button" role="tab" id="tab-assistant" aria-selected="false" aria-controls="panel-assistant" tabindex="-1">Teaching assistant</button>
+          <button class="tab" type="button" role="tab" id="tab-materials" aria-selected="false" aria-controls="panel-materials" tabindex="-1">Course materials</button>
+        </div>
 
-      <p class="type-body measure">
-        This page is built as a list so a second resource is an entry rather
-        than a redesign. Course notes, exercise sets and further interactive
-        pieces all fit here as they arrive.
-      </p>
+        <div class="tabpanel" role="tabpanel" id="panel-statlab" aria-labelledby="tab-statlab">
+          <h3 class="type-name">{STATLAB.name}</h3>
+          <p class="type-small type-muted">{STATLAB.description} Runs in the browser. Nothing to install, nothing to sign in to, and it works on a phone.</p>
+          <p><a class="button button--fill" href={STATLAB.href} rel="noopener">Open {STATLAB.name}</a></p>
+        </div>
 
-      <p class="todo measure">
-        TODO: teaching or course material beyond StatLab, if there is any that
-        should be public. docs/plan.md files this as missing but not blocking
-        launch. Kaung to supply. Tracked as B-10.
-      </p>
+        <div class="tabpanel" role="tabpanel" id="panel-assistant" aria-labelledby="tab-assistant" hidden>
+          <h3 class="type-name">Teaching assistant</h3>
+          <p class="todo">
+            TODO: the design canvas shows a teaching assistant "in development"
+            that states the mastery estimate it is acting on before it answers.
+            Nothing in this repository describes it, so nothing is claimed here.
+            Kaung to confirm it exists and supply a description. Tracked as
+            B-11.
+          </p>
+        </div>
+
+        <div class="tabpanel" role="tabpanel" id="panel-materials" aria-labelledby="tab-materials" hidden>
+          <h3 class="type-name">Course materials</h3>
+          <p class="todo">
+            TODO: which courses and materials go public, and who owns them.
+            docs/plan.md files teaching material as missing but not blocking
+            launch. Nothing listed until you supply it. Kaung to supply.
+            Tracked as B-10.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 </Base>
+
+<script>
+  /* Tabs, the accessible way: arrow keys move between them, the selected tab
+     is the only one in the tab order, and the panel follows. With JavaScript
+     off the first panel is open and the other two are hidden — which shows
+     the one real resource. */
+  const root = document.querySelector<HTMLElement>('[data-tabs]');
+  if (root) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+
+    const select = (index: number): void => {
+      tabs.forEach((tab, i) => {
+        tab.setAttribute('aria-selected', String(i === index));
+        tab.setAttribute('tabindex', i === index ? '0' : '-1');
+      });
+      panels.forEach((panel, i) => {
+        panel.hidden = i !== index;
+      });
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (event) => {
+        const delta = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+        if (!delta) return;
+        event.preventDefault();
+        const next = (i + delta + tabs.length) % tabs.length;
+        select(next);
+        tabs[next]?.focus();
+      });
+    });
+  }
+</script>

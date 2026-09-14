@@ -87,7 +87,7 @@ for (const { name, width, height } of WIDTHS) {
       // exactly that assumption once.
       let focused: string | null = null;
       let stops = 0;
-      for (; stops < 10 && focused === null; stops += 1) {
+      for (; stops < 40 && focused === null; stops += 1) {
         await page.keyboard.press('Tab');
         focused = await page.evaluate(
           () => document.activeElement?.getAttribute('data-index') ?? null,

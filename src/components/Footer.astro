@@ -1,46 +1,52 @@
 ---
 /**
- * Site footer.
+ * Site footer, from the design canvas: the name over "Human-centered AI" on
+ * the left, the page links plus Contact on the right.
  *
- * docs/plan.md: "Contact is a line in the footer, not a page." So the contact
- * line lives here, and /about points back at it rather than duplicating it.
- *
- * The address is a TODO rather than a plausible-looking string. An invented
- * email in a footer is a small lie in the most load-bearing place on an
- * academic site: it is where someone goes when they actually want to reach
- * you.
+ * docs/plan.md: "Contact is a line in the footer, not a page." The line is
+ * still a TODO rather than a plausible-looking address — an invented email
+ * in a footer is a small lie in the most load-bearing place on an academic
+ * site.
  */
 import { LAB_NAME, NAVIGATION } from '../data/navigation.ts';
 import { withBase } from '../lib/paths.ts';
+
+const links = NAVIGATION.filter((item) => item.href !== '/');
 ---
 
 <footer class="site-footer">
   <div class="page site-footer__inner">
     <div class="site-footer__block">
       <p class="site-footer__name">{LAB_NAME}</p>
+      <p class="label">Human-centered AI</p>
 
-      <p class="todo measure">
-        TODO: the contact address for the footer. docs/plan.md lists a
-        contact email as supplied, but it is not in the repository. Kaung to
-        supply. An invented address would be worse than this gap. Tracked as
-        B-2.
+      <p class="todo">
+        TODO: the contact address for the footer. docs/plan.md lists a contact
+        email as supplied, but it is not in the repository. Kaung to supply.
+        An invented address would be worse than this gap. Tracked as B-2.
       </p>
     </div>
 
     <nav class="site-footer__block" aria-label="Footer">
       <ul class="site-footer__nav">
         {
-          NAVIGATION.map((item) => (
+          links.map((item) => (
             <li>
               <a class="site-footer__link" href={withBase(item.href)}>{item.label}</a>
             </li>
           ))
         }
+        <li>
+          <a class="site-footer__link" href={withBase('/about#join')}>Join</a>
+        </li>
+        <li>
+          <a class="site-footer__link" href={withBase('/about#contact')}>Contact</a>
+        </li>
       </ul>
 
       <p class="site-footer__note label">
         Funding is acknowledged on the{' '}
-        <a class="site-footer__link" href={withBase('/about')}>about page</a>.
+        <a class="site-footer__link" href={withBase('/about#funding')}>about page</a>.
       </p>
     </nav>
   </div>

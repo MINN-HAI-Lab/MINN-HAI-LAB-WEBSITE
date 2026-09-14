@@ -1,41 +1,25 @@
 ---
 /**
- * Not found.
- *
- * Two jobs: say plainly what happened, and offer the pages that exist. All
- * five do now, so unlike the earlier version this lists them all rather than
- * withholding the unbuilt ones.
- *
- * No apology, no joke, no illustration. Someone here is looking for something.
+ * Not found. Say plainly what happened, and offer the pages that exist.
  */
 import Base from '../layouts/Base.astro';
 import { NAVIGATION } from '../data/navigation.ts';
 import { withBase } from '../lib/paths.ts';
 ---
 
-<Base
-  title="Page not found — MINN HAI Lab"
-  description="That page does not exist on this site."
-  noindex
->
+<Base title="Page not found — MINN HAI Lab" description="That page does not exist on this site." noindex>
   <section class="section">
     <div class="page">
-      <h1 class="type-display">Page not found</h1>
-
-      <p class="type-body measure">
+      <h1 class="type-title">Page not found</h1>
+      <p class="type-body type-muted measure">
         There is nothing at this address. It may have been a typo, or a link
         from somewhere that pointed at a page this site does not have.
       </p>
-
-      <p class="type-body type-muted measure">Everything that does exist:</p>
-
       <ul class="not-found__list">
         {
           NAVIGATION.map((item) => (
             <li>
-              <a class="link" href={withBase(item.href)}>
-                {item.label}
-              </a>
+              <a class="link" href={withBase(item.href)}>{item.label}</a>
             </li>
           ))
         }

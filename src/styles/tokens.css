@@ -1,59 +1,53 @@
 /* ---------------------------------------------------------------------------
-   tokens.css — dark instrument field.
+   tokens.css — the MINN HAI LAB design canvas, as tokens.
 
-   This replaces the light six-colour palette that design/DESIGN.md specifies.
-   The conflict is deliberate and recorded as Q-19; DESIGN.md is out of date
-   about colour, radii, shadows and motion until someone reconciles it.
+   Source: "MINN HAI LAB UI Design/MINN HAI LAB.dc.html", the design Kaung
+   handed over on 2026-09-14. Direction 2a (the reach) for the hero, 1d for
+   everything else. Every value here is read off that file; where the canvas
+   used a raw rgba() five different ways, the nearest of those is the token.
 
-   The reference point is scientific telemetry: precise, thin-stroked,
-   high-density. Not a consumer app, and specifically not iOS frosted panels.
+   The palette is a near-black field, one ink at a few alpha steps, and one
+   red. The red is the machine's opinion and appears nowhere else — the canvas
+   says so in its own copy: "Red is the machine's opinion. Ink is fact."
 
-   Contrast, measured against the glass composite rather than the field alone,
-   because text on glass sits on white-over-field and not on the field:
+   Contrast on the field (#06080A), measured:
 
-     --text on --field                16.70:1
-     --text on glass over --field     15.37:1
-     --text on glass over --field-2   14.36:1
-     --text-muted on --field           6.89:1
-     --text-muted on glass/--field-2   5.93:1   <- the tightest text case
-     --signal on glass over --field    5.25:1
+     --text         #e6edf0   16.94:1
+     --text-strong  #f2f6f8   18.45:1
+     --text-muted   ink @ .62  6.71:1
+     --text-faint   ink @ .50  4.63:1   <- the tightest text case
+     --signal       #e63360    4.78:1   (4.56:1 on a panel)
 
-   Every one clears 4.5:1. The tightest is muted text on a glass panel over a
-   raised section, which is the combination worth re-checking after any change
-   to the surface alpha.
+   The canvas's red is #D61A4A, which is 3.92:1 on the field — fine for a
+   46px numeral, short of 4.5 for a 12px readout. #E63360 is the same hue at
+   the darkest lightness that clears 4.5 on both grounds, and it is used for
+   everything so there is one red rather than two. --text-faint is used for
+   hints and never for a sentence anyone needs.
 --------------------------------------------------------------------------- */
 
 @theme {
   /* -- Field ------------------------------------------------------------- */
-  --color-field: #070b10;
-  --color-field-2: #0c121a;
-  --color-text: #e6edf3;
-  --color-text-muted: #8a9ba8;
-
-  /* The one accent. Model outputs, predictions, estimates — nothing else.
-     Not links, not focus, not buttons, not decoration. The rule from the old
-     palette survives the repaint: a reader learns that this colour means the
-     machine is asserting something. */
-  --color-signal: #ff3d5a;
+  --color-field: #06080a;
+  --color-field-2: #0c1013;
+  --color-text: #e6edf0;
+  --color-text-strong: #f2f6f8;
+  --color-text-muted: #919699;
+  --color-text-faint: #767a7d;
+  --color-signal: #e63360;
 
   /* -- Type -------------------------------------------------------------- */
-  /* Literata for prose, a sans stack for labels, readouts and navigation.
-     Serif on a dark instrument field is the thing that stops this looking
-     like every other dark AI site. */
-  /* var(--font-literata), not the literal name.
-     Astro's <Font> declares the face under a hashed family — Literata-<hash> —
-     and exposes that name, plus a metric-matched local fallback, in the
-     variable it is asked for. Naming "Literata" directly here matched no
-     @font-face at all, so every page quietly rendered in Georgia and the woff2
-     that was committed, subset and hashed was never fetched once.
-     The fallback in the var() covers the Font component failing outright. */
+  /* Literata, light, for display and for names. Space Grotesk for
+     everything a person reads at text size — the canvas sets its paragraphs
+     in the grotesk and keeps the serif for the moments that carry weight.
+
+     Both are var()s of the hashed families Astro's <Font> declares. Naming
+     "Literata" literally here once matched no @font-face at all and the site
+     rendered in Georgia for a whole branch. */
   --font-serif: var(--font-literata, Georgia, serif);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: var(--font-space-grotesk, system-ui, -apple-system, "Segoe UI", sans-serif);
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
   /* -- Spacing ----------------------------------------------------------- */
-  /* Four-pixel base, not linear past --space-4. Tailwind's calc spacing is
-     cleared so an undefined step generates nothing. */
   --spacing: initial;
   --spacing-1: 4px;
   --spacing-2: 8px;
@@ -61,6 +55,7 @@
   --spacing-4: 16px;
   --spacing-5: 24px;
   --spacing-6: 32px;
+  --spacing-7: 44px;
   --spacing-8: 48px;
   --spacing-10: 64px;
   --spacing-12: 96px;
@@ -74,26 +69,27 @@
   --breakpoint-lg: 1180px;
 
   /* -- Radii ------------------------------------------------------------- */
-  /* One radius now, not two. */
+  /* Three, from the canvas: 2px on a button, 4px on a panel, a pill on a
+     tab. Nothing else is rounded. */
   --radius-*: initial;
   --radius-0: 0;
+  --radius-control: 2px;
   --radius-glass: 4px;
+  --radius-pill: 999px;
 
   /* -- Motion ------------------------------------------------------------ */
   --ease-*: initial;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* The type scale is responsive, so its utilities must resolve through a
-   variable that changes at 900px rather than a value frozen at build time. */
 @theme inline {
   --text-display: var(--size-display);
   --text-display--line-height: var(--lh-display);
-  --text-display--letter-spacing: -0.02em;
+  --text-display--letter-spacing: -0.025em;
 
   --text-title: var(--size-title);
   --text-title--line-height: var(--lh-title);
-  --text-title--letter-spacing: -0.01em;
+  --text-title--letter-spacing: -0.025em;
 
   --text-section: var(--size-section);
   --text-section--line-height: var(--lh-section);
@@ -106,53 +102,84 @@
 }
 
 :root {
-  /* -- Field, in the brief's spelling ------------------------------------ */
+  /* -- Field --------------------------------------------------------------- */
   --field: var(--color-field);
   --field-2: var(--color-field-2);
   --text: var(--color-text);
+  --text-strong: var(--color-text-strong);
   --text-muted: var(--color-text-muted);
+  --text-faint: var(--color-text-faint);
   --signal: var(--color-signal);
 
-  /* Glass. The fill is white at 4.5%, the edge white at 10%, and every glass
-     surface carries both. Never stack one over another: two layers double the
-     blur cost and wash the text underneath toward the surface colour. */
-  --surface: rgb(255 255 255 / 0.045);
-  --surface-edge: rgb(255 255 255 / 0.1);
-  --glass-blur: blur(16px) saturate(120%);
+  /* Panels. The canvas's panel is the raised ground at 62-70% over whatever
+     is behind it, blurred, with an ink hairline. One kind, never nested. */
+  --surface: rgb(12 16 19 / 0.7);
+  --surface-edge: rgb(230 237 240 / 0.14);
+  --glass-blur: blur(14px);
 
-  /* Hairline rules and grid marks. Decorative by construction at 1.13:1 —
-     never the only thing marking a boundary a reader has to perceive. */
-  --grid: rgb(255 255 255 / 0.06);
+  /* Hairlines. The canvas rules every section with ink at 10%. */
+  --grid: rgb(230 237 240 / 0.1);
+  /* The ink at the alpha steps the canvas draws with. Hairlines and
+     underlines, not text — text has its own tokens above. */
+  --ink-18: rgb(230 237 240 / 0.18);
+  --ink-28: rgb(230 237 240 / 0.28);
+  --ink-40: rgb(230 237 240 / 0.4);
+  --ink-42: rgb(230 237 240 / 0.42);
+  --ink-72: rgb(230 237 240 / 0.72);
+  /* The stronger edge on an outlined button. */
+  --edge-strong: var(--ink-28);
+  /* The hatch inside an empty portrait frame. */
+  --hatch: rgb(230 237 240 / 0.05);
+  /* A dark veil over a 3D field so type stays readable in front of it. */
+  --veil: rgb(6 8 10 / 0.7);
+  --veil-35: rgb(6 8 10 / 0.35);
+  --veil-62: rgb(6 8 10 / 0.62);
+  --veil-80: rgb(6 8 10 / 0.8);
+  --veil-86: rgb(6 8 10 / 0.86);
+  --veil-40: rgb(6 8 10 / 0.4);
+  --veil-10: rgb(6 8 10 / 0.1);
+  --veil-solid: rgb(6 8 10 / 0.96);
+  --veil-clear: rgb(6 8 10 / 0);
+  /* The glow behind the hands: the canvas's radial from #10151a to the field. */
+  --hero-glow: #10151a;
+  --hero-glow-2: #090c0f;
 
   /* -- Type scale, mobile first ------------------------------------------ */
-  --size-display: 34px;
-  --lh-display: 1.1;
-  --size-title: 27px;
-  --lh-title: 1.2;
-  --size-section: 21px;
-  --lh-section: 1.3;
-  --size-body: 17px;
-  --lh-body: 1.6;
-  --size-small: 14px;
-  --lh-small: 1.5;
+  --size-display: 40px;
+  --lh-display: 1.02;
+  --size-title: 34px;
+  --lh-title: 1.05;
+  --size-section: 24px;
+  --lh-section: 1.15;
+  --size-name: 19px;
+  --lh-name: 1.3;
+  --size-body: 16px;
+  --lh-body: 1.62;
+  --size-small: 13.5px;
+  --lh-small: 1.55;
 
-  --opsz-display: 34;
-  --opsz-title: 27;
-  --opsz-section: 21;
-  --opsz-body: 17;
+  --opsz-display: 40;
+  --opsz-title: 34;
+  --opsz-section: 24;
+  --opsz-name: 19;
+  --opsz-body: 16;
   --opsz-small: 14;
 
-  --weight-display: 400;
-  --weight-title: 400;
-  --weight-section: 500;
+  /* Light display, regular everywhere else. The canvas sets every hero and
+     page title at 300. */
+  --weight-display: 300;
+  --weight-title: 300;
+  --weight-section: 400;
+  --weight-name: 400;
   --weight-body: 400;
   --weight-small: 400;
 
-  /* Labels and readouts are sans, and sit a step tighter and heavier than
-     prose so they read as instrument furniture rather than as sentences. */
-  --label-size: 12px;
-  --label-tracking: 0.02em;
+  /* Labels: 12.5px grotesk, medium. The 11.5px "micro" is the canvas's
+     smallest size, for a row label or a key. */
+  --label-size: 12.5px;
+  --label-tracking: 0;
   --label-weight: 500;
+  --micro-size: 11.5px;
 
   /* -- Spacing ------------------------------------------------------------ */
   --space-1: 4px;
@@ -161,112 +188,110 @@
   --space-4: 16px;
   --space-5: 24px;
   --space-6: 32px;
+  --space-7: 44px;
   --space-8: 48px;
   --space-10: 64px;
   --space-12: 96px;
   --space-16: 128px;
   --space-20: 192px;
 
-  --rhythm-section: var(--space-12);
-  --rhythm-heading: var(--space-6);
-  --rhythm-paragraph: var(--space-5);
+  /* Sections are ruled, not spaced: 40-44px of padding and a hairline. */
+  --rhythm-section: var(--space-8);
+  --rhythm-heading: var(--space-5);
+  --rhythm-paragraph: var(--space-4);
 
   /* -- Layout ------------------------------------------------------------- */
-  --measure: 66ch;
-  --page-max: 1180px;
-  /* The text column beside the hero artefact. Wide enough for the title to
-     break where it should and for a TODO to hold four lines, narrow enough to
-     leave the trace the room it needs. */
-  --hero-text: 420px;
-  --margin-col: 220px;
-  --gutter: var(--space-6);
+  --measure: 60ch;
+  --page-max: 1440px;
+  --hero-text: 440px;
+  --margin-col: 200px;
+  --aside-col: 300px;
+  --gutter: var(--space-4);
+
+  /* The header band on a content page: a field with the title at the foot. */
+  --band-height: 280px;
+  /* The closing band's height, the header's, and the small field in a row's
+     aside — all read off the canvas. */
+  --close-height: 300px;
+  --header-height: 74px;
+  /* The hero frame: the viewport less the header, never under 640px, with
+     room at the foot for the bar at its tallest (three lines on a phone). */
+  --hero-height: calc(100svh - var(--header-height));
+  --hero-min: 640px;
+  --hero-bar-space: 200px;
+  --hero-bar-height: 200px;
+  --aside-field-height: 150px;
+  /* The hero line in 2a is 54px, not the 80px of 1a: the hands carry the
+     frame and the line sits under them. */
+  --size-hero: 54px;
+  --nav-size: 13px;
+  --dot-size: 7px;
+  --hatch-step: 6px;
 
   /* -- Borders, radii ----------------------------------------------------- */
   --rule-width: 1px;
   --radius-0: 0;
+  --radius-control: 2px;
   --radius-glass: 4px;
+  --radius-pill: 999px;
 
   /* -- Motion ------------------------------------------------------------- */
-  /* 200-400ms. Anything faster reads as a glitch on a dark field; anything
-     slower reads as lag. */
-  --dur-fast: 200ms;
+  --dur-fast: 120ms;
   --dur-base: 280ms;
   --dur-slow: 400ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* -- States ------------------------------------------------------------- */
-  /* Focus is --text, not --signal: --signal means the model asserted
-     something, and a focus ring is not that. */
   --focus-width: 2px;
   --focus-offset: 2px;
   --underline-offset: 0.15em;
 
   /* -- Artefacts ---------------------------------------------------------- */
-  /* Shared by all four. An artefact draws its own data in --signal and
-     everything else in --text or --text-muted. */
   --mark-size: 20px;
   --curve-width: 2px;
   --artefact-min-height: 260px;
-
-  /* The smallest a control may be in its short dimension. 44px is the figure
-     both platform guidelines land on, and it is a floor rather than a scale
-     step, which is why it is here and not in the spacing ramp. */
   --tap-min: 44px;
-
-  /* How tall the 3D view of the network stands. Tall enough that depth is
-     readable — a flat-looking 3D graph is worse than the diagram it replaced —
-     and short enough to sit inside a section on a phone. */
   --network3d-height: 420px;
   --network3d-max: 820px;
-
-  /* The widest the photograph in artefact 3 is drawn. Past this the 300x200
-     working field is upscaled far enough to look soft, and the artefact starts
-     reading as a picture rather than as a reading. */
   --saliency-max: 640px;
-
-  /* The empty band above each line of the token row in artefact 4, where the
-     attention curves are drawn. It has to clear the tallest arc the script
-     draws, which lifts at most 54px, with air above it. */
   --arc-band: 64px;
 }
 
-/* Phones get a narrower gutter.
-
-   32px on each side of a 360px screen is 18 per cent of it, and the trace pays
-   for that twice: the ten attempt targets share whatever width is left, and at
-   a 32px gutter each one came out 22.5px wide against a 24px minimum. 16px is
-   the ordinary phone gutter and it puts them at 25.7px. */
-@media (max-width: 639px) {
+@media (min-width: 640px) {
   :root {
-    --gutter: var(--space-4);
+    --gutter: var(--space-6);
   }
 }
 
 @media (min-width: 900px) {
   :root {
-    --size-display: 56px;
-    --lh-display: 1.05;
-    --size-title: 36px;
-    --lh-title: 1.15;
-    --size-section: 24px;
-    --lh-section: 1.25;
-    --size-body: 18px;
-    --lh-body: 1.65;
-    --size-small: 15px;
-    --lh-small: 1.5;
+    --size-display: 54px;
+    --lh-display: 1.02;
+    --size-title: 52px;
+    --lh-title: 1;
+    --size-section: 30px;
+    --lh-section: 1.15;
+    --size-body: 17px;
+    --lh-body: 1.62;
+    --size-small: 13.5px;
 
-    --opsz-display: 56;
-    --opsz-title: 36;
-    --opsz-section: 24;
-    --opsz-body: 18;
-    --opsz-small: 15;
+    --opsz-display: 54;
+    --opsz-title: 52;
+    --opsz-section: 30;
+    --opsz-body: 17;
 
-    /* Was --space-20 (192px), set when the site was one page whose sections
-       were all dense. On the content pages, where a section can be a heading
-       and one paragraph, 192px top and bottom meant nearly four hundred pixels
-       of nothing between two sentences. */
-    --rhythm-section: var(--space-16);
+    --gutter: var(--space-7);
     --network3d-height: 520px;
+    --hero-bar-space: 104px;
+    --hero-bar-height: 66px;
+  }
+}
+
+@media (min-width: 1180px) {
+  :root {
+    --size-display: 80px;
+    --lh-display: 0.98;
+    --opsz-display: 72;
   }
 }
 
@@ -275,10 +300,9 @@
 --------------------------------------------------------------------------- */
 
 body {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--size-body);
   line-height: var(--lh-body);
-  font-variation-settings: "opsz" var(--opsz-body), "wght" var(--weight-body);
   background-color: var(--field);
   color: var(--text);
   -webkit-font-smoothing: antialiased;

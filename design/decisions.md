@@ -649,3 +649,42 @@ given the blanket, the rest is irrelevant — applied to the type.
 
 The side benefit is that the 3D layer needs neither `three-spritetext` nor a
 texture atlas to say "Prior knowledge".
+
+---
+
+## D-027 — The design canvas is the design
+
+**Status: adopted, 2026-09-14.** Kaung supplied a Claude Design canvas —
+`MINN HAI LAB UI Design/MINN HAI LAB.dc.html` — and asked for the whole UI
+changed to it. It supersedes `DESIGN.md` and the brief's aesthetic override
+(D-023) on every visual point. Where it and `CLAUDE.md` disagree, the canvas
+wins and the disagreement is written down (Q-25).
+
+What it specifies, read off the file and recorded in `tokens.css`:
+
+- **Field** `#06080A`; raised ground `#0C1013`; ink `#E6EDF0` at 1, .72, .62,
+  .55, .5 and .45; display `#F2F6F8`; one red. The canvas's red is `#D61A4A`,
+  which is 3.9:1 on the field; the site's is `#E63360`, the same hue at the
+  darkest lightness that clears 4.5:1, so a 12px readout in it is legible.
+- **Type** Literata at weight 300 for display and names; Space Grotesk for
+  every paragraph, label, control and navigation link. Body 17px, small
+  13.5px, label 12.5px, micro 11.5px. The hero line is 54px in 2a and 80px in
+  1a; page titles 52px; programme names 30px.
+- **Layout** full-bleed sections ruled with a 10% ink hairline, 44px side
+  padding on a wide screen, rows of `200px | 1fr | 300px`, content-page
+  header bands of 280px with a 3D field behind a veil, a 300px closing band.
+- **Radii** 2px on a button, 4px on a panel, a pill on a tab. Nothing else.
+- **Motion** a 7px status light that breathes; fields that turn slowly and
+  answer the cursor; the reach, which answers the cursor's distance from the
+  centre. All of it still under `prefers-reduced-motion`.
+
+What the canvas leaves to judgement, and what was decided:
+
+- The canvas is desktop-only. Below 900px the row collapses to one column, the
+  band's field fills the band behind a stronger veil, the header's button
+  steps out, and the hero's copy sits on a dark rise so it reads over the
+  hands.
+- The canvas's lattice field is replaced by its bayes field everywhere, for
+  the reason in Q-25.
+- The canvas's "Join" page is a section on `/about`, alongside contact,
+  because both are gaps waiting on the same person.

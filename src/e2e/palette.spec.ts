@@ -12,18 +12,25 @@ import { expect, test } from '@playwright/test';
  *
  * So this reads what the browser actually downloads.
  *
- * The palette is the dark instrument field from the brief's aesthetic
- * override, which replaces DESIGN.md's six light values. The conflict is
- * logged as Q-19.
+ * The palette is the design canvas's (D-027), which supersedes both DESIGN.md
+ * and the brief's earlier override. Q-19 and Q-25 record the lineage.
  */
 
-/** The field itself. Five values, and there is no sixth. */
+/**
+ * The design canvas's palette, as tokens.css declares it. The field, the
+ * raised ground, the ink at three solid steps, the display white, one red,
+ * and the two stops of the glow behind the hero's hands.
+ */
 const PALETTE = new Set([
-  '#070b10', // --field
-  '#0c121a', // --field-2
-  '#e6edf3', // --text
-  '#8a9ba8', // --text-muted
-  '#ff3d5a', // --signal
+  '#06080a', // --field
+  '#0c1013', // --field-2
+  '#e6edf0', // --text
+  '#f2f6f8', // --text-strong
+  '#919699', // --text-muted
+  '#767a7d', // --text-faint
+  '#e63360', // --signal
+  '#10151a', // --hero-glow
+  '#090c0f', // --hero-glow-2
 ]);
 
 /**
@@ -51,24 +58,25 @@ const VIRIDIS = new Set([
 const TRANSPARENT = new Set(['#0000', '#00000000']);
 
 /**
- * White, but only ever translucent.
+ * The ink, the field and the raised ground at an alpha — but only at an alpha.
  *
- * The glass is white at a few per cent over the field: --surface at 0.045,
- * --surface-edge at 0.10, --grid at 0.06. The minifier writes those as
- * #ffffff0c and friends, so they arrive here as white with an alpha channel.
- *
- * Opaque #ffffff still fails. A solid white anywhere on this field would be a
- * hole in it, and that is worth failing over — so the alpha is checked rather
- * than the base colour allowlisted.
+ * The canvas draws every hairline, veil and panel as one of those three at
+ * some opacity: ink at .1 to .72 for rules and edges, the field at .35 to .96
+ * for the veils over a 3D field, the raised ground at .7 for a panel. The
+ * minifier writes those as #e6edf01a and friends, so they arrive here with an
+ * alpha channel, and the alpha is what is checked: an opaque colour still has
+ * to be in the palette above.
  */
-function isTranslucentWhite(raw: string): boolean {
+const TRANSLUCENT_BASES = new Set(['e6edf0', '06080a', '0c1013']);
+
+function isTranslucentInk(raw: string): boolean {
   const value = raw.slice(1).toLowerCase();
   const hasAlpha = value.length === 4 || value.length === 8;
   if (!hasAlpha) return false;
   const expanded = value.length === 4
     ? value.split('').map((c) => c + c).join('')
     : value;
-  return expanded.slice(0, 6) === 'ffffff' && expanded.slice(6) !== 'ff';
+  return TRANSLUCENT_BASES.has(expanded.slice(0, 6)) && expanded.slice(6) !== 'ff';
 }
 
 /**
@@ -132,7 +140,7 @@ for (const path of PAGES) {
           const raw = match[0];
           if (TRANSPARENT.has(raw.toLowerCase())) continue;
           const base = normalise(raw);
-          if (isTranslucentWhite(raw)) continue;
+          if (isTranslucentInk(raw)) continue;
           if (!PALETTE.has(base) && !VIRIDIS.has(base)) found.set(base, raw);
         }
       }

@@ -9,13 +9,13 @@ import { expect, test } from '@playwright/test';
  * should rather than drifting. A failure here is a prompt to look, not
  * necessarily a bug.
  *
- * As measured, a cold visit to the home page is 98.1KB, of which 83.8KB is
- * Literata. Everything the site itself produces — HTML, CSS and the trace
- * island — is 14.3KB.
+ * As measured on the redesign (2026-09-14), a cold visit to the home page is
+ * about 163KB: 106KB of the two webfonts, a 35KB still for the hero, and
+ * 22KB of everything the site itself produces. The live hero scene arrives
+ * after that and is not in the number.
  *
- * That split is the useful part. One webfont costs six times the entire rest
- * of the site, which is worth knowing before anyone optimises the 3.3KB of
- * JavaScript.
+ * That split is still the useful part. The fonts cost five times the entire
+ * rest of the site.
  *
  * THE BUDGET IS PER PAGE, and it was not always.
  *
@@ -41,17 +41,16 @@ interface Budget {
 
 /** Measured 2026-09-13 on the built site, gzipped, plus headroom. */
 const BUDGETS: readonly Budget[] = [
-  // One island: the trace.
-  { path: '/', total: 112, site: 17 },
-  // Four artefacts, and the photograph once it is scrolled to. The 3D chunk is
-  // not in this number and islands.spec.ts fails if it ever is.
-  { path: '/research/', total: 135, site: 29 },
-  // No island. These should be almost entirely font and stylesheet; if one of
-  // them grows a script, that is the finding.
-  { path: '/people/', total: 106, site: 11 },
-  { path: '/learning/', total: 106, site: 11 },
-  { path: '/about/', total: 106, site: 11 },
-  { path: '/404.html', total: 106, site: 11 },
+  // The hero still (35KB webp), the trace, two fields, and the loader that
+  // brings the scene in after load. The scene itself is not in this number.
+  { path: '/', total: 190, site: 27 },
+  // Four artefacts, and the photograph once it is scrolled to.
+  { path: '/research/', total: 160, site: 35 },
+  // A field behind the header band, and on /learning the tabs.
+  { path: '/people/', total: 140, site: 18 },
+  { path: '/learning/', total: 140, site: 18 },
+  { path: '/about/', total: 140, site: 18 },
+  { path: '/404.html', total: 135, site: 13 },
 ];
 
 interface Weights {
@@ -65,8 +64,15 @@ async function weigh(
   path: string,
 ): Promise<Weights> {
   const byType: Record<string, number> = {};
+  let loaded = false;
+  page.on('load', () => {
+    loaded = true;
+  });
 
   page.on('response', async (response) => {
+    // After the load event, nothing counts: the hero's scene is an
+    // after-load import by design and is budgeted in islands.spec.ts.
+    if (loaded) return;
     const type = response.request().resourceType();
     try {
       const body = await response.body();
@@ -79,13 +85,17 @@ async function weigh(
     }
   });
 
-  await page.goto(path);
-  await page.waitForLoadState('networkidle');
+  /* To the load event, plus the fonts. The hero's scene is an after-load
+     import by design (Q-25) and is budgeted in islands.spec.ts; this is the
+     cost of what a reader waits on. */
+  await page.goto(path, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForTimeout(700);
+  await page.waitForTimeout(300);
 
   const total = Object.values(byType).reduce((a, b) => a + b, 0);
-  return { total, site: total - (byType.font ?? 0), byType };
+  // "site" is what this repository writes: HTML, CSS and script. Fonts and
+  // images are assets it carries.
+  return { total, site: total - (byType.font ?? 0) - (byType.image ?? 0), byType };
 }
 
 for (const budget of BUDGETS) {

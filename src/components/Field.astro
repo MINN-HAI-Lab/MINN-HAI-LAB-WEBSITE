@@ -1,0 +1,34 @@
+---
+/**
+ * A 3D field behind a band of the page. See src/lib/field.ts.
+ *
+ * Decorative in position, not in content: the bayes mode draws the lab's own
+ * network with its blanket lit, and a reader who stops to look can read every
+ * variable. With JavaScript off nothing draws and the veil in front of it
+ * simply sits on the field, which is the right fallback for something that
+ * carries no text of its own.
+ */
+interface Props {
+  mode: 'bayes' | 'grid';
+  class?: string;
+}
+const { mode, class: className } = Astro.props;
+---
+
+<div class:list={['field', className]} data-field-mode={mode} aria-hidden="true"></div>
+
+<script>
+  import { mountField } from '../lib/field.ts';
+
+  /* data-field-mode, not data-field: the language artefact already uses
+     data-field for its input wrapper, and the first version of this selector
+     mounted a 6,600px canvas inside it. */
+  for (const host of document.querySelectorAll<HTMLElement>('[data-field-mode]')) {
+    const mode = host.dataset.fieldMode === 'grid' ? 'grid' : 'bayes';
+    try {
+      mountField(host, mode);
+    } catch (error) {
+      console.error('A background field could not start.', error);
+    }
+  }
+</script>

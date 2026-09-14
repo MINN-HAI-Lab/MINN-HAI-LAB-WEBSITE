@@ -27,8 +27,14 @@ import { expect, test } from '@playwright/test';
  *  click-to-load rather than loaded with the page. */
 const CLICK_TO_LOAD_THRESHOLD = 100 * 1024;
 
-/** Pages carrying a live artefact, and so allowed to ship script. */
-const ISLAND_PAGES = new Set(['/', '/research/']);
+/**
+ * Every page now ships a little script: the 3D field behind each header band
+ * is drawn by one, and the learning page's tabs by another. What the rule
+ * still forbids is a page whose script, before the load event, is anything
+ * like the click-to-load threshold — a stray Three.js import would be caught
+ * here as a hundred-fold jump.
+ */
+const ISLAND_PAGES = new Set(['/', '/research/', '/people/', '/learning/', '/about/']);
 
 const PAGES = [
   { name: 'home', path: '/' },
@@ -79,7 +85,12 @@ for (const { name, path } of PAGES) {
 
     test('every byte of script stays under the click-to-load threshold', async ({ page }) => {
       const bodies: Buffer[] = [];
+      let loaded = false;
+      page.on('load', () => {
+        loaded = true;
+      });
       page.on('response', async (response) => {
+        if (loaded) return;
         if (response.request().resourceType() !== 'script') return;
         try {
           bodies.push(await response.body());
@@ -89,8 +100,11 @@ for (const { name, path } of PAGES) {
         }
       });
 
-      await page.goto(path);
-      await page.waitForLoadState('networkidle');
+      /* Measured to the load event, not to network idle. The hero's scene is
+         a deliberate after-load import (Q-25) and is checked on its own terms
+         below; what this guards is the script a reader waits on. */
+      await page.goto(path, { waitUntil: 'load' });
+      await page.waitForTimeout(100);
 
       const total = bodies.reduce((sum, body) => sum + gzipSync(body).length, 0);
       expect(
@@ -223,5 +237,59 @@ test.describe('islands: the 3D graph stays out of the first paint', () => {
 
     const after = requested.filter((path) => path.includes('network-3d'));
     expect(after.length, 'the click should fetch the 3D chunk').toBeGreaterThan(0);
+  });
+});
+
+
+test.describe('islands: the hero scene stays out of the first paint', () => {
+  test('Three.js is never referenced by the served HTML and only arrives after load', async ({
+    page,
+    request,
+  }) => {
+    /* The HTML as served, not the DOM: Vite's dynamic-import helper adds its
+       own modulepreload links to the document at the moment of the import,
+       which is fine — the document a reader downloads must not carry them. */
+    const html = await (await request.get('/')).text();
+    expect(html, 'the served HTML references the hero scene or Three.js').not.toMatch(/hands\.|three\.module/);
+
+    const requested: Array<{ path: string; beforeLoad: boolean }> = [];
+    let loaded = false;
+    page.on('request', (r) => requested.push({ path: new URL(r.url()).pathname, beforeLoad: !loaded }));
+    page.on('load', () => {
+      loaded = true;
+    });
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/', { waitUntil: 'load' });
+    await page.waitForTimeout(3500);
+
+    const scene = requested.filter((r) => /hands\.|three\.module/.test(r.path));
+    expect(
+      scene.filter((r) => r.beforeLoad).map((r) => r.path),
+      'the hero scene was requested before the load event',
+    ).toEqual([]);
+
+    /* Whether it arrives at all depends on the machine: the hero declines a
+       software renderer, and a headless browser usually has exactly that. The
+       hero says what it decided, and the two honest outcomes are both
+       accepted — loaded after load, or declined for a stated reason. */
+    const state = await page.locator('[data-hero]').getAttribute('data-scene');
+    expect(['live', 'software-gl', 'still', 'save-data']).toContain(state);
+    if (state === 'live') {
+      expect(scene.length, 'the hero reports live but never fetched the scene').toBeGreaterThan(0);
+    } else {
+      expect(scene, `the hero declined (${state}) but fetched the scene anyway`).toEqual([]);
+    }
+  });
+
+  test('a phone gets the still and never the scene', async ({ page }) => {
+    const requested: string[] = [];
+    page.on('request', (r) => requested.push(new URL(r.url()).pathname));
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/', { waitUntil: 'load' });
+    await page.waitForTimeout(3000);
+    expect(requested.filter((p) => /hands\.|three\.module/.test(p))).toEqual([]);
+    await expect(page.locator('[data-poster]')).toBeVisible();
+    expect(await page.locator('[data-hero]').getAttribute('data-scene')).toBe('small');
   });
 });

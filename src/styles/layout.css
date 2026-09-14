@@ -1,8 +1,11 @@
 /* ---------------------------------------------------------------------------
-   layout.css — the page shell on a dark instrument field.
+   layout.css — the page shell, in the language of the design canvas.
 
-   Breakpoints are 640, 900 and 1180. Three, and no fourth: any media query in
-   this codebase uses one of those numbers.
+   Full-bleed sections ruled with hairlines, 44px of side padding on a wide
+   screen, panels on the raised ground, buttons with a 2px radius. The page is
+   a column of ruled bands rather than a centred column with air around it.
+
+   Breakpoints are 640, 900 and 1180. Three, and no fourth.
 --------------------------------------------------------------------------- */
 
 *,
@@ -13,8 +16,6 @@
 
 html {
   scroll-padding-block-start: var(--space-6);
-  /* Tell the browser the page is dark so form controls, scrollbars and the
-     address bar follow, rather than flashing white. */
   color-scheme: dark;
 }
 
@@ -46,18 +47,10 @@ main {
   max-width: var(--measure);
 }
 
-/* -- Glass ----------------------------------------------------------------- */
+/* -- Panels ---------------------------------------------------------------- */
 
-/* One glass primitive. Fill, 1px edge, 4px radius, blur.
-
-   Never nest one inside another. Two layers double the blur cost — which is
-   what threatens the performance floor on mobile — and wash whatever is behind
-   toward the surface colour, so text on the inner layer loses the contrast the
-   outer layer was measured for.
-
-   Glass is for panels that hold live output. Body text sits directly on the
-   field, where it has 16.7:1 rather than 15.4:1 and costs nothing to
-   composite. */
+/* One panel primitive: the raised ground at 70%, blurred, with an ink
+   hairline and a 4px radius. Never nested. */
 .glass {
   position: relative;
   background-color: var(--surface);
@@ -67,13 +60,8 @@ main {
   backdrop-filter: var(--glass-blur);
 }
 
-/* Where backdrop-filter is unsupported the fill alone is nearly invisible
-   against the field and the panel loses its boundary. Deepen it so the edge
-   still reads.
-
-   lint-allow-px: the 1px inside a feature query is a probe, not a design
-   value. @supports needs some length to ask the question with and any would
-   do; it never reaches the page. */
+/* lint-allow-px: the 1px inside a feature query is a probe, not a design
+   value. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass {
     background-color: var(--field-2);
@@ -82,23 +70,16 @@ main {
 
 /* -- Sections -------------------------------------------------------------- */
 
+/* Every section is a ruled band. */
 .section {
   padding-block: var(--rhythm-section);
+  border-block-end: var(--rule-width) solid var(--grid);
 }
 
 .section--raised {
   background-color: var(--field-2);
-  border-block-start: var(--rule-width) solid var(--grid);
-  border-block-end: var(--rule-width) solid var(--grid);
 }
 
-/* Vertical rhythm inside a section.
-
-   Content sits in a `.page` column, so the rhythm has to reach one level
-   deeper than the section itself — the first version of this rule only matched
-   direct children of `.section` and every paragraph on the content pages ran
-   straight into the next one with no space at all. It looked like a stylesheet
-   that had failed to load. */
 .section > :is(h1, h2, h3) + *,
 .section > .page > :is(h1, h2, h3) + * {
   margin-block-start: var(--rhythm-heading);
@@ -108,9 +89,7 @@ main {
   margin-block-start: var(--rhythm-paragraph);
 }
 
-/* Columns that set their own gap opt out: a flex gap and a margin add up, and
-   the result is a section with twice the air it was designed with. */
-.section > .page:is(.area, .statlab, .hero__inner) > * + * {
+.section > .page:is(.area, .cols, .split) > * + * {
   margin-block-start: 0;
 }
 
@@ -118,15 +97,234 @@ main {
   margin-block-start: var(--rhythm-paragraph);
 }
 
+/* -- Header band ----------------------------------------------------------- */
+
+/* The canvas opens each content page with a 280px field — the network or the
+   plane drawn behind a veil — and the page title sitting at its foot. */
+.band {
+  position: relative;
+  min-height: var(--band-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-block-end: var(--rule-width) solid var(--grid);
+}
+
+.band__field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Below 900px the field keeps to the top of the band and the title has the
+   foot to itself; the network's labels were sitting on the title. */
+@media (width < 900px) {
+  .band__field {
+    inset-block-end: 42%;
+  }
+}
+
+/* On a wide screen the field sits in the right half, as in the canvas's 1a,
+   and the veil fades from solid on the left to clear on the right — so the
+   title has a clean ground and the network has room. */
+@media (width >= 900px) {
+  .band__field {
+    inset-inline-start: 42%;
+  }
+
+  .band__veil {
+    background-image: linear-gradient(
+      90deg,
+      var(--veil-solid) 0%,
+      var(--veil) 38%,
+      var(--veil-clear) 60%
+    ),
+    linear-gradient(180deg, var(--veil-clear) 60%, var(--veil-80) 100%);
+  }
+}
+
+.band__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* Below 900px the field is behind the title, so the lower half is near
+     solid; the field shows through the top half only. */
+  background-image: linear-gradient(
+    180deg,
+    var(--veil) 0%,
+    var(--veil-35) 30%,
+    var(--veil-solid) 62%,
+    var(--veil-solid) 100%
+  );
+}
+
+.band__text {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--space-7) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.band__lede {
+  max-width: 54ch;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* -- Programme rows -------------------------------------------------------- */
+
+/* A row: a 200px label column, the body, and a 300px aside. Ruled beneath.
+   The canvas draws every research programme this way. */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  padding-block: var(--space-8);
+  border-block-end: var(--rule-width) solid var(--grid);
+}
+
+.row:last-child {
+  border-block-end: none;
+}
+
+.row__label {
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+.row__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.row__aside {
+  min-width: 0;
+}
+
+/* A full-width thing under the row's three columns — a live artefact. */
+.row__wide {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+@media (width >= 900px) {
+  .row {
+    grid-template-columns: var(--margin-col) minmax(0, 1fr) var(--aside-col);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .row--no-aside {
+    grid-template-columns: var(--margin-col) minmax(0, 1fr);
+  }
+}
+
+/* Tags under a row's prose: outlined, 2px radius, 12px. */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  color: var(--text-muted);
+  border: var(--rule-width) solid var(--ink-18);
+  border-radius: var(--radius-control);
+  padding: var(--space-1) var(--space-3);
+}
+
+/* -- Two columns and three columns ----------------------------------------- */
+
+/* A ruled split: content on the left, a raised aside on the right. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.split__main {
+  padding-block: var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  border-block-end: var(--rule-width) solid var(--grid);
+}
+
+.split__aside {
+  padding-block: var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background-color: var(--surface);
+}
+
+@media (width >= 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr) var(--hero-text);
+  }
+
+  .split__main {
+    padding-inline-end: var(--space-7);
+    border-block-end: none;
+    border-inline-end: var(--rule-width) solid var(--grid);
+  }
+
+  .split__aside {
+    padding-inline-start: var(--space-7);
+  }
+}
+
+/* The canvas's three-column strip under the hero: a name and a line each. */
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.cols__item {
+  padding-block: var(--space-5);
+  border-block-end: var(--rule-width) solid var(--grid);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: inherit;
+}
+
+.cols__item:last-child {
+  border-block-end: none;
+}
+
+@media (width >= 900px) {
+  .cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cols__item {
+    padding-inline: var(--space-7);
+    border-block-end: none;
+    border-inline-end: var(--rule-width) solid var(--grid);
+  }
+
+  .cols__item:first-child {
+    padding-inline-start: 0;
+  }
+
+  .cols__item:last-child {
+    border-inline-end: none;
+  }
+}
+
 /* -- Scroll reveal --------------------------------------------------------- */
 
-/* One entrance per section, once, never repeating. The script adds
-   .is-revealed and then stops observing, so nothing re-animates on the way
-   back up.
-
-   The hidden state is applied by script rather than in CSS, so with JavaScript
-   off every section is simply visible. Nothing is hidden that could fail to be
-   revealed. */
 [data-reveal].is-pending {
   opacity: 0;
   transform: translateY(var(--space-4));
@@ -142,13 +340,10 @@ main {
 
 /* -- Focus ----------------------------------------------------------------- */
 
-/* Visible on every interactive element, never the browser default. --text
-   rather than --signal: --signal means the model asserted something, and a
-   focus ring is not that. */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: var(--focus-width) solid var(--text);
   outline-offset: var(--focus-offset);
-  border-radius: var(--radius-glass);
+  border-radius: var(--radius-control);
 }
 
 /* -- Links ----------------------------------------------------------------- */
@@ -157,7 +352,7 @@ main {
 a.link {
   color: var(--text);
   text-decoration: underline;
-  text-decoration-color: var(--text-muted);
+  text-decoration-color: var(--ink-40);
   text-decoration-thickness: var(--rule-width);
   text-underline-offset: var(--underline-offset);
   transition: text-decoration-color var(--dur-fast) var(--ease-out);
@@ -168,33 +363,98 @@ a.link:hover {
   text-decoration-color: var(--text);
 }
 
+/* The canvas's quiet link: ink text with a hairline under it, no colour. */
+.link--quiet {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  color: var(--text);
+  text-decoration: none;
+  border-block-end: var(--rule-width) solid var(--ink-40);
+  padding-block-end: var(--focus-offset);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.link--quiet:hover {
+  border-color: var(--text);
+}
+
 /* -- Buttons --------------------------------------------------------------- */
 
-/* One button style: glass edge, sans label. Not --signal — a control is not a
-   model output. */
+/* Two buttons from the canvas: ink fill with field text, and an outline.
+   Both 2px radius, 13.5px grotesk. Not --signal — a control is not a model
+   output. */
 .button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--surface);
-  border: var(--rule-width) solid var(--surface-edge);
-  border-radius: var(--radius-glass);
+  padding: var(--space-3) var(--space-5);
+  min-height: var(--tap-min);
+  background-color: transparent;
+  border: var(--rule-width) solid var(--edge-strong);
+  border-radius: var(--radius-control);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-tracking);
+  font-size: var(--size-small);
+  font-weight: 400;
+  line-height: 1.2;
+  text-decoration: none;
   cursor: pointer;
   transition:
     background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
 }
 
 .button:hover,
 .button[aria-pressed='true'] {
-  background-color: var(--surface-edge);
-  border-color: var(--text-muted);
+  border-color: var(--text);
+}
+
+.button--fill {
+  background-color: var(--text);
+  border-color: var(--text);
+  color: var(--field);
+  font-weight: 500;
+}
+
+.button--fill:hover {
+  background-color: var(--text-strong);
+  border-color: var(--text-strong);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* A pill tab, from the canvas's learning panel. */
+.tab {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-4);
+  min-height: var(--space-8);
+  cursor: pointer;
+  border: var(--rule-width) solid var(--ink-18);
+  background: transparent;
+  color: var(--text-muted);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.tab:hover {
+  color: var(--text);
+  border-color: var(--ink-42);
+}
+
+.tab[aria-selected='true'] {
+  background-color: var(--text);
+  color: var(--field);
+  border-color: var(--text);
 }
 
 /* -- Skip link ------------------------------------------------------------- */
@@ -205,40 +465,23 @@ a.link:hover {
   inset-inline-start: 0;
   z-index: 100;
   padding: var(--space-3) var(--space-4);
-  background-color: var(--field-2);
-  color: var(--text);
-  border: var(--rule-width) solid var(--text);
-  border-radius: var(--radius-glass);
+  background-color: var(--text);
+  color: var(--field);
   font-family: var(--font-sans);
   font-size: var(--label-size);
+  font-weight: var(--label-weight);
   text-decoration: none;
-  transform: translateY(-120%);
+  transform: translateY(-100%);
 }
 
-.skip-link:focus-visible {
-  transform: translateY(0);
-}
-
-/* main takes tabindex="-1" so the skip link can move focus to it, but it is a
-   landmark rather than a control and ringing the whole page would be noise. */
-main:focus,
-main:focus-visible {
-  outline: none;
-}
-
-/* -- Hairlines ------------------------------------------------------------- */
-
-.rule {
-  border: 0;
-  border-block-start: var(--rule-width) solid var(--grid);
-  margin: 0;
+.skip-link:focus {
+  transform: none;
 }
 
 /* -- Visually hidden ------------------------------------------------------- */
 
 /* lint-allow-px: the clip rectangle is an accessibility idiom, not a design
-   value. It has to be a real one-pixel box for screen readers to treat the
-   content as rendered; a spacing token here would be meaningless. */
+   value. */
 .visually-hidden {
   position: absolute;
   inline-size: 1px;
@@ -253,83 +496,68 @@ main:focus-visible {
 
 /* -- TODO markers ---------------------------------------------------------- */
 
-/* CLAUDE.md: a visible gap is correct, a plausible fabrication is a serious
-   bug. These are meant to be seen. --text on a raised field with a heavy
-   leading rule; never --signal, which means a model asserted something. */
-/* No margin of its own. Every place a TODO appears is a column that already
-   sets its own spacing — a flex gap in the hero, the footer and a people slot,
-   the flow rhythm on the content pages — and a margin on top of a gap is the
-   two adding up. In the hero that made seventy pixels of nothing between two
-   short blocks. */
+/* The canvas draws a gap as a 3px ink rule, a raised fill and 13.5px grotesk.
+   Never --signal: that means the model asserted something. */
 .todo {
   display: block;
   margin-block: 0;
-  padding: var(--space-4);
-  background-color: var(--field-2);
-  border-inline-start: calc(var(--rule-width) * 3) solid var(--text-muted);
-  border-radius: var(--radius-glass);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--surface);
+  border-inline-start: calc(var(--rule-width) * 3) solid var(--ink-40);
+  border-radius: calc(var(--rule-width) * 3);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: var(--size-small);
   line-height: var(--lh-small);
-}
-
-/* -- Reduced motion -------------------------------------------------------- */
-
-/* Transitions are removed rather than zeroed on a transform, which produces a
-   jump instead of removing the motion. The reveal resolves to its finished
-   state: the script never adds .is-pending when motion is reduced, so nothing
-   starts hidden in the first place. */
-@media (prefers-reduced-motion: reduce) {
-  .prose a,
-  a.link,
-  .button {
-    transition: none;
-  }
-
-  [data-reveal].is-revealed {
-    transition: none;
-  }
+  max-width: 66ch;
 }
 
 /* -- Site header ----------------------------------------------------------- */
 
-/* Bounded by a hairline, not a fill. The header sits on the field like
-   everything else; glass is reserved for panels holding live output. */
+/* Name left, links and one outlined button right. Ruled beneath. On the
+   home page it sits over the 3D field, so its ground is the veil. */
 .site-header {
   border-block-end: var(--rule-width) solid var(--grid);
+  background-color: var(--veil-80);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  position: relative;
+  z-index: 10;
 }
 
 .site-header__inner {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-3) var(--space-6);
-  padding-block: var(--space-5);
+  padding-block: var(--space-4);
 }
 
-/* Serif, because the lab's name is the one piece of prose in the header. */
+@media (width >= 900px) {
+  .site-header__inner {
+    padding-block: var(--space-5);
+  }
+}
+
 .site-header__name {
   font-family: var(--font-serif);
-  font-size: var(--size-section);
-  line-height: var(--lh-section);
-  font-variation-settings: "opsz" var(--opsz-section), "wght" var(--weight-section);
+  font-size: var(--size-name);
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" var(--opsz-name), "wght" 400;
   color: var(--text);
   text-decoration: none;
 }
 
 .site-header__name:hover {
-  text-decoration: underline;
-  text-decoration-thickness: var(--rule-width);
-  text-underline-offset: var(--underline-offset);
+  color: var(--text-strong);
 }
 
-/* Sans, because navigation is furniture. */
 .site-header__nav {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3) var(--space-5);
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -337,9 +565,7 @@ main:focus-visible {
 
 .site-header__link {
   font-family: var(--font-sans);
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-tracking);
+  font-size: var(--nav-size);
   color: var(--text-muted);
   text-decoration: none;
   transition: color var(--dur-fast) var(--ease-out);
@@ -354,21 +580,31 @@ main:focus-visible {
   color: var(--text);
   text-decoration: underline;
   text-decoration-thickness: var(--rule-width);
-  text-underline-offset: var(--underline-offset);
+  text-underline-offset: 0.35em;
+}
+
+.site-header__cta {
+  padding: var(--space-2) var(--space-4);
+  min-height: 0;
+  font-size: var(--label-size);
+}
+
+/* On a phone the header is two rows already; the button lives in the closing
+   band and the footer as well, so it steps out here. */
+@media (width < 640px) {
+  .site-header__cta {
+    display: none;
+  }
 }
 
 /* -- Site footer ----------------------------------------------------------- */
 
-/* No top margin. The last section on every page already ends with a full
-   section rhythm of padding, and adding another on top of it left a band of
-   nothing between the last sentence and the footer rule that looked like the
-   page had stopped rendering. */
 .site-footer {
   border-block-start: var(--rule-width) solid var(--grid);
 }
 
 .site-footer__inner {
-  padding-block: var(--space-8);
+  padding-block: var(--space-6);
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -392,8 +628,8 @@ main:focus-visible {
 
 .site-footer__name {
   font-family: var(--font-serif);
-  font-size: var(--size-section);
-  line-height: var(--lh-section);
+  font-size: var(--size-body);
+  font-variation-settings: "opsz" var(--opsz-body), "wght" 400;
   color: var(--text);
   margin: 0;
 }
@@ -404,14 +640,12 @@ main:focus-visible {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
+  gap: var(--space-2) var(--space-6);
 }
 
 .site-footer__link {
   font-family: var(--font-sans);
   font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-tracking);
   color: var(--text-muted);
   text-decoration: none;
   transition: color var(--dur-fast) var(--ease-out);
@@ -424,31 +658,61 @@ main:focus-visible {
   text-underline-offset: var(--underline-offset);
 }
 
-.site-footer__link:focus-visible {
-  outline: var(--focus-width) solid var(--text);
-  outline-offset: var(--focus-offset);
-  color: var(--text);
-}
-
 .site-footer__note {
   color: var(--text-muted);
   margin: 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .site-header__link,
-  .site-footer__link {
-    transition: none;
-  }
+/* -- The closing band ------------------------------------------------------ */
+
+/* "Bring us a problem that needs an explanation." A 300px plane behind a
+   radial veil, centred type, two buttons. */
+.close {
+  position: relative;
+  min-height: var(--close-height);
+  overflow: hidden;
+  border-block-end: var(--rule-width) solid var(--grid);
 }
 
-/* ---------------------------------------------------------------------------
-   Research areas
+.close__field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
 
-   A section on /research is a heading, a line of prose, a live artefact and
-   its publications. The artefact gets air on both sides so it reads as the
-   subject of the section rather than as an illustration dropped into it.
---------------------------------------------------------------------------- */
+.close__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: radial-gradient(
+    60% 70% at 50% 40%,
+    var(--veil-86) 0%,
+    var(--veil-40) 60%,
+    var(--veil-10) 100%
+  );
+}
+
+.close__text {
+  position: relative;
+  z-index: 2;
+  min-height: var(--close-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  text-align: center;
+  padding-block: var(--space-7);
+}
+
+.close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+/* -- Research areas (kept for the research page's paper lists) ------------- */
 
 .area {
   display: flex;
@@ -456,20 +720,12 @@ main:focus-visible {
   gap: var(--space-5);
 }
 
-.area > .artefact {
-  margin-block: var(--space-4);
-}
-
 .area__papers {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  margin-block-start: var(--space-5);
 }
 
-/* The visible gap where an area has no publications. Ruled like the list it
-   stands in for, so it reads as a deliberate empty list rather than as a
-   paragraph that wandered in. */
 .area__none {
   border-block-start: var(--rule-width) solid var(--grid);
   border-block-end: var(--rule-width) solid var(--grid);
@@ -477,60 +733,7 @@ main:focus-visible {
   color: var(--text-muted);
 }
 
-/* ---------------------------------------------------------------------------
-   Learning resources
-
-   A list of one today, and a list of many later — which is why it is a list
-   and not a callout. Each entry is a heading, a description and a way in.
---------------------------------------------------------------------------- */
-
-.resources {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-}
-
-.resources__item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-  padding-block-end: var(--space-8);
-  border-block-end: var(--rule-width) solid var(--grid);
-}
-
-.resources__item:last-child {
-  padding-block-end: 0;
-  border-block-end: none;
-}
-
-.resources__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.resources__action {
-  margin: 0;
-}
-
-@media (width >= 900px) {
-  .resources__item {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-8);
-  }
-
-  .resources__action {
-    flex: none;
-  }
-}
-
-/* A string quoted from a source document, inside a TODO. Not a blockquote —
-   it is a fragment being pointed at, not a passage being cited. */
+/* A string quoted from a source document, inside a TODO. */
 .quoted {
   color: var(--text);
   white-space: nowrap;
@@ -542,4 +745,45 @@ main:focus-visible {
 
 .quoted::after {
   content: "\201D";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header__link,
+  .site-footer__link,
+  .button,
+  .tab,
+  .link--quiet,
+  .prose a,
+  a.link {
+    transition: none;
+  }
+}
+
+/* -- Lists that are just lists ------------------------------------------- */
+
+.not-found__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+}
+
+/* Tabs and their panels, on the learning page. */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tabpanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: var(--aside-field-height);
+}
+
+.tabpanel[hidden] {
+  display: none;
 }

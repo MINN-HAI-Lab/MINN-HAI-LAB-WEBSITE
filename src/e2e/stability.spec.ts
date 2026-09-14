@@ -133,10 +133,13 @@ test.describe('fonts', () => {
     await page.waitForTimeout(500);
 
     const total = fonts.reduce((sum, f) => sum + f.size, 0);
+    /* Two faces now — Literata and Space Grotesk — so two files, one latin
+       subset each. A third would be a latin-ext subset pulled in by a
+       preload, which is the thing this exists to catch. */
     expect(
       fonts.length,
-      `expected one font file, got ${fonts.length}: ${fonts.map((f) => f.name).join(', ')}`,
-    ).toBe(1);
-    expect(total / 1024, 'the latin subset alone').toBeLessThan(100);
+      `expected one file per face, got ${fonts.length}: ${fonts.map((f) => f.name).join(', ')}`,
+    ).toBe(2);
+    expect(total / 1024, 'the two latin subsets alone').toBeLessThan(120);
   });
 });

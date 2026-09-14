@@ -64,6 +64,11 @@ const shareImage = Astro.site ? new URL(withBase('/share.svg'), Astro.site).href
          unicode-range and pull down a latin-ext subset no page here uses:
          measured at 152.8KB with it against 83.8KB without. -->
     <Font cssVariable="--font-literata" />
+    <!-- Both faces, or the grotesk's variable is never declared and every
+         label quietly falls back to the system sans — which is exactly what
+         happened on the first build of the redesign, and what the weight spec
+         caught by counting one font file where there should be two. -->
+    <Font cssVariable="--font-space-grotesk" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={LAB_NAME} />

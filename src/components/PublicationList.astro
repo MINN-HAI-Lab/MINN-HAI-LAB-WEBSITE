@@ -29,8 +29,10 @@ const incomplete = publications.filter((p) => p.authors === null || p.paperUrl =
 {
   incomplete > 0 && (
     <p class="todo measure">
-      TODO: authors and paper links for {incomplete === publications.length ? 'every' : `${incomplete} of these`}{' '}
-      {publications.length === 1 ? 'entry' : 'entries'}. The supplied list has
+      TODO: authors and paper links for{' '}
+      {incomplete === publications.length
+        ? publications.length === 1 ? 'this entry' : 'every entry here'
+        : `${incomplete} of these entries`}. The supplied list has
       short names, venues and years only, and a plausible-looking author list or
       DOI is the worst thing this site could ship — it would not look wrong to a
       reader. Kaung to supply. Tracked as B-4.

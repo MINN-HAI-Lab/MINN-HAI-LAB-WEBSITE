@@ -32,9 +32,13 @@ const ALLOWED = new Set([
 
 for (const path of PATHS) {
   test.describe(`outbound: ${path}`, () => {
-    test('names no origin that is not on the list', async ({ page }) => {
+    test('names no origin that is not on the list', async ({ page, baseURL }) => {
       await page.goto(path);
       await page.waitForLoadState('networkidle');
+      /* Vite's dynamic-import helper writes absolute modulepreload links into
+         the document at the moment of an import. They point at this origin,
+         which is not an outside one. */
+      const own = new URL(baseURL ?? 'http://localhost:4331').host;
 
       const hosts = await page.evaluate(() => {
         const found = new Set<string>();
@@ -51,7 +55,7 @@ for (const path of PATHS) {
         return [...found];
       });
 
-      const unexpected = hosts.filter((host) => !ALLOWED.has(host));
+      const unexpected = hosts.filter((host) => !ALLOWED.has(host) && host !== own);
       expect(
         unexpected,
         `an origin outside the allowed list appears in the markup: ${unexpected.join(', ')}`,

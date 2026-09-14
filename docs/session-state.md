@@ -10,7 +10,7 @@ conflict is logged as Q-19 rather than halted on.
 
 ## IN PROGRESS
 
-Nothing. The build is finished.
+Nothing. The redesign is finished.
 
 Final state: five pages, four live artefacts, 486 browser tests green across
 Chromium, Firefox and WebKit, 160 unit tests, Lighthouse 100 for performance,
@@ -19,7 +19,8 @@ Never pushed; `auto/site` exists only on this machine.
 
 ## QUEUE
 
-Nothing. Everything in the brief is built.
+Nothing. Everything in the design canvas is built, and the gaps it opened
+(B-11 teaching assistant, B-12 hiring and how to apply) are on the pages.
 
 What is left is content, not code: eight facts nobody on this side of the
 repository has. Every one of them is a visible TODO on the page it belongs to,
@@ -29,6 +30,16 @@ judgement call.
 ---
 
 ## DONE
+
+- **R-1** — The UI rebuilt to the design canvas (D-027): the reach as the
+  hero, live after load on wide pointer screens and a still everywhere else;
+  the canvas's palette, both faces self-hosted, ruled rows and bands with the
+  lab's own network drawn behind them, the tabs, the closing band.
+- **R-2** — 492 browser tests green across Chromium, Firefox and WebKit.
+  Lighthouse 99–100 on every page, both presets; CLS on the home page from
+  0.25 to 0.
+- **R-3** — Self-critique appended to docs/self-critique.md; Q-25 to Q-27
+  record the conflicts with CLAUDE.md and the one new dev dependency.
 
 - **S-19** — Final pass: five pages at three widths, read against the banned list and the brief's floor. `docs/self-critique.md`. Found four things no test did, including the same TODO printed thirty-seven times on /research.
 - **S-13** — `/people`: full-bleed group frame, five 4:5 slots at one crop, two-up on a phone and five across on a desktop, no names in any of them and each saying what it is waiting for.
@@ -52,6 +63,21 @@ judgement call.
 - **S-11** — Home page: full-bleed hero with the live trace on glass, four research areas as rows, five most recent publications with honest gaps, StatLab callout.
 
 ## NOTES
+
+- The design canvas is the design authority now (D-027). Where it and
+  CLAUDE.md disagree — Three.js in the hero on load, the lattice field —
+  Q-25 records what was built and why. The canvas's copy that reads as the
+  lab's own is on the page; the copy that reads as the design tool's (a
+  teaching assistant, partners, hiring) is a visible TODO where the canvas
+  put it.
+- The hero scene loads after `load`, on idle, only on a wide pointer screen
+  with a hardware GPU. Everyone else gets the still, which is rendered from
+  the scene itself by `scripts/hero-poster.mjs`. The hero writes what it
+  decided into `data-scene`, and islands.spec.ts reads it.
+- Space Grotesk's variable was declared in astro.config and never rendered
+  into the head: `<Font>` has to be called once per face. The first build of
+  the redesign set every label in the system sans and the weight spec caught
+  it by counting one font file where there should be two.
 
 - The previous run (T-01 to T-55, on `main`) built the light-palette version.
   Its infrastructure survives: the BKT model, the geometry module, the

@@ -1,26 +1,12 @@
 /* ---------------------------------------------------------------------------
-   people.css — the people page.
-
-   Five portraits in a row, breaking to two-up on a phone. Deliberately not
-   cards: no panel, no radius, no shadow, no hover lift. A portrait is a
-   rectangle of photograph with a name under it, which is what a person in a
-   list of people looks like.
-
-   The row is built at full size around photographs that do not exist yet. The
-   empty slots are the same shape the real ones will be, so nothing moves when
-   they arrive.
+   people.css — five frames in a row, from the design canvas.
 --------------------------------------------------------------------------- */
 
 .people {
   list-style: none;
   padding: 0;
-  /* Sits in the same section as the paragraph introducing it, so it needs a
-     heading-sized break rather than the paragraph-sized one the flow rule
-     would give it. */
-  margin: var(--space-10) 0 0;
+  margin: var(--space-6) 0 0;
   display: grid;
-  /* Two-up on a phone, five across from the point five 4:5 portraits stop
-     being too narrow to show a face. */
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-6) var(--space-4);
 }
@@ -34,96 +20,76 @@
 @media (width >= 900px) {
   .people {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: var(--space-5) var(--space-4);
+    gap: var(--space-5);
   }
 }
 
 .people__slot {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
   min-width: 0;
 }
 
-/* The portrait itself. 4:5 for all five, same crop, same lighting when the
-   photographs land — a row of portraits taken under one set of conditions
-   reads as a group, and five different crops read as a collage. */
+/* 4:5, hatched, a hairline and a 3px radius: the canvas's empty frame. */
 .people__portrait {
   aspect-ratio: 4 / 5;
-  background-color: var(--field-2);
   border: var(--rule-width) solid var(--surface-edge);
-  border-radius: var(--radius-0);
-  position: relative;
-  overflow: hidden;
+  border-radius: calc(var(--rule-width) * 3);
+  background-image: repeating-linear-gradient(135deg, var(--hatch) 0 var(--hatch-step), transparent var(--hatch-step) calc(var(--hatch-step) * 2));
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-3);
 }
 
-/* A hairline cross through the empty field: enough to read as "a frame with
-   nothing in it" rather than as a design element that is meant to be there. */
-.people__portrait::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(
-    to bottom right,
-    transparent calc(50% - var(--rule-width)),
-    var(--grid) 50%,
-    transparent calc(50% + var(--rule-width))
-  );
-  pointer-events: none;
+.people__caption {
+  color: var(--text-faint);
 }
 
 .people__name {
-  font-family: var(--font-serif);
-  font-size: var(--size-body);
-  line-height: var(--lh-body);
-  color: var(--text);
   margin: 0;
+  font-size: var(--size-body);
 }
 
 .people__unnamed {
-  color: var(--text-muted);
+  color: var(--text);
 }
 
 .people__role {
-  color: var(--text-muted);
   margin: 0;
 }
 
-.people__todo {
-  margin-block-start: var(--space-1);
+/* The canvas's outlined card: a serif line and a quiet link, ruled. */
+.card {
+  margin-block-start: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  border: var(--rule-width) solid var(--surface-edge);
+  border-radius: calc(var(--rule-width) * 3);
+  padding: var(--space-5) var(--space-5);
 }
 
 /* -- The group photograph -------------------------------------------------- */
 
-/* Full-bleed, and short enough that it does not eat a phone screen before the
-   page has said what it is. */
 .group__frame {
   position: relative;
   aspect-ratio: 3 / 2;
   max-block-size: 50vh;
   background-color: var(--field-2);
-  border-block-end: var(--rule-width) solid var(--surface-edge);
+  border-block-end: var(--rule-width) solid var(--grid);
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: var(--space-5);
+  justify-content: flex-start;
+  padding-block: var(--space-5);
 }
 
 @media (width >= 900px) {
   .group__frame {
-    /* Wider than it is tall by a good margin. An empty band is honest but it
-       should not eat half a screen before the page has said what it is. */
     aspect-ratio: 4 / 1;
   }
 }
 
-/* Wraps the marker in the page column, so its left edge is the site's left
-   edge rather than the middle of an empty band. */
 .group__todo {
   inline-size: 100%;
-}
-
-.group__frame {
-  justify-content: flex-start;
-  padding-inline: 0;
 }

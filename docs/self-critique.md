@@ -154,3 +154,53 @@ Recorded because it is the useful part of a critique.
   WebKit roughly one run in five — often enough to be noticed, rarely enough to
   be re-run rather than read.
 
+
+---
+
+## The redesign, 2026-09-14
+
+Kaung supplied a design canvas and asked for the whole UI changed to it. Read
+against the canvas and against the banned list, at 1440, 768 and 360.
+
+### Against the canvas
+
+- **The reach** is the hero, live, and it reaches. The composition is close to
+  the canvas's frame; the camera sits a touch further back, so the hands read
+  a little smaller against the ring. Everything in the frame is the canvas's
+  own scene, ported line for line.
+- **The type** is the canvas's: Literata at 300 for the lines that carry
+  weight, Space Grotesk for everything read at text size. The first build set
+  every label in the system sans because the grotesk's variable was declared
+  and never rendered into the head; a spec that counts font files caught it.
+- **The palette** is the canvas's, at one remove: its red is 3.9:1 on the
+  field and the site's is the same hue lifted until a 12px readout clears 4.5.
+- **The rows, the bands, the strip, the tabs, the closing band** are built as
+  drawn. The canvas is desktop-only; below 900px the row is one column, the
+  band's field sits behind a stronger veil, the header's button steps out.
+
+### Against the banned list
+
+Three items the earlier build could tick are now knowingly present because
+the canvas asks for them by value, and are recorded in Q-25: a near-black
+field with one red accent, glass panels, a fade-and-rise per section. One
+item the canvas asked for is refused: the lattice of random nodes, which is
+exactly the "ambient field of nodes that means nothing" the list names. Its
+place is taken by the canvas's own Bayesian-network field, which draws the
+lab's graph with every variable named.
+
+### What is weak
+
+1. **The hero is a still on a phone.** Deliberately — there is no cursor to
+   bring to the centre and Three.js on a throttled phone cost eleven seconds
+   of blocking time for a scene nobody could steer — but a phone reader gets
+   a picture where a desktop reader gets the reach. The still is a true frame
+   of the same scene, which is the most honest version of that trade.
+2. **The canvas's copy about partners, a teaching assistant and hiring** is
+   on the page as three gaps rather than as sentences. That is correct and it
+   makes the learning and people pages read as unfinished, which they are.
+3. **Two fonts cost 106KB** before a word of the site's own arrives. The
+   canvas wants both faces and both are subset and self-hosted; that is the
+   floor for this design.
+4. **The mission paragraph came through the design file.** It reads as the
+   lab's own and it is on the page, marked to be confirmed rather than
+   assumed. If it is not the lab's wording, B-3 is where that gets fixed.

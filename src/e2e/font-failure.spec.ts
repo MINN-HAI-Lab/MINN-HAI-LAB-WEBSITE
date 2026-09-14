@@ -39,13 +39,14 @@ for (const path of PAGES) {
         const root = getComputedStyle(document.documentElement);
         return {
           h1: getComputedStyle(document.querySelector('h1')!).fontSize,
+          hero: getComputedStyle(document.documentElement).getPropertyValue('--size-hero').trim(),
           display: root.getPropertyValue('--size-display').trim(),
           title: root.getPropertyValue('--size-title').trim(),
         };
       });
       expect(
-        [sizes.display, sizes.title],
-        `h1 is ${sizes.h1}, which is neither Display nor Page title`,
+        [sizes.display, sizes.title, sizes.hero],
+        `h1 is ${sizes.h1}, which is neither Display, Page title nor the hero line`,
       ).toContain(sizes.h1);
 
       // The fallback is the metric-matched face, not a bare serif.

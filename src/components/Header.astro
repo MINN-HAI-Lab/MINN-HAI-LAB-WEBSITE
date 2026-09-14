@@ -1,15 +1,18 @@
 ---
 /**
- * Site header.
+ * Site header, from the design canvas.
  *
- * Set type, not a wordmark: there is no wordmark yet. Sans for the navigation
- * because it is instrument furniture; serif for the lab name because it is
- * the one piece of prose up here.
+ * The lab name in the serif on the left; Research, Learning, People and About
+ * in the grotesk on the right, then one outlined button. The canvas labels
+ * that button "Partner with us" and it goes to the contact section — which is
+ * a gap until the address is supplied, but the way in should exist before the
+ * address does.
  */
 import { LAB_NAME, NAVIGATION } from '../data/navigation.ts';
 import { withBase } from '../lib/paths.ts';
 
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = NAVIGATION.filter((item) => item.href !== '/');
 ---
 
 <header class="site-header">
@@ -19,18 +22,21 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
     <nav aria-label="Main">
       <ul class="site-header__nav">
         {
-          NAVIGATION.map((item) => (
+          links.map((item) => (
             <li>
               <a
                 class="site-header__link"
                 href={withBase(item.href)}
-                aria-current={current === item.href.replace(/\/$/, '') || (item.href === '/' && current === '/') ? 'page' : undefined}
+                aria-current={current === item.href.replace(/\/$/, '') ? 'page' : undefined}
               >
                 {item.label}
               </a>
             </li>
           ))
         }
+        <li>
+          <a class="button site-header__cta" href={withBase('/about#contact')}>Partner with us</a>
+        </li>
       </ul>
     </nav>
   </div>

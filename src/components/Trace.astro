@@ -451,8 +451,14 @@ const altText =
       curve.style.strokeDasharray = String(length);
       curve.style.strokeDashoffset = String(length);
 
-      const started = performance.now();
+      /* The clock starts on the first frame, not now. On a busy load — two
+         background fields starting, a poster decoding — Firefox's first
+         animation frame arrived more than 400ms after this line, so t was 1
+         on the first step and the curve appeared fully drawn: no draw-in at
+         all, on exactly the loads where a reader would be looking. */
+      let started = 0;
       const step = (now: number): void => {
+        if (!started) started = now;
         const t = Math.min(1, (now - started) / span);
         curve.style.strokeDashoffset = String(length * (1 - ease(t)));
         if (t < 1) {

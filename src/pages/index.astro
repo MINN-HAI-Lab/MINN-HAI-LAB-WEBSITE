@@ -1,104 +1,169 @@
 ---
 /**
- * Home.
+ * Home, in the design canvas's language.
  *
- * The hero is one live artefact on glass, full-bleed. Everything below it is
- * quiet so that can be loud: four research areas as four lines, the five most
- * recent publications, and the StatLab callout.
+ * The reach as the hero. Under it, the canvas's three-column strip, the two
+ * programmes and two directions as ruled rows with the live artefacts where
+ * the canvas puts a live panel, the five most recent publications, and the
+ * closing band.
  */
 import Base from '../layouts/Base.astro';
-import Trace from '../components/Trace.astro';
+import Field from '../components/Field.astro';
+import Hero from '../components/Hero.astro';
 import PublicationList from '../components/PublicationList.astro';
+import Trace from '../components/Trace.astro';
 import { LAB_NAME, RESEARCH_AREAS, STATLAB } from '../data/navigation.ts';
 import { mostRecent } from '../data/publications.ts';
 import { withBase } from '../lib/paths.ts';
 
 const recent = mostRecent(5);
+const [tracing, bayesian, vision, language] = RESEARCH_AREAS;
 ---
 
 <Base
   title={LAB_NAME}
-  description="Research on knowledge tracing, Bayesian explanation, computer vision and language, with the working artefacts rather than descriptions of them."
+  description="Human-centered AI: knowledge tracing, Bayesian explanation, computer vision and language, with the working artefacts rather than descriptions of them."
 >
-  <!-- Hero. Full-bleed, with the live trace on glass. -->
-  <section class="hero bleed">
-    <div class="page hero__inner">
-      <div class="hero__text">
-        <h1 class="type-display">{LAB_NAME}</h1>
+  <Hero />
 
-        {/* Kept to two lines each.
+  <!-- The strip. Three things, each real. -->
+  <section class="section" style="padding-block: 0">
+    <div class="page cols">
+      <a class="cols__item" href={withBase(`/research#${tracing.id}`)}>
+        <span class="type-name">Knowledge tracing</span>
+        <span class="label">Per-learner mastery, estimated attempt by attempt</span>
+      </a>
+      <a class="cols__item" href={withBase(`/research#${bayesian.id}`)}>
+        <span class="type-name">Interpretable tabular models</span>
+        <span class="label">Bayesian networks and Markov blankets</span>
+      </a>
+      <a class="cols__item" href={withBase('/learning')}>
+        <span class="type-name">{STATLAB.name}</span>
+        <span class="label">{STATLAB.description}</span>
+      </a>
+    </div>
+  </section>
 
-            Written out in full they ran to seven lines apiece, which on a
-            phone put both of them and nothing else on the first screen — a
-            page whose first impression was a list of what is missing rather
-            than the thing that works. The detail lives in docs/plan.md and in
-            the B numbers; what belongs here is the fact of the gap. */}
-        <p class="todo measure">
-          TODO: the lab name for the header. Three forms appear in the brief,
-          and whether it is "Human-centered" or "Human-centred" is undecided.
-          Kaung to confirm. B-1.
-        </p>
-
-        <p class="todo measure">
-          TODO: the mission sentence. Listed as supplied but not in the
-          repository. Kaung to supply. B-3.
-        </p>
+  <!-- The programmes. -->
+  <section class="section" style="padding-block: 0" data-reveal>
+    <div class="page">
+      <div class="row">
+        <p class="row__label label">Programme 01<br />Active</p>
+        <div class="row__body">
+          <h2 class="type-section">AI for personalised learning</h2>
+          <p class="type-body type-muted measure">
+            Knowledge tracing: estimating what a learner has mastered, attempt
+            by attempt, and reporting how uncertain that estimate is. The
+            estimate is the model's claim about a person, so it is always shown
+            with its band.
+          </p>
+          <ul class="tags">
+            <li class="tag">Live trace widget</li>
+            <li class="tag">Synthetic data, labelled</li>
+          </ul>
+        </div>
+        <div class="row__aside">
+          <div class="panel" data-live-panel>
+            <p class="micro">Live model output</p>
+            <p class="panel__figure">
+              <span class="figure readout--signal" data-live-estimate>—</span>
+              <span class="label" data-live-caption>mastery estimate, from the trace below</span>
+            </p>
+            <span class="panel__rule" aria-hidden="true"></span>
+            <p class="label">Red is the machine's opinion. Ink is fact. The accent appears nowhere else on the site.</p>
+          </div>
+        </div>
+        <div class="row__wide">
+          <Trace />
+        </div>
       </div>
 
-      <Trace />
+      <div class="row">
+        <p class="row__label label">Programme 02<br />Active</p>
+        <div class="row__body">
+          <h2 class="type-section">Interpretable explanation of tabular models</h2>
+          <p class="type-body type-muted measure">
+            Bayesian networks and Markov blankets: identifying the smallest set
+            of variables that renders a target conditionally independent of
+            everything else, so an explanation names variables rather than
+            gesturing at importance scores.
+          </p>
+          <ul class="tags">
+            <li class="tag">3D blanket graph, click to load</li>
+            <li class="tag">Static SVG fallback</li>
+          </ul>
+          <p>
+            <a class="link--quiet" href={withBase(`/research#${bayesian.id}`)}>Open the network</a>
+          </p>
+        </div>
+        <div class="row__aside">
+          <div class="aside-field">
+            <Field mode="bayes" />
+            <p class="aside-field__caption micro">The lab's network, blanket of Mastery lit</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row--no-aside">
+        <p class="row__label label">Directions<br />No published work yet</p>
+        <div class="row__body">
+          <h2 class="type-section">{vision.name}, and {language.name.toLowerCase()}</h2>
+          <p class="type-body type-muted measure">{vision.line}</p>
+          <p class="type-body type-muted measure">{language.line}</p>
+          <ul class="tags">
+            <li class="tag">Saliency map, real photograph</li>
+            <li class="tag">Live tokeniser, illustrative attention</li>
+          </ul>
+          <p>
+            <a class="link--quiet" href={withBase(`/research#${vision.id}`)}>See both artefacts</a>
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Four research areas, four lines. -->
-  <section class="section section--raised" data-reveal>
-    <div class="page">
-      <h2 class="type-title">Research</h2>
-
-      <ul class="areas">
-        {
-          RESEARCH_AREAS.map((area) => (
-            <li class="areas__row">
-              <a class="areas__link" href={withBase(`/research#${area.id}`)}>
-                <span class="areas__name type-section">{area.name}</span>
-                <span class="areas__line type-body type-muted">{area.line}</span>
-                {!area.hasPublications && (
-                  <span class="areas__flag label">Research direction, no published work yet</span>
-                )}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <!-- Five most recent publications. -->
+  <!-- Recent work. -->
   <section class="section" data-reveal>
     <div class="page">
-      <h2 class="type-title">Recent work</h2>
-      <p class="type-body type-muted measure">
-        The five most recent of fourteen. The full list is on the{' '}
-        <a class="link" href={withBase('/research')}>research page</a>.
-      </p>
-
+      <div class="recent__head">
+        <h2 class="type-section">Recent work</h2>
+        <p class="label">
+          The five most recent of fourteen. The full list is on the{' '}
+          <a class="link" href={withBase('/research')}>research page</a>.
+        </p>
+      </div>
       <PublicationList publications={recent} />
     </div>
   </section>
 
-  <!-- StatLab. -->
-  <section class="section section--raised" data-reveal>
-    <div class="page statlab">
-      <div class="statlab__text">
-        <h2 class="type-title">{STATLAB.name}</h2>
-        <p class="type-body type-muted measure">{STATLAB.description}</p>
-        <p class="type-body measure">
-          Built to take more resources later, so a course or a set of exercises
-          can sit alongside it without a rebuild.
-        </p>
+  <!-- The closing band. -->
+  <section class="close" data-reveal>
+    <Field mode="grid" class="close__field" />
+    <div class="close__veil" aria-hidden="true"></div>
+    <div class="page close__text">
+      <h2 class="type-title" style="max-width: 24ch">Bring us a problem that needs an explanation.</h2>
+      <div class="close__actions">
+        <a class="button button--fill" href={withBase('/about#contact')}>Partner with the lab</a>
+        <a class="button" href={withBase('/about#join')}>Join</a>
       </div>
-      <p class="statlab__action">
-        <a class="button" href={STATLAB.href} rel="noopener">Open {STATLAB.name}</a>
-      </p>
     </div>
   </section>
 </Base>
+
+<script>
+  /* The live panel reads the trace's current estimate, so the number in the
+     canvas's "0.71" card is the model's actual output rather than a typed one.
+     The trace announces every change in its sentence; this listens to it. */
+  const panel = document.querySelector<HTMLElement>('[data-live-panel]');
+  const out = panel?.querySelector<HTMLElement>('[data-live-estimate]');
+  const sentence = document.querySelector<HTMLElement>('[data-sentence]');
+
+  if (panel && out && sentence) {
+    const read = (): void => {
+      const match = sentence.textContent?.match(/(\d+) per cent/);
+      if (match) out.textContent = (Number(match[1]) / 100).toFixed(2);
+    };
+    read();
+    new MutationObserver(read).observe(sentence, { childList: true, characterData: true, subtree: true });
+  }
+</script>
