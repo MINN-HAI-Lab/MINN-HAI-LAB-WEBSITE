@@ -28,3 +28,21 @@ npm run verify     # build, serve on 4331, run tests/site.spec.ts
 - The hero and the fields checked in a browser with a GPU: the scene is
   Three.js from unpkg and the fields draw to canvas.
 - Looked at, at 1920, 1440, 1024, 768 and 360.
+
+## Hosting on GitHub Pages
+
+`.github/workflows/deploy.yml` builds the site and publishes `dist/` on every
+push to `main` (or by hand from the Actions tab). One-time setup:
+
+1. Push the repository to GitHub.
+2. Settings → Pages → Source: **GitHub Actions**.
+3. Merge into `main`, or change the branch in the workflow.
+
+The site's address depends on the repository's name:
+
+- `MINN-HAI-Lab.github.io` → `https://minn-hai-lab.github.io/` (an org site,
+  at the root, beside StatLab at `/statLab/`).
+- Any other name → `https://minn-hai-lab.github.io/<repo>/` (a project site).
+
+The workflow works out which and sets the base path and site URL; nothing in
+the code changes between the two.

@@ -26,6 +26,7 @@
  * The 3D scene is public/design/hands-scene.html, and the fields are
  * public/design/mh-bg.js — both copied from the design folder untouched.
  */
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -36,7 +37,7 @@
     <title>MINN HAI Lab</title>
     <meta name="description" content="MINN HAI Lab — human-centered AI. Adaptive, interpretable, socially responsible systems." />
     <meta name="theme-color" content="#06080A" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;1,7..72,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
     <style is:inline>
@@ -125,7 +126,7 @@ html{scroll-behavior:smooth}
   [style*="grid-template-columns:140px"]{grid-template-columns:minmax(0,1fr)!important;gap:6px!important}
 }
     </style>
-    <script is:inline src="/design/mh-bg.js"></script>
+    <script is:inline src={`${base}/design/mh-bg.js`}></script>
   </head>
   <body>
     <div class="mh-page">
@@ -152,7 +153,7 @@ html{scroll-behavior:smooth}
 <div class="mh-hero" style="position:relative">
 <div id="top" class="mh-frame" style="position:relative;height:920px;background:#06080A;overflow:hidden">
 <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,#10151a 0%,#090c0f 55%,#06080A 100%)"></div>
-<iframe data-mh-scene src="/design/hands-scene.html" title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
+<iframe data-mh-scene src={`${base}/design/hands-scene.html`} title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
 
 
 

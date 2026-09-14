@@ -11,9 +11,17 @@ import { defineConfig } from 'astro/config';
  */
 const site = process.env.SITE_URL;
 
+/**
+ * Where under the origin the site is served. "/" for an org site
+ * (MINN-HAI-Lab.github.io) or a custom domain; "/<repo>" for a GitHub project
+ * page. The deploy workflow sets it; locally it is the root.
+ */
+const base = process.env.BASE_PATH || '/';
+
 export default defineConfig({
   output: 'static',
   ...(site ? { site } : {}),
+  base,
   // The previous site's routes, so an old link lands on the right section.
   redirects: {
     '/research': '/#research',
