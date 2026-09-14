@@ -31,12 +31,13 @@ npm run verify     # build, serve on 4331, run tests/site.spec.ts
 
 ## Hosting on GitHub Pages
 
-`.github/workflows/deploy.yml` builds the site and publishes `dist/` on every
-push to `main` (or by hand from the Actions tab). One-time setup:
+Live at https://minn-hai-lab.github.io/MINN-HAI-LAB-WEBSITE/ since
+2026-09-14. `.github/workflows/deploy.yml` builds the site and publishes
+`dist/` on every push to `main` (or by hand from the Actions tab).
 
-1. Push the repository to GitHub.
-2. Settings → Pages → Source: **GitHub Actions**.
-3. Merge into `main`, or change the branch in the workflow.
+The setup that was needed, for the record: Settings → Pages → Source must be
+**GitHub Actions**. In "Deploy from a branch" mode GitHub's own Jekyll build
+publishes the raw repository over the workflow's `dist/` (Q-29).
 
 The site's address depends on the repository's name:
 

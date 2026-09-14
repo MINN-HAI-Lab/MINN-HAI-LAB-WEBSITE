@@ -31,6 +31,10 @@ Nothing. The site is the canvas.
 
 ## NOTES
 
+- Live at https://minn-hai-lab.github.io/MINN-HAI-LAB-WEBSITE/ (2026-09-14),
+  deployed by the workflow on every push to `main`. `main` and `auto/site`
+  are the same commit.
+
 - The canvas is drawn at 1340px. The page adds four stacking rules below
   900px and hides the hero's nav below 640px; nothing else.
 - The canvas's copy is on the page as written, including claims Kaung should
