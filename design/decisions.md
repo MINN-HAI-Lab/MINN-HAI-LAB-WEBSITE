@@ -893,3 +893,17 @@ gauge marks on an instrument dial — part of the "rings, ticks, a wireframe
 icosahedron, a glowing arc" instrument field the hero was designed around
 (`design/DESIGN.md`). Removed, along with its per-frame rotation. `arc` and
 `arc2` are back to how the canvas had them.
+
+---
+
+## D-035 — The two arcs are gold, like the rest of the reach scene's accent
+
+**Status: adopted, 2026-09-16.** Kaung asked for `arc` and `arc2` — the two
+partial rings on the ring, restored in D-034 — to be yellowish, matching the
+prism and the orbiting nodes.
+
+Unlike the prism (D-032), which is a reflective steel material recoloured
+only in its environment highlight, `arc` and `arc2` use `glow`, the same flat
+emissive material the orbiting nodes used before D-033. Same fix as that
+decision: swap the material for `glowGold`. Nothing else about their shape,
+size or motion changes.

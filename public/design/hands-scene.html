@@ -171,8 +171,8 @@ const P = {
 /* cybernetic field behind the gap */
 const cyber = new THREE.Group(); cyber.position.set(0.05, 0.05, -1.3); scene.add(cyber);
 const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.011, 8, 160), steel); ring1.rotation.x = 1.15; cyber.add(ring1);
-const arc = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.018, 8, 64, Math.PI * 0.32), glow); arc.rotation.x = 1.15; cyber.add(arc);
-const arc2 = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.012, 8, 48, Math.PI * 0.18), glow); arc2.rotation.x = -0.95; cyber.add(arc2);
+const arc = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.018, 8, 64, Math.PI * 0.32), glowGold); arc.rotation.x = 1.15; cyber.add(arc);
+const arc2 = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.012, 8, 48, Math.PI * 0.18), glowGold); arc2.rotation.x = -0.95; cyber.add(arc2);
 const ico = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.95, 1)), wire); cyber.add(ico);
 const ico2 = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.45, 0)), wireDim); cyber.add(ico2);
 const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.18, 0), steel.clone()); core.material.envMap = goldReflection; core.material.roughness = 0.16; core.material.needsUpdate = true; cyber.add(core);
