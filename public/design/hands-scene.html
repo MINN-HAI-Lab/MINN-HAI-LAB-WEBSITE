@@ -80,6 +80,7 @@ const nail = new THREE.MeshPhysicalMaterial({ color: 0xe6bfae, roughness: 0.32, 
 const graphite = new THREE.MeshStandardMaterial({ color: 0x262b32, roughness: 0.42, metalness: 0.75 });
 const steel = new THREE.MeshStandardMaterial({ color: 0x8e979f, roughness: 0.3, metalness: 1 });
 const glow = new THREE.MeshStandardMaterial({ color: 0xd61a4a, emissive: 0xd61a4a, emissiveIntensity: 1.8, roughness: 0.4, metalness: 0 });
+const glowGold = new THREE.MeshStandardMaterial({ color: 0xf2bb3e, emissive: 0xf2bb3e, emissiveIntensity: 1.8, roughness: 0.4, metalness: 0 });
 const cable = new THREE.MeshStandardMaterial({ color: 0x12151a, roughness: 0.75, metalness: 0.2 });
 const wire = new THREE.LineBasicMaterial({ color: 0x9fb3bf, transparent: true, opacity: 0.32 });
 const wireDim = new THREE.LineBasicMaterial({ color: 0x9fb3bf, transparent: true, opacity: 0.14 });
@@ -180,7 +181,7 @@ const ico2 = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.Icosahedro
 const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.18, 0), steel.clone()); core.material.envMap = goldReflection; core.material.roughness = 0.16; core.material.needsUpdate = true; cyber.add(core);
 const nodes = [];
 for (let i = 0; i < 10; i++) {
-  const n = new THREE.Mesh(new THREE.OctahedronGeometry(0.045 + Math.random() * 0.03, 0), i % 3 === 0 ? glow : steel);
+  const n = new THREE.Mesh(new THREE.OctahedronGeometry(0.045 + Math.random() * 0.03, 0), i % 3 === 0 ? glowGold : steel);
   const a = Math.random() * Math.PI * 2, rr = 1.4 + Math.random() * 1.4;
   n.userData = { a, rr, z: -0.6 + Math.random() * 1.2, ph: Math.random() * 6.28, sp: 0.05 + Math.random() * 0.08 };
   cyber.add(n); nodes.push(n);

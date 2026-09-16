@@ -857,3 +857,18 @@ Verified across a full rotation: the highlight sweeps through as a clean warm
 gold on whichever facet catches the panel, while the rest of the shape stays
 its usual dark, blue or pink — matching what the white highlight did before,
 recoloured, not replaced.
+
+---
+
+## D-033 — The orbiting prisms are gold, not pink
+
+**Status: adopted, 2026-09-16.** Kaung asked for the small octahedra
+orbiting the ring (`nodes` in `hands-scene.html`) to be yellowish instead of
+pinkish.
+
+A third of them (`i % 3 === 0`) used `glow`, the scene's red accent
+material — the same one the robot hand's rings and the two arcs use. A new
+material, `glowGold` (same shape, same emissive intensity, coloured
+`0xf2bb3e`), replaces `glow` for these ten nodes only. The rings, the arcs and
+the robot hand's emissive parts keep the red — this is scoped to the
+orbiting nodes, not a change to the scene's accent colour generally.
