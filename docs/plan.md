@@ -11,12 +11,13 @@ to:
 | Anchor | Section |
 |---|---|
 | `#top` | The reach — the hero (2a) |
-| `#deep-field` | Deep Field (1a) — the network, the live-output panel, the three-column strip |
+| `#deep-field` | Deep Field (1a) — the network, the two-column strip |
 | `#lattice` | Lattice (1b) — the two programme rows over the lattice field |
 | `#signal-plane` | Signal Plane (1c) — "We model the learner, not the average." over the plane |
-| `#research` | Research header band, then the two programme rows |
-| `#learning` | Paper detail template beside the learning panel (teaching assistant, StatLab, course materials) |
-| `#people` | Five portrait frames and the hiring card |
+| `#research` | Research header band, then the two programme rows, each with its real publication list |
+| `#learning` | The learning panel: StatLab, linked out; course materials, still a gap |
+| `#people` | Five portrait frames and the hiring card, headed "Members" |
+| `#funding` | The seven funders, by name |
 | `#join` | "Bring us a problem that needs an explanation." — partner, open roles |
 
 The previous site's routes — `/research`, `/learning`, `/people`, `/about` —
@@ -24,13 +25,16 @@ redirect to those anchors.
 
 ## Content inventory
 
-On the page from the canvas: the hero copy, the programme descriptions, the
-learning panel's copy, the people section's structure, the closing line.
+Real, on the page: fourteen publications across both programmes (short name,
+venue, year, a `code` tag where code exists — no URLs, none supplied); seven
+funders by name; the contact address, as a live `mailto:` in three places; the
+hero and programme copy, checked against the lab's supplied bio.
 
-Still `TODO:` on the page, as the canvas has them: publication title, authors,
-venue, year, DOI and abstract; course materials.
+Still `TODO:` on the page: member names, roles and portraits; course
+materials; paper and code URLs.
 
-To confirm or supply, in the canvas: see `docs/phase.md`.
+Still unconfirmed either way, deliberately left rather than guessed: whether
+the lab is hiring. See `docs/phase.md`.
 
 ## How to change anything
 

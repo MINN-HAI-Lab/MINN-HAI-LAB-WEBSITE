@@ -819,3 +819,30 @@ none exists; it does not change an existing branch-mode site to Actions
 mode. That is one setting, once, by hand: Settings → Pages → Build and
 deployment → Source → **GitHub Actions**. After that only the workflow
 deploys, and the site is at https://minn-hai-lab.github.io/MINN-HAI-LAB-WEBSITE/.
+
+---
+
+## Q-30 — real content, and one thing left unresolved on purpose
+
+2026-09-16. Kaung supplied the lab's bio, both programmes' publication lists,
+seven funders and a contact address, and pointed out that the page had been
+showing synthetic figures (the `0.71` mastery demo) and unconfirmed claims
+(a teaching assistant, deployment with partners, an "established" lab) as if
+they were real. D-030 has the full account of what changed.
+
+One judgement call worth flagging on its own: Kaung's message said "we are
+new and the projects you [have] mentioned are not operated in our lab now,"
+which I read as confirming two things I'd flagged as unsupported — "Deployed
+with partners" and "Established research group" — and removed both, plus the
+"Active" status line on each programme row. I did *not* extend that same
+reasoning to "We are hiring research engineers" / "Open roles," which I had
+also flagged earlier, because nothing in this message actually confirmed or
+denied it — unlike the other two, where Kaung's own words were direct
+evidence. Guessing felt like exactly the mistake this whole pass was fixing.
+Left as found; asked about directly rather than acted on.
+
+Also unresolved: the publication rows show a `code` tag where the supplied
+list says code exists, but no paper or code URLs, since none were given.
+"Q-matrix Reinment" and "e-Learning" are reproduced exactly as supplied
+rather than silently corrected — the first looks like it might be
+"Refinement," but that is a guess, not a fact I was given.

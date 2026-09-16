@@ -1,23 +1,26 @@
 # Phases
 
-Current phase: **the canvas is live**.
+Current phase: **real content is live**.
 
-The earlier phases (decide, prove the hero, build the pages, publications)
-were for the previous site and are closed with it. D-028.
+The publication lists, funders and contact address Kaung supplied are on the
+page (D-030). What was invented to fill those gaps — the mastery figure, the
+teaching assistant, the deployment and "established" claims — is removed.
 
 ## What is left
 
-Content, not layout. The canvas carries `TODO:` markers for the paper detail
-fields and course materials, and it carries copy that Kaung should confirm:
-
-- The hero copy, and the copy of the three sections after it (1a, 1b, 1c),
-  which Kaung has said will change.
-- "Deployed with partners — education, health and public-sector pilots".
-- The teaching assistant "in development".
-- "We are hiring research engineers" and "See open roles".
-- Member names and roles (five frames, one marked principal investigator).
-
-Each is edited in the canvas, then the page is re-transcribed.
+- **Confirm or remove**: "We are hiring research engineers." and the "Open
+  roles" / "See open roles" buttons (People/Members section and the closing
+  band). Nothing supplied so far confirms or denies this; it was left as
+  found rather than guessed at. D-030.
+- **Course materials** — still a named gap on the Learning panel, waiting on
+  which courses go public and who owns them.
+- **Member names, roles and portraits** — five frames, still `TODO:`, one
+  marked principal investigator. Nobody is named on the site yet.
+- **Paper and code URLs** — the publication lists carry short name, venue,
+  year and a `code` tag where code exists, but no links, since none were
+  supplied. Adding them is a direct edit to the `<li>` rows in
+  `src/pages/index.astro`, wrapping the short name in an `<a>`.
+- **Institutional affiliation** — not stated anywhere on the site.
 
 **Exit gate:** every `TODO:` on the page is replaced with a supplied fact, and
-the copy above is confirmed or changed.
+the hiring question above is answered either way.

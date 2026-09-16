@@ -14,14 +14,16 @@ wireframe icosahedron, a glowing arc. After Michelangelo, *The Creation of
 Adam*. Everything in the frame is live 3D. The frame is 920px tall on a
 1340px canvas; on a wider screen the camera comes in — to no closer than 0.82 of its
 distance — so the frame shows about the same width of the scene, and the
-forearms are long enough to leave the frame at any size, so their ends are
-never in view.
+forearms are ten times the artboard's original length, so their ends are
+never in view even at an ultrawide monitor.
 
 Direction 1d is the rest of the page, in this order: a research header band
-over a lattice field; two programme rows (`200px | 1fr | 300px`); the paper
-detail template beside the tabbed learning panel; the people grid of five 4:5
-frames and the hiring card; the closing band over the signal plane; the
-footer.
+over a lattice field; two programme rows, each with its own publication list
+(`200px | 1fr | 300px` for the row with a field preview, `200px | 1fr` for the
+row without one); the Learning panel (StatLab, linked out; course materials,
+still a gap); the members grid of five 4:5 frames and the hiring card; a
+funding list; the closing band over the signal plane, with the contact
+address; the footer.
 
 ## Colour
 

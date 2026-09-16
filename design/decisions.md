@@ -734,3 +734,85 @@ fills the screen and scales the artboard's gutters, grids and display sizes
 through Bootstrap's own breakpoints; the rules are in one block at the top of
 `src/pages/index.astro` and described in `design/DESIGN.md`. The canvas's
 values at 1400px and above are unchanged.
+
+---
+
+## D-030 — Real content replaces the canvas's placeholders
+
+**Status: adopted, 2026-09-16.** Kaung supplied the lab's actual bio,
+publication lists, funders and contact address. Every synthetic or invented
+figure the canvas carried is removed and replaced with this, or with nothing:
+
+- **Publications.** The canvas's "Paper detail template" — a single mockup
+  reading `awaiting source`, pointing at a `src/data/publications.ts` that no
+  longer exists in this build — is gone. Each programme row now lists its own
+  real publications (nine for personalised learning, five for interpretable
+  models) as dense ruled rows: short name, venue, year, a `code` tag where one
+  exists. No paper or code URLs are supplied, so none are invented — the tag
+  is inert, not a link. "Q-matrix Reinment" and "e-Learning" are reproduced
+  exactly as given rather than silently corrected, per the standing rule
+  against altering a supplied fact.
+- **Funding.** A new section lists the seven funders by name, verbatim.
+- **Contact.** `sein.minn.cs@gmail.com` is now a live `mailto:` — on the
+  closing band's "Partner with the lab" button, as visible text beside it,
+  and on the footer's "Contact" link.
+- **The fabricated model.** Every occurrence of the invented `0.71 ± 0.09`
+  mastery figure is gone: the "Live model output" panel in the Deep Field
+  section, and the same figure repeated in the (now-removed) teaching
+  assistant panel. Kaung's own words: "We don't have the model yet."
+- **The teaching assistant.** Removed entirely — tab, panel, worked example,
+  and the shared "Request access" / "Read the docs" / "Works with JavaScript
+  disabled" row beneath it, none of which described anything that exists.
+  The Learning panel is now two tabs: StatLab (linked to
+  `minn-hai-lab.github.io/statLab`) and Course materials (still an honest
+  gap).
+- **Capability claims that don't hold.** "Deployed with partners — education,
+  health and public-sector pilots" and "Established research group" are gone:
+  Kaung's own words this round were "we are new" and that these programmes
+  "are not operated in our lab now." The Deep Field kicker drops "active"
+  alongside them; both programme rows drop their "Active" status line.
+  "Live trace widget" and "3D blanket graph, click to load" — tags naming
+  interactive features that do not exist in this build — are removed with
+  the demo content they described.
+- **"People" → "Members."**
+- **The mastery bar chart and the network-preview caption.** The fake
+  "Mastery estimate over 10 attempts" chart in Programme 01's row is gone;
+  that row now runs two columns (`200px | 1fr`) instead of three, since there
+  is nothing honest to put in the third. Programme 02 keeps its small field
+  preview but loses the caption "Loaded on interaction, never on page load,"
+  which was never true of this build (the field is a canvas animation, not a
+  click-to-load 3D graph).
+- **The cursor hint.** "Move the cursor to the centre." is removed from the
+  hero.
+- **Wording.** "Intelligence you can interrogate." → "observe." Deep Field's
+  paragraph drops "Every estimate on this site can be opened, questioned and
+  traced back to the model that made it" — there is no model to trace back
+  to. The Signal Plane's `±0.09 / reported with every estimate` stat is
+  removed; "open toolkit, StatLab" becomes "open learning resource, StatLab."
+  The Research section's kicker no longer claims "a live artefact you can
+  operate."
+
+**New class:** `.mh-row--full` — a programme row with no third column, at the
+same `200px | 160px | one column` steps as `.mh-row`, minus the aside.
+
+**Left as found**, pending a direct answer rather than an inference: "We are
+hiring research engineers" and "See open roles" / "Open roles." Nothing this
+round confirmed or denied them, unlike the deployment and status claims above,
+which Kaung's own message directly contradicted.
+
+---
+
+## D-031 — The forearms are ten times the artboard's length; the network field moves up
+
+**Status: adopted, 2026-09-16.** Two follow-ups to D-029's full-width layout.
+
+Five times the artboard's original arm length (2.8 units → 14) still left the
+ends visible on a 16-inch and wider display. They are ten times now (28
+units), with the camera's far plane pushed out to 220 to keep them in the
+draw distance at any zoom. Verified clean at 3440×1440.
+
+The Deep Field section's network graphic spanned nearly the whole vertical
+frame (`top:70px` to `bottom:90px` of a `min-height:100vh` container),
+reaching down far enough to visually merge with the three-column strip below
+it and, on a short viewport, the section boundary after that. It now sits in
+a fixed band nearer the top (`top:40px`, `bottom:260px`), clear of both.
