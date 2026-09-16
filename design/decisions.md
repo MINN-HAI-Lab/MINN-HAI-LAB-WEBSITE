@@ -872,19 +872,3 @@ material, `glowGold` (same shape, same emissive intensity, coloured
 `0xf2bb3e`), replaces `glow` for these ten nodes only. The rings, the arcs and
 the robot hand's emissive parts keep the red — this is scoped to the
 orbiting nodes, not a change to the scene's accent colour generally.
-
----
-
-## D-034 — The pink arcs on the ring are gone
-
-**Status: adopted, 2026-09-16.** Kaung flagged a dashed-looking line on the
-ring and, on a follow-up, narrowed it to the pink arcs specifically.
-
-`arc` was a partial red torus at the exact same radius and rotation as the
-base ring (`ring1`) — two coincident circles, which z-fight where they
-overlap and render as a flickering dashed line rather than a clean curve.
-`arc2`, a second partial red torus at a different radius, had no such
-conflict but was the other source of the pink Kaung was pointing at. Both are
-removed, along with their per-frame rotation. `ring1` (steel) and the tick
-marks around it, which were the actual source of a separate, unrelated
-dashed look at grazing angles, are original to the canvas and untouched.
