@@ -872,3 +872,24 @@ material, `glowGold` (same shape, same emissive intensity, coloured
 `0xf2bb3e`), replaces `glow` for these ten nodes only. The rings, the arcs and
 the robot hand's emissive parts keep the red — this is scoped to the
 orbiting nodes, not a change to the scene's accent colour generally.
+
+---
+
+## D-034 — The tick ring is gone; the pink arcs stay
+
+**Status: adopted, 2026-09-16.** Supersedes an earlier same-day attempt at
+the pink arcs, reverted (`263c4bc`) once Kaung asked for it back.
+
+Kaung first flagged a dashed-looking line on the ring. The first fix removed
+`arc` and `arc2`, the two partial red torus overlays, on the theory that one
+of them z-fighting against the base ring was the cause. Kaung reverted that —
+the pink arcs were wanted after all — and pointed at the actual dashed
+element directly: a large, faint circle outside the ring that is genuinely
+built from discrete pieces, not a rendering artefact.
+
+That element is `ticks`: a `THREE.Group` of 96 small boxes (a taller one
+every eighth) arranged around a circle of radius 2.15, standing in for
+gauge marks on an instrument dial — part of the "rings, ticks, a wireframe
+icosahedron, a glowing arc" instrument field the hero was designed around
+(`design/DESIGN.md`). Removed, along with its per-frame rotation. `arc` and
+`arc2` are back to how the canvas had them.
