@@ -8,10 +8,6 @@ teaching assistant, the deployment and "established" claims — is removed.
 
 ## What is left
 
-- **Confirm or remove**: "We are hiring research engineers." and the "Open
-  roles" / "See open roles" buttons (People/Members section and the closing
-  band). Nothing supplied so far confirms or denies this; it was left as
-  found rather than guessed at. D-030.
 - **Course materials** — still a named gap on the Learning panel, waiting on
   which courses go public and who owns them.
 - **Member names, roles and portraits** — five frames, still `TODO:`, one
@@ -22,5 +18,4 @@ teaching assistant, the deployment and "established" claims — is removed.
   `src/pages/index.astro`, wrapping the short name in an `<a>`.
 - **Institutional affiliation** — not stated anywhere on the site.
 
-**Exit gate:** every `TODO:` on the page is replaced with a supplied fact, and
-the hiring question above is answered either way.
+**Exit gate:** every `TODO:` on the page is replaced with a supplied fact.

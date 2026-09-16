@@ -16,9 +16,9 @@ to:
 | `#signal-plane` | Signal Plane (1c) — "We model the learner, not the average." over the plane |
 | `#research` | Research header band, then the two programme rows, each with its real publication list |
 | `#learning` | The learning panel: StatLab, linked out; course materials, still a gap |
-| `#people` | Five portrait frames and the hiring card, headed "Members" |
+| `#people` | Five portrait frames, headed "Members" |
 | `#funding` | The seven funders, by name |
-| `#join` | "Bring us a problem that needs an explanation." — partner, open roles |
+| `#join` | "Bring us a problem that needs an explanation." — partner |
 
 The previous site's routes — `/research`, `/learning`, `/people`, `/about` —
 redirect to those anchors.
@@ -32,9 +32,6 @@ hero and programme copy, checked against the lab's supplied bio.
 
 Still `TODO:` on the page: member names, roles and portraits; course
 materials; paper and code URLs.
-
-Still unconfirmed either way, deliberately left rather than guessed: whether
-the lab is hiring. See `docs/phase.md`.
 
 ## How to change anything
 

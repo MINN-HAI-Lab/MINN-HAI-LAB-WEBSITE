@@ -907,3 +907,19 @@ only in its environment highlight, `arc` and `arc2` use `glow`, the same flat
 emissive material the orbiting nodes used before D-033. Same fix as that
 decision: swap the material for `glowGold`. Nothing else about their shape,
 size or motion changes.
+
+---
+
+## D-036 — The hiring claim is removed, not just left unconfirmed
+
+**Status: adopted, 2026-09-16.** Resolves the open question D-030 and
+`docs/phase.md` had been carrying: "We are hiring research engineers." (the
+card at the foot of Members) and the two "Open roles" / "See open roles"
+buttons (Members and the closing band) were canvas placeholders nothing
+supplied so far had confirmed or denied, so D-030 left them as found rather
+than guess. Kaung has now asked for the section removed outright, which
+settles the question the other way from a guess: not "confirmed true" but
+"not stated, so not shown." All three instances are gone —
+`src/pages/index.astro`'s Members section ends at the portrait grid, and the
+closing band's button row is just "Partner with the lab." `docs/phase.md` and
+`docs/plan.md` no longer list this as outstanding.

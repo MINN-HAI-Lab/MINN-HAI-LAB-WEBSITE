@@ -21,9 +21,8 @@ Direction 1d is the rest of the page, in this order: a research header band
 over a lattice field; two programme rows, each with its own publication list
 (`200px | 1fr | 300px` for the row with a field preview, `200px | 1fr` for the
 row without one); the Learning panel (StatLab, linked out; course materials,
-still a gap); the members grid of five 4:5 frames and the hiring card; a
-funding list; the closing band over the signal plane, with the contact
-address; the footer.
+still a gap); the members grid of five 4:5 frames; a funding list; the
+closing band over the signal plane, with the contact address; the footer.
 
 ## Colour
 
