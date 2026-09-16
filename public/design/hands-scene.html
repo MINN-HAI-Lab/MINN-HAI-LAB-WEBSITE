@@ -174,8 +174,6 @@ const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.011, 8, 160), steel
 const ticks = new THREE.Group();
 for (let i = 0; i < 96; i++) { const a = (i / 96) * Math.PI * 2; const big = i % 8 === 0; const t = new THREE.Mesh(new THREE.BoxGeometry(0.012, big ? 0.16 : 0.07, 0.012), big ? steel : graphite); t.position.set(Math.cos(a) * 2.15, Math.sin(a) * 2.15, 0); t.rotation.z = a; ticks.add(t); }
 ticks.rotation.x = -0.95; cyber.add(ticks);
-const arc = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.018, 8, 64, Math.PI * 0.32), glow); arc.rotation.x = 1.15; cyber.add(arc);
-const arc2 = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.012, 8, 48, Math.PI * 0.18), glow); arc2.rotation.x = -0.95; cyber.add(arc2);
 const ico = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.95, 1)), wire); cyber.add(ico);
 const ico2 = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.45, 0)), wireDim); cyber.add(ico2);
 const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.18, 0), steel.clone()); core.material.envMap = goldReflection; core.material.roughness = 0.16; core.material.needsUpdate = true; cyber.add(core);
@@ -231,7 +229,6 @@ function tick() {
   const s = reduced ? 0 : 1;
   cyber.rotation.y = ptr.x * 0.14; cyber.rotation.x = ptr.y * 0.09;
   ring1.rotation.z = el * 0.05 * s; ticks.rotation.z = -el * 0.03 * s;
-  arc.rotation.z = el * 0.22 * s; arc2.rotation.z = -el * 0.15 * s + 2;
   ico.rotation.y = el * 0.12 * s; ico.rotation.x = el * 0.07 * s; ico2.rotation.y = -el * 0.05 * s;
   core.rotation.y = el * 0.5 * s; core.rotation.z = el * 0.3 * s;
   core.scale.setScalar(1 + ptr.reach * 0.4);
