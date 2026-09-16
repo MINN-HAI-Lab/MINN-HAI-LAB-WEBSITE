@@ -816,3 +816,44 @@ frame (`top:70px` to `bottom:90px` of a `min-height:100vh` container),
 reaching down far enough to visually merge with the three-column strip below
 it and, on a short viewport, the section boundary after that. It now sits in
 a fixed band nearer the top (`top:40px`, `bottom:260px`), clear of both.
+
+---
+
+## D-032 — The prism's white highlight is gold; the prism itself is still steel
+
+**Status: adopted, 2026-09-16.**
+
+The small reflective octahedron at the centre of the hero's instrument field
+(`core` in `hands-scene.html`) is a `steel` material — dark, picking up the
+scene's blue fill and pink rim like every other metal part. Kaung asked for
+yellow added to its reflection.
+
+The first attempt (`879a8cf`) replaced its material outright with a flat gold
+`MeshPhysicalMaterial`, matching colour and emissive — gold from every angle,
+independent of what it was reflecting. Kaung rejected this: the whole colour
+scheme was fine as it was; only the white highlight — the near-white key
+panel every metal surface in the scene reflects — should turn yellow, not the
+prism itself.
+
+**Fix:** the `core` mesh keeps its `steel` clone — same base colour, same
+roughness, same metalness, still reflecting the scene's dark ambient, blue
+fill and pink rim exactly as before. Only its `envMap` differs, pointing at a
+second lighting rig (`envGold`) that is identical to the main one except the
+near-white key panel is a warm gold instead. Two follow-on problems surfaced
+and were fixed in the same pass:
+
+- `THREE.PMREMGenerator.fromScene()` reuses internal render-target buffers
+  across calls; calling it a second time on the same generator for the second
+  rig produced a corrupt, effectively black texture regardless of the rig's
+  actual brightness. Fixed with a second, independent `PMREMGenerator`
+  instance dedicated to the gold rig.
+- Once the generator was fixed, the highlight read as a muddy brown rather
+  than gold — the roughness-blurred, tonemapped reflection was simply too dim
+  to hold its hue. Fixed by raising the gold panel's intensity and lowering
+  `core`'s roughness slightly (0.3 → 0.16) for a crisper, brighter catch,
+  without touching its colour.
+
+Verified across a full rotation: the highlight sweeps through as a clean warm
+gold on whichever facet catches the panel, while the rest of the shape stays
+its usual dark, blue or pink — matching what the white highlight did before,
+recoloured, not replaced.
