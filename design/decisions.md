@@ -970,3 +970,14 @@ and inline styles are untouched.
 where their content now is. `/research` and `/learning` need no redirect —
 those routes existed before the single-page detour and exist again now, at
 the same place.
+
+---
+
+## D-038 — The footer's link row is gone
+
+**Status: adopted, 2026-09-17.** Kaung asked for the footer's five links —
+Research, Learning, Members, Join, Contact — removed on every page. Since
+D-037 made the footer shared layout chrome in `src/layouts/Layout.astro`,
+one edit there does that. What remains is the lab name and "Human-centered
+AI"; the header nav and mobile menu, which carry the same routes, are
+unchanged.
