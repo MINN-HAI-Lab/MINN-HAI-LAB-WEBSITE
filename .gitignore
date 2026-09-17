@@ -36,6 +36,10 @@ screenshots/
 # throwaway layout studies, per docs/plan.md
 prototypes/
 
+# full-resolution member photos Kaung supplied (3000×3000, ~3MB total);
+# the site uses the resized, compressed copies in public/members/ instead
+pics/
+
 # per-machine agent settings, not shared
 .claude/settings.local.json
 

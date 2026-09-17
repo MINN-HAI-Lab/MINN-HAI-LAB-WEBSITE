@@ -1002,3 +1002,39 @@ so it grows to fill whatever room is left and the footer lands at the
 bottom of the viewport on a short page, or right after the content on a
 tall one, exactly as before. Home and Research, both already taller than
 any viewport, are unaffected — confirmed at 900px and 1400px tall.
+
+---
+
+## D-040 — The five members are named, with photos
+
+**Status: adopted, 2026-09-17.** The last placeholder content on the
+Members page. Kaung supplied a photo for each of the five frames and, for
+four of the five, an unambiguous role:
+
+| Name | Role | Photo |
+|---|---|---|
+| Dr. Sein Minn | Founder | `Sein_Minn.jpg` |
+| Aung Khant Maung | Research Assistant | `Aung_Khant_Maung.jpg` |
+| Thet Htun Swe | Research Assistant | `Thet_Htun_Swe.jpg` |
+| Kaung Hein Htet | Research Assistant | `Kaung_Hein_Htet.jpg` |
+| Win Htut Naing | Research Assistant | `Win_Htut_Naing.jpg` |
+
+For the first, Kaung wasn't sure of the formal title and asked directly
+whether "Founder" was a reasonable label. It is: the frame was already
+earmarked "Principal investigator" as a placeholder, the lab's own copy
+calls itself a new research group, and "Founder" is a plain statement of
+a fact Kaung is confident of, not a guess at a formal title he isn't — so
+it stands, on his say-so, rather than being left as another `TODO:`.
+
+**Photos.** Kaung dropped the five originals (3000×3000, 600KB–1.3MB each)
+in a `pics/` folder at the repo root. Resized to 900×900 and recompressed
+with `sips` (82–155KB each) into `public/members/`, which the page reads
+with `object-fit:cover` filling the same 4:5 frame the placeholder used.
+`pics/` itself is gitignored — the source files aren't needed once the
+resized copies are committed, and 3MB of full-resolution portraits has no
+reason to sit in the repository's history.
+
+The "Principal investigator, researchers, students" line by the section
+heading is removed, per Kaung's request — it described the placeholder
+grid's range of roles in the abstract, which five named, real people with
+real titles no longer need.

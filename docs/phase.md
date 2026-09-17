@@ -10,8 +10,6 @@ teaching assistant, the deployment and "established" claims — is removed.
 
 - **Course materials** — still a named gap on the Learning panel, waiting on
   which courses go public and who owns them.
-- **Member names, roles and portraits** — five frames, still `TODO:`, one
-  marked principal investigator. Nobody is named on the site yet.
 - **Paper and code URLs** — the publication lists carry short name, venue,
   year and a `code` tag where code exists, but no links, since none were
   supplied. Adding them is a direct edit to the `<li>` rows in
