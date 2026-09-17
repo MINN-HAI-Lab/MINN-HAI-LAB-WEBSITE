@@ -18,11 +18,13 @@ forearms are ten times the artboard's original length, so their ends are
 never in view even at an ultrawide monitor.
 
 Direction 1d is the rest of the site, in this order: a research header band
-over a lattice field; two programme rows, each with its own publication list
-(`200px | 1fr | 300px` for the row with a field preview, `200px | 1fr` for the
-row without one); the Learning panel (StatLab, linked out; course materials,
-still a gap); the members grid of five 4:5 frames; a funding list; the
-closing band over the signal plane, with the contact address; the footer.
+over a lattice field; three theme columns side by side, each with its own
+publication list where it has one (D-042 — no canvas equivalent; the canvas
+draws two stacked programme rows, one `200px | 1fr | 300px` with a field
+preview, one `200px | 1fr` without); the Learning panel (StatLab, linked
+out; course materials, still a gap); the members grid of five 4:5 frames,
+named, with photos; a funding list; the closing band over the signal
+plane, with the contact address; the footer.
 
 ## Colour
 
@@ -75,8 +77,7 @@ breakpoints — 576, 768, 992, 1200, 1400 — in one stylesheet shared by all of
 them, at the top of `src/layouts/Layout.astro`:
 
 - The gutter steps 48 → 40 → 32 → 28 → 24 → 20px.
-- The programme rows go `200 | 1fr | 300` → `160 | 1fr | 260` → one column
-  below 992px. The learning split's aside goes 440 → 380 → full width. The
+- The theme columns go three across → one column below 992px (D-042). The
   people grid goes 5 → 3 → 2 across.
 - The hero fills the viewport height; its display line steps 54 → 44 → 38px;
   the section titles 52 → 40 → 34px.

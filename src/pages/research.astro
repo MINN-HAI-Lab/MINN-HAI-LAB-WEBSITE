@@ -1,8 +1,14 @@
 ---
 /**
- * Research — the research band through Programme 02. See
+ * Research — the research band, then the three themes side by side. See
  * src/layouts/Layout.astro for the chrome and the transcription notes that
  * apply to every page.
+ *
+ * Kaung asked for the two "Programme" rows renamed "Theme" and laid out as
+ * columns instead of stacked full-width rows, the neural-network preview
+ * next to Theme 02 dropped, and a third column, Computer Vision, added —
+ * content for it still TODO, supplied later. .mh-themes (Layout.astro) is
+ * the grid: 3 columns at 992px and up, 1 below, no canvas equivalent.
  */
 import Layout from '../layouts/Layout.astro';
 ---
@@ -15,53 +21,52 @@ import Layout from '../layouts/Layout.astro';
       <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,8,10,.7) 0%,rgba(6,8,10,.35) 40%,rgba(6,8,10,.95) 100%)"></div>
       <div class="mh-gutter" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:44px">
         <h2 style="margin:0;font-family:Literata,serif;font-weight:300;font-size:52px;line-height:1;letter-spacing:-.025em">Research</h2>
-        <p style="margin:14px 0 0;font-size:16px;color:rgba(230,237,240,.68);max-width:54ch">Two research programmes, and the publications behind them.</p>
+        <p style="margin:14px 0 0;font-size:16px;color:rgba(230,237,240,.68);max-width:54ch">Three research themes, and the publications behind them.</p>
       </div>
     </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:0;border-bottom:1px solid rgba(230,237,240,.1)">
-    <div class="mh-gutter mh-row mh-row--full" style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;align-items:start;padding:40px 44px;border-bottom:1px solid rgba(230,237,240,.1)">
-      <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Programme 01</div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">AI for personalised learning</h3>
-        <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7);max-width:60ch">Knowledge tracing: estimating what a learner has mastered, attempt by attempt, and reporting how uncertain that estimate is. The estimate is the model's claim about a person, so it is always shown with its band.</p>
-        <div style="margin-top:10px">
-          <div style="font-size:12px;color:rgba(230,237,240,.45);letter-spacing:.01em">Publications</div>
-          <ul style="list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(230,237,240,.08);max-width:64ch">
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">EIKT</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">AIED, 2025</span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">Privacy-Preserving Synthetic Data Generation</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">EC-TEL, 2018</span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">IKT</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">AAAI, 2022<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">BKT-LSTM</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">Arxiv, 2021<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">DSCMN</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">PAKDD, 2019<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">DKT-DSC</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">ICDM, 2018<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">KT</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">ICDM, 2018</span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">Q-matrix Reinment</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">EC-TEL, 2016</span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">Uni Library Rec. Syst.</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">e-Learning, 2013</span></li>
-          </ul>
-        </div>
+  <div class="mh-gutter mh-themes" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-bottom:1px solid rgba(230,237,240,.1)">
+    <div style="padding:40px 44px 40px 0;border-right:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Theme 01</div>
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">AI for personalised learning</h3>
+      <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7)">Knowledge tracing: estimating what a learner has mastered, attempt by attempt, and reporting how uncertain that estimate is. The estimate is the model's claim about a person, so it is always shown with its band.</p>
+      <div style="margin-top:10px">
+        <div style="font-size:12px;color:rgba(230,237,240,.45);letter-spacing:.01em">Publications</div>
+        <ul style="list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(230,237,240,.08)">
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">EIKT</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">AIED, 2025</span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">Privacy-Preserving Synthetic Data Generation</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">EC-TEL, 2018</span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">IKT</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">AAAI, 2022<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">BKT-LSTM</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">Arxiv, 2021<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">DSCMN</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">PAKDD, 2019<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">DKT-DSC</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">ICDM, 2018<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">KT</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">ICDM, 2018</span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">Q-matrix Reinment</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">EC-TEL, 2016</span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">Uni Library Rec. Syst.</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">e-Learning, 2013</span></li>
+        </ul>
       </div>
     </div>
 
-    <div class="mh-gutter mh-row" style="display:grid;grid-template-columns:200px minmax(0,1fr) 300px;gap:40px;align-items:start;padding:40px 44px">
-      <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Programme 02</div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Interpretable explanation of tabular models</h3>
-        <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7);max-width:60ch">Bayesian networks and Markov blankets: identifying the smallest set of variables that renders a target conditionally independent of everything else, so an explanation names variables rather than gesturing at importance scores.</p>
-        <div style="margin-top:10px">
-          <div style="font-size:12px;color:rgba(230,237,240,.45);letter-spacing:.01em">Publications</div>
-          <ul style="list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(230,237,240,.08);max-width:64ch">
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">LAPLACE</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">Arxiv, 2023<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">FSBN &amp; SSBN</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">ICDM, 2023<span style="font-size:11px;color:rgba(230,237,240,.4);font-style:italic">CXAI workshop</span></span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">GBNC</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">DSAA, 2014</span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">GMBNC</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">MLDM, 2014</span></li>
-            <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">MBNC</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">Computer Science and Application, 2014<span style="font-size:11px;color:rgba(230,237,240,.4);font-style:italic">in Chinese</span></span></li>
-          </ul>
-        </div>
+    <div style="padding:40px 44px;border-right:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Theme 02</div>
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Interpretable explanation of tabular models</h3>
+      <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7)">Bayesian networks and Markov blankets: identifying the smallest set of variables that renders a target conditionally independent of everything else, so an explanation names variables rather than gesturing at importance scores.</p>
+      <div style="margin-top:10px">
+        <div style="font-size:12px;color:rgba(230,237,240,.45);letter-spacing:.01em">Publications</div>
+        <ul style="list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(230,237,240,.08)">
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">LAPLACE</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">Arxiv, 2023<span style="border:1px solid rgba(230,237,240,.18);border-radius:2px;padding:2px 7px;font-size:10.5px;color:rgba(230,237,240,.62)">code</span></span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">FSBN &amp; SSBN</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">ICDM, 2023<span style="font-size:11px;color:rgba(230,237,240,.4);font-style:italic">CXAI workshop</span></span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">GBNC</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">DSAA, 2014</span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0;border-bottom:1px solid rgba(230,237,240,.08)"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">GMBNC</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">MLDM, 2014</span></li>
+          <li style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:10px 0"><span style="font-family:Literata,serif;font-size:15px;color:#E6EDF0">MBNC</span><span style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(230,237,240,.5)">Computer Science and Application, 2014<span style="font-size:11px;color:rgba(230,237,240,.4);font-style:italic">in Chinese</span></span></li>
+        </ul>
       </div>
-      <div style="position:relative;border:1px solid rgba(230,237,240,.14);border-radius:4px;height:150px;overflow:hidden;background:#080A0D">
-        <mh-bg mode="lattice" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
-      </div>
+    </div>
+
+    <div style="padding:40px 0 40px 44px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Theme 03</div>
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Computer Vision</h3>
+      <div style="border-left:3px solid rgba(230,237,240,.4);background:rgba(6,8,10,.75);border-radius:3px;padding:14px 16px;font-size:13px;line-height:1.6;color:rgba(230,237,240,.82)">TODO: description and publications for this theme, to be supplied.</div>
     </div>
   </div>
 </div>

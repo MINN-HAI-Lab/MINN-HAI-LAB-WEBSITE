@@ -1056,3 +1056,40 @@ programmes / 1 open learning resource, StatLab" stats on the right in a
 stats to the left edge where the caption used to sit, so that row is now
 `justify-content:flex-end` to keep the stats where they were, at the
 right, with nothing to their left.
+
+---
+
+## D-042 — Research: three themes, side by side, not two stacked rows
+
+**Status: adopted, 2026-09-17.** Kaung asked for four things on the
+Research page together: drop the neural-network preview next to
+"Interpretable explanation of tabular models"; rename "Programme" to
+"Theme"; lay the themes out as columns instead of stacked full-width rows;
+and add a third column, Computer Vision, its content to follow later.
+
+**Layout.** The canvas's two rows — `200px | 1fr | 300px` for the row with
+the field preview, `200px | 1fr` for the one without — become one row of
+three equal columns, `.mh-themes` (new, no canvas equivalent), each a
+self-contained card: a small "Theme NN" kicker, the title, the description,
+then its publications where it has any. This is what made removing the
+neural-network preview straightforward — there was no longer a dedicated
+aside column for it to sit in, nor a need for one.
+
+**Computer Vision.** A name and nothing else — Kaung was explicit the
+description and publications are still to come. It gets the same `TODO:`
+treatment as every other unsupplied fact on the site (`design/DESIGN.md`'s
+left-rule marker), not placeholder copy invented to fill the column.
+
+**Responsive.** Three columns at 992px and up, one column below it —
+matching the threshold every other grid on the site already collapses at
+(`.mh-row` before it, `.mh-three`, `.mh-people`). Column dividers
+(`border-right`, inline, on the first two columns) become `border-bottom`
+on the stacked columns, skipping the last so it doesn't double up against
+the row's own closing rule.
+
+**Copy.** The header band's "Two research programmes, and the publications
+behind them." becomes "Three research themes..." — directly required by
+adding a third theme, on the same page as the count. The "2 research
+programmes" stat on Home's Signal Plane, and "two research programmes" in
+its own copy, are untouched: Computer Vision has no content yet, and
+changing a claim on a different page wasn't asked for.
