@@ -17,7 +17,7 @@ distance — so the frame shows about the same width of the scene, and the
 forearms are ten times the artboard's original length, so their ends are
 never in view even at an ultrawide monitor.
 
-Direction 1d is the rest of the page, in this order: a research header band
+Direction 1d is the rest of the site, in this order: a research header band
 over a lattice field; two programme rows, each with its own publication list
 (`200px | 1fr | 300px` for the row with a field preview, `200px | 1fr` for the
 row without one); the Learning panel (StatLab, linked out; course materials,
@@ -69,9 +69,10 @@ closing band over the signal plane, with the contact address; the footer.
 
 ## Every screen
 
-The canvas is drawn at one width, 1340px. The page fills whatever screen it is
-on and scales the artboard through Bootstrap's breakpoints — 576, 768, 992,
-1200, 1400 — in one stylesheet at the top of `src/pages/index.astro`:
+The canvas is drawn at one width, 1340px. Each of the site's five pages fills
+whatever screen it is on and scales the artboard through Bootstrap's
+breakpoints — 576, 768, 992, 1200, 1400 — in one stylesheet shared by all of
+them, at the top of `src/layouts/Layout.astro`:
 
 - The gutter steps 48 → 40 → 32 → 28 → 24 → 20px.
 - The programme rows go `200 | 1fr | 300` → `160 | 1fr | 260` → one column
@@ -79,9 +80,9 @@ on and scales the artboard through Bootstrap's breakpoints — 576, 768, 992,
   people grid goes 5 → 3 → 2 across.
 - The hero fills the viewport height; its display line steps 54 → 44 → 38px;
   the section titles 52 → 40 → 34px.
-- There is one header — 2a's — fixed to the top of the page on 1d's
-  translucent ground; the headers drawn inside 1a, 1b, 1c and 1d are not
-  repeated. Below 768px its links become a Menu button that opens a stacked
-  list.
+- There is one header — 2a's — fixed to the top of every page on 1d's
+  translucent ground, and one footer at the foot of every page; the headers
+  drawn inside 1a, 1b, 1c and 1d are not repeated. Below 768px the header's
+  links become a Menu button that opens a stacked list.
 
 Nothing else about the canvas changes with the screen.

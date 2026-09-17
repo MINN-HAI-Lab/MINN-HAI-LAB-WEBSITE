@@ -2,8 +2,9 @@
 import { defineConfig } from 'astro/config';
 
 /**
- * Static output, one page, no framework CSS. The site is the design canvas in
- * "MINN HAI LAB UI Design/" transcribed as it stands; see src/pages/index.astro.
+ * Static output, five pages, no framework CSS. The site is the design canvas
+ * in "MINN HAI LAB UI Design/" transcribed across them; see
+ * src/layouts/Layout.astro for the shared chrome and page map.
  *
  * `site` is read from SITE_URL at build time so a sitemap and canonical URLs
  * can be added once the domain is decided, without writing a placeholder
@@ -22,11 +23,11 @@ export default defineConfig({
   output: 'static',
   ...(site ? { site } : {}),
   base,
-  // The previous site's routes, so an old link lands on the right section.
+  // /research, /learning stayed put across the single-page detour and back;
+  // /people and /about did not, so they redirect to where their content is
+  // now.
   redirects: {
-    '/research': '/#research',
-    '/learning': '/#learning',
-    '/people': '/#people',
-    '/about': '/#join',
+    '/people': '/members',
+    '/about': '/partner',
   },
 });

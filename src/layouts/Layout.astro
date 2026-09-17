@@ -1,0 +1,211 @@
+---
+/**
+ * MINN HAI Lab — the shared page frame.
+ *
+ * Source: "MINN HAI LAB UI Design/MINN HAI LAB.dc.html". Direction 2a's
+ * header, and 1d's footer, are the site's chrome: fixed header on every
+ * page, footer at the foot of every page. What is in this file is exactly
+ * that chrome, copied from the canvas with its inline styles, values and
+ * copy — the same rule the pages themselves follow. What changed in the
+ * transcription and nothing else:
+ *
+ *   - the canvas's internal links (#1a, #1d) are now page routes — the site
+ *     is five pages, not anchors on one page (see "Pages" below);
+ *   - the wordmark and every nav link point at a page route under `base`
+ *     instead of a same-page `#id`;
+ *   - the design viewer's `x-import` wrapper is the `<mh-bg>` element it
+ *     wrapped, wired up by the script at the foot of the page;
+ *   - the page fills the screen rather than the 1340px artboard: every
+ *     container with the artboard's 44/48px gutter carries .mh-gutter, the
+ *     grids and the hero copy carry classes, and one stylesheet scales them
+ *     through Bootstrap's breakpoints (576, 768, 992, 1200, 1400). Below
+ *     768px the header's links become a Menu button.
+ *
+ * Pages: each is one continuous span of the canvas's direction 1d, copied in
+ * the canvas's order, wrapped in this layout —
+ *
+ *   index.astro     the reach (2a) through Signal Plane (1c)
+ *   research.astro  the research band through Programme 02
+ *   learning.astro  the Learning panel
+ *   members.astro   the Members grid
+ *   partner.astro   Funding through the closing band
+ *
+ * The 3D scene is public/design/hands-scene.html, and the fields are
+ * public/design/mh-bg.js — both copied from the design folder untouched.
+ */
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'MINN HAI Lab',
+  description = 'MINN HAI Lab — human-centered AI. Adaptive, interpretable, socially responsible systems.',
+} = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#06080A" />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;1,7..72,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style is:inline>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#15181b;font-family:"Space Grotesk",system-ui,sans-serif;color:#E6EDF0}
+a{color:#E6EDF0}a:hover{color:#fff}
+.mh-tab{font:500 12.5px "Space Grotesk",sans-serif;border-radius:999px;padding:9px 15px;cursor:pointer;border:1px solid rgba(230,237,240,.18);background:transparent;color:rgba(230,237,240,.68);transition:background .12s ease,color .12s ease,border-color .12s ease}
+.mh-tab:hover{color:#E6EDF0;border-color:rgba(230,237,240,.42)}
+.mh-tab[aria-selected="true"]{background:#E6EDF0;color:#06080A;border-color:#E6EDF0}
+@keyframes mh-spark{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.4);opacity:1}}
+@keyframes mh-blink{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes mh-drift{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
+
+/* -- Full-scale layout ---------------------------------------------------
+   The canvas is drawn on a 1340px artboard. The page fills whatever screen it
+   is on instead, and scales the artboard's gutters, grids and display sizes
+   through the same breakpoints Bootstrap uses: 576, 768, 992, 1200, 1400.
+   Inline styles are the canvas's own, so the overrides carry !important. */
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:96px}
+.mh-page{width:100%}
+/* The reach keeps a fixed frame because its copy is positioned inside it.
+   The other frames grow with their content, so a stacked phone layout is
+   never taller than the frame that holds it. */
+.mh-frame{height:auto!important;min-height:100vh;min-height:100svh}
+#top.mh-frame{height:100vh!important;height:100svh!important;min-height:640px;max-height:1100px}
+.mh-menu{display:none}
+/* The hidden attribute has to beat the nav's inline display:flex. */
+.mh-mobile-nav[hidden]{display:none!important}
+
+/* ≥1400: the artboard's own gutters, and the display sizes as drawn. */
+
+/* <1400 */
+@media (max-width:1399.98px){
+  .mh-gutter{padding-left:40px!important;padding-right:40px!important}
+}
+/* <1200 */
+@media (max-width:1199.98px){
+  .mh-gutter{padding-left:32px!important;padding-right:32px!important}
+  .mh-row{grid-template-columns:160px minmax(0,1fr) 260px!important;gap:28px!important}
+  .mh-row.mh-row--full{grid-template-columns:160px minmax(0,1fr)!important}
+}
+/* <992 */
+@media (max-width:991.98px){
+  .mh-hero-grid{grid-template-columns:minmax(0,1fr)!important;align-items:start!important}
+  .mh-gutter{padding-left:28px!important;padding-right:28px!important}
+  .mh-row{grid-template-columns:minmax(0,1fr)!important;gap:20px!important}
+  .mh-three{grid-template-columns:minmax(0,1fr)!important}
+  .mh-three>div{border-right:0!important;border-bottom:1px solid rgba(230,237,240,.1)}
+  .mh-people{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .mh-hero-copy{max-width:520px!important}
+}
+/* <768 */
+@media (max-width:767.98px){
+  .mh-gutter{padding-left:24px!important;padding-right:24px!important}
+  .mh-hero-nav{display:none!important}
+  .mh-menu{display:inline-block}
+  .mh-wrap{flex-wrap:wrap!important}
+  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .mh-hero-copy{left:24px!important;right:24px!important;bottom:200px!important;max-width:none!important}
+  .mh-hero-title{font-size:44px!important}
+  .mh-display-104{font-size:56px!important}
+  .mh-display-80{font-size:48px!important}
+  .mh-display-68{font-size:44px!important}
+  h2[style*="font-size:52px"]{font-size:40px!important}
+  h3[style*="font-size:44px"]{font-size:34px!important}
+  h3[style*="font-size:34px"]{font-size:28px!important}
+  h3[style*="font-size:30px"]{font-size:26px!important}
+}
+/* <576 */
+@media (max-width:575.98px){
+  .mh-gutter{padding-left:20px!important;padding-right:20px!important}
+  .mh-name{white-space:nowrap}
+  .mh-hero-copy{left:20px!important;right:20px!important;bottom:190px!important}
+  .mh-hero-title{font-size:38px!important}
+  .mh-display-104{font-size:42px!important}
+  .mh-display-80{font-size:40px!important}
+  .mh-display-68{font-size:38px!important}
+  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+  h2[style*="font-size:52px"]{font-size:34px!important}
+  h3[style*="font-size:44px"]{font-size:30px!important}
+  [style*="grid-template-columns:140px"]{grid-template-columns:minmax(0,1fr)!important;gap:6px!important}
+}
+    </style>
+    <script is:inline src={`${base}/design/mh-bg.js`}></script>
+  </head>
+  <body>
+    <div class="mh-page">
+<!-- The one header. 2a's, fixed to the top of every page. -->
+<header class="mh-header" style="position:fixed;z-index:50;left:0;right:0;top:0;background:rgba(6,8,10,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,237,240,.1)">
+<div class="mh-gutter" style="display:flex;align-items:center;justify-content:space-between;padding:26px 48px">
+  <a href={`${base}/`} class="mh-name" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em;color:#E6EDF0;text-decoration:none">MINN HAI Lab</a>
+  <button class="mh-menu" type="button" aria-expanded="false" aria-controls="mh-mobile-nav" style="pointer-events:auto;font:500 12.5px 'Space Grotesk',sans-serif;color:#E6EDF0;background:transparent;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px;cursor:pointer">Menu</button>
+  <div class="mh-hero-nav" style="display:flex;gap:32px;align-items:center;pointer-events:auto">
+    <a href={`${base}/research`} style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Research</a>
+    <a href={`${base}/learning`} style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Learning</a>
+    <a href={`${base}/members`} style="font-size:13px;color:rgba(230,237,240,.62);text-decoration:none">Members</a>
+    <a href={`${base}/partner`} style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px">Partner with us</a>
+  </div>
+</div>
+<nav id="mh-mobile-nav" class="mh-mobile-nav" hidden aria-label="Menu" style="position:absolute;z-index:6;left:0;right:0;top:100%;display:flex;flex-direction:column;background:rgba(6,8,10,.96);border-top:1px solid rgba(230,237,240,.1);border-bottom:1px solid rgba(230,237,240,.1)">
+  <a href={`${base}/research`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Research</a>
+  <a href={`${base}/learning`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Learning</a>
+  <a href={`${base}/members`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Members</a>
+  <a href={`${base}/partner`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px">Partner with us</a>
+</nav>
+</header>
+<slot />
+<div class="mh-gutter mh-wrap" style="display:flex;justify-content:space-between;gap:40px;padding:32px 44px;border-top:1px solid rgba(230,237,240,.1);background:#06080A">
+  <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:Literata,serif;font-size:17px">MINN HAI Lab</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">Human-centered AI</span></div>
+  <div class="mh-wrap" style="display:flex;gap:28px;align-items:flex-start"><a href={`${base}/research`} style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Research</a><a href={`${base}/learning`} style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Learning</a><a href={`${base}/members`} style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Members</a><a href={`${base}/partner`} style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Join</a><a href="mailto:sein.minn.cs@gmail.com" style="font-size:12.5px;color:rgba(230,237,240,.5);text-decoration:none">Contact</a></div>
+</div>
+    </div>
+
+    <script is:inline>
+      // From the canvas's own script: forward the pointer into the 3D scene's
+      // frame so the overlays do not block the reach, and switch the learning
+      // panel's tabs. Both are no-ops on pages without those elements.
+      (function () {
+        window.addEventListener('pointermove', function (e) {
+          document.querySelectorAll('iframe[data-mh-scene]').forEach(function (fr) {
+            var r = fr.getBoundingClientRect();
+            if (!r.width || !fr.contentWindow) return;
+            var x = ((e.clientX - r.left) / r.width) * 2 - 1, y = ((e.clientY - r.top) / r.height) * 2 - 1;
+            var out = x < -1.1 || x > 1.1 || y < -1.1 || y > 1.1;
+            fr.contentWindow.postMessage(out ? { type: 'mh-pointer', out: true } : { type: 'mh-pointer', x: x, y: y }, '*');
+          });
+        }, { passive: true });
+
+        var menu = document.querySelector('.mh-menu');
+        var mobileNav = document.getElementById('mh-mobile-nav');
+        if (menu && mobileNav) {
+          menu.addEventListener('click', function () {
+            var open = mobileNav.hidden;
+            mobileNav.hidden = !open;
+            menu.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menu.textContent = open ? 'Close' : 'Menu';
+          });
+          mobileNav.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', function () { mobileNav.hidden = true; menu.setAttribute('aria-expanded', 'false'); menu.textContent = 'Menu'; });
+          });
+        }
+
+        var tabs = document.querySelectorAll('[data-mh-tab]');
+        var panels = document.querySelectorAll('[data-mh-panel]');
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var i = tab.getAttribute('data-mh-tab');
+            tabs.forEach(function (t) { t.setAttribute('aria-selected', t.getAttribute('data-mh-tab') === i ? 'true' : 'false'); });
+            panels.forEach(function (p) { p.hidden = p.getAttribute('data-mh-panel') !== i; });
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,27 +1,27 @@
 # Plan
 
-The site is one page: the design canvas in `MINN HAI LAB UI Design/`,
-transcribed. `src/pages/index.astro` is the whole of it.
+The site is five pages, transcribing the design canvas in
+`MINN HAI LAB UI Design/`. `src/layouts/Layout.astro` is the shared header
+(fixed, every page) and footer; each page is one span of the canvas's
+direction 1d, in its order.
 
 ## Information architecture
 
-Sections, in the canvas's order, each an anchor the header and footer link
-to:
+| Page | Route | Content |
+|---|---|---|
+| Home | `/` | The reach — the hero (2a) — through Deep Field (1a), Lattice (1b) and Signal Plane (1c), "We model the learner, not the average." |
+| Research | `/research` | Research header band, then the two programme rows, each with its real publication list |
+| Learning | `/learning` | The learning panel: StatLab, linked out; course materials, still a gap |
+| Members | `/members` | Five portrait frames, headed "Members" |
+| Partner with us | `/partner` | The seven funders by name, then "Bring us a problem that needs an explanation." |
 
-| Anchor | Section |
-|---|---|
-| `#top` | The reach — the hero (2a) |
-| `#deep-field` | Deep Field (1a) — the network, the two-column strip |
-| `#lattice` | Lattice (1b) — the two programme rows over the lattice field |
-| `#signal-plane` | Signal Plane (1c) — "We model the learner, not the average." over the plane |
-| `#research` | Research header band, then the two programme rows, each with its real publication list |
-| `#learning` | The learning panel: StatLab, linked out; course materials, still a gap |
-| `#people` | Five portrait frames, headed "Members" |
-| `#funding` | The seven funders, by name |
-| `#join` | "Bring us a problem that needs an explanation." — partner |
+Kaung set these boundaries directly (D-037): Home ends where Research began
+as a section; Research runs through Programme 02; Learning and Members are
+each their own page; Partner with us is Funding through the close.
 
-The previous site's routes — `/research`, `/learning`, `/people`, `/about` —
-redirect to those anchors.
+The previous site's routes — `/people`, `/about` — redirect to where their
+content is now (`/members`, `/partner`). `/research` and `/learning` stayed
+put across the single-page detour and back, so they need no redirect.
 
 ## Content inventory
 
@@ -36,4 +36,5 @@ materials; paper and code URLs.
 ## How to change anything
 
 Edit the canvas. Re-transcribe following the notes at the top of
-`src/pages/index.astro`. Build, look at 1440 and 360, run `npm run verify`.
+`src/layouts/Layout.astro` and the page you're changing. Build, look at 1440
+and 360, run `npm run verify`.

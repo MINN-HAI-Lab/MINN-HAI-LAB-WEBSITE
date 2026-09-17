@@ -923,3 +923,50 @@ settles the question the other way from a guess: not "confirmed true" but
 `src/pages/index.astro`'s Members section ends at the portrait grid, and the
 closing band's button row is just "Partner with the lab." `docs/phase.md` and
 `docs/plan.md` no longer list this as outstanding.
+
+---
+
+## D-037 — Back to five pages, split where Kaung drew the lines
+
+**Status: adopted, 2026-09-17.** Supersedes D-028's "the canvas is copied,
+not interpreted, onto one page" and D-029's full-width single page, for
+structure only — the transcription rule itself, and everything transcribed
+under it since, stands.
+
+Kaung asked for the single page cut into five: Home (the reach through
+Signal Plane), Research (the research band through Programme 02), Learning,
+Members, and Partner with us (Funding through the closing band) — his own
+boundaries, given directly, not inferred from the canvas's own direction
+breaks (which run 2a / 1a / 1b / 1c / 1d, not five even pieces).
+
+**Structure.** `src/layouts/Layout.astro` now holds what used to be
+`index.astro`'s shared chrome — the fixed header, the closing footer, the
+stylesheet, the pointer-forwarding and tab-switching script — as a layout
+every page wraps itself in. `index.astro` keeps the reach and the three
+hero directions; `research.astro`, `learning.astro`, `members.astro` and
+`partner.astro` are new, each the canvas's own markup for its span,
+unchanged. The Members section's `id` moves from `people` to `members`, to
+match the nav label D-033 already renamed; everything else's ids, classes
+and inline styles are untouched.
+
+**Two things a single scrolling page didn't require, that five pages do:**
+
+- Every same-page anchor a nav link, a CTA or the footer used (`#research`,
+  `#learning`, `#people`, `#join`) is now a page route instead
+  (`${base}/research`, etc.), including the wordmark, which now points at
+  `${base}/` rather than `#top`.
+- The fixed header floats over whatever is at the top of a fresh page load,
+  same as it always floated over whatever was scrolled to the top of the
+  single page. Research's own header band is full-bleed and dark, so this
+  was already accounted for; Learning, Members and Partner's first sections
+  are plain gutter sections that would otherwise load with their heading
+  sitting behind the translucent header. Their wrapper carries
+  `padding-top:96px` — reusing the 96px already established site-wide for
+  `[id]{scroll-margin-top}` — to clear it. This is a structural fix for a
+  collision the split introduced, not a restyle of the canvas's own
+  sections, which are otherwise byte-for-byte what they were.
+
+**Routing.** `/people` and `/about` redirect to `/members` and `/partner`,
+where their content now is. `/research` and `/learning` need no redirect —
+those routes existed before the single-page detour and exist again now, at
+the same place.
