@@ -1136,3 +1136,28 @@ existing one finally present here too. Because the fix above makes each
 section's rendered height exactly right (a full screen, or taller only if
 content needs it), that border always lands exactly at the section's true
 end, matching what was asked.
+
+---
+
+## D-044 — Signal Plane: no "new research group," "themes," breathing room at the foot
+
+**Status: adopted, 2026-09-17.** Kaung's follow-up, on the section D-043
+just fixed.
+
+"New research group · " is gone from the small label above the headline;
+it now reads "Human-centered AI" alone, centred as before. The stats
+row's "research programmes" becomes "research themes," matching D-042's
+rename on the Research page — the count itself (2) is untouched, since
+Computer Vision still has no content behind it.
+
+Kaung reported the stats row "covered and off grid" on a 13-inch and a
+16-inch screen, and asked for it moved up. D-043 had just made this
+section's content correctly reach the section's true bottom edge — right,
+for the background, but the stats row itself sat only 26px off that exact
+edge, which is closer than real browser and OS chrome reliably leaves
+clear on a real laptop, as opposed to a Playwright viewport with none.
+Its bottom padding is now 64px, moving it up without reopening the empty
+gap D-043 removed — the section still reaches full height, just with
+real clearance at its foot. Checked at 1280×800 and 1440×900 (13-inch) and
+1536×960 and 1728×1117 (16-inch): the whole section, stats included, sits
+comfortably inside all four with no overflow.
