@@ -35,12 +35,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <!-- The canvas's three earlier hero directions — 1a Deep Field, 1b Lattice,
      1c Signal Plane — in order, as Kaung asked. Their copy is the canvas's
      and is to be changed later. -->
-<div id="deep-field" class="mh-frame" style="position:relative;height:860px;background:#06080A">
+<div id="deep-field" class="mh-frame" style="position:relative;height:860px;background:#06080A;display:flex;flex-direction:column;border-bottom:1px solid rgba(230,237,240,.1)">
 <div style="position:absolute;left:54%;right:0;top:40px;bottom:260px;z-index:0">
 <mh-bg mode="bayes" speed="1" style="position:absolute;inset:0"></mh-bg>
 </div>
 <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(6,8,10,.96) 0%,rgba(6,8,10,.7) 38%,rgba(6,8,10,0) 60%)"></div>
-<div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column">
+<div style="position:relative;z-index:2;flex:1 0 auto;display:flex;flex-direction:column">
 
   <div class="mh-gutter mh-hero-grid" style="flex:1;display:grid;grid-template-columns:minmax(0,1fr);align-items:end;gap:48px;padding:48px">
     <div style="display:flex;flex-direction:column;gap:28px;max-width:820px">
@@ -63,10 +63,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </div>
 </div>
 
-<div id="lattice" class="mh-frame" style="position:relative;height:860px;background:#07090C">
+<div id="lattice" class="mh-frame" style="position:relative;height:860px;background:#07090C;display:flex;flex-direction:column;border-bottom:1px solid rgba(230,237,240,.1)">
 <mh-bg mode="lattice" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
 <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.6) 46%,rgba(7,9,12,.2) 100%)"></div>
-<div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column">
+<div style="position:relative;z-index:2;flex:1 0 auto;display:flex;flex-direction:column">
 
   <div style="flex:1;display:flex;align-items:center;padding:0 44px">
     <div style="display:flex;flex-direction:column;gap:26px;max-width:660px">
@@ -81,10 +81,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </div>
 </div>
 
-<div id="signal-plane" class="mh-frame" style="position:relative;height:860px;background:#080A0D">
+<div id="signal-plane" class="mh-frame" style="position:relative;height:860px;background:#080A0D;display:flex;flex-direction:column;border-bottom:1px solid rgba(230,237,240,.1)">
 <mh-bg mode="grid" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
 <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(70% 55% at 50% 34%,rgba(8,10,13,.9) 0%,rgba(8,10,13,.45) 55%,rgba(8,10,13,0) 80%)"></div>
-<div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column">
+<div style="position:relative;z-index:2;flex:1 0 auto;display:flex;flex-direction:column">
 
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center;padding:0 44px">
     <span style="font-size:12px;color:rgba(230,237,240,.5)">New research group · Human-centered AI</span>

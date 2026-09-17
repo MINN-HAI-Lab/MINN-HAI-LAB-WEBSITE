@@ -1093,3 +1093,46 @@ adding a third theme, on the same page as the count. The "2 research
 programmes" stat on Home's Signal Plane, and "two research programmes" in
 its own copy, are untouched: Computer Vision has no content yet, and
 changing a claim on a different page wasn't asked for.
+
+---
+
+## D-043 — Deep Field, Lattice and Signal Plane fill the viewport; a rule at the foot of each
+
+**Status: adopted, 2026-09-17.** Kaung noticed Deep Field ("Intelligence
+you can observe") wasn't filling the screen — its two-column strip
+(Knowledge tracing / Interpretable tabular models) only reached the bottom
+once he'd scrolled further. Lattice and Signal Plane had the same fault,
+less visible since their content sits centred rather than pinned to an
+edge.
+
+**The bug.** Each section is `.mh-frame`: `height:auto` with
+`min-height:100vh`, so the section's own box is always at least a full
+screen tall. Its content sat in a child carrying `height:100%` — and a
+percentage height only resolves against a parent's *specified* height, not
+one produced by `min-height`. With the parent's height effectively `auto`
+for this purpose, `height:100%` computed to nothing, and the child
+shrank to its own content (624px of a 900px screen, measured directly).
+The section's dark background, absolutely positioned and unaffected by
+this, still covered the full box — so the fault read as empty space
+under short content, not a missing background.
+
+**The fix.** The same technique already in `src/layouts/Layout.astro` for
+the page footer: the section becomes `display:flex;flex-direction:column`,
+and its content child gets `flex:1 0 auto` instead of `height:100%`. A
+flex child sized this way fills the section exactly when content is
+shorter than a screen, and — unlike the alternative of an absolutely
+positioned child stretched with `inset:0`, which would have capped the
+section at exactly `min-height` — still grows past it if content ever
+needs more, on a narrow phone with heavily wrapped copy, say.
+
+**The rule.** Kaung asked for a line marking the end of each section,
+"exactly at the bottom of the screen," the way the hero's own bottom bar
+already reads as one (its `border-top`, pinned to the hero's own bottom
+edge). Deep Field, Lattice and Signal Plane each get
+`border-bottom:1px solid rgba(230,237,240,.1)` on the section itself — the
+same rule weight `design/DESIGN.md` already specifies for every other
+section boundary on the site, so this isn't a new visual element, just the
+existing one finally present here too. Because the fix above makes each
+section's rendered height exactly right (a full screen, or taller only if
+content needs it), that border always lands exactly at the section's true
+end, matching what was asked.
