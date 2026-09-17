@@ -1161,3 +1161,30 @@ gap D-043 removed — the section still reaches full height, just with
 real clearance at its foot. Checked at 1280×800 and 1440×900 (13-inch) and
 1536×960 and 1728×1117 (16-inch): the whole section, stats included, sits
 comfortably inside all four with no overflow.
+
+---
+
+## D-045 — Theme 01 had no left gutter at 1400px and up
+
+**Status: adopted, 2026-09-17.** Kaung reported Theme 01 sitting flush
+against the left edge of the screen on the Research page, "so close to
+the left. It starts at the screen." Confirmed: at any width 1400px or
+wider, its column had `padding-left: 0px`, measured directly.
+
+D-042's `.mh-themes` row (the three-column grid replacing the old
+programme rows) never got its own left/right padding — `.mh-gutter`'s
+breakpoint rules only *override* padding-left/right below 1400px; they
+supply no base value above it, which every other `.mh-gutter` element on
+the site gets from its own inline `padding`. `.mh-themes` had none. Below
+1400px it was never visible, since the narrower breakpoints happened to
+supply padding anyway — which is almost certainly why it went unnoticed
+at the time.
+
+Fixed with `padding:0 44px` on the row itself, matching what every other
+`.mh-gutter` section on the site sets inline (the Research header band
+right above it, among others). Confirmed at 1440, 1728 and 1920px: Theme
+01 now lines up with the header's wordmark and the "Research" title
+above it, and nothing else in the row moved, since only the outer row's
+own missing padding was the fault — the individual columns' padding
+(0 on Theme 01's left, 0 on Theme 03's right, so the row's own gutter is
+the only inset at either end) was already correct.
