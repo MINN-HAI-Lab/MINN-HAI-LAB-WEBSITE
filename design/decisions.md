@@ -981,3 +981,24 @@ D-037 made the footer shared layout chrome in `src/layouts/Layout.astro`,
 one edit there does that. What remains is the lab name and "Human-centered
 AI"; the header nav and mobile menu, which carry the same routes, are
 unchanged.
+
+---
+
+## D-039 — The footer sits at the true bottom of every page, never on grey
+
+**Status: adopted, 2026-09-17.** D-037 split the single page into five;
+Learning, Members and a short Funding list are all shorter than a typical
+viewport now, where the single page never had been. Below their footer,
+`body`'s own `#15181b` — "the design viewer's own ground," never meant to
+be seen — showed through, and the footer sat wherever the short content
+happened to end rather than at the foot of the screen. Kaung asked for
+spacing there instead, the footer pinned to the page's actual end, and no
+grey.
+
+Standard sticky-footer CSS: `.mh-page` is a column at least the height of
+the viewport; its one flexible child, a new `.mh-main` wrapping `<slot />`,
+carries `flex:1 0 auto` and the same `#06080A` every section already uses,
+so it grows to fill whatever room is left and the footer lands at the
+bottom of the viewport on a short page, or right after the content on a
+tall one, exactly as before. Home and Research, both already taller than
+any viewport, are unaffected — confirmed at 900px and 1400px tall.
