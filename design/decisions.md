@@ -1038,3 +1038,21 @@ The "Principal investigator, researchers, students" line by the section
 heading is removed, per Kaung's request — it described the placeholder
 grid's range of roles in the abstract, which five named, real people with
 real titles no longer need.
+
+---
+
+## D-041 — Two captions removed from Home
+
+**Status: adopted, 2026-09-17.** Kaung asked to remove Lattice's caption
+row — "Move the cursor — the lattice is the lab's Markov-blanket graph, not
+decoration" and, beside it, "node in the blanket of the target variable" —
+and Signal Plane's "The plane deforms around the cursor: a live surface,
+drawn from the model's own response curve."
+
+Lattice's row held only those two pieces, so the whole row is gone.
+Signal Plane's row held the caption on the left and the "2 research
+programmes / 1 open learning resource, StatLab" stats on the right in a
+`space-between` flex row; removing the caption alone would have pulled the
+stats to the left edge where the caption used to sit, so that row is now
+`justify-content:flex-end` to keep the stats where they were, at the
+right, with nothing to their left.
