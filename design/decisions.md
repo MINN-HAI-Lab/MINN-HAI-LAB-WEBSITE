@@ -1188,3 +1188,26 @@ above it, and nothing else in the row moved, since only the outer row's
 own missing padding was the fault — the individual columns' padding
 (0 on Theme 01's left, 0 on Theme 03's right, so the row's own gutter is
 the only inset at either end) was already correct.
+
+---
+
+## D-046 — Publications link to their papers and code
+
+**Status: adopted, 2026-09-17.** Kaung supplied a paper URL for every one
+of the fourteen publications across Theme 01 and Theme 02, and a code URL
+for five of them (IKT, BKT-LSTM, DSCMN, DKT-DSC, LAPLACE — the five
+already carrying a `code` tag). This was the last `TODO:` docs/phase.md had
+been carrying for the publication lists.
+
+Each short name is now an `<a>` to its paper, opening in a new tab
+(`target="_blank" rel="noopener"`, matching the site's one other external
+link, StatLab on the Learning page), with a `border-bottom` underline so
+the title reads as a link at a glance — the site had no established
+convention for an inline text link at this size, so it borrows the
+`rgba(230,237,240,.4)` weight already used for "Enter the lab" elsewhere.
+Each existing `code` tag becomes an `<a>` to its repository, keeping its
+pill styling exactly as it was — no separate visual treatment needed,
+since a `code` tag was already legible as a small interactive label.
+
+No publication's short name, venue, year or code claim changed — this
+is links added to facts already on the page, not new facts.

@@ -26,13 +26,13 @@ put across the single-page detour and back, so they need no redirect.
 ## Content inventory
 
 Real, on the page: fourteen publications across two of the three research
-themes (short name, venue, year, a `code` tag where code exists — no URLs,
-none supplied); seven funders by name; the contact address, as a live
-`mailto:` in three places; the hero and theme copy, checked against the
-lab's supplied bio; five members by name, role and photo.
+themes, each linked to its paper, five of them to code as well; seven
+funders by name; the contact address, as a live `mailto:` in three places;
+the hero and theme copy, checked against the lab's supplied bio; five
+members by name, role and photo.
 
 Still `TODO:` on the page: Computer Vision's description and publications,
-still unsupplied; course materials; paper and code URLs.
+still unsupplied; course materials.
 
 ## How to change anything
 
