@@ -1348,3 +1348,15 @@ Order: Founder, Post Doctoral, Doctoral, Master — matching where Kaung
 asked for Doctoral to go. No structural change beyond adding the group
 and its three entries; the same per-group heading and `.mh-people` grid
 pattern from D-049 handles it without modification.
+
+---
+
+## D-051 — The header nav's three links match the wordmark's brightness
+
+**Status: adopted, 2026-09-20.** Kaung noticed Research / Learning /
+Members read greyer than the rest of the header. They were
+`rgba(230,237,240,.62)`; the wordmark and "Partner with us" are full
+`#E6EDF0`, and so, already, was the mobile menu's copy of these same
+three links — the desktop row was the one inconsistent with everything
+else in the header, not the other way round. Changed to `#E6EDF0` to
+match.
