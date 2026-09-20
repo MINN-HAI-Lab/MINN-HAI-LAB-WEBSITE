@@ -14,9 +14,9 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Learning — MINN HAI Lab">
-<div style="background:#06080A;padding-top:96px">
-  <div class="mh-gutter" id="learning" style="padding:44px;border-bottom:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:20px">
-    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;letter-spacing:-.015em">Learning</h3><span style="font-size:12.5px;color:rgba(230,237,240,.5)">Resources from the lab</span></div>
+<div style="background:var(--field);padding-top:96px">
+  <div class="mh-gutter" id="learning" style="padding:44px;border-bottom:1px solid rgba(var(--ink-rgb),.1);display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;letter-spacing:-.015em">Learning</h3><span style="font-size:12.5px;color:rgba(var(--ink-rgb),.5)">Resources from the lab</span></div>
     <div style="display:flex;flex-wrap:wrap;gap:8px" role="tablist">
       <button class="mh-tab" type="button" role="tab" aria-selected="true" data-mh-tab="0">StatLab</button>
       <button class="mh-tab" type="button" role="tab" aria-selected="false" data-mh-tab="1">Course materials</button>
@@ -25,14 +25,14 @@ import Layout from '../layouts/Layout.astro';
       <div data-mh-panel="0">
         <div style="display:flex;flex-direction:column;gap:12px;max-width:70ch">
           <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">StatLab</div>
-          <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(230,237,240,.68)">An interactive introduction to probability and statistics. Runs in the browser.</p>
-          <a href="https://minn-hai-lab.github.io/statLab/index.html" target="_blank" rel="noopener" style="align-self:flex-start;font-size:13px;color:#06080A;background:#E6EDF0;text-decoration:none;border-radius:2px;padding:12px 20px;font-weight:500">Open StatLab</a>
+          <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(var(--ink-rgb),.68)">An interactive introduction to probability and statistics. Runs in the browser.</p>
+          <a href="https://minn-hai-lab.github.io/statLab/index.html" target="_blank" rel="noopener" style="align-self:flex-start;font-size:13px;color:var(--field);background:var(--ink);text-decoration:none;border-radius:2px;padding:12px 20px;font-weight:500">Open StatLab</a>
         </div>
       </div>
       <div data-mh-panel="1" hidden>
         <div style="display:flex;flex-direction:column;gap:12px;max-width:70ch">
           <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">Course materials</div>
-          <div style="border-left:3px solid rgba(230,237,240,.4);background:rgba(6,8,10,.75);border-radius:3px;padding:14px 16px;font-size:13px;line-height:1.6;color:rgba(230,237,240,.82)">TODO: which courses and materials go public, and who owns them. Nothing listed until you supply it.</div>
+          <div style="border-left:3px solid rgba(var(--ink-rgb),.4);background:rgba(var(--field-rgb),.75);border-radius:3px;padding:14px 16px;font-size:13px;line-height:1.6;color:rgba(var(--ink-rgb),.82)">TODO: which courses and materials go public, and who owns them. Nothing listed until you supply it.</div>
         </div>
       </div>
     </div>

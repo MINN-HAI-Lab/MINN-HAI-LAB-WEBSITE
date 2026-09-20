@@ -5,6 +5,11 @@ The site is five pages, transcribing the design canvas in
 (fixed, every page) and footer; each page is one span of the canvas's
 direction 1d, in its order.
 
+Light is the default theme, dark — the canvas's own colours, unchanged —
+a secondary one reachable from the header's toggle (D-052). See
+`design/DESIGN.md`'s "Theme" section for the token table and which four
+sections stay the canvas's dark always.
+
 ## Information architecture
 
 | Page | Route | Content |

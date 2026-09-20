@@ -56,8 +56,8 @@ const groups = [
 ---
 
 <Layout title="Members — MINN HAI Lab">
-<div style="background:#06080A;padding-top:96px">
-  <div class="mh-gutter" id="members" style="padding:44px;border-bottom:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:40px">
+<div style="background:var(--field);padding-top:96px">
+  <div class="mh-gutter" id="members" style="padding:44px;border-bottom:1px solid rgba(var(--ink-rgb),.1);display:flex;flex-direction:column;gap:40px">
     <div style="display:flex;align-items:baseline;justify-content:space-between"><h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;letter-spacing:-.015em">Members</h3></div>
     {groups.map((g) => (
       <div style="display:flex;flex-direction:column;gap:16px">
@@ -66,15 +66,15 @@ const groups = [
           {g.people.map((p) => (
             <div style="display:flex;flex-direction:column;gap:12px">
               {p.photo ? (
-                <div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;overflow:hidden">
+                <div style="aspect-ratio:4/5;border:1px solid rgba(var(--ink-rgb),.14);border-radius:3px;overflow:hidden">
                   <img src={`${base}/members/${p.photo}`} alt={p.name} loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" />
                 </div>
               ) : (
-                <div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px">
-                  <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span>
+                <div style="aspect-ratio:4/5;border:1px solid rgba(var(--ink-rgb),.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(var(--ink-rgb),.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px">
+                  <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(var(--ink-rgb),.5)">portrait</span>
                 </div>
               )}
-              <div><div style="font-family:Literata,serif;font-size:16px">{p.name ?? 'TODO: name'}</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">{p.role}</div></div>
+              <div><div style="font-family:Literata,serif;font-size:16px">{p.name ?? 'TODO: name'}</div><div style="font-size:12px;color:rgba(var(--ink-rgb),.5);margin-top:3px">{p.role}</div></div>
             </div>
           ))}
         </div>

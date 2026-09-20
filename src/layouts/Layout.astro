@@ -19,7 +19,11 @@
  *     container with the artboard's 44/48px gutter carries .mh-gutter, the
  *     grids and the hero copy carry classes, and one stylesheet scales them
  *     through Bootstrap's breakpoints (576, 768, 992, 1200, 1400). Below
- *     768px the header's links become a Menu button.
+ *     768px the header's links become a Menu button;
+ *   - every colour the canvas drew as a literal value is now a CSS custom
+ *     property (D-052), light by default, dark as an explicit alternative —
+ *     see "Theme" below. The canvas's own values, palette and hierarchy are
+ *     unchanged; only how a given page reaches them is.
  *
  * Pages: each is one continuous span of the canvas's direction 1d, copied in
  * the canvas's order, wrapped in this layout —
@@ -32,6 +36,22 @@
  *
  * The 3D scene is public/design/hands-scene.html, and the fields are
  * public/design/mh-bg.js — both copied from the design folder untouched.
+ *
+ * Theme (D-052): light is default, dark is a secondary theme a visitor
+ * opts into with the header's toggle; their choice is kept in
+ * localStorage and re-applied before paint (the inline script just below
+ * <head>, ahead of the stylesheet). Everywhere a colour used to be a
+ * literal value it is now `var(--token)`, defined once as light values on
+ * :root and overridden as dark values under [data-theme="dark"].
+ *
+ * Three places stay the canvas's original dark, always, regardless of
+ * theme: the hero's 3D scene (index.astro #top), and the two sections
+ * whose background is a live mh-bg canvas field with no fill of its own —
+ * Home's #signal-plane and Partner's #join — plus Research's Theme 01
+ * panel, which holds the third mh-bg field. mh-bg draws light lines on a
+ * transparent canvas; without an explicit dark backdrop behind it, in
+ * light mode those lines would be nearly invisible. Their colours stay
+ * literal hex, not tokens, on purpose.
  */
 export interface Props {
   title?: string;
@@ -51,17 +71,54 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#06080A" />
+    <meta name="theme-color" content="#EFF1F2" />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <script is:inline>
+      /* Applies a saved theme before first paint, so there is no flash of
+         the wrong one. Light is default: only a saved "dark" changes
+         anything. Must run before the stylesheet below. */
+      (function () {
+        try {
+          if (localStorage.getItem('mh-theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;1,7..72,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
     <style is:inline>
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:#15181b;font-family:"Space Grotesk",system-ui,sans-serif;color:#E6EDF0}
-a{color:#E6EDF0}a:hover{color:#fff}
-.mh-tab{font:500 12.5px "Space Grotesk",sans-serif;border-radius:999px;padding:9px 15px;cursor:pointer;border:1px solid rgba(230,237,240,.18);background:transparent;color:rgba(230,237,240,.68);transition:background .12s ease,color .12s ease,border-color .12s ease}
-.mh-tab:hover{color:#E6EDF0;border-color:rgba(230,237,240,.42)}
-.mh-tab[aria-selected="true"]{background:#E6EDF0;color:#06080A;border-color:#E6EDF0}
+
+/* -- Theme (D-052) --------------------------------------------------------
+   Light is default (:root); dark is everything the canvas originally drew,
+   kept as an explicit alternative under [data-theme="dark"]. Every token a
+   page or this layout uses is a --x-rgb triplet (so rgba(var(--x-rgb),N)
+   can carry the canvas's own alpha values unchanged) plus a solid rgb()
+   convenience for plain fills. --accent is the canvas's red and does not
+   change between themes. */
+:root{
+  --field-rgb:239,241,242;
+  --ink-rgb:28,40,48;
+  --display-rgb:10,16,20;
+  --accent-rgb:214,26,74;
+  --field:rgb(var(--field-rgb));
+  --ink:rgb(var(--ink-rgb));
+  --display:rgb(var(--display-rgb));
+  --accent:rgb(var(--accent-rgb));
+}
+[data-theme="dark"]{
+  --field-rgb:6,8,10;
+  --ink-rgb:230,237,240;
+  --display-rgb:244,248,250;
+}
+
+body{margin:0;background:var(--field);font-family:"Space Grotesk",system-ui,sans-serif;color:var(--ink)}
+a{color:var(--ink)}a:hover{color:var(--display)}
+.mh-tab{font:500 12.5px "Space Grotesk",sans-serif;border-radius:999px;padding:9px 15px;cursor:pointer;border:1px solid rgba(var(--ink-rgb),.18);background:transparent;color:rgba(var(--ink-rgb),.68);transition:background .12s ease,color .12s ease,border-color .12s ease}
+.mh-tab:hover{color:var(--ink);border-color:rgba(var(--ink-rgb),.42)}
+.mh-tab[aria-selected="true"]{background:var(--ink);color:var(--field);border-color:var(--ink)}
+.mh-theme-toggle{font:500 12.5px "Space Grotesk",sans-serif;color:var(--ink);background:transparent;border:1px solid rgba(var(--ink-rgb),.28);border-radius:2px;padding:9px 16px;cursor:pointer;pointer-events:auto}
 @keyframes mh-spark{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.4);opacity:1}}
 @keyframes mh-blink{0%,100%{opacity:.25}50%{opacity:1}}
 @keyframes mh-drift{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
@@ -74,13 +131,13 @@ a{color:#E6EDF0}a:hover{color:#fff}
 html{scroll-behavior:smooth}
 [id]{scroll-margin-top:96px}
 /* A page shorter than the viewport (Learning, Members, Partner with a short
-   funder list) would otherwise end with the body's own #15181b showing
+   funder list) would otherwise end with the body's own background showing
    below the footer. mh-page is a column the height of the viewport at
    least; mh-main is the one flexible child, so it grows to push the footer
-   to the true bottom of the screen and keeps its #06080A under it the
-   whole way down — never the body's grey. */
+   to the true bottom of the screen and keeps the field colour under it the
+   whole way down. */
 .mh-page{width:100%;min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
-.mh-main{flex:1 0 auto;background:#06080A}
+.mh-main{flex:1 0 auto;background:var(--field)}
 /* The reach keeps a fixed frame because its copy is positioned inside it.
    The other frames grow with their content, so a stacked phone layout is
    never taller than the frame that holds it. */
@@ -105,7 +162,7 @@ html{scroll-behavior:smooth}
   .mh-hero-grid{grid-template-columns:minmax(0,1fr)!important;align-items:start!important}
   .mh-gutter{padding-left:28px!important;padding-right:28px!important}
   .mh-three{grid-template-columns:minmax(0,1fr)!important}
-  .mh-three>div{border-right:0!important;border-bottom:1px solid rgba(230,237,240,.1)}
+  .mh-three>div{border-right:0!important;border-bottom:1px solid rgba(var(--ink-rgb),.1)}
   .mh-zigzag{grid-template-columns:minmax(0,1fr)!important;gap:28px!important}
   .mh-people{grid-template-columns:repeat(3,minmax(0,1fr))!important}
   .mh-hero-copy{max-width:520px!important}
@@ -147,27 +204,30 @@ html{scroll-behavior:smooth}
   <body>
     <div class="mh-page">
 <!-- The one header. 2a's, fixed to the top of every page. -->
-<header class="mh-header" style="position:fixed;z-index:50;left:0;right:0;top:0;background:rgba(6,8,10,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,237,240,.1)">
+<header class="mh-header" style="position:fixed;z-index:50;left:0;right:0;top:0;background:rgba(var(--field-rgb),.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(var(--ink-rgb),.1)">
 <div class="mh-gutter" style="display:flex;align-items:center;justify-content:space-between;padding:26px 48px">
-  <a href={`${base}/`} class="mh-name" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em;color:#E6EDF0;text-decoration:none">MINN HAI Lab</a>
-  <button class="mh-menu" type="button" aria-expanded="false" aria-controls="mh-mobile-nav" style="pointer-events:auto;font:500 12.5px 'Space Grotesk',sans-serif;color:#E6EDF0;background:transparent;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px;cursor:pointer">Menu</button>
-  <div class="mh-hero-nav" style="display:flex;gap:32px;align-items:center;pointer-events:auto">
-    <a href={`${base}/research`} style="font-size:13px;color:#E6EDF0;text-decoration:none">Research</a>
-    <a href={`${base}/learning`} style="font-size:13px;color:#E6EDF0;text-decoration:none">Learning</a>
-    <a href={`${base}/members`} style="font-size:13px;color:#E6EDF0;text-decoration:none">Members</a>
-    <a href={`${base}/partner`} style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border:1px solid rgba(230,237,240,.28);border-radius:2px;padding:9px 16px">Partner with us</a>
+  <a href={`${base}/`} class="mh-name" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em;color:var(--ink);text-decoration:none">MINN HAI Lab</a>
+  <div style="display:flex;align-items:center;gap:14px">
+    <button id="mh-theme-toggle" class="mh-theme-toggle" type="button" aria-label="Switch to dark theme">Dark</button>
+    <button class="mh-menu" type="button" aria-expanded="false" aria-controls="mh-mobile-nav" style="pointer-events:auto;font:500 12.5px 'Space Grotesk',sans-serif;color:var(--ink);background:transparent;border:1px solid rgba(var(--ink-rgb),.28);border-radius:2px;padding:9px 16px;cursor:pointer">Menu</button>
+    <div class="mh-hero-nav" style="display:flex;gap:32px;align-items:center;pointer-events:auto">
+      <a href={`${base}/research`} style="font-size:13px;color:var(--ink);text-decoration:none">Research</a>
+      <a href={`${base}/learning`} style="font-size:13px;color:var(--ink);text-decoration:none">Learning</a>
+      <a href={`${base}/members`} style="font-size:13px;color:var(--ink);text-decoration:none">Members</a>
+      <a href={`${base}/partner`} style="font-size:12.5px;color:var(--ink);text-decoration:none;border:1px solid rgba(var(--ink-rgb),.28);border-radius:2px;padding:9px 16px">Partner with us</a>
+    </div>
   </div>
 </div>
-<nav id="mh-mobile-nav" class="mh-mobile-nav" hidden aria-label="Menu" style="position:absolute;z-index:6;left:0;right:0;top:100%;display:flex;flex-direction:column;background:rgba(6,8,10,.96);border-top:1px solid rgba(230,237,240,.1);border-bottom:1px solid rgba(230,237,240,.1)">
-  <a href={`${base}/research`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Research</a>
-  <a href={`${base}/learning`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Learning</a>
-  <a href={`${base}/members`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(230,237,240,.08)">Members</a>
-  <a href={`${base}/partner`} style="font-size:15px;color:#E6EDF0;text-decoration:none;padding:16px 24px">Partner with us</a>
+<nav id="mh-mobile-nav" class="mh-mobile-nav" hidden aria-label="Menu" style="position:absolute;z-index:6;left:0;right:0;top:100%;display:flex;flex-direction:column;background:rgba(var(--field-rgb),.96);border-top:1px solid rgba(var(--ink-rgb),.1);border-bottom:1px solid rgba(var(--ink-rgb),.1)">
+  <a href={`${base}/research`} style="font-size:15px;color:var(--ink);text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(var(--ink-rgb),.08)">Research</a>
+  <a href={`${base}/learning`} style="font-size:15px;color:var(--ink);text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(var(--ink-rgb),.08)">Learning</a>
+  <a href={`${base}/members`} style="font-size:15px;color:var(--ink);text-decoration:none;padding:16px 24px;border-bottom:1px solid rgba(var(--ink-rgb),.08)">Members</a>
+  <a href={`${base}/partner`} style="font-size:15px;color:var(--ink);text-decoration:none;padding:16px 24px">Partner with us</a>
 </nav>
 </header>
 <main class="mh-main"><slot /></main>
-<div class="mh-gutter mh-wrap" style="display:flex;justify-content:space-between;gap:40px;padding:32px 44px;border-top:1px solid rgba(230,237,240,.1);background:#06080A">
-  <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:Literata,serif;font-size:17px">MINN HAI Lab</span><span style="font-size:12.5px;color:rgba(230,237,240,.5)">Human-centered AI</span></div>
+<div class="mh-gutter mh-wrap" style="display:flex;justify-content:space-between;gap:40px;padding:32px 44px;border-top:1px solid rgba(var(--ink-rgb),.1);background:var(--field)">
+  <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:Literata,serif;font-size:17px">MINN HAI Lab</span><span style="font-size:12.5px;color:rgba(var(--ink-rgb),.5)">Human-centered AI</span></div>
 </div>
     </div>
 
@@ -209,6 +269,33 @@ html{scroll-behavior:smooth}
             panels.forEach(function (p) { p.hidden = p.getAttribute('data-mh-panel') !== i; });
           });
         });
+
+        // Theme toggle (D-052): light is default; a saved "dark" is applied
+        // before paint by the inline script in <head>. This just handles
+        // the button — reflecting current state on load, flipping and
+        // persisting on click.
+        var toggle = document.getElementById('mh-theme-toggle');
+        if (toggle) {
+          var metaTheme = document.querySelector('meta[name="theme-color"]');
+          var sync = function () {
+            var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            toggle.textContent = dark ? 'Light' : 'Dark';
+            toggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+            if (metaTheme) metaTheme.setAttribute('content', dark ? '#06080A' : '#EFF1F2');
+          };
+          sync();
+          toggle.addEventListener('click', function () {
+            var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (dark) {
+              document.documentElement.removeAttribute('data-theme');
+              try { localStorage.setItem('mh-theme', 'light'); } catch (e) {}
+            } else {
+              document.documentElement.setAttribute('data-theme', 'dark');
+              try { localStorage.setItem('mh-theme', 'dark'); } catch (e) {}
+            }
+            sync();
+          });
+        }
       })();
     </script>
   </body>

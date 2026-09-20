@@ -1360,3 +1360,95 @@ Members read greyer than the rest of the header. They were
 three links — the desktop row was the one inconsistent with everything
 else in the header, not the other way round. Changed to `#E6EDF0` to
 match.
+
+---
+
+## D-052 — Light is the default theme; dark is secondary, kept, toggled
+
+**Status: adopted, 2026-09-20.** The largest change to how the site is
+built since D-037's split into five pages — recorded here in full because
+it touches `CLAUDE.md`'s own design-authority rule, not just a page.
+
+Kaung asked for a light theme, made default, with dark kept as a
+secondary theme rather than replaced. Two decisions were needed before
+touching any code, so I asked rather than guessed, since either answer
+would have meant materially different, and largely wasted, work if wrong:
+
+1. **How to switch.** "Dark theme is secondary" implied dark had to stay
+   reachable, not just removed — a visible toggle, remembered per visitor,
+   versus following system preference with no control, versus light only
+   for now. Kaung chose the toggle, so that's what's built: a button in
+   the header, next to "Partner with us", labelled with the theme a click
+   will switch *to* ("Dark" showing in light mode, "Light" in dark). The
+   choice is kept in `localStorage` and re-applied by an inline script at
+   the very top of `<head>`, ahead of the stylesheet, so there is no flash
+   of the wrong theme on load. No attribute on `<html>` means light; the
+   script and the toggle both only ever add or remove `data-theme="dark"`
+   — so a JS failure still degrades to the correct default rather than an
+   unstyled or wrong-themed page.
+
+2. **The 3D hero and the canvas fields.** `mh-bg.js` draws its lines with
+   `clearRect` — a transparent canvas, no fill of its own — relying
+   entirely on whatever sits behind it for contrast. Relighting the 3D
+   scene and redrawing the fields' colours for a light backdrop was one
+   option; Kaung chose the other: leave them the canvas's dark always,
+   theme everything else. This bounded the whole task precisely, once the
+   `mh-bg` usages were inventoried: `index.astro`'s `#top` (the 3D scene)
+   and `#signal-plane`, and Partner's `#join` — both full sections whose
+   *entire* background is a field, kept dark end to end — and Research's
+   Theme 01 panel, which holds a field but sits inside an otherwise
+   themed page, so only that one panel stays dark. (The research header
+   band's own field was removed already, in D-048 — nothing to exempt
+   there.)
+
+**Architecture.** Every colour the canvas specified as a literal value —
+hex or `rgba()` — is now a CSS custom property in `src/layouts/Layout.astro`:
+`--field-rgb`, `--ink-rgb`, `--display-rgb`, `--accent-rgb`, each an
+`R,G,B` triplet, plus `--field`/`--ink`/`--display`/`--accent` as `rgb()`
+convenience forms for a solid fill. Light values sit on `:root`; dark —
+the canvas's own values, unchanged — override under `[data-theme="dark"]`.
+Using a triplet rather than one token per exact colour+alpha combination
+means the canvas's own alpha values carry across untouched:
+`rgba(230,237,240,.62)` becomes `rgba(var(--ink-rgb),.62)`, not a new
+`--ink-62` token, so the same twenty-odd steps of the canvas's own
+hierarchy — from full ink down to the faintest rule — hold in both
+themes without re-deriving each one by hand. `research.astro`,
+`learning.astro`, `members.astro` and `partner.astro` were converted this
+way, mechanically, checked file by file afterward for anything the literal
+patterns missed (two `rgba(6,8,10,…)` gradients read as numbers, not hex,
+so a plain `#06080A`→token pass didn't catch them).
+
+`index.astro` needed no conversion at all — both its sections (`#top`,
+`#signal-plane`) are exempt, so the file is untouched, still the canvas's
+literal dark. The four exempt containers themselves keep or gained a
+literal `background:#06080A` of their own (Theme 01's panel and Partner's
+`#join` had none before — nothing was covering the transparent canvas
+except the *page's* background, which D-048 assumed would stay dark
+forever, hence "no border, no background" there. It doesn't anymore, so
+each got one back) — and anything drawn *inside* an exempt container
+keeps the canvas's literal ink too (`#join`'s headline and button, which
+D-052's own file-wide token pass initially swept up before this was
+caught and reverted specifically there).
+
+**Light palette.** New, since the canvas only ever specified dark:
+`--field-rgb: 239,241,242`, `--ink-rgb: 28,40,48`,
+`--display-rgb: 10,16,20`, `--accent-rgb` unchanged (`214,26,74`). Not
+arbitrary — the field and ink values are D-003's `--paper` and `--ink`
+almost exactly, the palette proposed for this site before the canvas
+became its design authority (D-027) and set aside, not because it was
+wrong, but because the canvas superseded it. A light theme gave it
+somewhere to go.
+
+**`CLAUDE.md`** is amended to carry this as a named exception to "do not
+restyle, re-tokenise" — colour only, and only as light-default with the
+canvas's dark preserved exactly as a secondary theme; every other
+property is still transcribed literally. `design/DESIGN.md` gets a
+"Theme" section with the full token table.
+
+**Verified:** every page in both themes at 1440 and 360px; the toggle
+sets `data-theme`, updates its own label, and persists across a full page
+navigation and a reload (confirmed via `localStorage`, not just the DOM
+attribute); dark mode screenshots pixel-match what shipped before this
+decision; no horizontal overflow at 360px on any page in either theme.
+`tests/site.spec.ts` gained a dedicated theme test alongside the existing
+five.

@@ -16,9 +16,24 @@ and master's students, and funding or programme committees.
 is that canvas transcribed: direction 2a as the hero, direction 1d as the rest
 of the site, in order, with the canvas's own markup, values and copy.
 
-Do not restyle it, re-tokenise it, or improve it. When the design changes, the
-canvas changes first and the page is re-transcribed from it. `design/DESIGN.md`
-describes what the canvas specifies; `design/decisions.md` records why.
+Do not restyle it or improve it. When the design changes, the canvas changes
+first and the page is re-transcribed from it. `design/DESIGN.md` describes
+what the canvas specifies; `design/decisions.md` records why.
+
+One exception, deliberate: colour is re-tokenised (D-052). Every colour the
+canvas drew as a literal value is a CSS custom property, light by default,
+with dark — the canvas's own values, unchanged — as a secondary theme a
+visitor opts into. The palette, hierarchy and every value are still the
+canvas's; only how a page reaches a given value changed. Layout, copy,
+spacing and every other property stay literal, transcribed exactly as
+before.
+
+Four exceptions to the exception, always literal hex, never tokens: the
+hero's 3D scene and any section whose background is a live `mh-bg` canvas
+field with no fill of its own — those stay the canvas's dark regardless of
+theme, because the fields draw light lines on a transparent canvas with
+nothing behind them. See the note at the top of `src/layouts/Layout.astro`
+for exactly which these are.
 
 ## Stack
 
@@ -26,8 +41,9 @@ Astro, static output, five pages sharing one layout: `src/layouts/Layout.astro`
 holds the canvas's header (fixed, every page) and footer, `src/pages/index.astro`
 is the reach through Signal Plane, and `research.astro`, `learning.astro`,
 `members.astro` and `partner.astro` are the rest of direction 1d, split at the
-boundaries in `docs/plan.md`. No component library, no CSS framework, no
-design tokens — the canvas's inline styles are the styles. The 3D scene is
+boundaries in `docs/plan.md`. No component library, no CSS framework — the
+canvas's inline styles are the styles, with colour alone carried as CSS
+custom properties for the theme (see "Design authority" above). The 3D scene is
 `public/design/hands-scene.html` (Three.js from unpkg, pinned with integrity
 hashes, as the canvas has it) in an iframe; the background fields are
 `public/design/mh-bg.js`, a dependency-free custom element. Fonts are Literata

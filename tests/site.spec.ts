@@ -5,7 +5,8 @@ import { expect, test } from '@playwright/test';
  * span of content, sharing one header and footer (src/layouts/Layout.astro).
  * What is checked: the hero's 3D frame and fields on the home page, that
  * each page exists with its own content, the nav routes between them, the
- * learning tabs, and nothing pushing any page sideways at a phone width.
+ * learning tabs, nothing pushing any page sideways at a phone width, and
+ * the light/dark theme toggle (D-052).
  */
 test('home has the hero and Signal Plane', async ({ page }) => {
   await page.goto('/');
@@ -62,4 +63,23 @@ test('nothing overflows at 360px, on any page', async ({ page }) => {
     const o = await page.evaluate(() => ({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth }));
     expect(o.s, `${path} overflows`).toBeLessThanOrEqual(o.c);
   }
+});
+
+test('theme: light by default, dark toggles and persists across pages', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('#mh-theme-toggle')).toHaveText('Dark');
+
+  await page.locator('#mh-theme-toggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('#mh-theme-toggle')).toHaveText('Light');
+
+  await page.goto('/research');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('#mh-theme-toggle')).toHaveText('Light');
+
+  await page.locator('#mh-theme-toggle').click();
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'dark');
+  await page.reload();
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'dark');
 });

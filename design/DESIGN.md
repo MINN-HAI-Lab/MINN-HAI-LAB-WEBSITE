@@ -41,6 +41,9 @@ the footer.
 
 ## Colour
 
+The canvas's own palette — dark, and since D-052 the site's secondary
+theme:
+
 - Field `#06080A`; raised ground `rgba(12,16,19,.62–.9)`; the design viewer's
   own ground `#15181b` is not part of the site.
 - Ink `#E6EDF0`, used at 1, .85, .82, .72, .7, .68, .62, .6, .55, .5, .45
@@ -49,7 +52,42 @@ the footer.
 - The red `#D61A4A`: the status light, the mastery figure, the bars in the
   mini chart, the blanket's node in the lattice key, the emissive parts of the
   robot hand. "Red is the machine's opinion. Ink is fact. The accent appears
-  nowhere else on the site."
+  nowhere else on the site." Unchanged between themes — see below.
+
+## Theme (D-052)
+
+Light is default; dark, above, is what a visitor opts into with the
+header's toggle, kept in `localStorage`. Every colour is a CSS custom
+property (`src/layouts/Layout.astro`) — light values on `:root`, dark
+values (the canvas's own, unchanged) under `[data-theme="dark"]`:
+
+| Token | Light (default) | Dark (secondary) |
+|---|---|---|
+| `--field-rgb` | `239,241,242` | `6,8,10` (canvas) |
+| `--ink-rgb` | `28,40,48` | `230,237,240` (canvas) |
+| `--display-rgb` | `10,16,20` | `244,248,250` (canvas) |
+| `--accent-rgb` | `214,26,74` | `214,26,74` — unchanged |
+
+`--ink`, `--field`, `--display` and `--accent` are `rgb()` convenience
+forms of the same tokens, for a solid fill where the canvas had no alpha.
+Every rule, border and secondary-text alpha the canvas specified (.05
+through .85, above) carries across unchanged — only the RGB channels
+switch, as `rgba(var(--ink-rgb),.62)` in place of the canvas's literal
+`rgba(230,237,240,.62)` — so the same hierarchy of emphasis holds in both
+themes, light ink fading toward field exactly as dark ink does.
+
+The light values are new — not the canvas's, which only ever specified
+dark — chosen to sit in the same family as the site's own pre-canvas
+palette (D-003's `--paper` `#EFF1F2` and `--ink` `#1C2830`, from before
+the canvas became the design authority).
+
+Four places stay the canvas's dark always, literal hex, never tokens: the
+hero's 3D scene (`index.astro` `#top`), and every section whose background
+is a live `mh-bg` canvas field with no fill of its own — Home's
+`#signal-plane`, Partner's `#join`, and the panel holding Research's
+Theme 01 network graphic. `mh-bg` draws light lines on a transparent
+canvas; without a literal dark backdrop behind it, those lines would be
+close to invisible on a light page.
 
 ## Type
 
