@@ -22,14 +22,16 @@ Direction 1c, the signal plane, follows the hero directly on Home — 1a
 that used to sit between them, are gone from the site (D-047), though they
 remain in the canvas.
 
-The rest of direction 1d, in this order: a research header band over a
-lattice field; the three themes zigzagging left and right, text and
+The rest of direction 1d, in this order: a research header band, its own
+lattice field removed as redundant once Theme 01 carried a real network
+graphic (D-048); the three themes zigzagging left and right, text and
 visual trading sides each row, each theme with its own publication list
 where it has one (D-047 — no canvas equivalent; the canvas draws two
 stacked programme rows, one `200px | 1fr | 300px` with a field preview,
 one `200px | 1fr` without). Theme 01's visual is Deep Field's network
-graphic, relocated rather than deleted; Theme 02 and 03's are marked
-placeholders, no asset supplied yet. Then: the Learning panel (StatLab,
+graphic, relocated rather than deleted, shown unpanelled — no border, no
+background (D-048); Theme 02 and 03's are marked placeholders, no asset
+supplied yet. Then: the Learning panel (StatLab,
 linked out; course materials, still a gap); the members grid of five 4:5
 frames, named, with photos; a funding list; the closing band over the
 signal plane, with the contact address; the footer.

@@ -8,6 +8,10 @@
  * between them, are gone — Kaung asked for them removed. Deep Field's
  * network graphic (mh-bg mode="bayes") moved to the Research page's Theme
  * 01 row rather than being deleted; see research.astro.
+ *
+ * Signal Plane's stats row ("2 research themes" / "1 open learning
+ * resource, StatLab") is gone too — Kaung asked for it removed. The
+ * headline block is now the section's only content, still centred.
  */
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -47,12 +51,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <h2 class="mh-display-104" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:104px;line-height:.95;letter-spacing:-.035em;color:#F4F8FA;max-width:16ch">We model the learner, not the average.</h2>
     <p style="margin:0;font-size:17.5px;line-height:1.6;color:rgba(230,237,240,.7);max-width:58ch">Adaptive, interpretable, socially responsible systems — designed to perform and to be accountable for how they performed.</p>
     <a href={`${base}/research`} style="margin-top:8px;font-size:13.5px;color:#080A0D;background:#E6EDF0;text-decoration:none;border-radius:999px;padding:15px 30px;font-weight:500">Enter the lab</a>
-  </div>
-  <div class="mh-gutter" style="display:flex;justify-content:flex-end;align-items:flex-end;padding:26px 44px 64px;gap:24px">
-    <div class="mh-wrap" style="display:flex;gap:44px">
-      <div><div style="font-family:Literata,serif;font-size:30px;color:#F4F8FA">2</div><div style="font-size:11.5px;color:rgba(230,237,240,.5);margin-top:4px">research themes</div></div>
-      <div><div style="font-family:Literata,serif;font-size:30px;color:#F4F8FA">1</div><div style="font-size:11.5px;color:rgba(230,237,240,.5);margin-top:4px">open learning resource, StatLab</div></div>
-    </div>
   </div>
 </div>
 </div>

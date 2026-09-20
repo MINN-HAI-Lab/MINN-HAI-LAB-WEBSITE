@@ -10,9 +10,17 @@
  * the grid: 2 columns at 992px and up, 1 below, no canvas equivalent.
  *
  * Theme 01's visual is mh-bg mode="bayes", the network graphic that used to
- * sit in Home's Deep Field section (now removed — see index.astro). Theme
- * 02 and Theme 03's visuals are placeholders: Kaung named them "Image or
- * 3D object" with no asset yet, so they're marked, not invented.
+ * sit in Home's Deep Field section (now removed — see index.astro), shown
+ * unpanelled — no border, no background — straight on the page. Theme 02
+ * and Theme 03's visuals are placeholders: Kaung named them "Image or 3D
+ * object" with no asset yet, so they're marked, not invented. The header
+ * band's own mh-bg (mode="lattice") is gone too, redundant once Theme 01
+ * carried a real network graphic of its own.
+ *
+ * Theme 03, "Visual generative modeling", has a real description now
+ * (Kaung's request, drafted with the personal-humanizer skill to match
+ * Theme 01 and 02's voice) — its publications are still TODO:, nothing
+ * supplied yet.
  */
 import Layout from '../layouts/Layout.astro';
 ---
@@ -21,7 +29,6 @@ import Layout from '../layouts/Layout.astro';
 <div style="background:#06080A">
 <div id="research" style="position:relative;padding:0;border-bottom:1px solid rgba(230,237,240,.1)">
     <div style="position:relative;height:280px;overflow:hidden">
-      <mh-bg mode="lattice" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
       <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,8,10,.7) 0%,rgba(6,8,10,.35) 40%,rgba(6,8,10,.95) 100%)"></div>
       <div class="mh-gutter" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:44px">
         <h2 style="margin:0;font-family:Literata,serif;font-weight:300;font-size:52px;line-height:1;letter-spacing:-.025em">Research</h2>
@@ -50,7 +57,7 @@ import Layout from '../layouts/Layout.astro';
         </ul>
       </div>
     </div>
-    <div style="position:relative;border:1px solid rgba(230,237,240,.14);border-radius:4px;height:420px;overflow:hidden;background:#080A0D">
+    <div style="position:relative;height:420px">
       <mh-bg mode="bayes" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
     </div>
   </div>
@@ -79,8 +86,12 @@ import Layout from '../layouts/Layout.astro';
   <div class="mh-gutter mh-zigzag" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start;padding:56px 44px">
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Theme 03</div>
-      <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Computer Vision</h3>
-      <div style="border-left:3px solid rgba(230,237,240,.4);background:rgba(6,8,10,.75);border-radius:3px;padding:14px 16px;font-size:13px;line-height:1.6;color:rgba(230,237,240,.82)">TODO: description and publications for this theme, to be supplied.</div>
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Visual generative modeling</h3>
+      <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7)">Learning what makes an image or video plausible well enough to generate new ones, not just classify or detect what's already there. A model that can generate a scene has learned something about its structure, so generation doubles as a test of whether a system understands what it sees.</p>
+      <div style="margin-top:10px">
+        <div style="font-size:12px;color:rgba(230,237,240,.45);letter-spacing:.01em">Publications</div>
+        <div style="border-left:3px solid rgba(230,237,240,.4);background:rgba(6,8,10,.75);border-radius:3px;padding:14px 16px;margin-top:10px;font-size:13px;line-height:1.6;color:rgba(230,237,240,.82)">TODO: publications for this theme, to be supplied.</div>
+      </div>
     </div>
     <div style="border:1px solid rgba(230,237,240,.14);border-radius:3px;height:420px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:14px">
       <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">image / 3D object — placeholder</span>

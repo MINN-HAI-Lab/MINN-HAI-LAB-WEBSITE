@@ -31,8 +31,9 @@ funders by name; the contact address, as a live `mailto:` in three places;
 the hero and theme copy, checked against the lab's supplied bio; five
 members by name, role and photo.
 
-Still `TODO:` on the page: Computer Vision's description and publications,
-still unsupplied; course materials.
+Still `TODO:` on the page: Visual generative modeling's publications, and
+Theme 02 and Theme 03's visuals (both marked "image / 3D object —
+placeholder"); course materials.
 
 ## How to change anything
 

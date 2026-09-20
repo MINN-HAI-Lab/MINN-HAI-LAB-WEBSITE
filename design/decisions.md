@@ -1252,3 +1252,39 @@ screenshotting the element directly after it had settled). `tests/site.spec.ts`
 updated: Home's mh-bg count drops from 3 to 1, `#deep-field`/`#lattice`
 checks removed, and Research gets an explicit check for the relocated
 `mh-bg[mode="bayes"]`.
+
+---
+
+## D-048 — Theme 01's visual unpanelled, the header's own field dropped, Computer Vision renamed and described, Signal Plane's stats gone
+
+**Status: adopted, 2026-09-20.** Four changes from Kaung in one message,
+each independent.
+
+**Theme 01's visual.** The `1px solid rgba(230,237,240,.14)` border and
+`#080A0D` background around the relocated network graphic (D-047) are
+gone — Kaung wanted the graphic itself, not a panel holding it. It now
+sits directly on the page, same `#06080A` behind it as everywhere else in
+the row.
+
+**The header band's own field.** `#research`'s `mh-bg mode="lattice"` is
+removed. It was decorative texture behind the "Research" title, and with
+a real, informative network visualisation now sitting prominently in
+Theme 01 just below it, Kaung judged it redundant rather than
+complementary.
+
+**Theme 03.** Renamed "Computer Vision" to "Visual generative modeling,"
+and given a real description — the last theme still carrying only a
+`TODO:` placeholder. Drafted with the `/personal-humanizer` skill, at
+Kaung's request, to match Theme 01 and Theme 02's voice rather than read
+as generated filler: a definition, then the reason it matters, no more.
+Its publications stay `TODO:`, under their own "Publications" label now
+(matching the other two themes' structure) rather than folded into one
+combined description+publications placeholder — nothing supplied, nothing
+invented.
+
+**Signal Plane's stats.** "2 research themes" / "1 open learning
+resource, StatLab" is removed from Home's second (now only remaining)
+section. Its headline block, already the section's tallest content and
+already centred, is now the section's sole content — still centred, still
+filling the screen (D-043's flex fix is unaffected, since it was never
+specific to having two flex children).
