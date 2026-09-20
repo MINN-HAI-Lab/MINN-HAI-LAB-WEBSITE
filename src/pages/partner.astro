@@ -6,6 +6,10 @@
  *
  * padding-top:96px on the wrapper clears the fixed header; see the same
  * note in learning.astro.
+ *
+ * #join carries an mh-bg field (mode="grid"), the same as Home's
+ * #signal-plane, and is themed the same way (D-054) — its own background
+ * and text as var()s, its field themed from inside mh-bg.js itself.
  */
 import Layout from '../layouts/Layout.astro';
 ---
@@ -26,13 +30,13 @@ import Layout from '../layouts/Layout.astro';
     </ul>
   </div>
 
-  <div id="join" style="position:relative;height:300px;overflow:hidden;background:#06080A">
+  <div id="join" style="position:relative;height:300px;overflow:hidden;background:var(--field)">
     <mh-bg mode="grid" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
-    <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(60% 70% at 50% 40%,rgba(6,8,10,.86) 0%,rgba(6,8,10,.4) 60%,rgba(6,8,10,.1) 100%)"></div>
+    <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(60% 70% at 50% 40%,rgba(var(--field-rgb),.86) 0%,rgba(var(--field-rgb),.4) 60%,rgba(var(--field-rgb),.1) 100%)"></div>
     <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:0 44px">
-      <h3 style="margin:0;font-family:Literata,serif;font-weight:300;font-size:44px;line-height:1.05;letter-spacing:-.025em;max-width:24ch;color:#E6EDF0">Bring us a problem that needs an explanation.</h3>
-      <div class="mh-wrap" style="display:flex;justify-content:center;gap:12px"><a href="mailto:sein.minn.cs@gmail.com" style="font-size:13px;color:#06080A;background:#E6EDF0;text-decoration:none;border-radius:2px;padding:13px 22px;font-weight:500">Partner with the lab</a></div>
-      <a href="mailto:sein.minn.cs@gmail.com" style="font-size:12.5px;color:rgba(230,237,240,.6);text-decoration:none;border-bottom:1px solid rgba(230,237,240,.28)">sein.minn.cs @ gmail.com</a>
+      <h3 style="margin:0;font-family:Literata,serif;font-weight:300;font-size:44px;line-height:1.05;letter-spacing:-.025em;max-width:24ch;color:var(--ink)">Bring us a problem that needs an explanation.</h3>
+      <div class="mh-wrap" style="display:flex;justify-content:center;gap:12px"><a href="mailto:sein.minn.cs@gmail.com" style="font-size:13px;color:var(--field);background:var(--ink);text-decoration:none;border-radius:2px;padding:13px 22px;font-weight:500">Partner with the lab</a></div>
+      <a href="mailto:sein.minn.cs@gmail.com" style="font-size:12.5px;color:rgba(var(--ink-rgb),.6);text-decoration:none;border-bottom:1px solid rgba(var(--ink-rgb),.28)">sein.minn.cs @ gmail.com</a>
     </div>
   </div>
 </div>

@@ -28,15 +28,18 @@ canvas's; only how a page reaches a given value changed. Layout, copy,
 spacing and every other property stay literal, transcribed exactly as
 before.
 
-A narrower exception to that exception, always literal hex, never tokens:
-any section whose background is a live `mh-bg` canvas field with no fill
-of its own — those stay the canvas's dark regardless of theme, because the
-fields draw light lines on a transparent canvas with nothing behind them.
-See the note at the top of `src/layouts/Layout.astro` for exactly which
-these are. The hero's 3D scene is not one of these (D-053): it's themed
-too, told which theme is active over `postMessage` since it runs in an
-iframe with its own document — CSS custom properties on the parent page
-don't reach it on their own.
+Nothing is exempt from theming any more (D-053, D-054) — not even the
+sections whose background is a live `mh-bg` canvas field, nor the hero's
+3D scene, both of which D-052 first left the canvas's dark always. Both
+draw with plain colour values in their own source rather than CSS, so
+"re-tokenised" doesn't quite describe how they're themed — each is told
+the active theme and picks its own light or dark colours at draw time,
+by two different routes depending on where the drawing happens: the 3D
+scene over `postMessage`, since it runs in an iframe with its own
+document CSS custom properties can't reach; `mh-bg` by watching
+`data-theme` directly, since it shares this document. See the note at
+the top of `src/layouts/Layout.astro`, and the one at the top of
+`public/design/mh-bg.js`, for exactly how.
 
 ## Stack
 

@@ -54,7 +54,7 @@ theme:
   robot hand. "Red is the machine's opinion. Ink is fact. The accent appears
   nowhere else on the site." Unchanged between themes — see below.
 
-## Theme (D-052, D-053)
+## Theme (D-052, D-053, D-054)
 
 Light is default; dark, above, is what a visitor opts into with the
 header's toggle — an icon (a filled moon to switch to dark, a sun to
@@ -83,15 +83,14 @@ dark — chosen to sit in the same family as the site's own pre-canvas
 palette (D-003's `--paper` `#EFF1F2` and `--ink` `#1C2830`, from before
 the canvas became the design authority).
 
-Three places stay the canvas's dark always, literal hex, never tokens:
-every section whose background is a live `mh-bg` canvas field with no
-fill of its own — Home's `#signal-plane`, Partner's `#join`, and the
-panel holding Research's Theme 01 network graphic. `mh-bg` draws light
-lines on a transparent canvas; without a literal dark backdrop behind it,
-those lines would be close to invisible on a light page.
+Nothing on the site stays the canvas's dark always any more — D-052 first
+left three sections exempt (everything holding a live `mh-bg` field, plus
+the hero's 3D scene), on the reasoning that a light theme over a
+transparent canvas drawing light lines on nothing would leave those lines
+near invisible. D-053 and D-054, the same day, themed those too, by two
+different routes:
 
-The hero's 3D scene is themed too (D-053), background and materials
-both — Kaung asked for it, after first agreeing it should stay dark.
+The hero's 3D scene (D-053) — background and materials both.
 `hands-scene.html`'s canvas was already transparent (`alpha:true`, no
 clear colour), so the frame's background was always whatever sat behind
 it in `index.astro`; that div is tokenised like everything else now, so
@@ -108,6 +107,16 @@ at all. Since the scene runs in an iframe — a separate document, its own
 `src/layouts/Layout.astro`'s script tells it the active theme over
 `postMessage`, once the scene confirms it's loaded enough to listen and
 again on every toggle.
+
+The `mh-bg` fields (D-054) — Home's `#signal-plane`, Partner's `#join`,
+and the panel holding Research's Theme 01 network graphic — each carry
+lines, node fills and text coloured for the canvas's dark theme. Unlike
+the 3D scene, `mh-bg` runs in the same document as the page, so it just
+watches `data-theme` on `<html>` directly (a `MutationObserver`, in
+`public/design/mh-bg.js`) rather than needing `postMessage`, and swaps
+its own line and fill colours for a dark-on-light equivalent when the
+theme is light. The accent (red) is unchanged in every mode, same as
+everywhere else on the site.
 
 ## Type
 

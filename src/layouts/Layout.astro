@@ -48,21 +48,23 @@
  * screen, after Menu on a narrow one — so it's always the rightmost
  * control regardless of breakpoint.
  *
- * Two places stay the canvas's original dark, always, regardless of
- * theme: the two sections whose background is a live mh-bg canvas field
- * with no fill of its own — Home's #signal-plane and Partner's #join —
- * plus Research's Theme 01 panel, which holds the third mh-bg field.
- * mh-bg draws light lines on a transparent canvas; without an explicit
- * dark backdrop behind it, in light mode those lines would be nearly
- * invisible. Their colours stay literal hex, not tokens, on purpose.
+ * D-052 originally left everything holding a live mh-bg field, plus the
+ * hero's 3D scene, the canvas's dark always — a light theme on top of a
+ * transparent canvas drawing light lines on nothing meant those lines
+ * would go near invisible. As of D-053/D-054, nothing is exempt any
+ * more: every one of those is themed too, the same way the rest of the
+ * site is, colour by colour — just by two different routes, depending on
+ * where the drawing actually happens:
  *
- * The hero's 3D scene (index.astro #top) is no longer on that list
- * (D-053): it's a live theme now too, background and materials both, the
- * one exception being that it renders in an iframe with its own document
- * — CSS custom properties here don't reach it, so this file's script
- * tells it which theme is active over postMessage (`sendTheme`, below),
- * once the scene announces it's ready to hear it and again on every
- * toggle.
+ *   - the 3D scene (index.astro #top) renders in an iframe, a separate
+ *     document CSS custom properties here can't reach, so this file's
+ *     script tells it the active theme over postMessage (`sendTheme`,
+ *     below), once the scene announces it's ready to hear it and again
+ *     on every toggle (D-053);
+ *   - mh-bg (Home's #signal-plane, Partner's #join, Research's Theme 01
+ *     panel) shares this document, so it just watches data-theme
+ *     directly — see the theme note at the top of
+ *     public/design/mh-bg.js (D-054).
  */
 export interface Props {
   title?: string;

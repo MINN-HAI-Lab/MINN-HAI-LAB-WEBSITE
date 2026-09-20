@@ -11,11 +11,14 @@
  *
  * Theme 01's visual is mh-bg mode="bayes", the network graphic that used to
  * sit in Home's Deep Field section (now removed — see index.astro), shown
- * unpanelled — no border, no background — straight on the page. Theme 02
- * and Theme 03's visuals are placeholders: Kaung named them "Image or 3D
- * object" with no asset yet, so they're marked, not invented. The header
- * band's own mh-bg (mode="lattice") is gone too, redundant once Theme 01
- * carried a real network graphic of its own.
+ * unpanelled — no border (D-048) — straight on the page. It does carry a
+ * background, though: mh-bg's canvas is transparent, so without one this
+ * panel would just show whatever the page around it does — that page is
+ * themed now (D-054), so its own background is var(--field), same as the
+ * page. Theme 02 and Theme 03's visuals are placeholders: Kaung named them
+ * "Image or 3D object" with no asset yet, so they're marked, not invented.
+ * The header band's own mh-bg (mode="lattice") is gone too, redundant once
+ * Theme 01 carried a real network graphic of its own.
  *
  * Theme 03, "Visual generative modeling", has a real description now
  * (Kaung's request, drafted with the personal-humanizer skill to match
@@ -57,7 +60,7 @@ import Layout from '../layouts/Layout.astro';
         </ul>
       </div>
     </div>
-    <div style="position:relative;height:420px;background:#06080A">
+    <div style="position:relative;height:420px;background:var(--field)">
       <mh-bg mode="bayes" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
     </div>
   </div>

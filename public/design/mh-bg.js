@@ -1,7 +1,14 @@
 /* mh-bg — dependency-free 3D background fields for MINN HAI LAB mockups.
    <mh-bg mode="metal|lattice|grid" speed="1"></mh-bg>
    Real 3D maths: a raymarched SDF (WebGL) and perspective-projected point
-   geometry (canvas 2D). No library, no CDN. */
+   geometry (canvas 2D). No library, no CDN.
+
+   Theme (D-054): the "bayes", "lattice" and "grid" modes draw ink-coloured
+   lines and text meant for the canvas's own dark theme. On light, those
+   swap for a dark equivalent — see the connectedCallback theme watcher and
+   the inline `this.dark ? … : …` in each draw method. The accent (red) and
+   "metal" mode (the raymarched SDF; not used with a light backdrop
+   anywhere on the site) are unaffected. */
 (() => {
   if (customElements.get('mh-bg')) return;
 
@@ -64,6 +71,17 @@ void main(){
       this._io = new IntersectionObserver((es) => { this.vis = es[0].isIntersecting; }, { rootMargin: '160px' });
       this._io.observe(this);
       this.vis = true;
+      /* Theme (D-054): this element lives in the same document as the page
+         (unlike hands-scene.html, which needs postMessage), so it can just
+         read data-theme off <html> directly and watch it for changes. The
+         "bayes" and "grid" modes draw ink-coloured lines and text for the
+         canvas's own dark theme; on light, those swap for a dark
+         equivalent so they're still visible against a light page. */
+      this.dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      this._themeObs = new MutationObserver(() => {
+        this.dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      });
+      this._themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
       this.mode === 'metal' ? this.initGL() : this.initGeo();
       this.resize();
       this.t0 = performance.now();
@@ -75,6 +93,7 @@ void main(){
       window.removeEventListener('pointermove', this._pt);
       this._ro && this._ro.disconnect();
       this._io && this._io.disconnect();
+      this._themeObs && this._themeObs.disconnect();
       cancelAnimationFrame(this._raf);
     }
     resize() {
@@ -153,13 +172,14 @@ void main(){
       const g = this.ctx; if (!this.bn) this.buildBayes();
       g.clearRect(0, 0, this.w, this.h);
       const P = this.bn.map((n) => this.proj({ x: n.x * 0.78 + 0.02 * Math.sin(t * 0.7 + n.x * 3), y: n.y * 0.78 + 0.02 * Math.cos(t * 0.6 + n.y * 4), z: n.z * 0.78 }, t * 0.35));
-      const col = (k, a) => k === 't' ? `rgba(214,26,74,${a})` : k ? `rgba(226,235,239,${a})` : `rgba(150,178,190,${a * 0.75})`;
+      const dark = this.dark;
+      const col = (k, a) => k === 't' ? `rgba(214,26,74,${a})` : k ? `rgba(${dark ? '226,235,239' : '28,40,48'},${a})` : `rgba(${dark ? '150,178,190' : '110,125,135'},${a * 0.75})`;
       g.lineWidth = 1;
       for (const [i, j] of this.bnE) {
         const a = P[i], b = P[j], na = this.bn[i], nb = this.bn[j];
         const inB = (na.k && nb.k) || na.k === 't' || nb.k === 't';
         const al = (inB ? 0.55 : 0.22) * (1 - (a.d + b.d) / 8);
-        g.strokeStyle = `rgba(${inB ? '200,214,220' : '140,168,180'},${al.toFixed(3)})`;
+        g.strokeStyle = `rgba(${dark ? (inB ? '200,214,220' : '140,168,180') : (inB ? '40,55,65' : '110,125,135')},${al.toFixed(3)})`;
         g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
         const ang = Math.atan2(b.y - a.y, b.x - a.x), r = 13 - nb.d * 2;
         const tx = b.x - Math.cos(ang) * r, ty = b.y - Math.sin(ang) * r;
@@ -177,10 +197,10 @@ void main(){
       this.bn.forEach((n, i) => {
         const p = P[i], r = (n.k === 't' ? 9 : n.k ? 6 : 4.5) * (1 - p.d * 0.12);
         if (n.k === 't') { g.fillStyle = 'rgba(214,26,74,.18)'; g.beginPath(); g.arc(p.x, p.y, r * 2.6 + Math.sin(t * 2) * 2, 0, 6.29); g.fill(); }
-        g.fillStyle = n.k ? col(n.k, 0.95) : 'rgba(7,9,12,1)';
+        g.fillStyle = n.k ? col(n.k, 0.95) : `rgba(${dark ? '7,9,12' : '239,241,242'},1)`;
         g.beginPath(); g.arc(p.x, p.y, r, 0, 6.29); g.fill();
-        if (!n.k) { g.strokeStyle = 'rgba(180,200,210,.7)'; g.lineWidth = 1.2; g.stroke(); }
-        g.fillStyle = n.k === 't' ? 'rgba(240,244,246,.95)' : `rgba(226,235,239,${n.k ? 0.78 : 0.5})`;
+        if (!n.k) { g.strokeStyle = `rgba(${dark ? '180,200,210' : '70,85,95'},.7)`; g.lineWidth = 1.2; g.stroke(); }
+        g.fillStyle = n.k === 't' ? `rgba(${dark ? '240,244,246' : '8,12,15'},.95)` : `rgba(${dark ? '226,235,239' : '28,40,48'},${n.k ? 0.78 : 0.5})`;
         g.textAlign = p.x > this.w / 2 ? 'left' : 'right';
         g.fillText(n.label, p.x + (p.x > this.w / 2 ? r + 8 : -r - 8), p.y);
       });
@@ -214,14 +234,14 @@ void main(){
         const a = P[i], b = P[j];
         const a0 = (1 - d / 0.46) * 0.5 * (1 - (a.d + b.d) / 6);
         if (a0 <= 0.01) continue;
-        g.strokeStyle = `rgba(150,178,190,${a0.toFixed(3)})`;
+        g.strokeStyle = `rgba(${this.dark ? '150,178,190' : '110,125,135'},${a0.toFixed(3)})`;
         g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
       }
       const mx = this.w / 2 + this.m.tx * this.w / 2, my = this.h / 2 + this.m.ty * this.h / 2;
       for (const p of P) {
         const near = Math.hypot(p.x - mx, p.y - my) < 110;
         const r = (1.5 - p.d * 0.35) * (near ? 2.2 : 1);
-        g.fillStyle = near ? 'rgba(214,26,74,.95)' : `rgba(226,235,239,${(0.55 - p.d * 0.14).toFixed(3)})`;
+        g.fillStyle = near ? 'rgba(214,26,74,.95)' : `rgba(${this.dark ? '226,235,239' : '28,40,48'},${(0.55 - p.d * 0.14).toFixed(3)})`;
         g.beginPath(); g.arc(p.x, p.y, Math.max(0.6, r), 0, 6.29); g.fill();
       }
     }
@@ -240,13 +260,13 @@ void main(){
       for (let j = 0; j <= M; j++) {
         g.beginPath();
         for (let i = 0; i <= N; i++) { const p = pt(i, j); i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y); }
-        g.strokeStyle = `rgba(158,186,198,${(0.32 * (1 - j / M) + 0.03).toFixed(3)})`;
+        g.strokeStyle = `rgba(${this.dark ? '158,186,198' : '70,85,95'},${(0.32 * (1 - j / M) + 0.03).toFixed(3)})`;
         g.lineWidth = 1; g.stroke();
       }
       for (let i = 0; i <= N; i += 1) {
         g.beginPath();
         for (let j = 0; j <= M; j++) { const p = pt(i, j); j ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y); }
-        g.strokeStyle = `rgba(120,148,162,${(0.12 + 0.1 * Math.abs(Math.sin(i * 0.4 + t * 0.3))).toFixed(3)})`;
+        g.strokeStyle = `rgba(${this.dark ? '120,148,162' : '110,125,135'},${(0.12 + 0.1 * Math.abs(Math.sin(i * 0.4 + t * 0.3))).toFixed(3)})`;
         g.stroke();
       }
       const c = pt(((mx + 1) / 2) * N, ((my * 0.5 + 0.8 + 0.35) / 2.4) * M);

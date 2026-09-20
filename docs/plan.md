@@ -6,9 +6,11 @@ The site is five pages, transcribing the design canvas in
 direction 1d, in its order.
 
 Light is the default theme, dark — the canvas's own colours, unchanged —
-a secondary one reachable from the header's toggle (D-052). See
-`design/DESIGN.md`'s "Theme" section for the token table and which four
-sections stay the canvas's dark always.
+a secondary one reachable from the header's icon toggle (D-052, D-053).
+The hero's 3D scene and the `mh-bg` fields are themed too (D-053, D-054);
+nothing on the site stays the canvas's dark always any more. See
+`design/DESIGN.md`'s "Theme" section for the token table and how each
+piece hears about a theme change.
 
 ## Information architecture
 

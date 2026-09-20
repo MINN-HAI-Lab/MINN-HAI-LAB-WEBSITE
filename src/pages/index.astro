@@ -13,11 +13,12 @@
  * resource, StatLab") is gone too — Kaung asked for it removed. The
  * headline block is now the section's only content, still centred.
  *
- * #top, the hero, is themed now too (D-053) — background and copy both —
- * unlike #signal-plane below it, which stays the canvas's dark always
- * (see the note in Layout.astro for why). The 3D scene inside it gets the
- * active theme over postMessage from Layout.astro's script, since it's a
+ * #top, the hero, is themed (D-053) — background and copy, and the 3D
+ * scene inside it, told the active theme over postMessage since it's a
  * separate document these CSS custom properties can't reach on their own.
+ * #signal-plane is themed too now (D-054), the same way; its mh-bg field
+ * is themed from inside mh-bg.js itself, which — unlike the 3D scene —
+ * shares this document and can just watch data-theme directly.
  */
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -45,18 +46,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </div>
 </div>
 </div>
-<div style="display:flex;flex-direction:column;background:#06080A">
+<div style="display:flex;flex-direction:column;background:var(--field)">
 
-<div id="signal-plane" class="mh-frame" style="position:relative;height:860px;background:#080A0D;display:flex;flex-direction:column;border-bottom:1px solid rgba(230,237,240,.1)">
+<div id="signal-plane" class="mh-frame" style="position:relative;height:860px;background:var(--field);display:flex;flex-direction:column;border-bottom:1px solid rgba(var(--ink-rgb),.1)">
 <mh-bg mode="grid" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
-<div style="position:absolute;inset:0;z-index:1;background:radial-gradient(70% 55% at 50% 34%,rgba(8,10,13,.9) 0%,rgba(8,10,13,.45) 55%,rgba(8,10,13,0) 80%)"></div>
+<div style="position:absolute;inset:0;z-index:1;background:radial-gradient(70% 55% at 50% 34%,rgba(var(--field-rgb),.9) 0%,rgba(var(--field-rgb),.45) 55%,rgba(var(--field-rgb),0) 80%)"></div>
 <div style="position:relative;z-index:2;flex:1 0 auto;display:flex;flex-direction:column">
 
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center;padding:0 44px">
-    <span style="font-size:12px;color:rgba(230,237,240,.5)">Human-centered AI</span>
-    <h2 class="mh-display-104" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:104px;line-height:.95;letter-spacing:-.035em;color:#F4F8FA;max-width:16ch">We model the learner, not the average.</h2>
-    <p style="margin:0;font-size:17.5px;line-height:1.6;color:rgba(230,237,240,.7);max-width:58ch">Adaptive, interpretable, socially responsible systems — designed to perform and to be accountable for how they performed.</p>
-    <a href={`${base}/research`} style="margin-top:8px;font-size:13.5px;color:#080A0D;background:#E6EDF0;text-decoration:none;border-radius:999px;padding:15px 30px;font-weight:500">Enter the lab</a>
+    <span style="font-size:12px;color:rgba(var(--ink-rgb),.5)">Human-centered AI</span>
+    <h2 class="mh-display-104" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:104px;line-height:.95;letter-spacing:-.035em;color:var(--display);max-width:16ch">We model the learner, not the average.</h2>
+    <p style="margin:0;font-size:17.5px;line-height:1.6;color:rgba(var(--ink-rgb),.7);max-width:58ch">Adaptive, interpretable, socially responsible systems — designed to perform and to be accountable for how they performed.</p>
+    <a href={`${base}/research`} style="margin-top:8px;font-size:13.5px;color:var(--field);background:var(--ink);text-decoration:none;border-radius:999px;padding:15px 30px;font-weight:500">Enter the lab</a>
   </div>
 </div>
 </div>

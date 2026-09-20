@@ -6,7 +6,9 @@ import { expect, test } from '@playwright/test';
  * What is checked: the hero's 3D frame and fields on the home page, that
  * each page exists with its own content, the nav routes between them, the
  * learning tabs, nothing pushing any page sideways at a phone width, and
- * the light/dark theme toggle (D-052).
+ * the light/dark theme toggle (D-052) — including the 3D scene and mh-bg
+ * fields, which each need to hear about a theme change by a different
+ * route (D-053, D-054).
  */
 test('home has the hero and Signal Plane', async ({ page }) => {
   await page.goto('/');
@@ -104,4 +106,17 @@ test('theme: the 3D scene hears about it too', async ({ page }) => {
   expect(light).not.toBeNull();
   expect(dark).not.toBeNull();
   expect(light).not.toBe(dark);
+});
+
+test('theme: mh-bg fields switch too', async ({ page }) => {
+  // mh-bg shares the page's own document (D-054), so this checks its
+  // internal .dark flag directly, the same white-box approach as the 3D
+  // scene's __wireHex() above, rather than trying to sample canvas pixels.
+  await page.goto('/');
+  await page.locator('#signal-plane mh-bg').scrollIntoViewIfNeeded();
+  const isDark = () => page.evaluate(() => (document.querySelector('#signal-plane mh-bg') as any)?.dark);
+  expect(await isDark()).toBe(false);
+  await page.click('#mh-theme-toggle');
+  await page.waitForTimeout(200);
+  expect(await isDark()).toBe(true);
 });

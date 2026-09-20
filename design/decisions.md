@@ -1520,3 +1520,52 @@ orbiting nodes — across several rotation states; dark mode unchanged.
 alongside the existing `__gap`/`__set`), not just the parent page's own
 CSS — the fragile new part of this change, and the one most worth a
 regression test.
+
+---
+
+## D-054 — mh-bg fields themed too; nothing on the site stays dark always any more
+
+**Status: adopted, 2026-09-20.** Kaung sent two screenshots — Home's
+Signal Plane, Research's Theme 01 network panel — both still the canvas's
+dark, and asked for them themed too. Extended to Partner's `#join` as
+well, not shown but the same case exactly: an `mh-bg mode="grid"` section
+with no fill of its own, identical in every relevant way to Signal Plane;
+leaving it dark while its structural twin went light would have been an
+inconsistency nobody asked for, not a deliberate choice preserved.
+
+**Why this one is a different shape of fix than D-053.** The 3D scene
+needed `postMessage` because it's a separate document. `mh-bg.js` is a
+custom element that lives in the *same* document as the page — so it
+just reads `data-theme` off `<html>` directly. `connectedCallback` now
+sets `this.dark` from the current attribute and a `MutationObserver`
+keeps it current; every draw method (`drawBayes`, `drawLattice` — unused
+live, kept consistent anyway — `drawGrid`) picks a dark-on-light colour
+over the canvas's light-on-dark one at the point it paints, via inline
+`this.dark ? 'canvasRGB' : 'lightRGB'`. No new custom properties, no new
+architecture — the simplest thing that could work, given the constraint
+D-053 didn't have.
+
+**The colours themselves** are new, chosen per line the same way D-052's
+site-wide ink values were: not a formula, a judgement call per role
+(primary line/text, muted edge, node fill, node stroke) aimed at holding
+the *same relative* prominence the canvas's own dark-theme values have to
+each other, just inverted for a light backdrop. The accent red is
+unchanged, as everywhere else on the site — `col()`'s `'t'` branch (the
+`mastery` node, in `drawBayes`) and the grid's centre dot never swap.
+
+**Scope.** With this, D-052's original three-item exemption list is
+empty — every colour on the site, including inside the 3D scene and the
+canvas fields, now follows the theme. `research.astro`'s own comment
+about Theme 01's panel, stale since D-052 first gave it a background back
+(it still said "no border, no background," true only of the border by
+then), is corrected in the same pass.
+
+**Verified:** Signal Plane, Research (all three theme rows, the "mastery"
+network specifically checked against Kaung's own reference screenshot —
+a close match, same dark-ink-on-white reading his image showed) and
+Partner in both themes, at 1440px; dark mode unchanged on all three.
+`tests/site.spec.ts` gained a third theme test, checking `mh-bg`'s own
+`.dark` flag flips on toggle — the same white-box approach as D-053's
+`__wireHex()` check, appropriate here for the same reason: what's being
+verified is internal state a screenshot alone wouldn't catch reliably in
+CI.
