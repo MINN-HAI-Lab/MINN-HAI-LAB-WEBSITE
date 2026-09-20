@@ -1,14 +1,18 @@
 ---
 /**
- * Research — the research band, then the three themes side by side. See
- * src/layouts/Layout.astro for the chrome and the transcription notes that
- * apply to every page.
+ * Research — the research band, then the three themes, zigzagging left and
+ * right. See src/layouts/Layout.astro for the chrome and the transcription
+ * notes that apply to every page.
  *
- * Kaung asked for the two "Programme" rows renamed "Theme" and laid out as
- * columns instead of stacked full-width rows, the neural-network preview
- * next to Theme 02 dropped, and a third column, Computer Vision, added —
- * content for it still TODO, supplied later. .mh-themes (Layout.astro) is
- * the grid: 3 columns at 992px and up, 1 below, no canvas equivalent.
+ * Supersedes D-042's three-column layout — Kaung asked for two columns per
+ * theme instead, alternating text and visual side, text/visual/text down
+ * the left, visual/text/visual down the right. .mh-zigzag (Layout.astro) is
+ * the grid: 2 columns at 992px and up, 1 below, no canvas equivalent.
+ *
+ * Theme 01's visual is mh-bg mode="bayes", the network graphic that used to
+ * sit in Home's Deep Field section (now removed — see index.astro). Theme
+ * 02 and Theme 03's visuals are placeholders: Kaung named them "Image or
+ * 3D object" with no asset yet, so they're marked, not invented.
  */
 import Layout from '../layouts/Layout.astro';
 ---
@@ -26,8 +30,8 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </div>
 
-  <div class="mh-gutter mh-themes" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:0 44px;border-bottom:1px solid rgba(230,237,240,.1)">
-    <div style="padding:40px 44px 40px 0;border-right:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:14px">
+  <div class="mh-gutter mh-zigzag" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start;padding:56px 44px;border-bottom:1px solid rgba(230,237,240,.1)">
+    <div style="display:flex;flex-direction:column;gap:14px">
       <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Theme 01</div>
       <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">AI for personalised learning</h3>
       <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7)">Knowledge tracing: estimating what a learner has mastered, attempt by attempt, and reporting how uncertain that estimate is. The estimate is the model's claim about a person, so it is always shown with its band.</p>
@@ -46,8 +50,16 @@ import Layout from '../layouts/Layout.astro';
         </ul>
       </div>
     </div>
+    <div style="position:relative;border:1px solid rgba(230,237,240,.14);border-radius:4px;height:420px;overflow:hidden;background:#080A0D">
+      <mh-bg mode="bayes" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
+    </div>
+  </div>
 
-    <div style="padding:40px 44px;border-right:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:14px">
+  <div class="mh-gutter mh-zigzag" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start;padding:56px 44px;border-bottom:1px solid rgba(230,237,240,.1)">
+    <div style="border:1px solid rgba(230,237,240,.14);border-radius:3px;height:420px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:14px">
+      <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">image / 3D object — placeholder</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
       <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Theme 02</div>
       <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Interpretable explanation of tabular models</h3>
       <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(230,237,240,.7)">Bayesian networks and Markov blankets: identifying the smallest set of variables that renders a target conditionally independent of everything else, so an explanation names variables rather than gesturing at importance scores.</p>
@@ -62,11 +74,16 @@ import Layout from '../layouts/Layout.astro';
         </ul>
       </div>
     </div>
+  </div>
 
-    <div style="padding:40px 0 40px 44px;display:flex;flex-direction:column;gap:14px">
+  <div class="mh-gutter mh-zigzag" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start;padding:56px 44px">
+    <div style="display:flex;flex-direction:column;gap:14px">
       <div style="font-size:12.5px;color:rgba(230,237,240,.45);line-height:1.5">Theme 03</div>
       <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Computer Vision</h3>
       <div style="border-left:3px solid rgba(230,237,240,.4);background:rgba(6,8,10,.75);border-radius:3px;padding:14px 16px;font-size:13px;line-height:1.6;color:rgba(230,237,240,.82)">TODO: description and publications for this theme, to be supplied.</div>
+    </div>
+    <div style="border:1px solid rgba(230,237,240,.14);border-radius:3px;height:420px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:14px">
+      <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">image / 3D object — placeholder</span>
     </div>
   </div>
 </div>

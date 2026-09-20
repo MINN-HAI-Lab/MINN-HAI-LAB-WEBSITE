@@ -1211,3 +1211,44 @@ since a `code` tag was already legible as a small interactive label.
 
 No publication's short name, venue, year or code claim changed — this
 is links added to facts already on the page, not new facts.
+
+---
+
+## D-047 — Deep Field and Lattice are gone from Home; Research zigzags instead of three columns
+
+**Status: adopted, 2026-09-20.** Supersedes D-042's three-column Research
+layout, for structure only — the publication data, links and TODO
+treatment it established stand. Two changes, given together and related:
+Deep Field's network graphic is the reason.
+
+**Home.** Deep Field (1a, "Intelligence you can observe") and Lattice (1b,
+"Between human understanding and machine inference") are removed entirely.
+Home is now the hero straight into Signal Plane — two sections, not four.
+`index.astro`'s frontmatter comment records this; `#deep-field` and
+`#lattice`, and their `mh-bg mode="bayes"` and `mode="lattice"` fields, no
+longer exist on the page.
+
+**Research.** D-042's three equal columns are gone too — Kaung asked for
+two columns per theme instead of three across, alternating which side
+carries the text: Theme 01's text is left, Theme 02's is right, Theme 03's
+is left again, its visual companion always on the other side. New class
+`.mh-zigzag` (`Layout.astro`, replacing `.mh-themes`): two columns at
+992px and up, one below, text and visual keeping whatever order they're
+written in when stacked.
+
+**The graphic moves, not deleted.** Deep Field's `mh-bg mode="bayes"` —
+the Bayesian network visualisation — is Theme 01's visual, panelled the
+same way the old programme-02 aside was (`1px solid rgba(230,237,240,.14)`,
+4px radius, `#080A0D`), just taller (420px, up from 150px) to carry a full
+column instead of a preview thumbnail. Theme 02 and Theme 03's visuals are
+placeholders — Kaung named them "Image or 3D object" with nothing to show
+yet, so they get the same striped-and-labelled treatment the Members grid
+used for unfilled portraits, not an invented image.
+
+Checked: the graphic renders correctly at both 1440px and, scrolled into
+view, at 360px (a full-page mobile screenshot caught it mid-draw and
+looked blank — a capture-timing artefact, not a bug, confirmed by
+screenshotting the element directly after it had settled). `tests/site.spec.ts`
+updated: Home's mh-bg count drops from 3 to 1, `#deep-field`/`#lattice`
+checks removed, and Research gets an explicit check for the relocated
+`mh-bg[mode="bayes"]`.

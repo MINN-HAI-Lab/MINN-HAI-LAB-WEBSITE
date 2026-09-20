@@ -8,9 +8,11 @@ teaching assistant, the deployment and "established" claims — is removed.
 
 ## What is left
 
-- **Computer Vision** — the third research theme, added as a column on the
-  Research page (D-042) with a name only; its description and publications
-  are still `TODO:`, waiting on Kaung.
+- **Computer Vision** — the third research theme on the Research page, with
+  a name only; its description and publications are still `TODO:`, waiting
+  on Kaung.
+- **Theme 02 and Theme 03's visuals** — marked "image / 3D object —
+  placeholder" (D-047); no asset supplied yet.
 - **Course materials** — still a named gap on the Learning panel, waiting on
   which courses go public and who owns them.
 - **Institutional affiliation** — not stated anywhere on the site.

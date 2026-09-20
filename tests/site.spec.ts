@@ -7,12 +7,12 @@ import { expect, test } from '@playwright/test';
  * each page exists with its own content, the nav routes between them, the
  * learning tabs, and nothing pushing any page sideways at a phone width.
  */
-test('home has the hero, the fields and the lead sections', async ({ page }) => {
+test('home has the hero and Signal Plane', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('iframe[data-mh-scene]')).toHaveCount(1);
   await expect(page.locator('h1')).toHaveText('The gap is the whole discipline.');
-  expect(await page.locator('mh-bg').count()).toBe(3);
-  for (const id of ['top', 'deep-field', 'lattice', 'signal-plane']) {
+  expect(await page.locator('mh-bg').count()).toBe(1);
+  for (const id of ['top', 'signal-plane']) {
     await expect(page.locator(`#${id}`)).toHaveCount(1);
   }
 });
@@ -21,6 +21,7 @@ test('research, learning, members and partner are their own pages', async ({ pag
   await page.goto('/research');
   await expect(page.locator('#research')).toHaveCount(1);
   await expect(page.locator('h2')).toHaveText('Research');
+  await expect(page.locator('mh-bg[mode="bayes"]')).toHaveCount(1);
 
   await page.goto('/learning');
   await expect(page.locator('#learning')).toHaveCount(1);

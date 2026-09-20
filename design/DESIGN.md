@@ -17,14 +17,22 @@ distance — so the frame shows about the same width of the scene, and the
 forearms are ten times the artboard's original length, so their ends are
 never in view even at an ultrawide monitor.
 
-Direction 1d is the rest of the site, in this order: a research header band
-over a lattice field; three theme columns side by side, each with its own
-publication list where it has one (D-042 — no canvas equivalent; the canvas
-draws two stacked programme rows, one `200px | 1fr | 300px` with a field
-preview, one `200px | 1fr` without); the Learning panel (StatLab, linked
-out; course materials, still a gap); the members grid of five 4:5 frames,
-named, with photos; a funding list; the closing band over the signal
-plane, with the contact address; the footer.
+Direction 1c, the signal plane, follows the hero directly on Home — 1a
+(Deep Field) and 1b (Lattice), the network graphic and the lattice field
+that used to sit between them, are gone from the site (D-047), though they
+remain in the canvas.
+
+The rest of direction 1d, in this order: a research header band over a
+lattice field; the three themes zigzagging left and right, text and
+visual trading sides each row, each theme with its own publication list
+where it has one (D-047 — no canvas equivalent; the canvas draws two
+stacked programme rows, one `200px | 1fr | 300px` with a field preview,
+one `200px | 1fr` without). Theme 01's visual is Deep Field's network
+graphic, relocated rather than deleted; Theme 02 and 03's are marked
+placeholders, no asset supplied yet. Then: the Learning panel (StatLab,
+linked out; course materials, still a gap); the members grid of five 4:5
+frames, named, with photos; a funding list; the closing band over the
+signal plane, with the contact address; the footer.
 
 ## Colour
 
@@ -77,8 +85,8 @@ breakpoints — 576, 768, 992, 1200, 1400 — in one stylesheet shared by all of
 them, at the top of `src/layouts/Layout.astro`:
 
 - The gutter steps 48 → 40 → 32 → 28 → 24 → 20px.
-- The theme columns go three across → one column below 992px (D-042). The
-  people grid goes 5 → 3 → 2 across.
+- Each theme's two columns go one below 992px (D-047), text and visual in
+  the order they're written. The people grid goes 5 → 3 → 2 across.
 - The hero fills the viewport height; its display line steps 54 → 44 → 38px;
   the section titles 52 → 40 → 34px.
 - There is one header — 2a's — fixed to the top of every page on 1d's

@@ -9,15 +9,15 @@ direction 1d, in its order.
 
 | Page | Route | Content |
 |---|---|---|
-| Home | `/` | The reach — the hero (2a) — through Deep Field (1a), Lattice (1b) and Signal Plane (1c), "We model the learner, not the average." |
-| Research | `/research` | Research header band, then three theme columns side by side, each with its real publication list where it has one |
+| Home | `/` | The reach — the hero (2a) — then Signal Plane (1c), "We model the learner, not the average." Deep Field (1a) and Lattice (1b), which used to sit between them, are gone (D-047) |
+| Research | `/research` | Research header band, then the three themes zigzagging left and right, each with its real publication list where it has one |
 | Learning | `/learning` | The learning panel: StatLab, linked out; course materials, still a gap |
 | Members | `/members` | Five members, named, with photos, headed "Members" |
 | Partner with us | `/partner` | The seven funders by name, then "Bring us a problem that needs an explanation." |
 
 Kaung set these boundaries directly (D-037): Home ends where Research began
-as a section; Research runs through the theme columns; Learning and Members
-are each their own page; Partner with us is Funding through the close.
+as a section; Research runs through the themes; Learning and Members are
+each their own page; Partner with us is Funding through the close.
 
 The previous site's routes — `/people`, `/about` — redirect to where their
 content is now (`/members`, `/partner`). `/research` and `/learning` stayed
