@@ -1288,3 +1288,40 @@ section. Its headline block, already the section's tallest content and
 already centred, is now the section's sole content — still centred, still
 filling the screen (D-043's flex fix is unaffected, since it was never
 specific to having two flex children).
+
+---
+
+## D-049 — Members grouped by rank: Founder, Post Doctoral, Master
+
+**Status: adopted, 2026-09-20.** Supersedes D-040's flat five-person grid,
+for structure only — the individual facts it established (names, the
+reasoning for "Founder") still stand.
+
+Kaung asked for the grid split into three ranked groups and supplied who
+goes where: Founder (Dr. Sein Minn, one person); Post Doctoral (two
+people, neither named yet — "two place holders for 2 PHD students in the
+Post Doctoral section"); Master (the four already on the page: Aung Khant
+Maung, Thet Htun Swe, Kaung Hein Htet, Win Htut Naing).
+
+The two Post Doctoral placeholders read "PhD student," Kaung's own word
+for them, even though the group heading above them says "Post Doctoral" —
+that mismatch is Kaung's, not smoothed over by guessing which term he
+meant. The Master group's four now read "Master's student" rather than
+D-040's "Research Assistant," since being placed under "Master" directly
+states their standing in a way the earlier generic label didn't.
+
+**Layout.** Each group is its own heading (matching the `19px` Literata
+weight Learning's "StatLab" sub-heading uses) over its own `.mh-people`
+grid — the same class and card markup as before, just re-run per group.
+No layout change was needed for the uneven counts (1, 2, 4): CSS Grid's
+explicit `repeat(5,minmax(0,1fr))` tracks keep their size regardless of
+how many items occupy them, so Founder's single card sits at its usual
+width with the rest of that row simply empty, not stretched.
+
+**Photos.** Kaung re-uploaded all five — a second, better-lit set on a
+consistent blue backdrop, replacing the first. Same processing as D-040:
+resized from 3000×3000 to 900×900 and recompressed with `sips` into
+`public/members/`, same filenames except Aung Khant Maung's (uploaded as
+`Aung.jpg`, saved under his full name for consistency with the other
+four). The Post Doctoral placeholders use the same striped, labelled
+portrait placeholder the whole grid used before D-040's photos existed.

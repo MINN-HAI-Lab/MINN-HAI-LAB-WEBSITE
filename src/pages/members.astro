@@ -1,39 +1,72 @@
 ---
 /**
- * Members — the Members grid. See src/layouts/Layout.astro for the chrome
- * and the transcription notes that apply to every page.
+ * Members — grouped Founder / Post Doctoral / Master, per Kaung's request.
+ * See src/layouts/Layout.astro for the chrome and the transcription notes
+ * that apply to every page.
  *
  * padding-top:96px on the wrapper clears the fixed header; see the same
  * note in learning.astro.
  *
- * Portraits are public/members/<Name>.jpg, supplied by Kaung and resized
- * from the originals (3000×3000) down to 900×900 for the web.
+ * Portraits are public/members/<Name>.jpg — Kaung's second upload, resized
+ * from the originals (3000×3000) down to 900×900 for the web, replacing
+ * the first set. The two Post Doctoral slots have no name or photo yet
+ * (Kaung: "two place holders for 2 PHD students in the Post Doctoral
+ * section") — the same striped, labelled placeholder the whole grid used
+ * before real photos existed, not a guess at who they are.
  */
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const people = [
-  { name: 'Dr. Sein Minn', role: 'Founder', photo: 'Sein_Minn.jpg' },
-  { name: 'Aung Khant Maung', role: 'Research Assistant', photo: 'Aung_Khant_Maung.jpg' },
-  { name: 'Thet Htun Swe', role: 'Research Assistant', photo: 'Thet_Htun_Swe.jpg' },
-  { name: 'Kaung Hein Htet', role: 'Research Assistant', photo: 'Kaung_Hein_Htet.jpg' },
-  { name: 'Win Htut Naing', role: 'Research Assistant', photo: 'Win_Htut_Naing.jpg' },
+const groups = [
+  {
+    label: 'Founder',
+    people: [
+      { name: 'Dr. Sein Minn', role: 'Founder', photo: 'Sein_Minn.jpg' },
+    ],
+  },
+  {
+    label: 'Post Doctoral',
+    people: [
+      { name: null, role: 'PhD student', photo: null },
+      { name: null, role: 'PhD student', photo: null },
+    ],
+  },
+  {
+    label: 'Master',
+    people: [
+      { name: 'Aung Khant Maung', role: "Master's student", photo: 'Aung_Khant_Maung.jpg' },
+      { name: 'Thet Htun Swe', role: "Master's student", photo: 'Thet_Htun_Swe.jpg' },
+      { name: 'Kaung Hein Htet', role: "Master's student", photo: 'Kaung_Hein_Htet.jpg' },
+      { name: 'Win Htut Naing', role: "Master's student", photo: 'Win_Htut_Naing.jpg' },
+    ],
+  },
 ];
 ---
 
 <Layout title="Members — MINN HAI Lab">
 <div style="background:#06080A;padding-top:96px">
-  <div class="mh-gutter" id="members" style="padding:44px;border-bottom:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:24px">
+  <div class="mh-gutter" id="members" style="padding:44px;border-bottom:1px solid rgba(230,237,240,.1);display:flex;flex-direction:column;gap:40px">
     <div style="display:flex;align-items:baseline;justify-content:space-between"><h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;letter-spacing:-.015em">Members</h3></div>
-    <div class="mh-people" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px">
-      {people.map((p) => (
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;overflow:hidden">
-            <img src={`${base}/members/${p.photo}`} alt={p.name} loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" />
-          </div>
-          <div><div style="font-family:Literata,serif;font-size:16px">{p.name}</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">{p.role}</div></div>
+    {groups.map((g) => (
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">{g.label}</div>
+        <div class="mh-people" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px">
+          {g.people.map((p) => (
+            <div style="display:flex;flex-direction:column;gap:12px">
+              {p.photo ? (
+                <div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;overflow:hidden">
+                  <img src={`${base}/members/${p.photo}`} alt={p.name} loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" />
+                </div>
+              ) : (
+                <div style="aspect-ratio:4/5;border:1px solid rgba(230,237,240,.14);border-radius:3px;background:repeating-linear-gradient(135deg,rgba(230,237,240,.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:12px">
+                  <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(230,237,240,.5)">portrait</span>
+                </div>
+              )}
+              <div><div style="font-family:Literata,serif;font-size:16px">{p.name ?? 'TODO: name'}</div><div style="font-size:12px;color:rgba(230,237,240,.5);margin-top:3px">{p.role}</div></div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
+    ))}
   </div>
 </div>
 </Layout>
