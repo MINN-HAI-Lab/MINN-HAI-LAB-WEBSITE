@@ -1325,3 +1325,26 @@ resized from 3000×3000 to 900×900 and recompressed with `sips` into
 `Aung.jpg`, saved under his full name for consistency with the other
 four). The Post Doctoral placeholders use the same striped, labelled
 portrait placeholder the whole grid used before D-040's photos existed.
+
+---
+
+## D-050 — A Doctoral group, three placeholders, after Post Doctoral
+
+**Status: adopted, 2026-09-20.** Kaung asked for a "Doctoral" group with
+three people, placed after Post Doctoral — no names supplied, so all
+three are the same striped, labelled placeholder D-049's Post Doctoral
+slots use.
+
+This also resolves a mismatch flagged when D-049 shipped: Post Doctoral's
+two placeholders were labelled "PhD student" because that was Kaung's own
+word for them at the time, even though it sat oddly under a "Post
+Doctoral" heading. With a Doctoral group now genuinely holding PhD-level
+placeholders, "PhD student" moves there and Post Doctoral's own
+placeholders become "Postdoctoral researcher" instead — a judgement call
+inferred from the new group existing, not something Kaung stated
+outright, and said so in the response given alongside this change.
+
+Order: Founder, Post Doctoral, Doctoral, Master — matching where Kaung
+asked for Doctoral to go. No structural change beyond adding the group
+and its three entries; the same per-group heading and `.mh-people` grid
+pattern from D-049 handles it without modification.

@@ -1,18 +1,23 @@
 ---
 /**
- * Members — grouped Founder / Post Doctoral / Master, per Kaung's request.
- * See src/layouts/Layout.astro for the chrome and the transcription notes
- * that apply to every page.
+ * Members — grouped Founder / Post Doctoral / Doctoral / Master, per
+ * Kaung's request. See src/layouts/Layout.astro for the chrome and the
+ * transcription notes that apply to every page.
  *
  * padding-top:96px on the wrapper clears the fixed header; see the same
  * note in learning.astro.
  *
  * Portraits are public/members/<Name>.jpg — Kaung's second upload, resized
  * from the originals (3000×3000) down to 900×900 for the web, replacing
- * the first set. The two Post Doctoral slots have no name or photo yet
- * (Kaung: "two place holders for 2 PHD students in the Post Doctoral
- * section") — the same striped, labelled placeholder the whole grid used
- * before real photos existed, not a guess at who they are.
+ * the first set.
+ *
+ * Post Doctoral and Doctoral are both entirely placeholder — no names, no
+ * photos. Kaung first described Post Doctoral's two slots as "PHD
+ * students," then asked for a separate three-person Doctoral group after
+ * it, which reads as the actual PhD group; Post Doctoral's placeholders
+ * are labelled "Postdoctoral researcher" here on that basis, Doctoral's
+ * "PhD student" — flagged as a judgement call, not something Kaung stated
+ * outright either way.
  */
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -26,6 +31,14 @@ const groups = [
   {
     label: 'Post Doctoral',
     people: [
+      { name: null, role: 'Postdoctoral researcher', photo: null },
+      { name: null, role: 'Postdoctoral researcher', photo: null },
+    ],
+  },
+  {
+    label: 'Doctoral',
+    people: [
+      { name: null, role: 'PhD student', photo: null },
       { name: null, role: 'PhD student', photo: null },
       { name: null, role: 'PhD student', photo: null },
     ],

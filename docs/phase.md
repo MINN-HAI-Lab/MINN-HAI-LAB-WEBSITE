@@ -13,9 +13,10 @@ teaching assistant, the deployment and "established" claims — is removed.
   publications are still `TODO:`, waiting on Kaung.
 - **Theme 02 and Theme 03's visuals** — marked "image / 3D object —
   placeholder" (D-047); no asset supplied yet.
-- **Two Post Doctoral members** — the Members page now groups by rank
-  (Founder / Post Doctoral / Master, D-049); the Post Doctoral group has
-  two placeholder cards, name and photo both `TODO:`, waiting on Kaung.
+- **Five Post Doctoral and Doctoral members** — the Members page groups by
+  rank (Founder / Post Doctoral / Doctoral / Master, D-049, D-050); Post
+  Doctoral has two placeholder cards, Doctoral three, all name and photo
+  `TODO:`, waiting on Kaung.
 - **Course materials** — still a named gap on the Learning panel, waiting on
   which courses go public and who owns them.
 - **Institutional affiliation** — not stated anywhere on the site.
