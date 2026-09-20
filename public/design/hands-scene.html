@@ -23,7 +23,15 @@
 import * as THREE from 'three';
 
 /* MINN HAI — the reach. Human hand upper-left, robot hand lower-right.
-   Cursor near the centre draws both hands in and extends the index fingers. */
+   Cursor near the centre draws both hands in and extends the index fingers.
+
+   Theme (D-053): the canvas is already transparent (alpha:true, no clear
+   colour set), so the page behind it — index.astro's #top, themed like
+   the rest of the site — is what the frame's background actually shows;
+   nothing here needs to change for that. The one thing that does is the
+   wireframe cage (wire/wireDim): it's coloured light-on-dark, near
+   invisible on the light theme's page unless swapped. See applyTheme,
+   near the bottom, and the parent's postMessage handshake it answers to. */
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
@@ -82,8 +90,15 @@ const steel = new THREE.MeshStandardMaterial({ color: 0x8e979f, roughness: 0.3, 
 const glow = new THREE.MeshStandardMaterial({ color: 0xd61a4a, emissive: 0xd61a4a, emissiveIntensity: 1.8, roughness: 0.4, metalness: 0 });
 const glowGold = new THREE.MeshStandardMaterial({ color: 0xf2bb3e, emissive: 0xf2bb3e, emissiveIntensity: 1.8, roughness: 0.4, metalness: 0 });
 const cable = new THREE.MeshStandardMaterial({ color: 0x12151a, roughness: 0.75, metalness: 0.2 });
-const wire = new THREE.LineBasicMaterial({ color: 0x9fb3bf, transparent: true, opacity: 0.32 });
-const wireDim = new THREE.LineBasicMaterial({ color: 0x9fb3bf, transparent: true, opacity: 0.14 });
+/* wire/wireDim are the only materials that read as light-on-dark rather
+   than a colour that works on either backdrop — the wireframe cage is
+   meant to be felt, not seen, so it needs to sit near the background
+   either way. Default to light's colour (the site's default theme);
+   applyTheme (below, driven by the parent's postMessage) corrects it the
+   moment the real theme is known. */
+const WIRE_LIGHT = 0x1c2830, WIRE_DARK = 0x9fb3bf;
+const wire = new THREE.LineBasicMaterial({ color: WIRE_LIGHT, transparent: true, opacity: 0.32 });
+const wireDim = new THREE.LineBasicMaterial({ color: WIRE_LIGHT, transparent: true, opacity: 0.14 });
 
 /* a finger: three hierarchical phalanges, curl set per frame */
 function finger({ len, r, human }) {
@@ -189,7 +204,23 @@ const ptr = { x: 0, y: 0, tx: 0, ty: 0, reach: 0, treach: 0 };
 const setPtr = (nx, ny) => { if (ptr.lock) return; ptr.tx = nx; ptr.ty = ny; const d = Math.hypot(nx, ny * 0.75); ptr.treach = 1 - THREE.MathUtils.smoothstep(d, 0.10, 0.62); };
 addEventListener('pointermove', e => setPtr((e.clientX / innerWidth) * 2 - 1, (e.clientY / innerHeight) * 2 - 1), { passive: true });
 addEventListener('pointerleave', () => { if (!ptr.lock) ptr.treach = 0; });
-addEventListener('message', e => { const d = e.data; if (d && d.type === 'mh-pointer') { if (d.out) { if (!ptr.lock) ptr.treach = 0; } else setPtr(d.x, d.y); } });
+addEventListener('message', e => {
+  const d = e.data;
+  if (!d) return;
+  if (d.type === 'mh-pointer') { if (d.out) { if (!ptr.lock) ptr.treach = 0; } else setPtr(d.x, d.y); }
+  if (d.type === 'mh-theme') applyTheme(d.theme === 'dark');
+});
+/* the parent's stylesheet has the real theme (D-052/D-053); this frame is
+   a separate document and can't read it, so it asks — parent.postMessage
+   rather than waiting to be told, since the parent's own script may run
+   before this listener above is registered (three.js is fetched from a
+   CDN first) and a message sent before there's a listener is simply lost. */
+function applyTheme(dark) {
+  const c = dark ? WIRE_DARK : WIRE_LIGHT;
+  wire.color.setHex(c);
+  wireDim.color.setHex(c);
+}
+if (parent !== window) parent.postMessage({ type: 'mh-ready' }, '*');
 
 /* The artboard is 1340x920. On a wider frame the camera comes in so the frame
    shows about the same width of the scene the artboard did — but no closer
@@ -241,5 +272,6 @@ frame();
 /* debug hook for tuning: fingertip gap in world units */
 window.__gap = () => { const a = new THREE.Vector3(), b = new THREE.Vector3(); human.h.userData.fingers[0].userData.tip.getWorldPosition(a); robot.h.userData.fingers[0].userData.tip.getWorldPosition(b); return { a: a.toArray().map(v => +v.toFixed(2)), b: b.toArray().map(v => +v.toFixed(2)), gap: +a.distanceTo(b).toFixed(2) }; };
 window.__set = (r) => { ptr.lock = true; ptr.treach = r; ptr.reach = r; for (let i = 0; i < 3; i++) tick(); };
+window.__wireHex = () => '#' + wire.color.getHexString();
 </script>
 </body></html>

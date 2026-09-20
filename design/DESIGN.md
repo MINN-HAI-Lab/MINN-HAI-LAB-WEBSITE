@@ -54,10 +54,12 @@ theme:
   robot hand. "Red is the machine's opinion. Ink is fact. The accent appears
   nowhere else on the site." Unchanged between themes — see below.
 
-## Theme (D-052)
+## Theme (D-052, D-053)
 
 Light is default; dark, above, is what a visitor opts into with the
-header's toggle, kept in `localStorage`. Every colour is a CSS custom
+header's toggle — an icon (a filled moon to switch to dark, a sun to
+switch back), last in the header's right-hand cluster so it's always the
+rightmost control — kept in `localStorage`. Every colour is a CSS custom
 property (`src/layouts/Layout.astro`) — light values on `:root`, dark
 values (the canvas's own, unchanged) under `[data-theme="dark"]`:
 
@@ -81,13 +83,31 @@ dark — chosen to sit in the same family as the site's own pre-canvas
 palette (D-003's `--paper` `#EFF1F2` and `--ink` `#1C2830`, from before
 the canvas became the design authority).
 
-Four places stay the canvas's dark always, literal hex, never tokens: the
-hero's 3D scene (`index.astro` `#top`), and every section whose background
-is a live `mh-bg` canvas field with no fill of its own — Home's
-`#signal-plane`, Partner's `#join`, and the panel holding Research's
-Theme 01 network graphic. `mh-bg` draws light lines on a transparent
-canvas; without a literal dark backdrop behind it, those lines would be
-close to invisible on a light page.
+Three places stay the canvas's dark always, literal hex, never tokens:
+every section whose background is a live `mh-bg` canvas field with no
+fill of its own — Home's `#signal-plane`, Partner's `#join`, and the
+panel holding Research's Theme 01 network graphic. `mh-bg` draws light
+lines on a transparent canvas; without a literal dark backdrop behind it,
+those lines would be close to invisible on a light page.
+
+The hero's 3D scene is themed too (D-053), background and materials
+both — Kaung asked for it, after first agreeing it should stay dark.
+`hands-scene.html`'s canvas was already transparent (`alpha:true`, no
+clear colour), so the frame's background was always whatever sat behind
+it in `index.astro`; that div is tokenised like everything else now, so
+the scene's backdrop follows the theme with no change inside the scene
+itself. The one thing inside the scene that did need a change is the
+wireframe icosahedron (`wire`/`wireDim`): coloured light-on-dark, it goes
+near invisible on a light page unless swapped for something dark. Every
+other material — skin, steel, graphite, the emissive rings — already
+reads on either backdrop, steel especially: it's a mirror-finish
+material reflecting a fixed, separately-lit environment rig, so it
+renders dark regardless of the page around it, without needing to change
+at all. Since the scene runs in an iframe — a separate document, its own
+`window` — the parent's CSS custom properties can't reach into it;
+`src/layouts/Layout.astro`'s script tells it the active theme over
+`postMessage`, once the scene confirms it's loaded enough to listen and
+again on every toggle.
 
 ## Type
 

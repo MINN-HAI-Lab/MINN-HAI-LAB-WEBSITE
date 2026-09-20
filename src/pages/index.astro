@@ -12,6 +12,12 @@
  * Signal Plane's stats row ("2 research themes" / "1 open learning
  * resource, StatLab") is gone too — Kaung asked for it removed. The
  * headline block is now the section's only content, still centred.
+ *
+ * #top, the hero, is themed now too (D-053) — background and copy both —
+ * unlike #signal-plane below it, which stays the canvas's dark always
+ * (see the note in Layout.astro for why). The 3D scene inside it gets the
+ * active theme over postMessage from Layout.astro's script, since it's a
+ * separate document these CSS custom properties can't reach on their own.
  */
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -19,22 +25,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <Layout>
 <div class="mh-hero" style="position:relative">
-<div id="top" class="mh-frame" style="position:relative;height:920px;background:#06080A;overflow:hidden">
-<div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,#10151a 0%,#090c0f 55%,#06080A 100%)"></div>
+<div id="top" class="mh-frame" style="position:relative;height:920px;background:var(--field);overflow:hidden">
+<div style="position:absolute;inset:0;z-index:0;background:radial-gradient(90% 70% at 50% 48%,rgb(var(--hero-glow-rgb)) 0%,var(--field) 100%)"></div>
 <iframe data-mh-scene src={`${base}/design/hands-scene.html`} title="Human and robot hands reaching toward each other" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;border:0;background:transparent"></iframe>
 
 <div class="mh-hero-copy" style="position:absolute;z-index:4;left:48px;bottom:118px;max-width:440px;display:flex;flex-direction:column;gap:20px;pointer-events:none">
-  <div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;border-radius:50%;background:#D61A4A;animation:mh-blink 2.6s ease-in-out infinite"></span><span style="font-size:12px;color:rgba(230,237,240,.6)">Human-centered AI</span></div>
-  <h1 class="mh-hero-title" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:54px;line-height:1.02;letter-spacing:-.025em;color:#F2F6F8;text-wrap:pretty">The gap is the whole discipline.</h1>
-  <p style="margin:0;font-size:17px;line-height:1.62;color:rgba(230,237,240,.72);max-width:42ch">We build AI that reaches back on human terms — adaptive, interpretable, accountable for how it arrived at what it says.</p>
+  <div style="display:flex;align-items:center;gap:12px"><span style="width:7px;height:7px;border-radius:50%;background:#D61A4A;animation:mh-blink 2.6s ease-in-out infinite"></span><span style="font-size:12px;color:rgba(var(--ink-rgb),.6)">Human-centered AI</span></div>
+  <h1 class="mh-hero-title" style="margin:0;font-family:Literata,serif;font-weight:300;font-size:54px;line-height:1.02;letter-spacing:-.025em;color:var(--display);text-wrap:pretty">The gap is the whole discipline.</h1>
+  <p style="margin:0;font-size:17px;line-height:1.62;color:rgba(var(--ink-rgb),.72);max-width:42ch">We build AI that reaches back on human terms — adaptive, interpretable, accountable for how it arrived at what it says.</p>
 </div>
 
 </div>
 
-<div style="position:absolute;z-index:5;left:0;right:0;bottom:0;border-top:1px solid rgba(230,237,240,.12);background:rgba(6,8,10,.62);backdrop-filter:blur(10px);pointer-events:none">
+<div style="position:absolute;z-index:5;left:0;right:0;bottom:0;border-top:1px solid rgba(var(--ink-rgb),.12);background:rgba(var(--field-rgb),.62);backdrop-filter:blur(10px);pointer-events:none">
   <div class="mh-gutter mh-wrap" style="display:flex;align-items:center;justify-content:flex-end;gap:32px;padding:20px 48px">
         <div class="mh-wrap" style="display:flex;gap:26px;align-items:center;pointer-events:auto">
-                  <a href={`${base}/research`} style="font-size:12.5px;color:#E6EDF0;text-decoration:none;border-bottom:1px solid rgba(230,237,240,.4);padding-bottom:2px">Enter the lab</a>
+                  <a href={`${base}/research`} style="font-size:12.5px;color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(var(--ink-rgb),.4);padding-bottom:2px">Enter the lab</a>
     </div>
   </div>
 </div>

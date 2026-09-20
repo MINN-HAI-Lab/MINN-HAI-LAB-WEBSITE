@@ -28,12 +28,15 @@ canvas's; only how a page reaches a given value changed. Layout, copy,
 spacing and every other property stay literal, transcribed exactly as
 before.
 
-Four exceptions to the exception, always literal hex, never tokens: the
-hero's 3D scene and any section whose background is a live `mh-bg` canvas
-field with no fill of its own — those stay the canvas's dark regardless of
-theme, because the fields draw light lines on a transparent canvas with
-nothing behind them. See the note at the top of `src/layouts/Layout.astro`
-for exactly which these are.
+A narrower exception to that exception, always literal hex, never tokens:
+any section whose background is a live `mh-bg` canvas field with no fill
+of its own — those stay the canvas's dark regardless of theme, because the
+fields draw light lines on a transparent canvas with nothing behind them.
+See the note at the top of `src/layouts/Layout.astro` for exactly which
+these are. The hero's 3D scene is not one of these (D-053): it's themed
+too, told which theme is active over `postMessage` since it runs in an
+iframe with its own document — CSS custom properties on the parent page
+don't reach it on their own.
 
 ## Stack
 

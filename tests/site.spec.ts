@@ -68,18 +68,40 @@ test('nothing overflows at 360px, on any page', async ({ page }) => {
 test('theme: light by default, dark toggles and persists across pages', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('#mh-theme-toggle')).toHaveText('Dark');
+  await expect(page.locator('#mh-theme-toggle')).toHaveAttribute('aria-label', 'Switch to dark theme');
+  await expect(page.locator('#mh-theme-toggle [data-icon="moon"]')).toBeVisible();
+  await expect(page.locator('#mh-theme-toggle [data-icon="sun"]')).toBeHidden();
 
   await page.locator('#mh-theme-toggle').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('#mh-theme-toggle')).toHaveText('Light');
+  await expect(page.locator('#mh-theme-toggle')).toHaveAttribute('aria-label', 'Switch to light theme');
+  await expect(page.locator('#mh-theme-toggle [data-icon="sun"]')).toBeVisible();
 
   await page.goto('/research');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('#mh-theme-toggle')).toHaveText('Light');
+  await expect(page.locator('#mh-theme-toggle')).toHaveAttribute('aria-label', 'Switch to light theme');
 
   await page.locator('#mh-theme-toggle').click();
   await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'dark');
   await page.reload();
   await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'dark');
+});
+
+test('theme: the 3D scene hears about it too', async ({ page }) => {
+  // The scene runs in an iframe with its own document — this exercises the
+  // postMessage handshake (D-053), not just the parent page's own CSS.
+  await page.goto('/');
+  const scene = page.frameLocator('iframe[data-mh-scene]');
+  await expect.poll(() => scene.locator('canvas').isVisible()).toBe(true);
+  await page.waitForTimeout(500); // scene fetches three.js from a CDN before it can answer the ready handshake
+  const frame = page.frames().find(f => f.url().includes('hands-scene'));
+  if (!frame) throw new Error('hands-scene.html iframe not found');
+  const wireHex = () => frame.evaluate(() => (window as any).__wireHex?.() ?? null);
+  const light = await wireHex();
+  await page.click('#mh-theme-toggle');
+  await page.waitForTimeout(300);
+  const dark = await wireHex();
+  expect(light).not.toBeNull();
+  expect(dark).not.toBeNull();
+  expect(light).not.toBe(dark);
 });

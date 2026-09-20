@@ -1452,3 +1452,71 @@ attribute); dark mode screenshots pixel-match what shipped before this
 decision; no horizontal overflow at 360px on any page in either theme.
 `tests/site.spec.ts` gained a dedicated theme test alongside the existing
 five.
+
+---
+
+## D-053 — Icon toggle, moved to the end; the 3D hero themed after all
+
+**Status: adopted, 2026-09-20.** Two follow-ups on D-052, the same day.
+
+**The toggle.** Kaung called the "Dark"/"Light" text button "ridiculous"
+and asked for day/night icons instead, and asked whether its position —
+first in the header's right-hand cluster, before Menu and the nav — was
+the best one, open to moving it. Replaced with two inline SVGs (a filled
+moon and a sun, matching the site's thin-stroke line weight, `1.3px`, no
+emoji per the site's own content rule), one shown at a time, the visible
+one still showing what a click switches *to* — moon in light mode, sun in
+dark — same semantics as the text version, an icon instead of a word.
+Moved to the end of the cluster, after the nav (after Menu on a narrow
+screen), the position most theme toggles on real sites use: the least
+central control in the header sits last, not first.
+
+**The 3D hero.** D-052 kept the hero's 3D scene dark always, on the
+reasoning that relighting it for a light backdrop was a bigger, separate
+piece of work — Kaung's own recommended choice at the time, from a
+question I asked before starting. He came back and asked for it anyway:
+white background, dark foreground "or accordingly." Investigating what
+that actually required turned out better than the original estimate
+suggested:
+
+- The scene's `<canvas>` was already transparent (`alpha:true`, no clear
+  colour ever set) — its "background" was always whatever sat behind it
+  on the page, meaning `index.astro`'s `#top` div (now tokenised like the
+  rest of the site) is the entire fix for the backdrop. Nothing inside
+  `hands-scene.html` needed to change for that part at all.
+- Of the materials, only the wireframe icosahedron (`wire`/`wireDim`,
+  `0x9fb3bf` at low opacity) is coloured for a dark backdrop specifically
+  — light-on-dark, and close to invisible light-on-light. Everything
+  else — skin, steel, graphite, the glowing rings — already reads on
+  white. Steel in particular needed no change at all: it's a
+  metalness-1 material reflecting a separately-lit, fixed environment
+  rig (D-032's gold-highlight work), so what it renders is governed by
+  that rig, not by the page around it — confirmed by screenshotting the
+  central prism through a full rotation on a white page, where it read
+  as a clean, consistently dark shape at every angle, exactly as it does
+  on dark.
+- What the earlier estimate had right: the scene runs in an iframe, a
+  separate document with its own `window`, so the parent page's CSS
+  custom properties can't reach into it, regardless of how small the
+  actual colour change turned out to be. `Layout.astro`'s script now
+  tells the scene which theme is active over `postMessage` — once,
+  answering a `{type:'mh-ready'}` the scene sends once its own message
+  listener is registered (three.js loads from a CDN first, so guessing a
+  fixed delay instead would have been a race), and again on every toggle.
+  `wire`/`wireDim` default to light's colour at construction (the site's
+  own default), corrected immediately if dark turns out to be active.
+
+**Scope, held to what was asked.** "3D objects" was Kaung's own phrase,
+and the three sections whose background is a live `mh-bg` *canvas* field
+— not 3D, a 2D transparent-clear canvas drawing — are unaffected:
+`#signal-plane`, Partner's `#join`, and Research's Theme 01 panel stay
+the canvas's dark always, exactly as D-052 left them.
+
+**Verified:** the toggle's new icon and position, at 1440 and 360px;
+`hands-scene.html` on white — background, hands, wireframe, ring, prism,
+orbiting nodes — across several rotation states; dark mode unchanged.
+`tests/site.spec.ts` gained a second theme test that exercises the
+`postMessage` handshake itself (a new `window.__wireHex()` debug hook,
+alongside the existing `__gap`/`__set`), not just the parent page's own
+CSS — the fragile new part of this change, and the one most worth a
+regression test.

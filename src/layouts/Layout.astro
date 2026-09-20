@@ -42,16 +42,27 @@
  * localStorage and re-applied before paint (the inline script just below
  * <head>, ahead of the stylesheet). Everywhere a colour used to be a
  * literal value it is now `var(--token)`, defined once as light values on
- * :root and overridden as dark values under [data-theme="dark"].
+ * :root and overridden as dark values under [data-theme="dark"]. The
+ * toggle is an icon (D-053), not the original "Dark"/"Light" text, and
+ * sits last in the header's right-hand cluster — after the nav on a wide
+ * screen, after Menu on a narrow one — so it's always the rightmost
+ * control regardless of breakpoint.
  *
- * Three places stay the canvas's original dark, always, regardless of
- * theme: the hero's 3D scene (index.astro #top), and the two sections
- * whose background is a live mh-bg canvas field with no fill of its own —
- * Home's #signal-plane and Partner's #join — plus Research's Theme 01
- * panel, which holds the third mh-bg field. mh-bg draws light lines on a
- * transparent canvas; without an explicit dark backdrop behind it, in
- * light mode those lines would be nearly invisible. Their colours stay
- * literal hex, not tokens, on purpose.
+ * Two places stay the canvas's original dark, always, regardless of
+ * theme: the two sections whose background is a live mh-bg canvas field
+ * with no fill of its own — Home's #signal-plane and Partner's #join —
+ * plus Research's Theme 01 panel, which holds the third mh-bg field.
+ * mh-bg draws light lines on a transparent canvas; without an explicit
+ * dark backdrop behind it, in light mode those lines would be nearly
+ * invisible. Their colours stay literal hex, not tokens, on purpose.
+ *
+ * The hero's 3D scene (index.astro #top) is no longer on that list
+ * (D-053): it's a live theme now too, background and materials both, the
+ * one exception being that it renders in an iframe with its own document
+ * — CSS custom properties here don't reach it, so this file's script
+ * tells it which theme is active over postMessage (`sendTheme`, below),
+ * once the scene announces it's ready to hear it and again on every
+ * toggle.
  */
 export interface Props {
   title?: string;
@@ -102,6 +113,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   --ink-rgb:28,40,48;
   --display-rgb:10,16,20;
   --accent-rgb:214,26,74;
+  --hero-glow-rgb:255,255,255;
   --field:rgb(var(--field-rgb));
   --ink:rgb(var(--ink-rgb));
   --display:rgb(var(--display-rgb));
@@ -111,6 +123,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   --field-rgb:6,8,10;
   --ink-rgb:230,237,240;
   --display-rgb:244,248,250;
+  --hero-glow-rgb:16,21,26;
 }
 
 body{margin:0;background:var(--field);font-family:"Space Grotesk",system-ui,sans-serif;color:var(--ink)}
@@ -118,7 +131,8 @@ a{color:var(--ink)}a:hover{color:var(--display)}
 .mh-tab{font:500 12.5px "Space Grotesk",sans-serif;border-radius:999px;padding:9px 15px;cursor:pointer;border:1px solid rgba(var(--ink-rgb),.18);background:transparent;color:rgba(var(--ink-rgb),.68);transition:background .12s ease,color .12s ease,border-color .12s ease}
 .mh-tab:hover{color:var(--ink);border-color:rgba(var(--ink-rgb),.42)}
 .mh-tab[aria-selected="true"]{background:var(--ink);color:var(--field);border-color:var(--ink)}
-.mh-theme-toggle{font:500 12.5px "Space Grotesk",sans-serif;color:var(--ink);background:transparent;border:1px solid rgba(var(--ink-rgb),.28);border-radius:2px;padding:9px 16px;cursor:pointer;pointer-events:auto}
+.mh-theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;color:var(--ink);background:transparent;border:1px solid rgba(var(--ink-rgb),.28);border-radius:2px;cursor:pointer;pointer-events:auto}
+.mh-theme-toggle svg{width:16px;height:16px;display:block}
 @keyframes mh-spark{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.4);opacity:1}}
 @keyframes mh-blink{0%,100%{opacity:.25}50%{opacity:1}}
 @keyframes mh-drift{0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
@@ -208,7 +222,6 @@ html{scroll-behavior:smooth}
 <div class="mh-gutter" style="display:flex;align-items:center;justify-content:space-between;padding:26px 48px">
   <a href={`${base}/`} class="mh-name" style="font-family:Literata,serif;font-size:20px;letter-spacing:-.01em;color:var(--ink);text-decoration:none">MINN HAI Lab</a>
   <div style="display:flex;align-items:center;gap:14px">
-    <button id="mh-theme-toggle" class="mh-theme-toggle" type="button" aria-label="Switch to dark theme">Dark</button>
     <button class="mh-menu" type="button" aria-expanded="false" aria-controls="mh-mobile-nav" style="pointer-events:auto;font:500 12.5px 'Space Grotesk',sans-serif;color:var(--ink);background:transparent;border:1px solid rgba(var(--ink-rgb),.28);border-radius:2px;padding:9px 16px;cursor:pointer">Menu</button>
     <div class="mh-hero-nav" style="display:flex;gap:32px;align-items:center;pointer-events:auto">
       <a href={`${base}/research`} style="font-size:13px;color:var(--ink);text-decoration:none">Research</a>
@@ -216,6 +229,10 @@ html{scroll-behavior:smooth}
       <a href={`${base}/members`} style="font-size:13px;color:var(--ink);text-decoration:none">Members</a>
       <a href={`${base}/partner`} style="font-size:12.5px;color:var(--ink);text-decoration:none;border:1px solid rgba(var(--ink-rgb),.28);border-radius:2px;padding:9px 16px">Partner with us</a>
     </div>
+    <button id="mh-theme-toggle" class="mh-theme-toggle" type="button" aria-label="Switch to dark theme">
+      <svg data-icon="moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.7 9.65A6 6 0 116.35 2.3a5 5 0 007.35 7.35z"/></svg>
+      <svg data-icon="sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true" style="display:none"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.7l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.3L3.1 3.1"/></svg>
+    </button>
   </div>
 </div>
 <nav id="mh-mobile-nav" class="mh-mobile-nav" hidden aria-label="Menu" style="position:absolute;z-index:6;left:0;right:0;top:100%;display:flex;flex-direction:column;background:rgba(var(--field-rgb),.96);border-top:1px solid rgba(var(--ink-rgb),.1);border-bottom:1px solid rgba(var(--ink-rgb),.1)">
@@ -270,23 +287,41 @@ html{scroll-behavior:smooth}
           });
         });
 
-        // Theme toggle (D-052): light is default; a saved "dark" is applied
-        // before paint by the inline script in <head>. This just handles
-        // the button — reflecting current state on load, flipping and
-        // persisting on click.
+        // Theme toggle (D-052/D-053): light is default; a saved "dark" is
+        // applied before paint by the inline script in <head>. This
+        // handles the button — an icon, not the earlier "Dark"/"Light"
+        // text, showing what a click switches *to* — and tells the 3D
+        // scene's iframe which theme is active, since it's a separate
+        // document CSS custom properties on this page can't reach.
         var toggle = document.getElementById('mh-theme-toggle');
+        var isDark = function () { return document.documentElement.getAttribute('data-theme') === 'dark'; };
+        var sendTheme = function (win) {
+          var msg = { type: 'mh-theme', theme: isDark() ? 'dark' : 'light' };
+          if (win) { win.postMessage(msg, '*'); return; }
+          document.querySelectorAll('iframe[data-mh-scene]').forEach(function (fr) {
+            if (fr.contentWindow) fr.contentWindow.postMessage(msg, '*');
+          });
+        };
+        // The scene's own script only finishes loading three.js and wiring
+        // up its message listener some time after the iframe itself has
+        // loaded, so it announces readiness rather than being guessed at.
+        window.addEventListener('message', function (e) {
+          if (e.data && e.data.type === 'mh-ready') sendTheme(e.source);
+        });
         if (toggle) {
           var metaTheme = document.querySelector('meta[name="theme-color"]');
+          var moonIcon = toggle.querySelector('[data-icon="moon"]');
+          var sunIcon = toggle.querySelector('[data-icon="sun"]');
           var sync = function () {
-            var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-            toggle.textContent = dark ? 'Light' : 'Dark';
+            var dark = isDark();
+            if (moonIcon) moonIcon.style.display = dark ? 'none' : '';
+            if (sunIcon) sunIcon.style.display = dark ? '' : 'none';
             toggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
             if (metaTheme) metaTheme.setAttribute('content', dark ? '#06080A' : '#EFF1F2');
           };
           sync();
           toggle.addEventListener('click', function () {
-            var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-            if (dark) {
+            if (isDark()) {
               document.documentElement.removeAttribute('data-theme');
               try { localStorage.setItem('mh-theme', 'light'); } catch (e) {}
             } else {
@@ -294,6 +329,7 @@ html{scroll-behavior:smooth}
               try { localStorage.setItem('mh-theme', 'dark'); } catch (e) {}
             }
             sync();
+            sendTheme();
           });
         }
       })();
