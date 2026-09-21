@@ -16,7 +16,7 @@ piece hears about a theme change.
 
 | Page | Route | Content |
 |---|---|---|
-| Home | `/` | The reach — the hero (2a) — then Signal Plane (1c), "We model the learner, not the average." Deep Field (1a) and Lattice (1b), which used to sit between them, are gone (D-047) |
+| Home | `/` | The reach — the hero (2a) — then Signal Plane (1c), "We model for Human, not the AI alone." Deep Field (1a) and Lattice (1b), which used to sit between them, are gone (D-047) |
 | Research | `/research` | Research header band, then the three themes zigzagging left and right, each with its real publication list where it has one |
 | Learning | `/learning` | The learning panel: StatLab, linked out; course materials, still a gap |
 | Members | `/members` | Ten member slots as profile rows — portrait, name, role, bio, links — grouped Founder / Post Doctoral / Doctoral / Master, headed "Members" |
