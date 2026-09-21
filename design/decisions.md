@@ -1569,3 +1569,56 @@ Partner in both themes, at 1440px; dark mode unchanged on all three.
 `__wireHex()` check, appropriate here for the same reason: what's being
 verified is internal state a screenshot alone wouldn't catch reliably in
 CI.
+
+---
+
+## D-055 — Members are profile rows: portrait, bio, links; Md Kamal Hosen added
+
+**Status: adopted, 2026-09-21.** Kaung added Md Kamal Hosen (a PhD
+student, photo supplied, a two-paragraph bio supplied verbatim) and
+relayed his professor's ask: every member should carry a bio and their
+links — Google Scholar, LinkedIn, Facebook and the like. He also said he
+couldn't picture the layout, and that he'd have a cheaper model fill in
+the other members later, so the structure had to be one that model can
+follow from the file alone.
+
+**Why rows, not cards.** The canvas's members grid is five 4:5 frames
+across. A 250-word bio doesn't fit a fifth of the page, and the two
+honest alternatives both cost more than they return: an expand-on-click
+card hides the content the professor asked to show, and a page per
+member adds routes to a five-page site for what is, today, one bio.
+A profile row — portrait left, text right, one row per person, groups as
+before — is what lab sites conventionally do, needs no JavaScript and no
+new routes, reuses the Research page's text-beside-visual rhythm, and
+keeps the whole Members page as one array. The spec is in
+`design/DESIGN.md` ("A member's profile row"); the how-to is the note at
+the top of `src/pages/members.astro`.
+
+**The data shape** — `{ name, role, photo, bio, links }`, with `bio` an
+array of paragraphs and `links` an array of `{ label, href }` — is the
+entire interface. The template renders what's present and appends one
+TODO marker naming what isn't (name and photo / bio / links), so a row
+never silently looks finished. Adding a bio or a link is a data edit, not
+a layout edit — which is the point, given who'll be making those edits.
+
+**Kamal fills a placeholder, not a new slot.** D-050's three Doctoral
+slots were "3 people," unnamed. Kamal is the first of them named, so
+Doctoral is now Kamal plus two placeholders, not four rows. Flagged in the
+reply so Kaung can say otherwise.
+
+**No links yet, for anyone.** Kaung asked for links but supplied none —
+not even Kamal's. None were invented. Every row's marker lists "links
+(Google Scholar, LinkedIn, …)" until real URLs arrive; the file's note
+says, explicitly, not to guess a URL or write a bio for a real person from
+nothing. That note is aimed at the cheaper model as much as at anyone.
+
+**Photo.** `pics/Md_Kamal _Hosen.jpg` (a stray space in the name as
+uploaded — kept on disk, since `pics/` is gitignored, but the resized copy
+is `public/members/Md_Kamal_Hosen.jpg` without it), 1072×1280, resized to
+753×900 the same way as every other portrait. Already ~4:5, so the frame
+crops it barely at all.
+
+**Verified:** both themes at 1440px; 360px stacks portrait-first with no
+overflow. `.mh-people`'s three breakpoint rules, now unused, are removed;
+`.mh-profile` gets one rule at 768px. All eight tests pass unchanged —
+nothing tested the old grid's shape, only that `#members` exists.

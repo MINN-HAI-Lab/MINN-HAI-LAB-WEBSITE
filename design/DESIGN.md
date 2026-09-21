@@ -32,12 +32,36 @@ one `200px | 1fr` without). Theme 01's visual is Deep Field's network
 graphic, relocated rather than deleted, shown unpanelled — no border, no
 background (D-048); Theme 02 and 03's are marked placeholders, no asset
 supplied yet. Then: the Learning panel (StatLab,
-linked out; course materials, still a gap); the members grid, ten 4:5
-frames grouped Founder / Post Doctoral / Doctoral / Master (D-049, D-050
-— no canvas equivalent), five named with photos and five still `TODO:`;
-a funding list; the closing band over the signal plane, with the contact
-address;
-the footer.
+linked out; course materials, still a gap); the members list, one profile
+row per person grouped Founder / Post Doctoral / Doctoral / Master
+(D-049, D-050, D-055 — no canvas equivalent), six named with photos, one
+with a bio, four still `TODO:`; a funding list; the closing band over the
+signal plane, with the contact address; the footer.
+
+### A member's profile row (D-055)
+
+The canvas drew members as a grid of 4:5 portrait frames with a name and
+role beneath. A bio and a set of links can't live in a fifth-width card,
+so each member is a row instead — `180px | 1fr`, 32px apart, `28px 0`
+vertical padding, a `.08` ink rule above each row, groups 44px apart under
+a 19px Literata group heading:
+
+- Left: the same 4:5 frame the grid used (`.14` ink border, 3px radius,
+  `object-fit: cover`), or the striped placeholder when there's no photo.
+- Right, capped at `70ch`: the name (16px Literata, as before) over the
+  role (12px, `.5` ink); then the bio, one `<p>` per paragraph (14.5px,
+  line-height 1.6, `.7` ink — the funding blurb's own size); then the
+  links, a wrapping row of pills (`.18` ink border, 2px radius,
+  `5px 10px`, 12px, `.72` ink — the publication list's `code` tag, one
+  size up), each opening in a new tab; then, if anything is still
+  missing, one TODO marker (the site's usual left-rule marker) naming
+  exactly what — name and photo, bio, links — so a row never silently
+  looks complete.
+- Below 768px the row stacks, portrait first, held to 200px wide.
+
+Everything on the page is one array in `src/pages/members.astro`; the
+markup renders whatever a person's entry has and marks the rest. The
+note at the top of that file is the how-to for adding a member.
 
 ## Colour
 
@@ -158,7 +182,8 @@ them, at the top of `src/layouts/Layout.astro`:
 
 - The gutter steps 48 → 40 → 32 → 28 → 24 → 20px.
 - Each theme's two columns go one below 992px (D-047), text and visual in
-  the order they're written. The people grid goes 5 → 3 → 2 across.
+  the order they're written. A member's profile row goes portrait-beside-
+  text → stacked, portrait first, below 768px (D-055).
 - The hero fills the viewport height; its display line steps 54 → 44 → 38px;
   the section titles 52 → 40 → 34px.
 - There is one header — 2a's — fixed to the top of every page on 1d's

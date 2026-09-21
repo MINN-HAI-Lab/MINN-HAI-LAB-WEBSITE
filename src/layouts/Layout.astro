@@ -180,7 +180,6 @@ html{scroll-behavior:smooth}
   .mh-three{grid-template-columns:minmax(0,1fr)!important}
   .mh-three>div{border-right:0!important;border-bottom:1px solid rgba(var(--ink-rgb),.1)}
   .mh-zigzag{grid-template-columns:minmax(0,1fr)!important;gap:28px!important}
-  .mh-people{grid-template-columns:repeat(3,minmax(0,1fr))!important}
   .mh-hero-copy{max-width:520px!important}
 }
 /* <768 */
@@ -189,7 +188,11 @@ html{scroll-behavior:smooth}
   .mh-hero-nav{display:none!important}
   .mh-menu{display:inline-block}
   .mh-wrap{flex-wrap:wrap!important}
-  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  /* A member's profile row (D-055): portrait beside the text on a wide
+     screen, stacked on a phone, the portrait held to 200px so it doesn't
+     become a full-width image. */
+  .mh-profile{grid-template-columns:minmax(0,1fr)!important;gap:16px!important}
+  .mh-profile>div:first-child{max-width:200px}
   .mh-hero-copy{left:24px!important;right:24px!important;bottom:200px!important;max-width:none!important}
   .mh-hero-title{font-size:44px!important}
   .mh-display-104{font-size:56px!important}
@@ -209,7 +212,6 @@ html{scroll-behavior:smooth}
   .mh-display-104{font-size:42px!important}
   .mh-display-80{font-size:40px!important}
   .mh-display-68{font-size:38px!important}
-  .mh-people{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
   h2[style*="font-size:52px"]{font-size:34px!important}
   h3[style*="font-size:44px"]{font-size:30px!important}
   [style*="grid-template-columns:140px"]{grid-template-columns:minmax(0,1fr)!important;gap:6px!important}
