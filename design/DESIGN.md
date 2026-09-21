@@ -49,9 +49,10 @@ a 19px Literata group heading:
 - Left: the same 4:5 frame the grid used (`.14` ink border, 3px radius,
   `object-fit: cover`), or the striped placeholder when there's no photo.
 - Right, the full remaining width: the name (16px Literata, as before)
-  over the role (12px, `.5` ink); then the bio, one `<p>` per paragraph
-  (14.5px, line-height 1.6, `.7` ink — the funding blurb's own size),
-  justified, with `hyphens: auto` so justification doesn't open gaps;
+  over the role (12px, `.5` ink); then the bio — exactly two sentences,
+  third person, one `<p>` (D-059) — at 14.5px, line-height 1.6, `.7`
+  ink (the funding blurb's own size), justified, with `hyphens: auto`
+  so justification doesn't open gaps;
   then the links; then, if anything is still missing, one TODO marker
   (the site's usual left-rule marker) naming exactly what — name and
   photo, bio, links — so a row never silently looks complete.

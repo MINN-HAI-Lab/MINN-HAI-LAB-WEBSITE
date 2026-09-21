@@ -1731,3 +1731,38 @@ rather than "Portfolio"; the tooltip and screen-reader label say so.
 glyphs at one visual weight, ink-coloured on light and on dark; 360px
 stacks with the four glyphs in one row beneath the bio. Eight tests
 pass unchanged.
+
+---
+
+## D-059 — Every bio is two sentences, third person
+
+**Status: adopted, 2026-09-21.** Kaung, seeing Dr. Sein Minn's three
+paragraphs beside Kamal's two sentences, made the rule general: every
+member's bio is two sentences, picking only the important things.
+Dr. Sein Minn's is condensed accordingly; Kamal's (D-057) already was.
+
+**The two sentences.** First, who he is and what he works on: assistant
+professor at AIT, researching adaptive, interpretable systems across
+machine learning, user modeling and cognitive modeling, committed to
+human-centered and explainable AI. Second, where he came from: Ph.D. in
+Computer Engineering from Université de Montréal, then UQAM in Canada and
+École Polytechnique, CNRS and Inria in France. Dropped: the education
+focus of recent work, the "accurate, transparent models… trust" framing,
+the long-form institute names, and the visiting stints in Singapore,
+Japan and China. Every fact kept is one he supplied.
+
+**Third person.** He wrote in first person; Kamal's row is third. With
+one bio per row under a name, a page that switches voice row to row
+reads as unedited, so the condensed version is third person, matching
+Kamal and the rest of the site's copy. That is the one change beyond
+shortening, and it's flagged in the reply: it's his profile, and if he
+prefers "I", it's a data edit.
+
+**Made a rule, not a one-off.** The how-to at the top of
+`src/pages/members.astro` now says two sentences, third person, one
+paragraph, condensed from what the member gives, nothing added — so the
+cheaper model filling in the other members produces the same shape
+without being told each time. `design/DESIGN.md`'s profile-row spec and
+`docs/phase.md` say the same.
+
+**Verified:** 1440px, both themes; 360px. Eight tests pass unchanged.

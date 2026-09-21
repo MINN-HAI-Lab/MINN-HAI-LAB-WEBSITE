@@ -17,7 +17,7 @@
  *     name:  'Full Name',            // null while unknown → "TODO: name"
  *     role:  'PhD student',          // shown under the name
  *     photo: 'Full_Name.jpg',        // null while unknown → striped placeholder
- *     bio:   ['Paragraph one.', 'Paragraph two.'],   // null while unknown
+ *     bio:   ['Two sentences, third person.'],      // null while unknown
  *     links: [                                       // [] while unknown
  *       { label: 'Google Scholar', href: 'https://scholar.google.com/…' },
  *       { label: 'LinkedIn',       href: 'https://www.linkedin.com/in/…' },
@@ -30,9 +30,14 @@
  * — the same treatment every existing portrait had (D-040, D-049).
  *
  * Bio and links must be supplied by the member (or by Kaung on their
- * behalf), verbatim. Do not write a bio for a real person from nothing,
- * and do not guess a URL — a wrong link or an invented claim on a
- * researcher's public profile is worse than a visible TODO. Bio copy
+ * behalf). Do not write a bio for a real person from nothing, and do
+ * not guess a URL — a wrong link or an invented claim on a researcher's
+ * public profile is worse than a visible TODO.
+ *
+ * Every bio is exactly two sentences, third person, one paragraph
+ * (D-059). When a member supplies more, condense it to two sentences
+ * using only the facts they gave — who they are and what they work on,
+ * then where they came from — and drop the rest; add nothing. Bio copy
  * follows the site's rules: sentence case, no exclamation marks, no
  * emoji. Link labels are the service's own name ("Google Scholar",
  * "LinkedIn", "Facebook", "GitHub", "ORCID", "Website"…); any number, in
@@ -62,9 +67,7 @@ const groups: Group[] = [
         role: 'Faculty',
         photo: 'Sein_Minn.jpg',
         bio: [
-          'I am an AI researcher focused on building adaptive, interpretable systems at the intersection of machine learning, user modeling, and cognitive modeling. While my recent work centers on education, I am broadly committed to human-centered and explainable AI, aiming for accurate, transparent models that support trust in sensitive applications.',
-          'I am also an assistant professor at the Asian Institute of Technology (AIT) in Thailand. Before joining AIT, I worked at AI Research Center, Université du Québec à Montréal, Montreal, Canada, and École Polytechnique, Institut Polytechnique de Paris, French National Centre for Scientific Research (CNRS) and French Institute for Research in Computer Science and Automation (Inria) in France.',
-          'I received a Ph.D. in Computer Engineering from Université de Montréal in Canada. I also spent time at several international institutions, including Singapore Management University in Singapore, National Institute of Informatics in Japan, and Huaqiao University in China.',
+          'Dr. Sein Minn is an assistant professor at the Asian Institute of Technology in Thailand, researching adaptive, interpretable systems at the intersection of machine learning, user modeling and cognitive modeling, with a broader commitment to human-centered and explainable AI. He received his Ph.D. in Computer Engineering from Université de Montréal, and previously worked at Université du Québec à Montréal in Canada and at École Polytechnique, CNRS and Inria in France.',
         ],
         links: [
           { label: 'Google Scholar', href: 'https://scholar.google.com/citations?user=4cXYLugAAAAJ&hl=en' },

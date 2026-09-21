@@ -17,8 +17,9 @@ teaching assistant, the deployment and "established" claims — is removed.
   Doctoral two (D-049, D-050; Md Kamal Hosen filled the third, D-055),
   all name and photo `TODO:`, waiting on Kaung.
 - **Bios** — every member's row has a bio slot (D-055); Kamal's and
-  Dr. Sein Minn's are filled (D-057, D-058). Each must be supplied by the
-  member, verbatim — not written for them.
+  Dr. Sein Minn's are filled. Each is two sentences, third person,
+  condensed from what the member supplied (D-059) — never written for
+  them from nothing.
 - **Links** — every member's row has a links slot (D-055) for Google
   Scholar, LinkedIn, Facebook and the like, shown as icons (D-056);
   Kamal's Google Scholar and Dr. Sein Minn's four are supplied so far.
