@@ -20,8 +20,9 @@ teaching assistant, the deployment and "established" claims — is removed.
   filled. Each must be supplied by the member, verbatim — not written for
   them.
 - **Links** — every member's row has a links slot (D-055) for Google
-  Scholar, LinkedIn, Facebook and the like; none supplied yet, Kamal's
-  included. Real URLs only — never guessed.
+  Scholar, LinkedIn, Facebook and the like, shown as icons (D-056);
+  only Kamal's Google Scholar is supplied so far. Real URLs only — never
+  guessed.
 - **Course materials** — still a named gap on the Learning panel, waiting on
   which courses go public and who owns them.
 - **Institutional affiliation** — not stated anywhere on the site.

@@ -1622,3 +1622,46 @@ crops it barely at all.
 overflow. `.mh-people`'s three breakpoint rules, now unused, are removed;
 `.mh-profile` gets one rule at 768px. All eight tests pass unchanged —
 nothing tested the old grid's shape, only that `#members` exists.
+
+---
+
+## D-056 — Profile rows: justified full-width bio, larger portrait, icon links; Kamal's Scholar link
+
+**Status: adopted, 2026-09-21.** Kaung, looking at D-055 on the page,
+asked for the bio to be justified and run the full width, the portrait
+to be a bit bigger, the link pills to be icons rather than words, and
+supplied Md Kamal Hosen's Google Scholar URL — the first real link on
+the page.
+
+**Portrait 180 → 240px, gap 32 → 40px.** "A bit bigger", so one step,
+not a redesign; the 4:5 frame, border and radius are unchanged. The
+right column loses its `70ch` cap so the bio runs to the gutter; with
+justification a long measure reads fine at 14.5px/1.6, and it's what
+Kaung asked for. `hyphens: auto` goes with `text-align: justify`
+because justified text without hyphenation opens rivers, which the
+360px screenshot showed even with it on. Justification applies at every
+width — Kaung asked for it without qualification; if the phone reading
+bothers him, left-aligning below 768px is a one-line change in
+`Layout.astro`, noted in the reply.
+
+**Icons, not words.** A link row of "Google Scholar · LinkedIn ·
+Facebook" is text competing with the bio; the services' own marks are
+what people scan for. No icon font or library — that would be a
+dependency, and the site has none. Each glyph is one inline SVG path
+(24×24, from Simple Icons, CC0), kept in an `icons` map in
+`members.astro` keyed by the link's label, drawn in `currentColor` at
+`.72` ink inside the same `.18` ink border the pills had, so both themes
+get the right colour for free — the same reason every other colour on
+the site is a token. A label with no glyph falls back to the D-055 text
+pill, so an unfamiliar service (ORCID, a personal site) still renders
+instead of breaking or getting an invented mark. The note at the top of
+the file says so, for whoever fills in the other members.
+
+**Kamal's link.** Exactly the URL Kaung pasted. His marker now reads
+"TODO: —" for nothing; it's gone, since name, photo, bio and at least one
+link are present. Everyone else's marker still lists links.
+
+**Verified:** Kamal's row at 1440px in both themes — the glyph reads as
+the Scholar cap, ink-coloured on light and on dark; 360px stacks with the
+portrait at 240px, no overflow. Eight tests pass unchanged.
+

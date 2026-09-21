@@ -38,13 +38,13 @@ funders by name; the contact address, as a live `mailto:` in three places;
 the hero and theme copy, checked against the lab's supplied bio; six
 members by name, role and photo, grouped Founder / Post Doctoral /
 Doctoral / Master among ten member slots, one of them (Md Kamal Hosen)
-with his bio.
+with his bio and his Google Scholar link.
 
 Still `TODO:` on the page: Visual generative modeling's publications; Theme
 02 and Theme 03's visuals (both marked "image / 3D object — placeholder");
 the two Post Doctoral and two Doctoral members' names and photos; a bio
 for every member but Kamal; links (Google Scholar, LinkedIn, …) for every
-member, Kamal included; course materials. Adding any of the member items
+member but Kamal, who has his Google Scholar; course materials. Adding any of the member items
 is a data edit in `src/pages/members.astro` — the note at the top of that
 file says how.
 

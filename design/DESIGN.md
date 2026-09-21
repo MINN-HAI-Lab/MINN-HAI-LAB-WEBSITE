@@ -38,26 +38,32 @@ row per person grouped Founder / Post Doctoral / Doctoral / Master
 with a bio, four still `TODO:`; a funding list; the closing band over the
 signal plane, with the contact address; the footer.
 
-### A member's profile row (D-055)
+### A member's profile row (D-055, D-056)
 
 The canvas drew members as a grid of 4:5 portrait frames with a name and
 role beneath. A bio and a set of links can't live in a fifth-width card,
-so each member is a row instead — `180px | 1fr`, 32px apart, `28px 0`
+so each member is a row instead — `240px | 1fr`, 40px apart, `28px 0`
 vertical padding, a `.08` ink rule above each row, groups 44px apart under
 a 19px Literata group heading:
 
 - Left: the same 4:5 frame the grid used (`.14` ink border, 3px radius,
   `object-fit: cover`), or the striped placeholder when there's no photo.
-- Right, capped at `70ch`: the name (16px Literata, as before) over the
-  role (12px, `.5` ink); then the bio, one `<p>` per paragraph (14.5px,
-  line-height 1.6, `.7` ink — the funding blurb's own size); then the
-  links, a wrapping row of pills (`.18` ink border, 2px radius,
-  `5px 10px`, 12px, `.72` ink — the publication list's `code` tag, one
-  size up), each opening in a new tab; then, if anything is still
-  missing, one TODO marker (the site's usual left-rule marker) naming
-  exactly what — name and photo, bio, links — so a row never silently
-  looks complete.
-- Below 768px the row stacks, portrait first, held to 200px wide.
+- Right, the full remaining width: the name (16px Literata, as before)
+  over the role (12px, `.5` ink); then the bio, one `<p>` per paragraph
+  (14.5px, line-height 1.6, `.7` ink — the funding blurb's own size),
+  justified, with `hyphens: auto` so justification doesn't open gaps;
+  then the links; then, if anything is still missing, one TODO marker
+  (the site's usual left-rule marker) naming exactly what — name and
+  photo, bio, links — so a row never silently looks complete.
+- Links are a wrapping row of 34px square icon buttons (`.18` ink
+  border, 2px radius, `.72` ink), each a 17px monochrome glyph of the
+  service's own mark drawn in `currentColor`, so it takes the ink of
+  whichever theme is on; `aria-label` and `title` carry the service's
+  name. Each opens in a new tab. Glyphs exist for Google Scholar,
+  LinkedIn, Facebook and GitHub; a link to any other service renders as
+  a text pill instead (`.18` ink border, 2px radius, `5px 10px`, 12px,
+  `.72` ink — the publication list's `code` tag, one size up).
+- Below 768px the row stacks, portrait first, held to 240px wide.
 
 Everything on the page is one array in `src/pages/members.astro`; the
 markup renders whatever a person's entry has and marks the rest. The
