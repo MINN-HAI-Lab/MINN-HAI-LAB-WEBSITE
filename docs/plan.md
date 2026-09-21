@@ -37,14 +37,14 @@ themes, each linked to its paper, five of them to code as well; seven
 funders by name; the contact address, as a live `mailto:` in three places;
 the hero and theme copy, checked against the lab's supplied bio; six
 members by name, role and photo, grouped Faculty / Post Doctoral /
-Doctoral / Master among ten member slots, two of them (Dr. Sein Minn,
-Md Kamal Hosen) with a bio and links.
+Doctoral / Master among ten member slots, three of them (Dr. Sein
+Minn, Md Kamal Hosen, Kaung Hein Htet) with a bio and links.
 
 Still `TODO:` on the page: Visual generative modeling's publications; Theme
 02 and Theme 03's visuals (both marked "image / 3D object — placeholder");
 the two Post Doctoral and two Doctoral members' names and photos; a bio
 and links (Google Scholar, LinkedIn, …) for every member but Dr. Sein
-Minn and Kamal; course materials. Adding any of the member items
+Minn, Kamal and Kaung Hein Htet; course materials. Adding any of the member items
 is a data edit in `src/pages/members.astro` — the note at the top of that
 file says how.
 
