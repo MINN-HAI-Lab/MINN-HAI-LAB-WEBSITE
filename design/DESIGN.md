@@ -60,10 +60,12 @@ a 19px Literata group heading:
   border, 2px radius, `.72` ink), each a 17px monochrome glyph of the
   service's own mark drawn in `currentColor`, so it takes the ink of
   whichever theme is on; `aria-label` and `title` carry the service's
-  name. Each opens in a new tab. Glyphs exist for Google Scholar,
-  LinkedIn, Facebook and GitHub (the services' marks, filled) and for
-  "Website" (a generic globe, stroked at 1.8 — D-058); a link to any
-  other service renders as a text pill instead (`.18` ink border, 2px radius, `5px 10px`, 12px,
+  name (a `mailto:` link opens the visitor's mail client instead of a
+  tab). Glyphs exist for Google Scholar, LinkedIn, Facebook and GitHub
+  (the services' marks, filled), "Website" (a generic globe, D-058) and
+  "Email" (a generic envelope, D-060) — the last two stroked at 1.8,
+  since neither has a brand mark to borrow; a link to any other service
+  renders as a text pill instead (`.18` ink border, 2px radius, `5px 10px`, 12px,
   `.72` ink — the publication list's `code` tag, one size up).
 - Below 768px the row stacks, portrait first, held to 240px wide.
 

@@ -1766,3 +1766,23 @@ without being told each time. `design/DESIGN.md`'s profile-row spec and
 `docs/phase.md` say the same.
 
 **Verified:** 1440px, both themes; 360px. Eight tests pass unchanged.
+
+---
+
+## D-060 — Dr. Sein Minn: Facebook link replaced with email
+
+**Status: adopted, 2026-09-21.** Kaung asked to drop the Facebook link
+and add an email instead, with an icon for it — `sein.minn.cs@gmail.com`.
+
+**Envelope glyph, mailto: link.** "Email" joins the `icons` map as a
+generic envelope, stroked like the D-058 globe, since email has no
+single brand mark either. The href is a plain `mailto:` link, which
+opens the visitor's mail client rather than a new browser tab —
+`target="_blank"` is harmless on a `mailto:` link but does nothing
+useful, so the row's behaviour differs slightly by link type; not worth
+branching the markup over. Facebook's glyph stays in the map — it's a
+generic service entry, not tied to Dr. Sein Minn, and Kamal or a future
+member may still use it.
+
+**Verified:** 1440px, both themes — the envelope reads at 17px next to
+the other three. Eight tests pass unchanged.
