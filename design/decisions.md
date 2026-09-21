@@ -1791,25 +1791,33 @@ the other three. Eight tests pass unchanged.
 
 ## D-061 — Kaung Hein Htet's bio and links
 
-**Status: adopted, 2026-09-21.** Kaung supplied his own bio (one
-paragraph, first person) and asked for it condensed to two sentences,
-plus a portfolio site, LinkedIn and email.
+**Status: adopted, 2026-09-21; bio revised same day.** Kaung supplied
+his own bio (one paragraph, first person) and asked for it condensed to
+two sentences, plus a portfolio site, LinkedIn and email.
 
-**The two sentences**, following the D-059 shape: first, who he is and
-what he works on — a Master's candidate in Data Science and AI at AIT,
-working as a data scientist and AI engineer on time-series models, data
-pipelines and reliable backends. Second, a professional highlight —
-leading the AI team at Gold Silver Central on ARIMA-based forecasting
-and Azure pipelines for gold markets, and teaching data science outside
-his paid work. Dropped: the Myanmar-to-Thailand background, the four
-institutions across three countries, the "messy data into decisions"
-framing, and the specific manual-work-reduction figure. Third person,
-matching Kamal and Dr. Sein Minn's condensed bio.
+**First pass**, following the D-059 shape: who he is and what he works
+on — a Master's candidate in Data Science and AI at AIT, working as a
+data scientist and AI engineer on time-series models, data pipelines
+and reliable backends — then a professional highlight, leading the AI
+team at Gold Silver Central on ARIMA-based forecasting and Azure
+pipelines for gold markets, and teaching data science outside his paid
+work.
+
+**Revised.** Kaung asked to drop the work history entirely — the
+time-series/data-pipeline framing and the Gold Silver Central line —
+and replace it with his research direction: personalized knowledge
+tracing and knowledge graphs, the same territory as the lab's own
+knowledge-tracing programme. The bio is now: who he is (Master's
+candidate in Data Science and AI at AIT), then what he researches
+(personalized knowledge tracing and knowledge graphs). Still two
+sentences, third person; every other paragraph in the initial draft
+(the Myanmar-to-Thailand background, the four institutions, the
+manual-work figure) was already dropped in the first pass and stays out.
 
 **Links.** Portfolio labelled "Website" (the existing generic-site
 glyph, D-058, no new icon needed), LinkedIn (existing glyph), and email
 as a `mailto:` link (the D-060 envelope). All three supplied URLs used
-as given.
+as given; unaffected by the bio revision.
 
-**Verified:** his row at 1440px in both themes and 360px — two
-sentences, three icons, no overflow. Eight tests pass unchanged.
+**Verified:** his row at 1440px in both themes — two sentences, three
+icons, no overflow. Eight tests pass unchanged.
