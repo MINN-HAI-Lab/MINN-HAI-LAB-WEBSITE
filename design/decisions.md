@@ -1665,3 +1665,35 @@ link are present. Everyone else's marker still lists links.
 the Scholar cap, ink-coloured on light and on dark; 360px stacks with the
 portrait at 240px, no overflow. Eight tests pass unchanged.
 
+
+---
+
+## D-057 — Kamal's bio shortened to two sentences
+
+**Status: adopted, 2026-09-21.** Kaung asked for Kamal's bio to be
+shortened to two sentences, picking the important things that define
+him, rather than the full two-paragraph version from D-055.
+
+**What's kept.** Both sentences use only facts already in the
+supplied text — nothing new is introduced. First: PhD researcher in
+Data Science and AI at the Asian Institute of Technology, working on
+physics-informed neural operators for urban heat modeling — his
+doctoral identity and topic. Second: Geospatial Web Developer at the
+Asian Disaster Preparedness Center in Bangkok, building GeoAI systems
+for flood, disaster and environmental monitoring across eight
+countries in Asia — his professional role and its scope. Dropped: the
+canopy-layer mechanism detail, the "physical constraints... fast,
+accurate, physically consistent" framing, the itemised list of
+monitoring sectors, the bulletin-systems detail, the background
+clause, and the eight countries named individually (kept as a count).
+
+**Not verbatim any more.** D-055 said a member's bio "must be supplied
+by the member... verbatim." This is Kaung's edit, not Kamal's, so it's
+a condensation of Kamal's own supplied words to the facts he himself
+gave, not new material about him. It's on the page at Kaung's explicit
+direction; worth Kamal's own sign-off if he wants his profile to read
+differently than what he wrote, but that's a call for the lab, not
+this tool.
+
+**Verified:** renders as two sentences, no overflow, at 1440px in both
+themes.
