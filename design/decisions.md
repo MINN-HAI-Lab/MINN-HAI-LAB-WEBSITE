@@ -1697,3 +1697,37 @@ this tool.
 
 **Verified:** renders as two sentences, no overflow, at 1440px in both
 themes.
+
+---
+
+## D-058 — Dr. Sein Minn's bio and links; a globe glyph for "Website"
+
+**Status: adopted, 2026-09-21.** Kaung supplied Dr. Sein Minn's bio
+(three paragraphs, first person) and four links: Google Scholar, a
+portfolio site, LinkedIn, Facebook. All go in exactly as given. This
+is on top of Kaung's own commit renaming the first group and role from
+"Founder" to "Faculty" (37bce2a); the docs that still said "Founder"
+now say "Faculty" to match.
+
+**Verbatim, not shortened, not re-personed.** D-057 shortened Kamal's
+bio to two sentences at Kaung's explicit ask; nothing was asked here, so
+the content rule holds and the text is his own words. Two consequences
+Kaung should see: this bio is first person where Kamal's is third, and
+three paragraphs where Kamal's is two sentences. Both are flagged in the
+reply, not fixed — changing either is an edit to what a real person
+wrote about himself, and that's the lab's call.
+
+**A globe for "Website".** The portfolio link has no service behind it,
+so no mark exists to borrow, and one text pill among three icons would
+read as a mistake. A generic globe — the conventional sign for a
+personal site — is not an invented brand mark, so it doesn't breach the
+D-056 rule; it is stroked (1.8, round caps) rather than filled, since a
+filled globe at 17px is a blob, and the `icons` map's values become
+`{ d, stroke? }` so the template knows which way to draw each one. The
+label is "Website", the general word the file's note already listed,
+rather than "Portfolio"; the tooltip and screen-reader label say so.
+
+**Verified:** Dr. Sein Minn's row at 1440px in both themes — four
+glyphs at one visual weight, ink-coloured on light and on dark; 360px
+stacks with the four glyphs in one row beneath the bio. Eight tests
+pass unchanged.

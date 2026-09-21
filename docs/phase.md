@@ -16,13 +16,13 @@ teaching assistant, the deployment and "established" claims — is removed.
 - **Four unnamed members** — Post Doctoral has two placeholder rows,
   Doctoral two (D-049, D-050; Md Kamal Hosen filled the third, D-055),
   all name and photo `TODO:`, waiting on Kaung.
-- **Bios** — every member's row has a bio slot (D-055); only Kamal's is
-  filled. Each must be supplied by the member, verbatim — not written for
-  them.
+- **Bios** — every member's row has a bio slot (D-055); Kamal's and
+  Dr. Sein Minn's are filled (D-057, D-058). Each must be supplied by the
+  member, verbatim — not written for them.
 - **Links** — every member's row has a links slot (D-055) for Google
   Scholar, LinkedIn, Facebook and the like, shown as icons (D-056);
-  only Kamal's Google Scholar is supplied so far. Real URLs only — never
-  guessed.
+  Kamal's Google Scholar and Dr. Sein Minn's four are supplied so far.
+  Real URLs only — never guessed.
 - **Course materials** — still a named gap on the Learning panel, waiting on
   which courses go public and who owns them.
 - **Institutional affiliation** — not stated anywhere on the site.

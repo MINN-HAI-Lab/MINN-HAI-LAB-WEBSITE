@@ -37,8 +37,10 @@
  * emoji. Link labels are the service's own name ("Google Scholar",
  * "LinkedIn", "Facebook", "GitHub", "ORCID", "Website"…); any number, in
  * any order. A label that has a glyph in `icons` below renders as that
- * icon (D-056); any other label renders as a small text pill, which is
- * fine — don't invent a glyph, add one only from the service's own mark.
+ * icon (D-056): Google Scholar, LinkedIn, Facebook, GitHub, and
+ * "Website" for a personal or portfolio site (a globe, D-058). Any
+ * other label renders as a small text pill, which is fine — don't
+ * invent a glyph, add one only from the service's own mark.
  * ───────────────────────────────────────────────────────────────────────
  *
  * Portraits are public/members/<Name>.jpg, resized from the originals in
@@ -55,7 +57,22 @@ const groups: Group[] = [
   {
     label: 'Faculty',
     people: [
-      { name: 'Dr. Sein Minn', role: 'Faculty', photo: 'Sein_Minn.jpg', bio: null, links: [] },
+      {
+        name: 'Dr. Sein Minn',
+        role: 'Faculty',
+        photo: 'Sein_Minn.jpg',
+        bio: [
+          'I am an AI researcher focused on building adaptive, interpretable systems at the intersection of machine learning, user modeling, and cognitive modeling. While my recent work centers on education, I am broadly committed to human-centered and explainable AI, aiming for accurate, transparent models that support trust in sensitive applications.',
+          'I am also an assistant professor at the Asian Institute of Technology (AIT) in Thailand. Before joining AIT, I worked at AI Research Center, Université du Québec à Montréal, Montreal, Canada, and École Polytechnique, Institut Polytechnique de Paris, French National Centre for Scientific Research (CNRS) and French Institute for Research in Computer Science and Automation (Inria) in France.',
+          'I received a Ph.D. in Computer Engineering from Université de Montréal in Canada. I also spent time at several international institutions, including Singapore Management University in Singapore, National Institute of Informatics in Japan, and Huaqiao University in China.',
+        ],
+        links: [
+          { label: 'Google Scholar', href: 'https://scholar.google.com/citations?user=4cXYLugAAAAJ&hl=en' },
+          { label: 'Website', href: 'https://simon-tan.github.io/' },
+          { label: 'LinkedIn', href: 'https://www.linkedin.com/in/sein-minn-4bb9b584/' },
+          { label: 'Facebook', href: 'https://www.facebook.com/Tang.SMOO' },
+        ],
+      },
     ],
   },
   {
@@ -102,12 +119,15 @@ const missing = (p: Person) =>
 // label, drawn with currentColor so it takes the ink of whichever theme is
 // on. A label with no glyph here falls back to a text pill — add a path to
 // give it one. Paths are the services' own marks, 24×24, from Simple Icons
-// (CC0).
-const icons: Record<string, string> = {
-  'Google Scholar': 'M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z',
-  LinkedIn: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z',
-  Facebook: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z',
-  GitHub: 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12',
+// (CC0), filled; "Website" is a generic globe, stroked (D-058), since a
+// personal site has no mark of its own.
+type Glyph = { d: string; stroke?: true };
+const icons: Record<string, Glyph> = {
+  'Google Scholar': { d: 'M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z' },
+  LinkedIn: { d: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' },
+  Facebook: { d: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z' },
+  GitHub: { d: 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12' },
+  Website: { d: 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM3 12h18M12 3c-3 3.5-3 14.5 0 18M12 3c3 3.5 3 14.5 0 18', stroke: true },
 };
 ---
 
@@ -142,7 +162,7 @@ const icons: Record<string, string> = {
                   <div style="display:flex;flex-wrap:wrap;gap:8px">
                     {p.links.map((l) => icons[l.label] ? (
                       <a href={l.href} target="_blank" rel="noopener" aria-label={l.label} title={l.label} style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(var(--ink-rgb),.18);border-radius:2px;color:rgba(var(--ink-rgb),.72)">
-                        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" style="fill:currentColor;display:block"><path d={icons[l.label]} /></svg>
+                        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" style={icons[l.label].stroke ? 'fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;display:block' : 'fill:currentColor;display:block'}><path d={icons[l.label].d} /></svg>
                       </a>
                     ) : (
                       <a href={l.href} target="_blank" rel="noopener" style="border:1px solid rgba(var(--ink-rgb),.18);border-radius:2px;padding:5px 10px;font-size:12px;color:rgba(var(--ink-rgb),.72);text-decoration:none">{l.label}</a>

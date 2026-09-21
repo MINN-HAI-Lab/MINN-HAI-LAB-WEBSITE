@@ -33,7 +33,7 @@ graphic, relocated rather than deleted, shown unpanelled — no border, no
 background (D-048); Theme 02 and 03's are marked placeholders, no asset
 supplied yet. Then: the Learning panel (StatLab,
 linked out; course materials, still a gap); the members list, one profile
-row per person grouped Founder / Post Doctoral / Doctoral / Master
+row per person grouped Faculty / Post Doctoral / Doctoral / Master
 (D-049, D-050, D-055 — no canvas equivalent), six named with photos, one
 with a bio, four still `TODO:`; a funding list; the closing band over the
 signal plane, with the contact address; the footer.
@@ -60,8 +60,9 @@ a 19px Literata group heading:
   service's own mark drawn in `currentColor`, so it takes the ink of
   whichever theme is on; `aria-label` and `title` carry the service's
   name. Each opens in a new tab. Glyphs exist for Google Scholar,
-  LinkedIn, Facebook and GitHub; a link to any other service renders as
-  a text pill instead (`.18` ink border, 2px radius, `5px 10px`, 12px,
+  LinkedIn, Facebook and GitHub (the services' marks, filled) and for
+  "Website" (a generic globe, stroked at 1.8 — D-058); a link to any
+  other service renders as a text pill instead (`.18` ink border, 2px radius, `5px 10px`, 12px,
   `.72` ink — the publication list's `code` tag, one size up).
 - Below 768px the row stacks, portrait first, held to 240px wide.
 

@@ -19,7 +19,7 @@ piece hears about a theme change.
 | Home | `/` | The reach — the hero (2a) — then Signal Plane (1c), "We model for Human, not the AI alone." Deep Field (1a) and Lattice (1b), which used to sit between them, are gone (D-047) |
 | Research | `/research` | Research header band, then the three themes zigzagging left and right, each with its real publication list where it has one |
 | Learning | `/learning` | The learning panel: StatLab, linked out; course materials, still a gap |
-| Members | `/members` | Ten member slots as profile rows — portrait, name, role, bio, links — grouped Founder / Post Doctoral / Doctoral / Master, headed "Members" |
+| Members | `/members` | Ten member slots as profile rows — portrait, name, role, bio, links — grouped Faculty / Post Doctoral / Doctoral / Master, headed "Members" |
 | Partner with us | `/partner` | The seven funders by name, then "Bring us a problem that needs an explanation." |
 
 Kaung set these boundaries directly (D-037): Home ends where Research began
@@ -36,15 +36,15 @@ Real, on the page: fourteen publications across two of the three research
 themes, each linked to its paper, five of them to code as well; seven
 funders by name; the contact address, as a live `mailto:` in three places;
 the hero and theme copy, checked against the lab's supplied bio; six
-members by name, role and photo, grouped Founder / Post Doctoral /
-Doctoral / Master among ten member slots, one of them (Md Kamal Hosen)
-with his bio and his Google Scholar link.
+members by name, role and photo, grouped Faculty / Post Doctoral /
+Doctoral / Master among ten member slots, two of them (Dr. Sein Minn,
+Md Kamal Hosen) with a bio and links.
 
 Still `TODO:` on the page: Visual generative modeling's publications; Theme
 02 and Theme 03's visuals (both marked "image / 3D object — placeholder");
 the two Post Doctoral and two Doctoral members' names and photos; a bio
-for every member but Kamal; links (Google Scholar, LinkedIn, …) for every
-member but Kamal, who has his Google Scholar; course materials. Adding any of the member items
+and links (Google Scholar, LinkedIn, …) for every member but Dr. Sein
+Minn and Kamal; course materials. Adding any of the member items
 is a data edit in `src/pages/members.astro` — the note at the top of that
 file says how.
 
