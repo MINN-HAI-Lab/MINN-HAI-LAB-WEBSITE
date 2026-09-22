@@ -24,7 +24,9 @@ test('research, learning, members and partner are their own pages', async ({ pag
   await page.goto('/research');
   await expect(page.locator('#research')).toHaveCount(1);
   await expect(page.locator('h2')).toHaveText('Research');
-  await expect(page.locator('mh-bg[mode="bayes"]')).toHaveCount(1);
+  for (const mode of ['bayes', 'blanket', 'generate']) {
+    await expect(page.locator(`mh-bg[mode="${mode}"]`)).toHaveCount(1);
+  }
 
   await page.goto('/learning');
   await expect(page.locator('#learning')).toHaveCount(1);

@@ -1899,3 +1899,70 @@ one real resource, the repo link) even though more may be added later.
 
 **Verified:** the tab at 1440px in both themes — description, button,
 nothing else, no leftover TODO styling. Eight tests pass unchanged.
+
+---
+
+## D-065 — Theme 02 and Theme 03 get their own fields: a Markov blanket, and a sample emerging from noise
+
+**Status: adopted, 2026-09-23.** Kaung asked for "3D rendering objects"
+for Theme 02 and Theme 03 on the Research page to match Theme 01's,
+which had been the only theme with a visual; the other two had carried
+"image / 3D object — placeholder" since D-047.
+
+**What Theme 01's visual actually is.** Not the Three.js scene — that's
+the hero's alone — but `mh-bg mode="bayes"`, a dependency-free canvas
+field drawing a knowledge-tracing network in 3D projection: ink lines,
+hollow and filled nodes, role-coloured, a red accent for the model's
+opinion (the `mastery` node and the pulses along its edges). So "match
+Theme 01" means two more modes in the same element, in the same idiom,
+themed the same way (D-054) — not a second WebGL scene, and not a raster
+image, which the site has none of.
+
+**Theme 02 — `mode="blanket"`.** A Bayesian network over sixteen
+variables, drawn as a graph the way the theme's description says an
+explanation should be: "names variables rather than gesturing at
+importance scores." The target's parents, children and co-parents — the
+Markov blanket — are named by exactly those roles and ringed by a dashed
+ellipse (the smallest enclosing one, recomputed each frame as the graph
+turns), captioned "Markov blanket"; everything outside is an anonymous
+hollow node — siblings, grandparents and grandchildren included, since
+none of those are in a blanket, a detail a reader who knows the concept
+will notice. The accent: red pulses of evidence travel the edges. From
+inside the ring they reach the target; from outside they fade out on
+reaching the ring — conditional independence, drawn. Labels are roles,
+not invented column names, so the diagram claims nothing about any
+particular dataset.
+
+**Theme 03 — `mode="generate"`.** A 45×31 field of samples on a plane
+tilted toward the viewer as a height field. Each 13-second cycle a new
+image — three drifting gaussians, one negative, so it has a shape — rises
+out of per-point noise over 7.5s, holds 3s, dissolves back over 2s, then
+half a second of pure noise before the next. That's a diffusion model's
+two processes in order: reverse (denoising, step 1000 → 0), then forward
+(noising, 0 → 1000). A readout names the phase and the step; a "noise →
+image" axis along the bottom carries a red marker for where the process
+is — the accent as the model's state. Nothing recognisable is generated,
+deliberately: an abstract sample makes the process the subject, and the
+theme's description is about learning plausibility, not any one picture.
+
+**Neither field turns all the way round.** Theme 01's turns
+continuously (one revolution every three minutes, going near-edge-on on
+the way); these two swing ±34° instead, so a graph never collapses to a
+line and a plane never becomes a sliver. A deliberate departure from
+Theme 01's rhythm, in a different row, for legibility.
+
+**Both files.** Per CLAUDE.md's "change the canvas, not the page," the
+two modes are in `MINN HAI LAB UI Design/mh-bg.js` as well as
+`public/design/mh-bg.js`, method for method — the canvas's copy gets a
+`this.dark = true` so the shared draw code picks the canvas's own dark
+colours there (it never gained D-054's theme watcher, being dark-only).
+The canvas's `.dc.html` still doesn't place them: its Research section
+predates the zigzag (D-047 already noted "no canvas equivalent"), so the
+asset is in the canvas, the placement isn't.
+
+**Verified:** both fields at 1440px in light and dark — the ring, the
+role labels and the pulses read; the sample field's phases, readout and
+axis marker checked mid-denoise, at hold and mid-noise; both at 360px,
+where the ring and labels still fit and the plane fills the width.
+`tests/site.spec.ts`'s research check now asserts all three modes are
+on the page. Eight tests pass.

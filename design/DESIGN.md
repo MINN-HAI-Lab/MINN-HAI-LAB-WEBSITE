@@ -30,8 +30,12 @@ where it has one (D-047 — no canvas equivalent; the canvas draws two
 stacked programme rows, one `200px | 1fr | 300px` with a field preview,
 one `200px | 1fr` without). Theme 01's visual is Deep Field's network
 graphic, relocated rather than deleted, shown unpanelled — no border, no
-background (D-048); Theme 02 and 03's are marked placeholders, no asset
-supplied yet. Then: the Learning panel (StatLab,
+background (D-048); Theme 02 and 03's are two more `mh-bg` fields drawn
+for them (D-065): `mode="blanket"`, a Bayesian network with the target's
+Markov blanket named by role and ringed, and `mode="generate"`, a sample
+emerging from noise on a tilted height field, a diffusion model's reverse
+process with its step readout. Each sits in the same 420px `var(--field)`
+panel as Theme 01's. Then: the Learning panel (StatLab,
 linked out; course materials, holding the StatLab repo link, D-063 —
 more still a gap, D-064); the members list, one profile
 row per person grouped Faculty / Post Doctoral / Doctoral / Master
@@ -147,7 +151,7 @@ at all. Since the scene runs in an iframe — a separate document, its own
 again on every toggle.
 
 The `mh-bg` fields (D-054) — Home's `#signal-plane`, Partner's `#join`,
-and the panel holding Research's Theme 01 network graphic — each carry
+and the panels holding Research's three theme graphics (D-065) — each carry
 lines, node fills and text coloured for the canvas's dark theme. Unlike
 the 3D scene, `mh-bg` runs in the same document as the page, so it just
 watches `data-theme` on `<html>` directly (a `MutationObserver`, in
@@ -182,7 +186,10 @@ everywhere else on the site.
 
 - The status light breathes (`mh-blink`, 2.6s).
 - The fields turn slowly and follow the cursor; the plane ripples away from
-  it; the lattice's nodes light up under it.
+  it; the lattice's nodes light up under it. Research's blanket and sample
+  fields (D-065) swing gently rather than turning through, so neither
+  goes edge-on; the sample field runs a 13s cycle, noise to image and
+  back, a new sample each time.
 - The reach follows the cursor's distance from the centre of the frame.
 - All of it eases to a still under `prefers-reduced-motion`, in the scene's
   and the fields' own code.

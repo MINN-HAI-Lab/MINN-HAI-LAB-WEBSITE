@@ -1,12 +1,13 @@
 /* mh-bg — dependency-free 3D background fields for MINN HAI LAB mockups.
-   <mh-bg mode="metal|lattice|grid" speed="1"></mh-bg>
+   <mh-bg mode="metal|lattice|grid|bayes|blanket|generate" speed="1"></mh-bg>
    Real 3D maths: a raymarched SDF (WebGL) and perspective-projected point
    geometry (canvas 2D). No library, no CDN.
 
-   Theme (D-054): the "bayes", "lattice" and "grid" modes draw ink-coloured
-   lines and text meant for the canvas's own dark theme. On light, those
-   swap for a dark equivalent — see the connectedCallback theme watcher and
-   the inline `this.dark ? … : …` in each draw method. The accent (red) and
+   Theme (D-054): the "bayes", "blanket", "generate", "lattice" and "grid"
+   modes draw ink-coloured lines and text meant for the canvas's own dark
+   theme. On light, those swap for a dark equivalent — see the
+   connectedCallback theme watcher and the inline `this.dark ? … : …` in
+   each draw method. The accent (red) and
    "metal" mode (the raymarched SDF; not used with a light backdrop
    anywhere on the site) are unaffected. */
 (() => {
@@ -150,7 +151,7 @@ void main(){
       const t = ((performance.now() - this.t0) / 1000) * (this.reduced ? 0.15 : this.speed);
       this.m.x += (this.m.tx - this.m.x) * 0.06;
       this.m.y += (this.m.ty - this.m.y) * 0.06;
-      this.mode === 'metal' ? this.drawGL(t) : this.mode === 'grid' ? this.drawGrid(t) : this.mode === 'bayes' ? this.drawBayes(t) : this.drawLattice(t);
+      this.mode === 'metal' ? this.drawGL(t) : this.mode === 'grid' ? this.drawGrid(t) : this.mode === 'bayes' ? this.drawBayes(t) : this.mode === 'blanket' ? this.drawBlanket(t) : this.mode === 'generate' ? this.drawGenerate(t) : this.drawLattice(t);
     }
     /* Bayesian network: a knowledge-tracing DAG with the Markov blanket of `mastery` highlighted */
     buildBayes() {
@@ -204,6 +205,122 @@ void main(){
         g.textAlign = p.x > this.w / 2 ? 'left' : 'right';
         g.fillText(n.label, p.x + (p.x > this.w / 2 ? r + 8 : -r - 8), p.y);
       });
+    }
+    /* Markov blanket (Theme 02, D-065): a Bayesian network over a table's
+       columns. The target's parents, children and co-parents are named by
+       role and ringed — the smallest set that screens the target off from
+       everything else; the rest stay anonymous. Red pulses are evidence:
+       from outside the ring they fade out on reaching it, from inside they
+       reach the target. */
+    buildBlanket() {
+      const N = (id, label, x, y, z, k) => ({ id, label, x, y, z, k: k || '' });
+      this.mb = [
+        N('t', 'target', 0, 0, 0, 't'),
+        N('p1', 'parent', -0.6, 0.45, 0.25, 'p'), N('p2', 'parent', -0.55, -0.4, -0.3, 'p'),
+        N('c1', 'child', 0.6, 0.38, -0.25, 'c'), N('c2', 'child', 0.55, -0.42, 0.3, 'c'),
+        N('s1', 'co-parent', 1.15, 0.7, 0.2, 's'), N('s2', 'co-parent', 1.1, -0.75, -0.2, 's'),
+        N('o1', '', -1.5, 0.95, -0.2), N('o2', '', -1.65, 0.05, 0.5), N('o3', '', -1.45, -0.9, 0.1),
+        N('o4', '', -0.35, 1.1, -0.6), N('o5', '', -0.25, -1.15, 0.55),
+        N('o6', '', 1.85, 0.25, -0.55), N('o7', '', 1.8, -0.45, 0.55),
+        N('o8', '', 1.0, 1.15, 0.5), N('o9', '', 0.95, -1.2, -0.5),
+      ];
+      const E = (a, b) => [this.mb.findIndex((n) => n.id === a), this.mb.findIndex((n) => n.id === b)];
+      this.mbE = [E('o1', 'p1'), E('o2', 'p1'), E('o2', 'p2'), E('o3', 'p2'), E('p1', 't'), E('p2', 't'), E('t', 'c1'), E('t', 'c2'), E('s1', 'c1'), E('s2', 'c2'),
+        E('p1', 'o4'), E('p2', 'o5'), E('c1', 'o6'), E('c2', 'o7'), E('o8', 's1'), E('s2', 'o9')];
+      this.mbPulse = this.mbE.map((_, i) => ({ e: i, ph: Math.random() }));
+    }
+    drawBlanket(t) {
+      const g = this.ctx; if (!this.mb) this.buildBlanket();
+      g.clearRect(0, 0, this.w, this.h);
+      const dark = this.dark, ink = dark ? '226,235,239' : '28,40,48';
+      const tt = 6 * Math.sin(t * 0.12);
+      const P = this.mb.map((n) => this.proj({ x: n.x * 0.7 + 0.02 * Math.sin(t * 0.7 + n.x * 3), y: n.y * 0.7 + 0.02 * Math.cos(t * 0.6 + n.y * 4), z: n.z * 0.7 }, tt));
+      g.lineWidth = 1;
+      for (const [i, j] of this.mbE) {
+        const a = P[i], b = P[j], inB = !!(this.mb[i].k && this.mb[j].k);
+        const al = (inB ? 0.6 : 0.2) * (1 - (a.d + b.d) / 8);
+        g.strokeStyle = `rgba(${dark ? (inB ? '200,214,220' : '140,168,180') : (inB ? '40,55,65' : '110,125,135')},${al.toFixed(3)})`;
+        g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+        const ang = Math.atan2(b.y - a.y, b.x - a.x), r = (this.mb[j].k ? 12 : 8) - b.d * 2;
+        const tx = b.x - Math.cos(ang) * r, ty = b.y - Math.sin(ang) * r;
+        g.fillStyle = g.strokeStyle; g.beginPath();
+        g.moveTo(tx, ty); g.lineTo(tx - Math.cos(ang - 0.42) * 7, ty - Math.sin(ang - 0.42) * 7); g.lineTo(tx - Math.cos(ang + 0.42) * 7, ty - Math.sin(ang + 0.42) * 7); g.closePath(); g.fill();
+      }
+      const B = this.mb.map((n, i) => (n.k ? P[i] : null)).filter(Boolean);
+      let cx = 0, cy = 0; for (const p of B) { cx += p.x; cy += p.y; } cx /= B.length; cy /= B.length;
+      let sxx = 0, syy = 0, sxy = 0; for (const p of B) { const dx = p.x - cx, dy = p.y - cy; sxx += dx * dx; syy += dy * dy; sxy += dx * dy; }
+      const th = 0.5 * Math.atan2(2 * sxy, sxx - syy), ct = Math.cos(th), st = Math.sin(th);
+      let ra = 0, rb = 0; for (const p of B) { const dx = p.x - cx, dy = p.y - cy; ra = Math.max(ra, Math.abs(dx * ct + dy * st)); rb = Math.max(rb, Math.abs(-dx * st + dy * ct)); }
+      ra += 28; rb += 28;
+      g.setLineDash([4, 5]); g.strokeStyle = `rgba(${ink},.38)`;
+      g.beginPath(); g.ellipse(cx, cy, ra, rb, th, 0, 6.29); g.stroke(); g.setLineDash([]);
+      g.font = '500 11px "Space Grotesk", system-ui, sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'center';
+      g.fillStyle = `rgba(${ink},.6)`; g.fillText('Markov blanket', cx, cy - Math.sqrt(ra * ra * st * st + rb * rb * ct * ct) - 10);
+      for (const p of this.mbPulse) {
+        let [i, j] = this.mbE[p.e];
+        const ki = this.mb[i].k, kj = this.mb[j].k, inB = !!(ki && kj);
+        if (ki && !kj) [i, j] = [j, i];
+        const a = P[i], b = P[j], u = (t * 0.22 + p.ph) % 1;
+        const al = inB ? 0.85 * Math.sin(u * Math.PI) : 0.8 * Math.pow(1 - u, 1.7);
+        g.fillStyle = `rgba(214,26,74,${al.toFixed(3)})`;
+        g.beginPath(); g.arc(a.x + (b.x - a.x) * u, a.y + (b.y - a.y) * u, 1.8, 0, 6.29); g.fill();
+      }
+      this.mb.forEach((n, i) => {
+        const p = P[i], r = (n.k === 't' ? 9 : n.k ? 6 : 3.6) * (1 - p.d * 0.12);
+        if (n.k === 't') { g.fillStyle = 'rgba(214,26,74,.18)'; g.beginPath(); g.arc(p.x, p.y, r * 2.6 + Math.sin(t * 2) * 2, 0, 6.29); g.fill(); }
+        g.fillStyle = n.k === 't' ? 'rgba(214,26,74,.95)' : n.k ? `rgba(${ink},.95)` : `rgba(${dark ? '7,9,12' : '239,241,242'},1)`;
+        g.beginPath(); g.arc(p.x, p.y, r, 0, 6.29); g.fill();
+        if (!n.k) { g.strokeStyle = `rgba(${dark ? '180,200,210' : '70,85,95'},.6)`; g.lineWidth = 1.2; g.stroke(); }
+        if (n.label) {
+          g.fillStyle = n.k === 't' ? `rgba(${dark ? '240,244,246' : '8,12,15'},.95)` : `rgba(${ink},.78)`;
+          g.textAlign = p.x > this.w / 2 ? 'left' : 'right';
+          g.fillText(n.label, p.x + (p.x > this.w / 2 ? r + 8 : -r - 8), p.y);
+        }
+      });
+    }
+    /* Visual generative modeling (Theme 03, D-065): a height field of samples
+       on a tilted plane. Each 13s cycle a new image emerges from noise — a
+       diffusion model's reverse process, step 1000 → 0 — holds, then
+       dissolves back the way it came (the forward process) before the next
+       sample. The readout and the noise → image axis say where it is. */
+    drawGenerate(t) {
+      const g = this.ctx;
+      g.clearRect(0, 0, this.w, this.h);
+      const dark = this.dark, ink = dark ? '226,235,239' : '28,40,48';
+      const C = 13, u = t % C, seed = Math.floor(t / C) * 7.31 + 1;
+      const ease = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
+      let s, phase;
+      if (u < 7.5) { s = ease(u / 7.5); phase = 'reverse process'; }
+      else if (u < 10.5) { s = 1; phase = 'sample'; }
+      else if (u < 12.5) { s = 1 - ease((u - 10.5) / 2); phase = 'forward process'; }
+      else { s = 0; phase = 'noise'; }
+      const hash = (a, b, c) => { const x = Math.sin(a * 12.9898 + b * 78.233 + c * 37.719) * 43758.5453; return x - Math.floor(x); };
+      const K = [0, 1, 2].map((k) => ({
+        x: 0.8 * Math.sin(seed * 1.7 + k * 2.1) + 0.06 * Math.sin(t * 0.4 + k),
+        z: 0.55 * Math.cos(seed * 2.3 + k * 1.3) + 0.05 * Math.cos(t * 0.3 + k * 2),
+        a: k === 2 ? -1.1 : 1, r: 0.32 + 0.2 * hash(seed, k, 0),
+      }));
+      const img = (x, z) => { let v = 0; for (const k of K) { const dx = x - k.x, dz = z - k.z; v += k.a * Math.exp(-(dx * dx + dz * dz) / (k.r * k.r)); } return Math.min(1, Math.max(0, 0.15 + v)); };
+      const N = 44, M = 30, fr = Math.floor(t * 8), tt = 4.5 * Math.sin(t * 0.22), ca = Math.cos(0.62), sa = Math.sin(0.62);
+      for (let j = 0; j <= M; j++) for (let i = 0; i <= N; i++) {
+        const x = (i / N) * 2.6 - 1.3, z = (j / M) * 1.7 - 0.85;
+        const n = hash(i, j, fr);
+        const v = Math.min(1, Math.max(0, 0.5 + (img(x, z) - 0.5) * s + (n - 0.5) * 1.3 * (1 - s)));
+        const y = -(v - 0.5) * 0.36 * s - 0.08;
+        const p = this.proj({ x, y: y * ca - z * sa, z: y * sa + z * ca }, tt), f = 1 - p.d * 0.12;
+        g.fillStyle = `rgba(${ink},${(0.08 + 0.72 * v).toFixed(3)})`;
+        g.beginPath(); g.arc(p.x, p.y, (0.5 + 2.3 * v) * f, 0, 6.29); g.fill();
+      }
+      g.font = '500 11px "Space Grotesk", system-ui, sans-serif'; g.textBaseline = 'middle';
+      g.fillStyle = `rgba(${ink},.55)`; g.textAlign = 'left';
+      g.fillText(`${phase} · step ${Math.round((1 - s) * 1000)}`, 16, 18);
+      const y0 = this.h - 24, x0 = 16, x1 = this.w - 16;
+      g.strokeStyle = `rgba(${ink},.2)`; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y0); g.stroke();
+      g.fillStyle = `rgba(${ink},.45)`; g.fillText('noise', x0, y0 - 12);
+      g.textAlign = 'right'; g.fillText('image', x1, y0 - 12);
+      g.fillStyle = 'rgba(214,26,74,.9)';
+      g.beginPath(); g.arc(x0 + (x1 - x0) * s, y0, 3.2, 0, 6.29); g.fill();
     }
     drawGL(t) {
       const gl = this.gl;

@@ -15,9 +15,13 @@
  * background, though: mh-bg's canvas is transparent, so without one this
  * panel would just show whatever the page around it does — that page is
  * themed now (D-054), so its own background is var(--field), same as the
- * page. Theme 02 and Theme 03's visuals are placeholders: Kaung named them
- * "Image or 3D object" with no asset yet, so they're marked, not invented.
- * The header band's own mh-bg (mode="lattice") is gone too, redundant once
+ * page. Theme 02 and Theme 03's visuals are mh-bg fields too (D-065),
+ * mode="blanket" and mode="generate", each in the same 420px var(--field)
+ * panel as Theme 01's: a Markov blanket ringed inside a Bayesian network,
+ * and a sample emerging from noise the way a diffusion model's reverse
+ * process does. They replaced the "image / 3D object" placeholders Kaung
+ * had marked; see public/design/mh-bg.js for what each one draws. The
+ * header band's own mh-bg (mode="lattice") is gone, redundant once
  * Theme 01 carried a real network graphic of its own.
  *
  * Theme 03, "Visual generative modeling", has a real description now
@@ -66,8 +70,8 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <div class="mh-gutter mh-zigzag" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start;padding:56px 44px;border-bottom:1px solid rgba(var(--ink-rgb),.1)">
-    <div style="border:1px solid rgba(var(--ink-rgb),.14);border-radius:3px;height:420px;background:repeating-linear-gradient(135deg,rgba(var(--ink-rgb),.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:14px">
-      <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(var(--ink-rgb),.5)">image / 3D object — placeholder</span>
+    <div style="position:relative;height:420px;background:var(--field)">
+      <mh-bg mode="blanket" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="font-size:12.5px;color:rgba(var(--ink-rgb),.45);line-height:1.5">Theme 02</div>
@@ -96,8 +100,8 @@ import Layout from '../layouts/Layout.astro';
         <div style="border-left:3px solid rgba(var(--ink-rgb),.4);background:rgba(var(--field-rgb),.75);border-radius:3px;padding:14px 16px;margin-top:10px;font-size:13px;line-height:1.6;color:rgba(var(--ink-rgb),.82)">TODO: publications for this theme, to be supplied.</div>
       </div>
     </div>
-    <div style="border:1px solid rgba(var(--ink-rgb),.14);border-radius:3px;height:420px;background:repeating-linear-gradient(135deg,rgba(var(--ink-rgb),.05) 0 6px,transparent 6px 12px);display:flex;align-items:flex-end;padding:14px">
-      <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:rgba(var(--ink-rgb),.5)">image / 3D object — placeholder</span>
+    <div style="position:relative;height:420px;background:var(--field)">
+      <mh-bg mode="generate" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>
     </div>
   </div>
 </div>

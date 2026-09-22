@@ -11,8 +11,6 @@ teaching assistant, the deployment and "established" claims — is removed.
 - **Visual generative modeling** — Theme 03 on the Research page, renamed
   from "Computer Vision" and given a real description (D-048); its
   publications are still `TODO:`, waiting on Kaung.
-- **Theme 02 and Theme 03's visuals** — marked "image / 3D object —
-  placeholder" (D-047); no asset supplied yet.
 - **Five unnamed members** — two Post Doctoral, two Doctoral and one
   Intern, all commented out on the page rather than shown as visible
   placeholders (D-062), so those groups don't appear until someone

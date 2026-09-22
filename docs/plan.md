@@ -17,7 +17,7 @@ piece hears about a theme change.
 | Page | Route | Content |
 |---|---|---|
 | Home | `/` | The reach — the hero (2a) — then Signal Plane (1c), "We model for Human, not the AI alone." Deep Field (1a) and Lattice (1b), which used to sit between them, are gone (D-047) |
-| Research | `/research` | Research header band, then the three themes zigzagging left and right, each with its real publication list where it has one |
+| Research | `/research` | Research header band, then the three themes zigzagging left and right, each with its own `mh-bg` field (D-065) and its real publication list where it has one |
 | Learning | `/learning` | The learning panel: StatLab, linked out; course materials, holding the StatLab repo link, more still a gap (D-064) |
 | Members | `/members` | Profile rows — portrait, name, role, bio, links — grouped Faculty / Post Doctoral / Doctoral / Master / Intern, headed "Members"; a group with no active people is hidden entirely (D-062) |
 | Partner with us | `/partner` | The seven funders by name, then "Bring us a problem that needs an explanation." |
@@ -42,8 +42,7 @@ bio and links. Post Doctoral and Intern are empty for now (D-062) —
 every slot in them is a placeholder, commented out in
 `src/pages/members.astro`, so neither group shows on the page.
 
-Still `TODO:` on the page: Visual generative modeling's publications; Theme
-02 and Theme 03's visuals (both marked "image / 3D object — placeholder");
+Still `TODO:` on the page: Visual generative modeling's publications;
 the two Post Doctoral, two Doctoral and one Intern member's names and
 photos — all six commented out (D-062), waiting on people who haven't
 arrived; a bio and links (Google Scholar, LinkedIn, …) for every member
