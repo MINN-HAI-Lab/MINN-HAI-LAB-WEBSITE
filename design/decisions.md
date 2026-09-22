@@ -1859,23 +1859,24 @@ follows Master's last row directly. Eight tests pass unchanged.
 
 ---
 
-## D-063 — Learning: a "Source code" tab linking to StatLab's repo
+## D-063 — Learning: the StatLab repo link lives in Course materials
 
-**Status: adopted, 2026-09-22.** Kaung supplied the StatLab code repo
-— `https://github.com/MINN-HAI-Lab/statLab_Codes` — and asked for a
-third tab in the Learning panel, between StatLab and Course materials,
-that's just a button linking out to it.
+**Status: adopted, 2026-09-22; revised same day.** Kaung supplied the
+StatLab code repo — `https://github.com/MINN-HAI-Lab/statLab_Codes` —
+and first asked for a third tab between StatLab and Course materials
+that just linked out to it.
 
-**Same shape as the other two panels.** A third `data-mh-tab` /
-`data-mh-panel` pair, same tab script (index-matched, already generic
-over however many tabs exist — no script change needed), same one-line
-description-then-button layout the StatLab panel already used. The
-button reuses the "Open StatLab" button's exact style (`var(--ink)`
-background, `var(--field)` text) so it reads as the same kind of
-action, labelled "View source" since it's a GitHub link, not the tool
-itself. Panel order is StatLab, Source code, Course materials — code
-follows the tool it belongs to, ahead of the still-empty materials tab.
+**Revised.** Kaung caught that Course materials already existed as a
+tab (holding only a TODO) and asked to fold the repo link into it
+instead of adding a third tab — he'd forgotten it was there. The panel
+is back to two tabs, StatLab and Course materials. Course materials now
+opens with the same description-then-button block the standalone tab
+had — "The source code and visualizations used in StatLab," a "View
+source" button styled like "Open StatLab" — followed by the existing
+TODO marker, reworded ("which *other* courses and materials go public…
+nothing *else* listed") since the panel is no longer entirely empty.
+No script change either way — the tab script is already index-generic.
 
-**Verified:** all three tabs switch correctly at 1440px in both themes;
-the new tab's pill and button take the theme's ink/field colours.
-Eight tests pass unchanged.
+**Verified:** both tabs switch correctly at 1440px in both themes;
+Course materials shows the button above the TODO in each. Eight tests
+pass unchanged.
