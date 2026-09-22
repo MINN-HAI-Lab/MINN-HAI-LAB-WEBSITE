@@ -1856,3 +1856,26 @@ but nothing shows until a real intern replaces it.
 Members now shows Faculty, Doctoral and Master only, in that order,
 with no gap where Post Doctoral or Intern would have sat; the footer
 follows Master's last row directly. Eight tests pass unchanged.
+
+---
+
+## D-063 — Learning: a "Source code" tab linking to StatLab's repo
+
+**Status: adopted, 2026-09-22.** Kaung supplied the StatLab code repo
+— `https://github.com/MINN-HAI-Lab/statLab_Codes` — and asked for a
+third tab in the Learning panel, between StatLab and Course materials,
+that's just a button linking out to it.
+
+**Same shape as the other two panels.** A third `data-mh-tab` /
+`data-mh-panel` pair, same tab script (index-matched, already generic
+over however many tabs exist — no script change needed), same one-line
+description-then-button layout the StatLab panel already used. The
+button reuses the "Open StatLab" button's exact style (`var(--ink)`
+background, `var(--field)` text) so it reads as the same kind of
+action, labelled "View source" since it's a GitHub link, not the tool
+itself. Panel order is StatLab, Source code, Course materials — code
+follows the tool it belongs to, ahead of the still-empty materials tab.
+
+**Verified:** all three tabs switch correctly at 1440px in both themes;
+the new tab's pill and button take the theme's ink/field colours.
+Eight tests pass unchanged.
