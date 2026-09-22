@@ -1880,3 +1880,22 @@ No script change either way — the tab script is already index-generic.
 **Verified:** both tabs switch correctly at 1440px in both themes;
 Course materials shows the button above the TODO in each. Eight tests
 pass unchanged.
+
+---
+
+## D-064 — Course materials: TODO marker removed
+
+**Status: adopted, 2026-09-22.** Kaung asked to remove the TODO marker
+from the Course materials tab now that it holds the StatLab repo link
+(D-063).
+
+**Page versus tracking.** The gap the marker named — which other
+courses and materials go public, and who owns them — hasn't been
+filled; only the visible flag on the page is gone. That gap is still
+listed in `docs/phase.md`'s open items, so it isn't lost, just no
+longer shown to a site visitor. The tab now reads as complete rather
+than in-progress, which is accurate for what it currently offers (the
+one real resource, the repo link) even though more may be added later.
+
+**Verified:** the tab at 1440px in both themes — description, button,
+nothing else, no leftover TODO styling. Eight tests pass unchanged.

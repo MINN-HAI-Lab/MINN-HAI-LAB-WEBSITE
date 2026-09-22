@@ -32,7 +32,8 @@ one `200px | 1fr` without). Theme 01's visual is Deep Field's network
 graphic, relocated rather than deleted, shown unpanelled — no border, no
 background (D-048); Theme 02 and 03's are marked placeholders, no asset
 supplied yet. Then: the Learning panel (StatLab,
-linked out; course materials, still a gap); the members list, one profile
+linked out; course materials, holding the StatLab repo link, D-063 —
+more still a gap, D-064); the members list, one profile
 row per person grouped Faculty / Post Doctoral / Doctoral / Master
 (D-049, D-050, D-055 — no canvas equivalent), six named with photos, one
 with a bio, four still `TODO:`; a funding list; the closing band over the

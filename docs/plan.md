@@ -18,7 +18,7 @@ piece hears about a theme change.
 |---|---|---|
 | Home | `/` | The reach — the hero (2a) — then Signal Plane (1c), "We model for Human, not the AI alone." Deep Field (1a) and Lattice (1b), which used to sit between them, are gone (D-047) |
 | Research | `/research` | Research header band, then the three themes zigzagging left and right, each with its real publication list where it has one |
-| Learning | `/learning` | The learning panel: StatLab, linked out; course materials, still a gap |
+| Learning | `/learning` | The learning panel: StatLab, linked out; course materials, holding the StatLab repo link, more still a gap (D-064) |
 | Members | `/members` | Profile rows — portrait, name, role, bio, links — grouped Faculty / Post Doctoral / Doctoral / Master / Intern, headed "Members"; a group with no active people is hidden entirely (D-062) |
 | Partner with us | `/partner` | The seven funders by name, then "Bring us a problem that needs an explanation." |
 
@@ -47,7 +47,8 @@ Still `TODO:` on the page: Visual generative modeling's publications; Theme
 the two Post Doctoral, two Doctoral and one Intern member's names and
 photos — all six commented out (D-062), waiting on people who haven't
 arrived; a bio and links (Google Scholar, LinkedIn, …) for every member
-but Dr. Sein Minn, Kamal and Kaung Hein Htet; course materials. Adding
+but Dr. Sein Minn, Kamal and Kaung Hein Htet; course materials beyond
+the StatLab repo link. Adding
 any of the member items is a data edit in `src/pages/members.astro` —
 the note at the top of that file says how, including uncommenting a
 placeholder back in.
