@@ -38,7 +38,7 @@ row per person grouped Faculty / Post Doctoral / Doctoral / Master
 with a bio, four still `TODO:`; a funding list; the closing band over the
 signal plane, with the contact address; the footer.
 
-### A member's profile row (D-055, D-056)
+### A member's profile row (D-055, D-056, D-062)
 
 The canvas drew members as a grid of 4:5 portrait frames with a name and
 role beneath. A bio and a set of links can't live in a fifth-width card,
@@ -68,6 +68,9 @@ a 19px Literata group heading:
   renders as a text pill instead (`.18` ink border, 2px radius, `5px 10px`, 12px,
   `.72` ink — the publication list's `code` tag, one size up).
 - Below 768px the row stacks, portrait first, held to 240px wide.
+- A group with no active people — every entry commented out, waiting
+  on someone who hasn't arrived — renders nothing at all, not even its
+  heading (D-062), so the page never shows an empty group label.
 
 Everything on the page is one array in `src/pages/members.astro`; the
 markup renders whatever a person's entry has and marks the rest. The

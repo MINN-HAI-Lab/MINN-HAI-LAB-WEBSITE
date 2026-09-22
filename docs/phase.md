@@ -13,9 +13,11 @@ teaching assistant, the deployment and "established" claims — is removed.
   publications are still `TODO:`, waiting on Kaung.
 - **Theme 02 and Theme 03's visuals** — marked "image / 3D object —
   placeholder" (D-047); no asset supplied yet.
-- **Four unnamed members** — Post Doctoral has two placeholder rows,
-  Doctoral two (D-049, D-050; Md Kamal Hosen filled the third, D-055),
-  all name and photo `TODO:`, waiting on Kaung.
+- **Five unnamed members** — two Post Doctoral, two Doctoral and one
+  Intern, all commented out on the page rather than shown as visible
+  placeholders (D-062), so those groups don't appear until someone
+  real replaces an entry. Waiting on Kaung; the how-to at the top of
+  `src/pages/members.astro` says how to bring one back.
 - **Bios** — every member's row has a bio slot (D-055); Kamal's,
   Dr. Sein Minn's and Kaung Hein Htet's are filled. Each is two
   sentences, third person, condensed from what the member supplied

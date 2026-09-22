@@ -1821,3 +1821,38 @@ as given; unaffected by the bio revision.
 
 **Verified:** his row at 1440px in both themes — two sentences, three
 icons, no overflow. Eight tests pass unchanged.
+
+---
+
+## D-062 — Post Doctoral and Doctoral placeholders commented out; Intern group added, also commented out
+
+**Status: adopted, 2026-09-22.** Kaung asked to comment out the
+placeholder rows in Post Doctoral and Doctoral until those people
+arrive, and to add an Intern group under Master with a placeholder,
+commented out from the start.
+
+**Commented out, not deleted.** Each placeholder — two in Post
+Doctoral, two in Doctoral, one new one in Intern — is now a `//`-commented
+object literal in the `groups` array in `src/pages/members.astro`,
+exactly the shape the how-to at the top of the file already documents.
+Bringing someone in is still a data edit: uncomment the line and fill
+it in, or replace it outright. Nothing about the markup changed.
+
+**A group with nothing to show shows nothing.** Post Doctoral and
+Intern each end up with an empty `people` array once their only
+entries are commented out. Rendering the group's 19px heading over an
+empty column would read as broken, not as "not yet" — so the template
+now filters to `g.people.length > 0` before mapping groups, and a
+group with no active people is skipped outright: no heading, no gap.
+Doctoral still renders, since Md Kamal Hosen's entry is real and stays
+active; only the two placeholder lines under his are commented out.
+
+**Intern is new**, added after Master per Kaung's request — one
+placeholder (`role: 'Intern'`), commented out identically to the
+others, so the group exists in source and in the how-to's group list
+but nothing shows until a real intern replaces it.
+
+**Verified:** built and rendered full-page at 1440px in both themes —
+Members now shows Faculty, Doctoral and Master only, in that order,
+with no gap where Post Doctoral or Intern would have sat; the footer
+follows Master's last row directly. Eight tests pass unchanged.
