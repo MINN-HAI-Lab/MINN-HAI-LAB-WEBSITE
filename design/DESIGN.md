@@ -32,10 +32,11 @@ one `200px | 1fr` without). Theme 01's visual is Deep Field's network
 graphic, relocated rather than deleted, shown unpanelled — no border, no
 background (D-048); Theme 02 and 03's are two more `mh-bg` fields drawn
 for them (D-065): `mode="blanket"`, a Bayesian network with the target's
-Markov blanket named by role and ringed, and `mode="generate"`, a sample
-emerging from noise on a tilted height field, a diffusion model's reverse
-process with its step readout. Each sits in the same 420px `var(--field)`
-panel as Theme 01's. Then: the Learning panel (StatLab,
+Markov blanket named by role and ringed, and `mode="generate"`, a cat
+drawn as a 40×30 dot matrix on an upright plane, emerging from noise the
+way a diffusion model's reverse process does, with its step readout
+(D-066 — an abstract shape first, replaced once it read wrong). Each sits
+in the same 420px `var(--field)` panel as Theme 01's. Then: the Learning panel (StatLab,
 linked out; course materials, holding the StatLab repo link, D-063 —
 more still a gap, D-064); the members list, one profile
 row per person grouped Faculty / Post Doctoral / Doctoral / Master
@@ -189,7 +190,7 @@ everywhere else on the site.
   it; the lattice's nodes light up under it. Research's blanket and sample
   fields (D-065) swing gently rather than turning through, so neither
   goes edge-on; the sample field runs a 13s cycle, noise to image and
-  back, a new sample each time.
+  back, the cat facing the other way each time.
 - The reach follows the cursor's distance from the centre of the frame.
 - All of it eases to a still under `prefers-reduced-motion`, in the scene's
   and the fields' own code.

@@ -258,16 +258,17 @@ void main(){
         }
       });
     }
-    /* Visual generative modeling (Theme 03, D-065): a height field of samples
-       on a tilted plane. Each 13s cycle a new image emerges from noise — a
-       diffusion model's reverse process, step 1000 → 0 — holds, then
-       dissolves back the way it came (the forward process) before the next
-       sample. The readout and the noise → image axis say where it is. */
+    /* Visual generative modeling (Theme 03, D-065, D-066): a picture as a
+       40×30 dot matrix on an upright plane. Each 13s cycle the cat emerges
+       from noise — a diffusion model's reverse process, step 1000 → 0 —
+       holds, then dissolves back the way it came (the forward process)
+       before the next sample, which faces the other way. The readout and
+       the noise → image axis say where the process is. */
     drawGenerate(t) {
       const g = this.ctx;
       g.clearRect(0, 0, this.w, this.h);
       const dark = this.dark, ink = dark ? '226,235,239' : '28,40,48';
-      const C = 13, u = t % C, seed = Math.floor(t / C) * 7.31 + 1;
+      const C = 13, u = t % C;
       const ease = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
       let s, phase;
       if (u < 7.5) { s = ease(u / 7.5); phase = 'reverse process'; }
@@ -275,19 +276,44 @@ void main(){
       else if (u < 12.5) { s = 1 - ease((u - 10.5) / 2); phase = 'forward process'; }
       else { s = 0; phase = 'noise'; }
       const hash = (a, b, c) => { const x = Math.sin(a * 12.9898 + b * 78.233 + c * 37.719) * 43758.5453; return x - Math.floor(x); };
-      const K = [0, 1, 2].map((k) => ({
-        x: 0.8 * Math.sin(seed * 1.7 + k * 2.1) + 0.06 * Math.sin(t * 0.4 + k),
-        z: 0.55 * Math.cos(seed * 2.3 + k * 1.3) + 0.05 * Math.cos(t * 0.3 + k * 2),
-        a: k === 2 ? -1.1 : 1, r: 0.32 + 0.2 * hash(seed, k, 0),
-      }));
-      const img = (x, z) => { let v = 0; for (const k of K) { const dx = x - k.x, dz = z - k.z; v += k.a * Math.exp(-(dx * dx + dz * dz) / (k.r * k.r)); } return Math.min(1, Math.max(0, 0.15 + v)); };
-      const N = 44, M = 30, fr = Math.floor(t * 8), tt = 4.5 * Math.sin(t * 0.22), ca = Math.cos(0.62), sa = Math.sin(0.62);
-      for (let j = 0; j <= M; j++) for (let i = 0; i <= N; i++) {
-        const x = (i / N) * 2.6 - 1.3, z = (j / M) * 1.7 - 0.85;
-        const n = hash(i, j, fr);
-        const v = Math.min(1, Math.max(0, 0.5 + (img(x, z) - 0.5) * s + (n - 0.5) * 1.3 * (1 - s)));
-        const y = -(v - 0.5) * 0.36 * s - 0.08;
-        const p = this.proj({ x, y: y * ca - z * sa, z: y * sa + z * ca }, tt), f = 1 - p.d * 0.12;
+      if (!this.cat) this.cat = [
+      '........................................',
+      '........................................',
+      '.........#..............#...............',
+      '.........##............##...............',
+      '.........###..........###...............',
+      '.........####........####...............',
+      '.........#####......#####...............',
+      '.........################...............',
+      '........##################..............',
+      '........##################..............',
+      '.......####################.............',
+      '.......###..##########..###.............',
+      '.......###..##########..###.............',
+      '.......####################.............',
+      '.......####################.............',
+      '........##################..............',
+      '.........################...............',
+      '..........##############................',
+      '..........##############................',
+      '.........################...............',
+      '........##################..............',
+      '.......####################......##.....',
+      '......######################....####....',
+      '......######################...###.##...',
+      '.....########################..###..##..',
+      '.....########################..###..##..',
+      '....##########################.###.##...',
+      '....############################.###....',
+      '.....##############################.....',
+      '........................................'
+      ];
+      const N = 40, M = 30, flip = Math.floor(t / C) % 2 === 1, fr = Math.floor(t * 8), tt = 4.5 * Math.sin(t * 0.22);
+      for (let j = 0; j < M; j++) for (let i = 0; i < N; i++) {
+        const x = (i / (N - 1)) * 2.2 - 1.1, y = (j / (M - 1)) * 1.65 - 0.9;
+        const img = this.cat[j][flip ? N - 1 - i : i] === '#' ? 1 : 0.05, n = hash(i, j, fr);
+        const v = Math.min(1, Math.max(0, 0.5 + (img - 0.5) * s + (n - 0.5) * 1.3 * (1 - s)));
+        const p = this.proj({ x, y, z: -(v - 0.5) * 0.2 * s }, tt), f = 1 - p.d * 0.12;
         g.fillStyle = `rgba(${ink},${(0.08 + 0.72 * v).toFixed(3)})`;
         g.beginPath(); g.arc(p.x, p.y, (0.5 + 2.3 * v) * f, 0, 6.29); g.fill();
       }

@@ -1966,3 +1966,37 @@ axis marker checked mid-denoise, at hold and mid-noise; both at 360px,
 where the ring and labels still fit and the plane fills the width.
 `tests/site.spec.ts`'s research check now asserts all three modes are
 on the page. Eight tests pass.
+
+---
+
+## D-066 — Theme 03's field generates a cat, not an abstract shape
+
+**Status: adopted, 2026-09-23.** Kaung looked at D-065's Theme 03 field
+— three drifting gaussians rising out of noise as a height field — and
+said it looked like something inappropriate, and asked for the same
+thing from noise to a picture of a cat, in dots.
+
+**He's right, and D-065's reasoning was wrong.** That entry argued an
+abstract sample "makes the process the subject." But two rounded mounds
+with a dip between them, viewed from a low angle, are an abstract shape
+the eye will complete into a body, and once it does, the process is
+not the subject any more. A recognisable object removes the ambiguity;
+a cat is the canonical one for "generate an image," since the
+literature's first image-generation examples were cats and it's what
+most people picture when they picture a generated picture.
+
+**A bitmap, not a formula.** The cat is a hand-drawn 40×30 dot matrix
+in the draw method — sitting, facing the viewer, ears up, eyes as two
+gaps, tail curled at its right — each cell a dot whose size and ink
+track its value the same way D-065's samples did. The plane is upright
+now rather than tilted, since a picture is looked at face-on; it still
+swings ±26° with time and the cursor, and cat cells still stand
+slightly proud of the plane in depth. The noise → image cycle, the
+phase and step readout, the axis and the red marker are unchanged.
+"Each cycle a new sample" is kept in a smaller way: the cat faces the
+other way on alternate cycles.
+
+**Verified:** at 1440px, light at the hold ("sample · step 0"), dark
+mid-denoise ("reverse process"), the silhouette clear in both; the
+bottom row lifted clear of the axis. Eight tests pass unchanged — the
+mode's name didn't change. In both `mh-bg.js` files, as D-065 was.
