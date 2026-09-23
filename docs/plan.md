@@ -42,15 +42,16 @@ bio and links. Post Doctoral and Intern are empty for now (D-062) —
 every slot in them is a placeholder, commented out in
 `src/pages/members.astro`, so neither group shows on the page.
 
-Still `TODO:` on the page: Visual generative modeling's publications;
-the two Post Doctoral, two Doctoral and one Intern member's names and
+Still `TODO:` on the page: the two Post Doctoral, two Doctoral and one Intern member's names and
 photos — all six commented out (D-062), waiting on people who haven't
 arrived; a bio and links (Google Scholar, LinkedIn, …) for every member
 but Dr. Sein Minn, Kamal and Kaung Hein Htet; course materials beyond
 the StatLab repo link. Adding
 any of the member items is a data edit in `src/pages/members.astro` —
 the note at the top of that file says how, including uncommenting a
-placeholder back in.
+placeholder back in. Off the page but still open: Visual generative
+modeling's publications, its block commented out in
+`src/pages/research.astro` until there are some (D-067).
 
 ## How to change anything
 

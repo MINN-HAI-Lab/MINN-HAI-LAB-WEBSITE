@@ -27,8 +27,9 @@
  *
  * Theme 03, "Visual generative modeling", has a real description now
  * (Kaung's request, drafted with the personal-humanizer skill to match
- * Theme 01 and 02's voice) — its publications are still TODO:, nothing
- * supplied yet.
+ * Theme 01 and 02's voice). It has no publications yet; its Publications
+ * block is commented out in the template below (D-067), not shown as a
+ * TODO, until there are some to list.
  */
 import Layout from '../layouts/Layout.astro';
 ---
@@ -96,10 +97,15 @@ import Layout from '../layouts/Layout.astro';
       <div style="font-size:12.5px;color:rgba(var(--ink-rgb),.45);line-height:1.5">Theme 03</div>
       <h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;line-height:1.15;letter-spacing:-.015em">Visual generative modeling</h3>
       <p style="margin:0;font-size:16px;line-height:1.62;color:rgba(var(--ink-rgb),.7)">Learning what makes an image or video plausible well enough to generate new ones, not just classify or detect what's already there. A model that can generate a scene has learned something about its structure, so generation doubles as a test of whether a system understands what it sees.</p>
+      {/* Theme 03's publications, commented out until there are some to list
+          (D-067). Uncomment the block and replace the TODO marker with a
+          <ul> shaped like Theme 01's and 02's — the label stays with it, so
+          the theme doesn't show a "Publications" heading over nothing.
       <div style="margin-top:10px">
         <div style="font-size:12px;color:rgba(var(--ink-rgb),.45);letter-spacing:.01em">Publications</div>
         <div style="border-left:3px solid rgba(var(--ink-rgb),.4);background:rgba(var(--field-rgb),.75);border-radius:3px;padding:14px 16px;margin-top:10px;font-size:13px;line-height:1.6;color:rgba(var(--ink-rgb),.82)">TODO: publications for this theme, to be supplied.</div>
       </div>
+      */}
     </div>
     <div style="position:relative;height:420px;background:var(--field)">
       <mh-bg mode="generate" speed="1" style="position:absolute;inset:0;z-index:0"></mh-bg>

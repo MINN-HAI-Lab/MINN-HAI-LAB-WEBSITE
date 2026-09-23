@@ -2000,3 +2000,27 @@ other way on alternate cycles.
 mid-denoise ("reverse process"), the silhouette clear in both; the
 bottom row lifted clear of the axis. Eight tests pass unchanged — the
 mode's name didn't change. In both `mh-bg.js` files, as D-065 was.
+
+---
+
+## D-067 — Theme 03's publications TODO commented out
+
+**Status: adopted, 2026-09-23.** Kaung asked for the Theme 03 TODO on
+the Research page — "publications for this theme, to be supplied" — to
+be commented out.
+
+**The label goes with it.** Commenting out only the marker would leave
+a "Publications" heading over nothing, which reads as broken rather
+than as not-yet; so the whole block, label and marker, is inside an
+Astro `{/* */}` comment, which ships nothing — same reasoning as D-062
+hiding an empty member group's heading. Theme 03 now ends at its
+description. The comment says what to do when publications arrive:
+uncomment, and replace the marker with a list shaped like Theme 01's
+and 02's.
+
+**Still open, tracked off the page.** Like D-064's Course materials
+marker, the gap hasn't closed — only its visible flag has. It stays
+listed in `docs/phase.md` and `docs/plan.md` as an open item.
+
+**Verified:** Theme 03's row at 1440px in both themes — description,
+then the field, no heading, no marker. Eight tests pass unchanged.
