@@ -27,11 +27,6 @@ teaching assistant, the deployment and "established" claims — is removed.
   (D-056, D-058, D-060); Kamal's Google Scholar, Dr. Sein Minn's three
   and Kaung Hein Htet's three are supplied so far. Real URLs only —
   never guessed.
-- **Course materials** — the tab holds the StatLab source-code link
-  (D-063) but nothing else; Kaung asked to remove the page's TODO
-  marker for it (D-064), so this is now tracked here only, not flagged
-  on the page. Still waiting on which other courses go public and who
-  owns them.
 - **Institutional affiliation** — not stated anywhere on the site.
 
 **Exit gate:** every `TODO:` on the page is replaced with a supplied fact.

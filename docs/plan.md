@@ -18,7 +18,7 @@ piece hears about a theme change.
 |---|---|---|
 | Home | `/` | The reach — the hero (2a) — then Signal Plane (1c), "We model for Human, not the AI alone." Deep Field (1a) and Lattice (1b), which used to sit between them, are gone (D-047) |
 | Research | `/research` | Research header band, then the three themes zigzagging left and right, each with its own `mh-bg` field (D-065) and its real publication list where it has one |
-| Learning | `/learning` | The learning panel: StatLab, linked out; course materials, holding the StatLab repo link, more still a gap (D-064) |
+| Learning | `/learning` | The learning panel: StatLab, linked out, and its source code (D-068); no tabs any more |
 | Members | `/members` | Profile rows — portrait, name, role, bio, links — grouped Faculty / Post Doctoral / Doctoral / Master / Intern, headed "Members"; a group with no active people is hidden entirely (D-062) |
 | Partner with us | `/partner` | The seven funders by name, then "Bring us a problem that needs an explanation." |
 

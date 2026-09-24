@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
  * span of content, sharing one header and footer (src/layouts/Layout.astro).
  * What is checked: the hero's 3D frame and fields on the home page, that
  * each page exists with its own content, the nav routes between them, the
- * learning tabs, nothing pushing any page sideways at a phone width, and
+ * learning links, nothing pushing any page sideways at a phone width, and
  * the light/dark theme toggle (D-052) — including the 3D scene and mh-bg
  * fields, which each need to hear about a theme change by a different
  * route (D-053, D-054).
@@ -52,12 +52,11 @@ test('the header nav goes to each page', async ({ page }) => {
   await expect(page).toHaveURL(/\/partner\/?$/);
 });
 
-test('the learning tabs switch', async ({ page }) => {
+test('learning links out to StatLab and its source', async ({ page }) => {
   await page.goto('/learning');
-  await page.locator('[data-mh-tab="1"]').click();
-  await expect(page.locator('[data-mh-panel="1"]')).toBeVisible();
-  await expect(page.locator('[data-mh-panel="0"]')).toBeHidden();
-  await expect(page.locator('[data-mh-tab="1"]')).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#learning a:has-text("Open StatLab")')).toHaveAttribute('href', 'https://minn-hai-lab.github.io/statLab/index.html');
+  await expect(page.locator('#learning a:has-text("Source code")')).toHaveAttribute('href', 'https://github.com/MINN-HAI-Lab/statLab_Codes');
+  await expect(page.locator('[data-mh-tab]')).toHaveCount(0);
 });
 
 test('nothing overflows at 360px, on any page', async ({ page }) => {

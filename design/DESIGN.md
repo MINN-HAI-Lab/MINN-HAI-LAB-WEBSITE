@@ -36,9 +36,10 @@ Markov blanket named by role and ringed, and `mode="generate"`, a cat
 drawn as a 40×30 dot matrix on an upright plane, emerging from noise the
 way a diffusion model's reverse process does, with its step readout
 (D-066 — an abstract shape first, replaced once it read wrong). Each sits
-in the same 420px `var(--field)` panel as Theme 01's. Then: the Learning panel (StatLab,
-linked out; course materials, holding the StatLab repo link, D-063 —
-more still a gap, D-064); the members list, one profile
+in the same 420px `var(--field)` panel as Theme 01's. Then: the Learning panel (StatLab, linked
+out, with a second, outlined button to its source code; the canvas's
+Course materials tab and with it the tab row are gone, D-068); the
+members list, one profile
 row per person grouped Faculty / Post Doctoral / Doctoral / Master
 (D-049, D-050, D-055 — no canvas equivalent), six named with photos, one
 with a bio, four still `TODO:`; a funding list; the closing band over the

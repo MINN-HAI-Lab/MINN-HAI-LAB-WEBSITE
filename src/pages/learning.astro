@@ -3,6 +3,13 @@
  * Learning — the Learning panel. See src/layouts/Layout.astro for the
  * chrome and the transcription notes that apply to every page.
  *
+ * One resource, StatLab, with two buttons: the tool itself (ink fill) and
+ * its source code on GitHub (ink outline — the canvas's secondary button).
+ * The canvas's tab row is gone (D-068): Course materials, its only other
+ * tab, was removed, and a single tab that can't switch is dead UI. The
+ * tab script and .mh-tab styles in Layout.astro are still there for if
+ * a second resource ever brings the row back.
+ *
  * padding-top:96px on the wrapper clears the fixed header — the same 96px
  * used site-wide for [id]{scroll-margin-top}. The canvas's own sections
  * that open a page (the hero, Research's band) are dark and full-bleed, so
@@ -17,23 +24,13 @@ import Layout from '../layouts/Layout.astro';
 <div style="background:var(--field);padding-top:96px">
   <div class="mh-gutter" id="learning" style="padding:44px;border-bottom:1px solid rgba(var(--ink-rgb),.1);display:flex;flex-direction:column;gap:20px">
     <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><h3 style="margin:0;font-family:Literata,serif;font-weight:400;font-size:30px;letter-spacing:-.015em">Learning</h3><span style="font-size:12.5px;color:rgba(var(--ink-rgb),.5)">Resources from the lab</span></div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px" role="tablist">
-      <button class="mh-tab" type="button" role="tab" aria-selected="true" data-mh-tab="0">StatLab</button>
-      <button class="mh-tab" type="button" role="tab" aria-selected="false" data-mh-tab="1">Course materials</button>
-    </div>
     <div style="min-height:140px">
-      <div data-mh-panel="0">
-        <div style="display:flex;flex-direction:column;gap:12px;max-width:70ch">
-          <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">StatLab</div>
-          <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(var(--ink-rgb),.68)">An interactive introduction to probability and statistics. Runs in the browser.</p>
-          <a href="https://minn-hai-lab.github.io/statLab/index.html" target="_blank" rel="noopener" style="align-self:flex-start;font-size:13px;color:var(--field);background:var(--ink);text-decoration:none;border-radius:2px;padding:12px 20px;font-weight:500">Open StatLab</a>
-        </div>
-      </div>
-      <div data-mh-panel="1" hidden>
-        <div style="display:flex;flex-direction:column;gap:12px;max-width:70ch">
-          <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">Course materials</div>
-          <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(var(--ink-rgb),.68)">The source code and visualizations used in StatLab.</p>
-          <a href="https://github.com/MINN-HAI-Lab/statLab_Codes" target="_blank" rel="noopener" style="align-self:flex-start;font-size:13px;color:var(--field);background:var(--ink);text-decoration:none;border-radius:2px;padding:12px 20px;font-weight:500">View source</a>
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:70ch">
+        <div style="font-family:Literata,serif;font-size:19px;line-height:1.3">StatLab</div>
+        <p style="margin:0;font-size:14.5px;line-height:1.6;color:rgba(var(--ink-rgb),.68)">An interactive introduction to probability and statistics. Runs in the browser.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <a href="https://minn-hai-lab.github.io/statLab/index.html" target="_blank" rel="noopener" style="font-size:13px;color:var(--field);background:var(--ink);text-decoration:none;border-radius:2px;padding:12px 20px;font-weight:500">Open StatLab</a>
+          <a href="https://github.com/MINN-HAI-Lab/statLab_Codes" target="_blank" rel="noopener" style="font-size:13px;color:var(--ink);border:1px solid rgba(var(--ink-rgb),.28);text-decoration:none;border-radius:2px;padding:11px 19px;font-weight:500">Source code</a>
         </div>
       </div>
     </div>

@@ -2024,3 +2024,38 @@ listed in `docs/phase.md` and `docs/plan.md` as an open item.
 
 **Verified:** Theme 03's row at 1440px in both themes — description,
 then the field, no heading, no marker. Eight tests pass unchanged.
+
+---
+
+## D-068 — StatLab gets a "Source code" button; Course materials is gone, and the tab row with it
+
+**Status: adopted, 2026-09-24.** Kaung asked for a "Source Code" button
+under StatLab, linking to the repo the Course materials tab's "View
+source" button pointed at, and for the Course materials section to be
+removed.
+
+**The button.** "Source code", sentence case per the site's copy rule,
+beside "Open StatLab" in a wrapping row. It's the canvas's secondary
+button — a `.28` ink outline, `var(--ink)` text, padding one pixel less
+each side so it stands the same height as the filled one — since the
+tool is the primary action and its code the secondary. Same URL as
+before, unchanged.
+
+**No tab row.** With Course materials gone, StatLab would have been
+the only tab, and a single pill that can't switch to anything is dead
+UI, not a label. So the `role="tablist"` row and the `data-mh-panel`
+wrapper are gone too; the panel's content sits directly under the
+"Learning" heading. The tab script in `Layout.astro` and `.mh-tab`
+styles stay — they're the canvas's, and cost nothing — for if a second
+resource ever brings the row back. A judgement call beyond the literal
+ask, made rather than asked, since the alternative is visibly wrong.
+
+**Course materials was an open item; it isn't now.** D-063/D-064's
+tracking of "which other courses go public" comes off `docs/phase.md`:
+Kaung removed the section, so there's nothing on the page for the item
+to fill.
+
+**Verified:** at 1440px and 360px in both themes — heading, StatLab,
+two buttons side by side, wrapping at 360. The test that clicked the
+second tab is replaced by one that checks both links' hrefs and that
+no tab is on the page. Eight tests pass.
